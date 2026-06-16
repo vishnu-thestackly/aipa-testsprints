@@ -86,12 +86,12 @@ function App() {
 <Route path="/notification-setup" element={<NotificationSetup />} />
 <Route path="/completion" element={<Completion />} />
 
-        <Route path="/dashboard" element={<ProtectedRoute>
+        {/* <Route path="/dashboard" element={<ProtectedRoute>
                                               <Dashboard />
-                                          </ProtectedRoute>} />
-                                          {/* <Route path="/dashboard" element={
+                                          </ProtectedRoute>} /> */}
+                                          <Route path="/dashboard" element={
                                               <Dashboard />
-                                          } /> */}
+                                          } /> 
           
 
 
