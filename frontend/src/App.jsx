@@ -1,122 +1,106 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import HomePage from "./pages/HomePage";
+import Conversation from "./pages/AIConversation";
+import AskPage from "./pages/AskPage";
+import FaqPage from "./pages/FaqPage";
+import HelpPage from "./pages/HelpPage";
+import LoginPage from "./pages/LoginPage";
+import Signup from "./pages/Signup";
+import PersonalDetails from "./pages/PersonalDetails";
+import AiPreferences from "./pages/AiPreferences";
+import ConnectIntegrations from "./pages/ConnectIntegrations";
+import NotificationSetup from "./pages/NotificationSetup";
+import Completion from "./pages/Completion";
+import PreferenceSetting from "./pages/PreferenceSetting";
+import Frame from "./assets/images/Frame.png"
+import UserProfile from "./pages/UserProfile";
+import AdminLogin from "./pages/AdminLogin";
+import AdminLoginOTP from "./pages/AdminLoginOTP";
+import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgotPassword";
+import ForgotPasswordOTP from "./pages/ForgotPasswordOTP";
+import PasswordExpiryLogin from "./pages/PasswordExpiryLogin";
+import PasswordExpired from "./pages/PasswordExpired";
+import ForceResetPassword from "./pages/ForceResetPassword";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import VerifyUserOTP from "./pages/VerifyUserOTP";
+import PersonalAssistant from "./components/editprofile/PersonalAssistant";
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [showChat, setShowChat] = useState(false);
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <BrowserRouter>
+      <Routes>
 
-      <div className="ticks"></div>
+        {/* HOME */}
+        <Route path="/" element={<HomePage />} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* CONVERSATION */}
+        <Route
+          path="/conversation"
+          element={<Conversation />}
+        />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        
+        {/* FAQ */}
+        <Route
+          path="/faq"
+          element={<FaqPage />}
+        />
+
+        {/* HELP */}
+        <Route
+          path="/help"
+          element={<HelpPage />}
+        />
+
+        {/* LOGIN */}
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/otp-verification" element={<AdminLoginOTP />} />
+        <Route path="/signup-otp" element={<VerifyUserOTP />} />
+        <Route path="/send-email" element={<ForgotPassword />} />
+        <Route path="/send-email-otp" element={<ForgotPasswordOTP />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/force-reset-password" element={<ForceResetPassword />} />
+        <Route path="/password-expiry-login" element={<PasswordExpiryLogin />} />
+        <Route path="/password-expired" element={<PasswordExpired />} />
+
+        {/* sprint3 */}
+    
+<Route path="/user-profile" element={<UserProfile />} />
+
+<Route path="/preferences" element={<PreferenceSetting />} />
+
+{/* Onboarding */}
+<Route path="/personal-details" element={<PersonalDetails />} />
+<Route path="/aipreferences" element={<AiPreferences />} />
+<Route path="/connect-integrations" element={<ConnectIntegrations />} />
+<Route path="/notification-setup" element={<NotificationSetup />} />
+<Route path="/completion" element={<Completion />} />
+
+        {/* <Route path="/dashboard" element={<ProtectedRoute>
+                                              <Dashboard />
+                                          </ProtectedRoute>} /> */}
+                                          <Route path="/dashboard" element={
+                                              <Dashboard />
+                                          } /> 
+          
+
+
+                                      </Routes> 
+
+
+                    
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
