@@ -98,27 +98,7 @@ function App() {
                                       </Routes> 
 
 
-                    {showChat && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center sm:items-end sm:justify-end p-4 sm:p-0">
-          <div
-            className="fixed inset-0 bg-black/40 sm:bg-transparent"
-            onClick={() => setShowChat(false)}
-          />
-         
-          <div className="relative w-full max-w-[95%] h- sm:w-[320px] sm:h-[500px]  md:w-[400px] md:h-[650px] sm:mb-4 sm:mr-4 md:mb-6 md:mr-6 bg-white rounded-xl shadow-2xl overflow-visible border-2 border-[#4866F6] z-50">
-           
-           
-            <button
-              onClick={() => setShowChat(false)}
-              className="absolute -top-4 -right-4 sm:-top-5 sm:-right-5 lg:w-[50px] lg:h-[50px] md:-top-6 lg:mt-[-40px] lg:mr-[20px] md:mt-[-40px] md:mr-[20px] mt-[-40px] mr-[20px] md:-right-6 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14  bg-[#4866F6] rounded-full z-30 flex items-center justify-center hover:bg-[#3D5AE8] shadow-xl border-2 border-white"
-            >
-             <img src={Frame} alt="Close" className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7" />
-            </button>
- 
-            <PersonalAssistant onClose={() => setShowChat(false)} />
-          </div>
-        </div>
-                    )}
+                    
     </BrowserRouter>
   );
 }
