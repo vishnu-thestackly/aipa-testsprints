@@ -1,0 +1,976 @@
+import axios from "axios";
+
+// Backend Base URL
+const BASE_URL = "http://127.0.0.1:8000";
+
+// Axios Instance
+const API = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+//  Added for refresh token perpose
+
+API.interceptors.response.use(
+  (response) => response,
+
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken =
+          localStorage.getItem("refreshToken");
+
+        const refreshResponse = await axios.post(
+          `${BASE_URL}/api/v1/auth/refresh`,
+          {
+            refresh_token: refreshToken,
+          }
+        );
+
+        const newAccessToken =
+          refreshResponse.data.access_token;
+
+        localStorage.setItem("token", newAccessToken);
+
+        originalRequest.headers.Authorization =
+          `Bearer ${newAccessToken}`;
+
+        return API(originalRequest);
+      } catch (refreshError) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+
+        
+
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+// ================= REGISTER API =================
+
+export const signupUser = async (userData) => {
+  try {
+
+    const response = await API.post(
+      "/api/v1/auth/register",
+      userData
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Signup Failed";
+  }
+};
+
+// ================= LOGIN API =================
+
+export const loginUser = async (userData) => {
+  try {
+
+    const response = await API.post(
+      "/api/v1/auth/login",
+      userData
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Login Failed";
+  }
+};
+
+// export const loginUser = async (userData) => {
+//   try {
+//     const response = await API.post(
+//       "/api/v1/auth/login",
+//       userData
+//     );
+
+//     return response.data;
+
+//   } catch (error) {
+
+//     throw new Error(
+//       error.response?.data?.detail || "Login Failed"
+//     );
+//   }
+// };
+// ================= CAPTCHA VERIFY API =================
+
+export const verifyCaptcha = async (captchaToken) => {
+
+  try {
+
+    const response = await API.post(
+      "/api/v1/auth/captcha/verify",
+      {
+        captcha_token: captchaToken,
+      }
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Captcha Verification Failed";
+  }
+};
+
+// ================= GOOGLE LOGIN API =================
+
+export const googleLogin = async (tokenData) => {
+
+  try {
+
+    const response = await API.post(
+      "api/v1/auth/oauth/google",
+      tokenData
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Google Login Failed";
+  }
+};
+
+// ================= RESEND OTP API =================
+
+export const resendOtp = async (emailData) => {
+
+  try {
+
+    const response = await API.post(
+      "/api/v1/auth/resend-otp",
+      emailData
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Resend OTP Failed";
+  }
+};
+
+// ================= VERIFY EMAIL API =================
+
+export const verifyEmail = async (otpData) => {
+
+  try {
+
+    const response = await API.post(
+      "/api/v1/auth/verify-email",
+      otpData
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Email Verification Failed";
+  }
+};
+
+// ================= VERIFY RESET PASSWORD EMAIL API =================
+
+export const verifyResetPassword = async (otpData) => {
+
+  try {
+
+    const response = await API.post(
+      "/api/v1/auth/verify-reset-otp",
+      otpData
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Email Verification Failed";
+  }
+};
+
+export const verifyAdminLoginOTP = async (otpData) => {
+
+  try {
+
+    const response = await API.post(
+      "/api/v1/auth/verify-admin-login-otp",
+      otpData
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Email Verification Failed";
+  }
+};
+
+
+// ================= FORGOT PASSWORD API =================
+
+export const forgotPassword = async (emailData) => {
+
+  try {
+
+    const response = await API.post(
+      "/api/v1/auth/forgot-password",
+      emailData
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Forgot Password Failed";
+  }
+};
+
+// ================= RESET PASSWORD API =================
+
+export const resetPassword = async (resetData) => {
+
+  try {
+
+    const response = await API.post(
+      "/api/v1/auth/reset-password",
+      resetData
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Reset Password Failed";
+  }
+};
+
+// ================= REFRESH TOKEN API =================
+
+export const refreshToken = async (refreshData) => {
+
+  try {
+
+    const response = await API.post(
+      "/api/v1/auth/refresh",
+      refreshData
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    throw error.response?.data || "Refresh Token Failed";
+  }
+};
+
+// ================= LOGOUT API =================
+
+export const logoutAdmin = async () => {
+
+  try {
+
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/auth/logout",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+
+  } catch (error) {
+
+    console.log("Logout API Error:", error);
+
+    throw error.response?.data || "Logout Failed";
+  }
+};
+
+
+// sprint 3
+
+// ================= USERS KPI STATS =================
+
+export const getUserStats = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/users/stats",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch user stats";
+  }
+};
+
+
+// ================= GET ALL USERS =================
+
+export const getUsers = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/users",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch users";
+  }
+};
+
+
+// ================= EXPORT USERS =================
+
+export const exportUsers = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/users/export",
+      {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Export failed";
+  }
+};
+
+
+// ================= GET USER DETAILS =================
+
+export const getUserDetails = async (userId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      `/api/v1/admin-management/users/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch user details";
+  }
+};
+
+
+// ================= UPDATE USER =================
+
+export const updateUser = async (userId, payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.patch(
+      `/api/v1/admin-management/users/${userId}`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Update failed";
+  }
+};
+
+
+// ================= DELETE USER =================
+
+export const deleteUser = async (userId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.delete(
+      `/api/v1/admin-management/users/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Delete failed";
+  }
+};
+
+
+// ================= UPDATE USER STATUS =================
+
+export const updateUserStatus = async (userId, payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.patch(
+      `/api/v1/admin-management/users/${userId}/status`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Status update failed";
+  }
+};
+
+
+// ================= UPDATE USER ROLE =================
+
+export const updateUserRole = async (userId, payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.patch(
+      `/api/v1/admin-management/users/${userId}/role`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Role update failed";
+  }
+};
+
+
+// ================= SYSTEM HEALTH =================
+
+export const getSystemHealth = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/system/health",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch system health";
+  }
+};
+
+
+// ================= SYSTEM SERVICES =================
+
+export const getSystemServices = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      throw new Error("No auth token found");
+    }
+
+    const response = await API.get(
+      "/api/v1/admin-management/system/services",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("getSystemServices error:", error);
+
+    throw new Error(
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to fetch services"
+    );
+  }
+};
+
+
+// ================= getUserProfile =================
+
+export const getUserProfile = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/users/me/profile",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch profile";
+  }
+};
+
+
+// ================= UpadteUserProfile =================
+
+// export const updateUserProfile = async (payload) => {
+//   try {
+//     const token = localStorage.getItem("token");
+
+//     const response = await API.patch(
+//       "/api/v1/users/me/profile",
+//       payload,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+
+//     return response.data;
+//   } catch (error) {
+//     throw error.response?.data || "Failed to update profile";
+//   }
+// };
+
+
+export const updateUserProfile = async (payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.patch(
+      "/api/v1/users/me/profile",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error.response?.data);
+    throw error;
+  }
+};
+
+// ================= Avtar Profile =================
+
+// ================= ONBOARDING AVATAR =================
+
+export const uploadAvatar = async (file) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await API.post(
+      "/api/v1/users/me/avatar",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Avatar upload failed";
+  }
+};
+
+
+// ================= edit Avtar Profile =================
+
+export const uploadProfileAvatar = async (file) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await API.post(
+      "/api/v1/users/me/avatar",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Profile avatar upload failed";
+  }
+};
+
+// ================= Delete Avtar Profile =================
+
+export const deleteAvatar = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.delete(
+      "/api/v1/users/me/avatar",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Avatar delete failed";
+  }
+};
+
+
+// ================= Get Preferences =================
+
+
+// ================= ONBOARDING - AI PREFERENCES =================
+
+export const saveAiPreferences = async (payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/onboarding/preferences",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to save AI preferences";
+  }
+};
+
+
+
+
+
+// ================= ONBOARDING - NOTIFICATION SETTINGS =================
+
+export const saveNotificationSettings = async (payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/onboarding/notifications",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to save notification settings";
+  }
+};
+
+
+// =================update Notification Settings  =================
+
+
+export const updateNotificationSettings = async (payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.patch(
+      "/api/v1/users/me/notification-settings",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to update notification settings";
+  }
+};
+
+
+// ================= ONBOARDING - PERSONAL DETAILS =================
+
+export const savePersonalDetails = async (payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/onboarding/personal",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to save personal details";
+  }
+};
+
+
+// ================= AVAILABLE INTEGRATIONS =================
+
+export const getAvailableIntegrations = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/onboarding/integrations/available",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch integrations";
+  }
+};
+
+
+// ================= SAVE CONNECTED INTEGRATIONS =================
+
+export const saveConnectedIntegrations = async (payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/onboarding/integrations",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to save integrations";
+  }
+};
+
+
+export const getOnboardingSummary = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/onboarding/summary",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch onboarding summary";
+  }
+};
+
+ // Save btn
+
+export const completeOnboarding = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/onboarding/complete",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to complete onboarding";
+  }
+};
+
+
+// Skip btn
+
+export const skipOnboarding = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/onboarding/skip",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to skip onboarding";
+  }
+};
+
+
+
+// ================= GET USER PREFERENCES =================
+
+export const getUserPreferences = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/users/me/preferences",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch preferences";
+  }
+};
+
+
+// ================= UPDATE USER PREFERENCES =================
+
+export const updateUserPreferences = async (payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.patch(
+      "/api/v1/users/me/preferences",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to update preferences";
+  }
+};
+
+
+// ================= COUNTRY CODES =================
+
+export const getCountryCodes = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/location/country-codes",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch country codes";
+  }
+};
+
+
+export const getLocations = async (limit = 20) => {
+  const response = await API.get(
+    `/api/v1/location/locations?limit=${limit}`
+  );
+  return response.data;
+};
