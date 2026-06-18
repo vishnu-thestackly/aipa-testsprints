@@ -2,11 +2,25 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import React,{useState} from "react";
 import logo from "../../assets/images/Logo.svg";
+<<<<<<< HEAD
 import SignOut from "../../assets/images/SignOut.png";
 import defaultProfile from "../../assets/images/profile.png";
 
 const icon_bg="w-[36px] h-[36px] bg-[#4866F626] rounded-[18px] flex justify-center items-center text-[#4866F6] transition-all duration-300 ease-in-out";
 export default function Navbar({ profile }) {
+=======
+import profile from "../../assets/images/profile.png";
+import TabletSidebar from "./TabletSidebar";
+import logos from "../../assets/images/logo.png";
+
+
+const icon_bg="w-[36px] h-[36px] bg-[#4866F626] rounded-[18px] flex justify-center items-center text-[#4866F6] transition-all duration-300 ease-in-out";
+export default function Navbar({
+  
+  profilePage,
+  setProfilePage,
+}) {
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
   const navigate = useNavigate();
 const [openMenu,setOpenMenu]=useState({
 tasks:false,
@@ -26,6 +40,10 @@ const languages = [
   "Portuguese",
   "Latin",
 ];
+<<<<<<< HEAD
+=======
+
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
 useEffect(() => {
   function handleClickOutside(event) {
     if (
@@ -62,9 +80,13 @@ return (
 </h2>
 <p className="text-[#4866F6] text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] tracking-[0.5em] mt-[4px]">ASSISTANT
 </p></div></div>
+<<<<<<< HEAD
 <img src={profile?.avatar_url
       ? `http://127.0.0.1:8000${profile.avatar_url}`
       : defaultProfile} alt="" alt="" className="w-[45px] h-[45px] min-[360px]:w-[48px] min-[360px]:h-[48px] min-[390px]:w-[52px] min-[390px]:h-[52px]" />
+=======
+<img src={profile} alt="" className="w-[45px] h-[45px] min-[360px]:w-[48px] min-[360px]:h-[48px] min-[390px]:w-[52px] min-[390px]:h-[52px]" />
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
 </div>
 <div className="flex justify-between items-center mt-[25px]">
 <div className="w-[120px]"></div>
@@ -126,6 +148,7 @@ return (
 {/* <div className="border-t border-[#CFCFCF] mt-[16px]"></div> forline */}
 </div>
 {/* MOBILE SIDEBAR */}
+<<<<<<< HEAD
 <div
   className={`fixed top-0 left-0 h-screen w-[285px] bg-white z-50 shadow-lg transition-all duration-300 md:block lg:hidden overflow-y-auto no-scrollbar ${
    sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -394,6 +417,17 @@ Profile
 <span>Logout</span>
 <img src={SignOut} alt="logout" className="w-[18px] h-[18px]" />
 </button></div>
+=======
+ <div>
+    <div className="absolute bottom-[20px] left-[33px]">
+    </div>
+    {/* <button className="mt-8 mx-auto w-[220px] h-[44px] flex items-center justify-center gap-[10px] rounded-[10px] border border-[#FB0000] bg-[#FF000033] px-[4px] text-[#FB0000] font-medium text-[14px] cursor-pointer">
+    <span>Logout</span>
+    <img src={SignOut} alt="logout" className="w-[18px] h-[18px]" />
+    </button> */}
+    </div>
+
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
 {/* normal mobile view */}
 <div className="hidden md:flex w-full max-w-none h-[80px] md:h-[80px] lg:h-[100px]">{/* LEFT */}
 <div className="flex items-center gap-0 md:gap-0 lg:gap-2 md:ml-[25px] lg:ml-[30px]">
@@ -403,7 +437,11 @@ Profile
 </svg></div>
 {/* LOGO */}
 <div className="flex justify-center items-center gap-2 md:gap-4 lg:gap-5 ml-0 md:ml-1 lg:ml-[-10px] xl:ml-1 transition-transform duration-300 hover:scale-105 cursor-pointer">
+<<<<<<< HEAD
 <img src={logo} alt="" onClick={() => navigate("/")} className="w-[46px] h-[40px] md:w-[50px] md:h-[42px] lg:w-[46px] lg:h-[40px] ml-5px]" />
+=======
+<img src={logo} alt="" onClick={() => navigate("/")} className="w-[46px] h-[40px] md:w-[50px] md:h-[42px] lg:w-[46px] lg:h-[40px]" />
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
             {/* Hide in tablet only */}
 <div className="hidden lg:block text-[14px]">
   <h2 className="w-auto font-bold text-[24px] text-[#4866F6]">
@@ -416,7 +454,10 @@ Profile
 {/* LEFT LINE + ICON */}
 {/* TABLET VIEW */}
 <div
+<<<<<<< HEAD
   onClick={() => setOpenMenu(true)}
+=======
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
   className="hidden md:flex lg:hidden items-center ml-[-25px] cursor-pointer"
 >  {/* vertical line */}
 <div className="w-[60px] border-t border-[#CFCFCF] rotate-90 ml-[27px]"></div>
@@ -489,6 +530,7 @@ Profile
   </div>
 )}
 
+<<<<<<< HEAD
 <img src={profile?.avatar_url
       ? `http://127.0.0.1:8000${profile.avatar_url}`
       : defaultProfile} alt="" className="w-[55px] h-[55px] md:w-[42px] md:h-[42px] lg:w-[60px] lg:h-[60px] rounded-full" />
@@ -500,3 +542,39 @@ Profile
 <div className="hidden md:flex justify-start items-center pl-4 lg:pl-5">
   {/* horizontal line */}
 <div className="w-[90px] lg:w-[240px] xl:w-[330px] border-t border-[#CFCFCF]"></div></div></div> ); }
+=======
+<img src={profile} alt="" className="w-[55px] h-[55px] md:w-[42px] md:h-[42px] lg:w-[60px] lg:h-[60px]" />
+<div className="hidden lg:flex flex-col">
+  <h4 className="font-semibold text-[16px] text-[#4866F6]">Santosh Kumar</h4>
+  <p className="text-[14px] text-[#586D93]">User</p>
+</div>
+</div></div></div>
+<div className="hidden md:flex justify-start items-center pl-4 lg:pl-5">
+  <div className="w-[90px] lg:w-[240px] xl:w-[330px] border-t border-[#CFCFCF]"></div>
+</div>
+
+{sidebarOpen && (
+  <>
+    <div
+      className="fixed inset-0 bg-black/40 z-40 md:block lg:hidden"
+      onClick={() => setSidebarOpen(false)}
+    />
+
+   <TabletSidebar
+  mode="drawer"
+  sidebarOpen={sidebarOpen}
+  setSidebarOpen={setSidebarOpen}
+  activeItem={activeItem}
+  setActiveItem={setActiveItem}
+  openMenu={openMenu}
+  setOpenMenu={setOpenMenu}
+  profilePage={profilePage}
+  setProfilePage={setProfilePage}
+  navigate={navigate}
+  logos={logos}
+/>
+  </>
+)}</div>
+ ); 
+}
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6

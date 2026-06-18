@@ -14,12 +14,18 @@ import { useNavigate } from "react-router-dom";
 import { getUserProfile } from "../../api/authApi";
 
 
+<<<<<<< HEAD
 export default function ProfileDashboard({ languageOpen,
   setProfilePage,
   profile,
   setProfile,})  {
     const navigate = useNavigate();
     
+=======
+export default function ProfileDashboard({ languageOpen,  setProfilePage,})  {
+    const navigate = useNavigate();
+    const [profile, setProfile] = useState(null);
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
     const [sections, setSections] = useState({
   profile: true,
   plan: true,
@@ -31,6 +37,7 @@ const toggleSection = (key) => {
     [key]: !prev[key],
   }));
 };
+<<<<<<< HEAD
 
 
 useEffect(() => {
@@ -40,6 +47,16 @@ useEffect(() => {
       setProfile(response);
     } catch (error) {
       console.error(error);
+=======
+    useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const response = await getUserProfile();
+      console.log("Profile Data:", response);
+      setProfile(response);
+    } catch (error) {
+      console.error("Profile Fetch Error:", error);
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
     }
   };
 

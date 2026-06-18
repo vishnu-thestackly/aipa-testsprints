@@ -27,8 +27,11 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import VerifyUserOTP from "./pages/VerifyUserOTP";
 import PersonalAssistant from "./components/editprofile/PersonalAssistant";
+<<<<<<< HEAD
 import AddSubscription from "./components/admin/AddSubscription";
 import EditSubscription from "./components/admin/EditSubscription";
+=======
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
 
 
 function App() {
@@ -46,7 +49,11 @@ function App() {
           element={<Conversation />}
         />
 
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
         {/* FAQ */}
         <Route
           path="/faq"
@@ -76,6 +83,7 @@ function App() {
         <Route path="/password-expired" element={<PasswordExpired />} />
 
         {/* sprint3 */}
+<<<<<<< HEAD
 
         <Route path="/user-profile" element={<UserProfile />} />
 
@@ -87,10 +95,24 @@ function App() {
         <Route path="/connect-integrations" element={<ConnectIntegrations />} />
         <Route path="/notification-setup" element={<NotificationSetup />} />
         <Route path="/completion" element={<Completion />} />
+=======
+    
+<Route path="/user-profile" element={<UserProfile />} />
+
+<Route path="/preferences" element={<PreferenceSetting />} />
+
+{/* Onboarding */}
+<Route path="/personal-details" element={<PersonalDetails />} />
+<Route path="/aipreferences" element={<AiPreferences />} />
+<Route path="/connect-integrations" element={<ConnectIntegrations />} />
+<Route path="/notification-setup" element={<NotificationSetup />} />
+<Route path="/completion" element={<Completion />} />
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
 
         {/* <Route path="/dashboard" element={<ProtectedRoute>
                                               <Dashboard />
                                           </ProtectedRoute>} /> */}
+<<<<<<< HEAD
         <Route path="/dashboard" element={
           <Dashboard />
         } />
@@ -105,6 +127,18 @@ function App() {
 
 
 
+=======
+                                          <Route path="/dashboard" element={
+                                              <Dashboard />
+                                          } />
+          
+
+
+                                      </Routes> 
+
+
+                    
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
     </BrowserRouter>
   );
 }

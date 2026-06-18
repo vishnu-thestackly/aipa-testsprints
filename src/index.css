@@ -39,4 +39,15 @@
 input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
+<<<<<<< HEAD
+=======
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+>>>>>>> d59cd9811fcdae9d277e123b337195690bf067c6
 }
