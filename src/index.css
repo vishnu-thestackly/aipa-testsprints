@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+}
+
+/* hidden the scroll bar imp */
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Blue scrollbar */
+
+.blue-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.blue-scrollbar::-webkit-scrollbar-track {
+  background: #E4E8FE;
+  border-radius: 9999px;
+}
+
+.blue-scrollbar::-webkit-scrollbar-thumb {
+  background: #4866F6;
+  border-radius: 9999px;
+}
+
+.blue-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3655E5;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
