@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Search, Download, Eye, IndianRupee, Users, CreditCard, RefreshCw } from "lucide-react";
 // import bubbleSvg from "../../assets/images/Combined Shape.svg";
-import TransactionRevenueChart from "../Charts/TransactionRevenueChart";
-import TransactionRevenuePlanChart from "../Charts/TransactionRevenuePlanChart";
+import TransactionRevenueChart from "../charts/TransactionRevenueChart";
+import TransactionRevenuePlanChart from "../charts/TransactionRevenuePlanChart";
 
 
 
