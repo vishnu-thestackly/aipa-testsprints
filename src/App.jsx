@@ -27,7 +27,8 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import VerifyUserOTP from "./pages/VerifyUserOTP";
 import PersonalAssistant from "./components/editprofile/PersonalAssistant";
-
+import EditProfile from "./components/userprofile/EditProfile"
+import DownArrow from "./assets/images/DownArrow.png"
 
 function App() {
   const [showChat, setShowChat] = useState(false);
@@ -56,6 +57,17 @@ function App() {
           path="/help"
           element={<HelpPage />}
         />
+
+        <Route
+          path="/editProfile"
+          element={<EditProfile onOpenChat={() => setShowChat(true)} />}
+        />
+        <Route
+          path="/chat"
+          element={<PersonalAssistant />}
+        
+        />
+       
 
         {/* LOGIN */}
         <Route
@@ -93,13 +105,39 @@ function App() {
                                               <Dashboard />
                                           } />
           
+  
 
 
-                                      </Routes> 
+  </Routes>
+                   
+    {/* Chat Popup */}
+      {showChat && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center sm:items-end sm:justify-end p-4 sm:p-0">
+          <div
+            className="fixed inset-0 bg-black/40 sm:bg-transparent"
+            onClick={() => setShowChat(false)}
+          />
+          
+          <div className="relative  border-1 border-[#4866F6]">
+            
+            
+            <button
+              onClick={() => setShowChat(false)}
+              className="absolute  lg:mt-[-610px] mt-[-65px] ml-[100px] lg:mr-[40px] md:mr-[35px] md:mt-[-600px] mt-[-500px] sm:-top-5 sm:-right-5 lg:w-[50px] lg:h-[50px] md:-top-6 lg:mt-[-40px] lg:mr-[20px] md:mt-[-40px] md:mr-[20px] mt-[-40px] mr-[20px] md:-right-6 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14  bg-[#4866F6] rounded-full z-30 flex items-center justify-center hover:bg-[#3D5AE8] shadow-xl border-2 border-white"
+            >
+             <img src={DownArrow} alt="Close" className="h-5 w-5  sm:h-6 sm:w-6 md:h-7 md:w-7" />
+            </button>
+
+            <PersonalAssistant onClose={() => setShowChat(false)} />
+          </div>
+        </div>
+      )}
+ 
+                                      
 
 
-                    
-    </BrowserRouter>
+    </BrowserRouter>                
+  
   );
 }
 
