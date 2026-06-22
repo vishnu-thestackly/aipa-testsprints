@@ -1,13 +1,16 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from '../components/admin/Navbar'
-import Sidebar from '../components/admin/Sidebar'
-import DashboardContent from '../components/admin/DashboardContent'
-import Configurations from '../components/admin/Configurations'
-import ManageHome from '../components/admin/UserManagment/ManageHome'
-import UserDetailPage from '../components/admin/UserManagment/UserDetailPage'
+import Navbar from "../components/admin/Navbar";
+import Sidebar from "../components/admin/Sidebar";
+import DashboardContent from "../components/admin/DashboardContent";
+import Configurations from "../components/admin/Configurations";
+import ManageHome from "../components/admin/UserManagment/ManageHome";
+import UserDetailPage from "../components/admin/UserManagment/UserDetailPage";
 import SessionTimeout from "../components/admin/SessionTimeout";
-import TransactionMonitoring from "../components/admin/TransactionMonitoring";
+import TransactionMonitoring from "../components/admin/ManageSubscription/TransactionMonitoring";
+import RefundDispute from "../components/admin/ManageSubscription/RefundDispute";
+import PaymentReport from "../components/admin/ManageSubscription/PaymentReport";
+import SubscriptionTracking from "../components/admin/ManageSubscription/SubscriptionTracking";
 
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
@@ -20,6 +23,9 @@ export default function Dashboard() {
   console.log("userId:", userId);
   const [currentPage, setCurrentPage] = useState(1);
   console.log(activeItem);
+  const [refundCurrentPage, setRefundCurrentPage] = useState(1);
+  const [paymentCurrentPage, setPaymentCurrentPage] = useState(1);
+  const [trackingCurrentPage, setTrackingCurrentPage] = useState(1);
 
   // Added session TimeOut
 
@@ -27,45 +33,44 @@ export default function Dashboard() {
   const [showSessionTimeout, setShowSessionTimeout] = useState(false);
 
   const handleSessionTimeout = useCallback(() => {
-  setShowSessionTimeout(true);
+    setShowSessionTimeout(true);
   }, []);
 
   useIdleTimeout({
-  timeoutMs: 15 * 60 * 1000,
-  onTimeout: handleSessionTimeout,
-  enabled: !showSessionTimeout,
+    timeoutMs: 15 * 60 * 1000,
+    onTimeout: handleSessionTimeout,
+    enabled: !showSessionTimeout,
   });
 
   const handleLogout = () => {
-  localStorage.removeItem("token");
-  sessionStorage.clear();
-  navigate("/admin",{ replace: true });
-};
+    localStorage.removeItem("token");
+    sessionStorage.clear();
+    navigate("/admin", { replace: true });
+  };
 
   return (
-    <div className='h-screen flex  flex-col'>
-
+    <div className="h-screen flex  flex-col">
       {/* Navbar */}
       <Navbar />
 
       {/* Main Layout */}
-      <div className='flex flex-1 min-h-0 overflow-hidden'>
-
+      <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* Sidebar */}
-        <Sidebar 
-        activeItem={activeItem}
+        <Sidebar
+          activeItem={activeItem}
           setActiveItem={setActiveItem}
           onLogout={handleLogout}
-          />
+        />
 
         {/* Content Wrapper */}
-        <div className='flex-1 overflow-hidden bg-gray-100 '>
+        <div className="flex-1 overflow-hidden bg-gray-100 ">
           {activeItem === "dashboard" && <DashboardContent />}
 
           {/* {activeItem === "manage" && (
             <ManageHome />
           )} */}
 
+          {/*Manage Users & Roles */}
           {activeItem === "manage" &&
             (userId ? (
               <UserDetailPage userId={userId} onBack={() => setUserId(null)} />
@@ -76,21 +81,43 @@ export default function Dashboard() {
                 onPageChange={setCurrentPage}
               />
             ))}
- {activeItem === "transaction" && (
-  <TransactionMonitoring />
-)}
-          {activeItem === "configuration" && (
-            <Configurations />
+
+          {/*Configuration */}
+          {activeItem === "configuration" && <Configurations />}
+
+          {/*Manage Subscription - Transaction Monitoring */}
+          {activeItem === "transaction" && <TransactionMonitoring />}
+
+          {/*Manage Subscription - Refund & Dispute */}
+          {activeItem === "refund" && (
+            <RefundDispute
+              currentPage={refundCurrentPage}
+              onPageChange={setRefundCurrentPage}
+            />
+          )}
+
+          {/*Manage Subscription - Payment Report */}
+          {activeItem === "payment" && (
+            <PaymentReport
+              currentPage={paymentCurrentPage}
+              onPageChange={setPaymentCurrentPage}
+            />
+          )}
+
+          {/*Manage Subscription - Subscription Tracking */}
+          {activeItem === "tracking" && (
+            <SubscriptionTracking
+              currentPage={trackingCurrentPage}
+              onPageChange={setTrackingCurrentPage}
+            />
           )}
         </div>
-
       </div>
       <SessionTimeout
-  open={showSessionTimeout}
-  onClose={handleLogout}
-  onLogin={handleLogout}
-/>
-
+        open={showSessionTimeout}
+        onClose={handleLogout}
+        onLogin={handleLogout}
+      />
     </div>
-  )
+  );
 }
