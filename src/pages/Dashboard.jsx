@@ -7,6 +7,8 @@ import Configurations from '../components/admin/Configurations'
 import ManageHome from '../components/admin/UserManagment/ManageHome'
 import UserDetailPage from '../components/admin/UserManagment/UserDetailPage'
 import SessionTimeout from "../components/admin/SessionTimeout";
+import TransactionMonitoring from "../components/admin/TransactionMonitoring";
+
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
 
@@ -74,7 +76,9 @@ export default function Dashboard() {
                 onPageChange={setCurrentPage}
               />
             ))}
-
+ {activeItem === "transaction" && (
+  <TransactionMonitoring />
+)}
           {activeItem === "configuration" && (
             <Configurations />
           )}

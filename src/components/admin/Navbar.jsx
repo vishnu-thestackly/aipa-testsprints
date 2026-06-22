@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import { useState, useEffect, useRef } from "react";
 import logo from "../../assets/images/Logo.jpeg";
 import SignOut from "../../assets/images/SignOut.png";
 import profile from "../../assets/images/profile.png";
@@ -10,9 +10,36 @@ export default function Navbar() {
 const [openMenu,setOpenMenu]=useState(false);
 const [activeItem,setActiveItem]=useState("dashboard");
 
-return (
-<div className="w-screen min-w-screen relative left-0 right-0 bg-white overflow-x-hidden">
+const [showLanguages, setShowLanguages] = useState(false);
+const [selectedLanguage, setSelectedLanguage] = useState("English");
+const languageRef = useRef(null);
 
+const languages = [
+  "English",
+  "Spanish",
+  "German",
+  "Portuguese",
+  "Latin",
+];
+useEffect(() => {
+  function handleClickOutside(event) {
+    if (
+      languageRef.current &&
+      !languageRef.current.contains(event.target)
+    ) {
+      setShowLanguages(false);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
+return (
+<div className="w-screen min-w-screen relative bg-white overflow-visible z-[9999]">
 {/* MOBILE VIEW */}
 
 <div className="md:hidden px-[20px] pt-[10px] pb-[14px]">
@@ -51,18 +78,71 @@ Dashboard
 <div className="flex gap-[8px] items-center">
 
 {/* Translate */}
+<div className="relative" ref={languageRef}>
 
-<div className="w-[35px] h-[35px] min-[360px]:w-[38px] min-[360px]:h-[38px] min-[390px]:w-[40px] min-[390px]:h-[40px] bg-[#4866F626] rounded-full flex justify-center items-center">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-[#4866F6]">
+<div
+  onClick={() => setShowLanguages(!showLanguages)}
+  className="w-[35px] h-[35px] min-[360px]:w-[38px] min-[360px]:h-[38px] min-[390px]:w-[40px] min-[390px]:h-[40px] bg-[#4866F626] rounded-full flex justify-center items-center cursor-pointer"
+><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" className="text-[#4866F6]">
 <path d="M13.5 3.75V5.25H11.1C10.6058 7.37035 9.59593 9.33596 8.16 10.9725C9.24497 12.0793 10.5543 12.9412 12 13.5L11.4675 14.88C9.8444 14.228 8.37362 13.2475 7.1475 12C5.89872 13.2306 4.42769 14.213 2.8125 14.895L2.25 13.5C3.68742 12.8915 4.99958 12.0218 6.12 10.935C5.10624 9.69875 4.3421 8.27746 3.87 6.75H5.445C5.82704 7.8886 6.4086 8.95013 7.1625 9.885C8.31901 8.55344 9.13944 6.96402 9.555 5.25H1.5V3.75H6.75V1.5H8.25V3.75H13.5ZM22.5 21.75H20.8874L19.6874 18.75H14.55L13.35 21.75H11.7375L16.2374 10.5H18L22.5 21.75ZM17.115 12.33L15.15 17.25H19.0874L17.115 12.33Z"/>
-</svg>
+</svg></div>
+{showLanguages && (
+  <div
+  className="
+  fixed
+  top-[125px]
+  right-[10px]
+  z-[999999]
+  w-[280px]
+"
+>
+    <div
+      className="
+        bg-white
+        rounded-[25px]
+        border
+        border-[#E5E5E5]
+        px-[8px]
+        py-[6px]
+      "
+    >
+      <div className="flex items-center gap-[2px] overflow-x-auto no-scrollbar">
+
+        {languages.map((item) => (
+          <button
+            key={item}
+            onClick={(e) => {
+  e.stopPropagation();
+  setSelectedLanguage(item);
+  setShowLanguages(false);
+}}
+            className={`
+              flex-shrink-0
+              min-w-[110px]
+              h-[32px]
+              rounded-[18px]
+              text-[14px]
+              ${
+                selectedLanguage === item
+                  ? "bg-[#4866F6] text-white"
+                  : "text-[#4866F6]"
+              }
+            `}
+          >
+            {item}
+          </button>
+        ))}
+
+      </div>
+    </div>
+  </div>
+)}
 
 </div>
 
-
-
 {/* Notification */}
-<div className="w-[35px] h-[35px] min-[360px]:w-[38px] min-[360px]:h-[38px] min-[390px]:w-[40px] min-[390px]:h-[40px] bg-[#4866F626] rounded-full flex justify-center items-center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+<div className="w-[35px] h-[35px] min-[360px]:w-[38px] min-[360px]:h-[38px] min-[390px]:w-[40px] min-[390px]:h-[40px] bg-[#4866F626] rounded-full flex justify-center items-center">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
 <path d="M2.53001 14.77C2.31701 16.164 3.26801 17.131 4.43201 17.613C8.89501 19.463 15.105 19.463 19.568 17.613C20.732 17.131 21.683 16.163 21.47 14.77C21.34 13.913 20.693 13.2 20.214 12.503C19.587 11.579 19.525 10.572 19.524 9.5C19.525 5.358 16.157 2 12 2C7.843 2 4.47501 5.358 4.47501 9.5C4.47501 10.572 4.41301 11.58 3.78501 12.503C3.30701 13.2 2.66101 13.913 2.53001 14.77Z" stroke="#4866F6" strokeWidth="1.5"/>
 <path d="M8 19C8.458 20.725 10.076 22 12 22C13.925 22 15.541 20.725 16 19" stroke="#4866F6" strokeWidth="1.5"/>
 </svg>
@@ -279,7 +359,7 @@ ASSISTANT
 
 {/* RIGHT */}
 
-<div className="flex items-center justify-between flex-1 min-w-0 ml-3 overflow-hidden">
+<div className="relative flex items-center justify-between flex-1 min-w-0 ml-3 overflow-visible z-10">
 
 <div className="px-2 md:px-3 lg:px-10 min-w-0">
 
@@ -295,12 +375,75 @@ Dashboard
             {/* ICON GROUP */}
 <div className="flex gap-3 md:gap-6 lg:gap-7 justify-center items-center">
 
-  <div className={`${icon_bg} group hover:bg-[#4866F6] hover:text-white cursor-pointer hover:scale-105`}>
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="transition-colors duration-300">
+
+
+<div className="relative">
+  <div
+    onClick={() => setShowLanguages(!showLanguages)}
+    className={`${icon_bg} group hover:bg-[#4866F6] hover:text-white cursor-pointer hover:scale-105`}
+  >
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
       <path d="M13.5 3.75V5.25H11.1C10.6058 7.37035 9.59593 9.33596 8.16 10.9725C9.24497 12.0793 10.5543 12.9412 12 13.5L11.4675 14.88C9.8444 14.228 8.37362 13.2475 7.1475 12C5.89872 13.2306 4.42769 14.213 2.8125 14.895L2.25 13.5C3.68742 12.8915 4.99958 12.0218 6.12 10.935C5.10624 9.69875 4.3421 8.27746 3.87 6.75H5.445C5.82704 7.8886 6.4086 8.95013 7.1625 9.885C8.31901 8.55344 9.13944 6.96402 9.555 5.25H1.5V3.75H6.75V1.5H8.25V3.75H13.5ZM22.5 21.75H20.8874L19.6874 18.75H14.55L13.35 21.75H11.7375L16.2374 10.5H18L22.5 21.75ZM17.115 12.33L15.15 17.25H19.0874L17.115 12.33Z"/>
     </svg>
   </div>
 
+  {showLanguages && (
+    <div
+      ref={languageRef}
+      className="
+        fixed
+        top-[90px]
+        right-[25px]
+        z-[999999]
+        w-[350px]
+      "
+    >
+      <div
+        className="
+          bg-white
+          rounded-[25px]
+          border
+          border-[#E5E5E5]
+          px-[8px]
+          py-[6px]
+          shadow-lg
+        "
+      >
+        <div className="flex items-center gap-[2px] overflow-x-auto no-scrollbar">
+
+          {languages.map((item) => (
+            <button
+              key={item}
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedLanguage(item);
+                setShowLanguages(false);
+              }}
+              className={`
+                flex-shrink-0
+                min-w-[125px]
+                h-[36px]
+                rounded-[18px]
+                text-[14px]
+                font-medium
+                transition-all
+                duration-300
+                ${
+                  selectedLanguage === item
+                    ? "bg-[#4866F6] text-white"
+                    : "bg-white text-[#4866F6]"
+                }
+              `}
+            >
+              {item}
+            </button>
+          ))}
+
+        </div>
+      </div>
+    </div>
+  )}
+</div>
   <div className={`${icon_bg} group hover:bg-[#4866F6] hover:text-white cursor-pointer hover:scale-105`}>
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="transition-colors duration-300">
       <path d="M2.53001 14.77C2.31701 16.164 3.26801 17.131 4.43201 17.613C8.89501 19.463 15.105 19.463 19.568 17.613C20.732 17.131 21.683 16.163 21.47 14.77C21.34 13.913 20.693 13.2 20.214 12.503C19.587 11.579 19.525 10.572 19.524 9.5C19.525 5.358 16.157 2 12 2C7.843 2 4.47501 5.358 4.47501 9.5C4.47501 10.572 4.41301 11.58 3.78501 12.503C3.30701 13.2 2.66101 13.913 2.53001 14.77Z" stroke="currentColor" strokeWidth="1.5"/>
