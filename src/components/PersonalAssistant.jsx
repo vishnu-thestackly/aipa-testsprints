@@ -4,7 +4,7 @@ import { askAI } from "../Pages/askAI";
 import Logoimg from "../assets/images/Logoimg.svg";
 import AiImage from "../assets/images/AiImage.png"
 import Profile from "../assets/images/Profile.png";
-git
+
 export default function PersonalAssistant({ onClose }) {
   const [messages, setMessages] = useState([
     {

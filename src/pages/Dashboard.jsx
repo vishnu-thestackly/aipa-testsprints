@@ -9,11 +9,13 @@ import UserDetailPage from '../components/admin/UserManagment/UserDetailPage'
 import SessionTimeout from "../components/admin/SessionTimeout";
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
-import TransactionMonitoring from "../components/admin/TransactionMonitoring";
 
 export default function Dashboard() {
   const [activeItem, setActiveItem] = useState("dashboard");
   const [userId, setUserId] = useState(null);
+  console.log("Dashboard userId:", userId);
+  console.log("userId: after");
+  console.log("userId:", userId);
   const [currentPage, setCurrentPage] = useState(1);
   console.log(activeItem);
 
@@ -51,6 +53,7 @@ export default function Dashboard() {
         <Sidebar 
         activeItem={activeItem}
           setActiveItem={setActiveItem}
+          onLogout={handleLogout}
           />
 
         {/* Content Wrapper */}
@@ -71,11 +74,7 @@ export default function Dashboard() {
                 onPageChange={setCurrentPage}
               />
             ))}
-            
 
-       {activeItem === "transactionmonitoring" && (
-  <TransactionMonitoring />
-)}
           {activeItem === "configuration" && (
             <Configurations />
           )}
