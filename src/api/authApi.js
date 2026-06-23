@@ -974,3 +974,73 @@ export const getLocations = async (limit = 20) => {
   );
   return response.data;
 };
+
+
+
+
+// ================= ADMIN PROFILE =================
+
+export const getAdminProfile = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin/profile",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch admin profile";
+  }
+};
+
+
+// ================= UPDATE ADMIN PROFILE =================
+
+export const updateAdminProfile = async (formData) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.put(
+      "/api/v1/admin/profile",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to update profile";
+  }
+};
+
+// ================= CHANGE ADMIN PASSWORD =================
+
+export const changeAdminPassword = async (passwordData) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/admin/profile/change-password",
+      passwordData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Password change failed";
+  }
+};

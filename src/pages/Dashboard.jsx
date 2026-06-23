@@ -11,6 +11,11 @@ import TransactionMonitoring from "../components/admin/ManageSubscription/Transa
 import RefundDispute from "../components/admin/ManageSubscription/RefundDispute";
 import PaymentReport from "../components/admin/ManageSubscription/PaymentReport";
 import SubscriptionTracking from "../components/admin/ManageSubscription/SubscriptionTracking";
+import SubscriptionPlan from "../components/admin/adminprofile/SubscriptionPlan";
+import AddSubscription from "../components/admin/adminprofile/AddSubscription";
+import EditSubscription from "../components/admin/adminprofile/EditSubscription";
+
+import AdminProfile from "../components/admin/adminprofile/AdminProfile";
 
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
@@ -111,6 +116,19 @@ export default function Dashboard() {
               onPageChange={setTrackingCurrentPage}
             />
           )}
+
+          {activeItem === "subscriptionplan" && (
+  <SubscriptionPlan setActiveItem={setActiveItem} />
+)}
+
+  {activeItem === "addSubscription" && (
+    <AddSubscription setActiveItem={setActiveItem} />
+  )}
+
+  {activeItem === "editSubscription" && (
+    <EditSubscription setActiveItem={setActiveItem} />
+  )}
+  {activeItem === "profile" && <AdminProfile />}
         </div>
       </div>
       <SessionTimeout
