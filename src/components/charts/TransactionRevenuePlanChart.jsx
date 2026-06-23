@@ -36,12 +36,12 @@ export default function TransactionRevenuePlanChart({
   Revenue Chart (Based on Plans)
 </h3>
 
-        <button
-          onClick={() => setIsPieMinimized(!isPieMinimized)}
-          className="w-[28px] h-[28px] rounded-full bg-[#4866F6] text-white flex items-center justify-center text-[18px]"
-        >
-          {isPieMinimized ? "+" : "−"}
-        </button>
+       <button
+  onClick={() => setIsPieMinimized(!isPieMinimized)}
+  className="w-[28px] h-[28px] rounded-full bg-[#4866F6] text-white flex items-center justify-center text-[18px] cursor-pointer"
+>
+  {isPieMinimized ? "+" : "−"}
+</button>
       </div>
 
       <div
@@ -51,8 +51,9 @@ export default function TransactionRevenuePlanChart({
       >
         <div className="h-[1px] bg-[#D9D9D9] mt-6 mb-4" />
 
-        <div className="relative w-full h-[260px] sm:h-[320px]">
-          <ResponsiveContainer width="100%" height="100%">
+<div className="relative w-full h-[280px] flex justify-center items-center">
+    <div className="relative w-[320px] h-[320px]">
+            <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={planData}
@@ -79,42 +80,27 @@ export default function TransactionRevenuePlanChart({
           </div>
 
           <PercentageBubble
-            value="55%"
-            className="
-              absolute
-              left-[-12%]
-              min-[375px]:left-[-5%]
-              min-[425px]:left-[2%]
-              sm:left-[8%]
-              md:left-[19%]
-              lg:left-[16%]
-              xl:left-[12%]
-              top-[48%]
-              md:top-[50%]
-              -translate-y-1/2
-            "
-          />
+  value="55%"
+  className="
+    absolute
+    left-[-30px]
+    top-1/2
+    -translate-y-1/2
+    z-10
+  "
+/>
 
-          <PercentageBubble
-            value="45%"
-            reverse
-            className="
-              absolute
-              right-[-12%]
-              min-[375px]:right-[6%]
-              top-[15%]
-              sm:right-[10%]
-              sm:top-[18%]
-              md:right-[18%]
-              md:top-[20%]
-              lg:right-[18%]
-              lg:top-[20%]
-              xl:right-[15%]
-              xl:top-[20%]
-              min-[1440px]:right-[8%]
-            "
-          />
-        </div>
+<PercentageBubble
+  value="45%"
+  reverse
+  className="
+    absolute
+    right-[-15px]
+    top-[50px]
+    z-10
+  "
+/></div>
+</div>
 
         <div className="flex justify-center gap-10 mt-4">
           <div className="flex items-center gap-2">

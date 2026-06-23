@@ -21,11 +21,11 @@ export default function TransactionRevenueChart({
         </h3>
 
         <button
-          onClick={() => setIsMinimized(!isMinimized)}
-          className="w-[28px] h-[28px] rounded-full bg-[#4866F6] text-white flex items-center justify-center text-[18px]"
-        >
-          {isMinimized ? "+" : "−"}
-        </button>
+  onClick={() => setIsMinimized(!isMinimized)}
+  className="w-[28px] h-[28px] rounded-full bg-[#4866F6] text-white flex items-center justify-center text-[18px] cursor-pointer"
+>
+  {isMinimized ? "+" : "−"}
+</button>
       </div>
 
       <div
@@ -35,8 +35,8 @@ export default function TransactionRevenueChart({
       >
         <div className="h-[1px] bg-[#D9D9D9] mt-6 mb-4" />
 
-        <div className="w-full h-[260px]">
-          <ResponsiveContainer width="100%" height="100%">
+<div className="w-[90%] mx-auto h-[260px]">       
+     <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={revenueData}
               margin={{ top: 10, right: 10, left: 5, bottom: 20 }}
@@ -50,22 +50,23 @@ export default function TransactionRevenueChart({
                 tickLine={false}
               />
 
-              <YAxis
-                width={55}
-                domain={[0, 100]}
-                ticks={[0, 20, 40, 60, 80, 100]}
-                tickFormatter={(v) => `${v}%`}
-                tick={{ fill: "#6D83AA", fontSize: 14 }}
-                axisLine={{ stroke: "#D9D9D9", strokeWidth: 1 }}
-                tickLine={false}
-                label={{
-                  value: "Percentage %",
-                  angle: -90,
-                  position: "insideLeft",
-                  dy: 40,
-                  style: { fill: "#4B5563", fontSize: 16 },
-                }}
-              />
+             <YAxis
+  width={65}
+  domain={[0, 100]}
+  ticks={[0, 20, 40, 60, 80, 100]}
+  tickFormatter={(v) => `${v}%`}
+  label={{
+    value: "Percentage %",
+    angle: -90,
+    position: "insideLeft",
+    dx: -1,
+    dy: 40,
+    style: {
+      fill: "#4B5563",
+      fontSize: 16,
+    },
+  }}
+/>
 
               <Line
                 type="monotone"
