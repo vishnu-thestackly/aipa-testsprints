@@ -50,10 +50,7 @@ export default function CancelSubscriptionModal({
       <div className="w-full max-w-[620px] bg-white rounded-[20px] p-8 relative shadow-xl">
 
         {/* Close */}
-        <button
-          onClick={onClose}
-          className="absolute top-5 right-5 w-[18px] h-[18px] rounded-full bg-[#FF4D4F] text-white flex items-center justify-center text-[10px]"
-        >
+        <button onClick={onClose} className="absolute top-5 right-5 w-[18px] h-[18px] rounded-full bg-[#FF4D4F] text-white flex items-center justify-center text-[10px] cursor-pointer">
           ✕
         </button>
 
@@ -83,19 +80,11 @@ export default function CancelSubscriptionModal({
 
         {/* Buttons */}
         <div className="flex justify-center items-center gap-2 mt-8">
-            <button
-            onClick={() => handleCancel(true)}
-            disabled={loading}
-            className="flex-1 max-w-[140px] h-[42px] rounded-full bg-[#4866F6] text-white text-[13px] disabled:opacity-50"
-          >
+           <button onClick={() => handleCancel(true)} disabled={loading} className="flex-1 max-w-[140px] h-[42px] rounded-full bg-[#4866F6] text-white text-[13px] cursor-pointer disabled:opacity-50">
             {loading ? "Please wait..." : "Cancel Now"}
           </button>
 
-            <button
-            onClick={() => handleCancel(false)}
-            disabled={loading}
-            className="flex-1 max-w-[170px] h-[42px] rounded-full bg-[#4866F6] text-white text-[13px] disabled:opacity-50"
-          >
+            <button onClick={() => handleCancel(false)} disabled={loading} className="flex-1 max-w-[170px] h-[42px] rounded-full bg-[#4866F6] text-white text-[13px] cursor-pointer disabled:opacity-50">
             {loading ? "Please wait..." : "Cancel End of Cycle"}
           </button>
 </div>

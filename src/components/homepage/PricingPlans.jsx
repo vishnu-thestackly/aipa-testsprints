@@ -52,8 +52,9 @@ className="w-[16px] h-[16px]"
 ))}
 </div>
 
-<button className="mt-8 mx-auto flex items-center justify-center gap-2 w-[145px] sm:w-[190px] lg:w-[165px] xl:w-[190px] h-[46px] lg:h-[44px] xl:h-[50px] rounded-full bg-[#4A63FF] text-white text-[14px] lg:text-[14px] xl:text-[16px]">Upgrade Plan
-<img src={Sparkle} alt="" className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px]" />
+<button className="mt-8 mx-auto flex items-center justify-center gap-2 w-[145px] sm:w-[190px] lg:w-[165px] xl:w-[190px] h-[46px] lg:h-[44px] xl:h-[50px] rounded-full bg-[#4A63FF] text-white text-[14px] lg:text-[14px] xl:text-[16px] cursor-pointer hover:bg-[#3F5AE6] transition-all duration-300">
+  Upgrade Plan
+  <img src={Sparkle} alt="" className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px]" />
 </button>
 
 </div>

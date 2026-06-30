@@ -49,10 +49,7 @@ export default function UpgradePlanModal({
       <div className="w-full max-w-[620px] bg-white rounded-[24px] px-10 py-8 relative">
 
         {/* Close */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 w-[16px] h-[16px] rounded-full bg-[#FF4D4F] text-white flex items-center justify-center text-[10px]"
-        >
+        <button onClick={onClose} className="absolute top-4 right-4 w-[16px] h-[16px] rounded-full bg-[#FF4D4F] text-white flex items-center justify-center text-[10px] cursor-pointer">
           ✕
         </button>
 
@@ -69,22 +66,14 @@ export default function UpgradePlanModal({
         {/* Select Plan */}
         <div className="mt-6">
 <div className="relative">
-  <select
-    value={selectedPlan}
-    onChange={(e) => setSelectedPlan(e.target.value)}
-    className="w-full h-[46px] border border-[#D9D9D9] rounded-[8px] px-4 appearance-none text-[#A0A7B5] outline-none bg-white"
->
-    <option value="">Select Plan</option>
-    <option value="monthly">Monthly</option>
-    <option value="annual">Yearly</option>
-</select>
+  <select className="w-full h-[46px] border border-[#D9D9D9] rounded-[8px] px-4 appearance-none text-[#A0A7B5] outline-none bg-white cursor-pointer">
+    <option className="cursor-pointer">Select Plan</option>
+  <option className="cursor-pointer">Basic Plan</option>
+  <option className="cursor-pointer">Premium Plan</option>
+  </select>
 
-  <img
-    src={arrowIcon}
-    alt="arrow"
-    className="absolute right-6 top-1/2 -translate-y-1/2 w-[12px] h-[12px] pointer-events-none"
-  />
-</div>
+  <img src={arrowIcon} alt="arrow" className="absolute right-6 top-1/2 -translate-y-1/2 w-[12px] h-[12px] pointer-events-none" />
+</div>  
             
         </div>
 
@@ -120,10 +109,12 @@ export default function UpgradePlanModal({
         <button
             onClick={handleConfirmPayment}
             disabled={loading}
-            className="w-full h-[44px] rounded-full bg-[#4866F6] text-white mt-8 font-medium disabled:opacity-50"
+           className="w-full h-[44px] rounded-full bg-[#4866F6] text-white mt-8 font-medium cursor-pointer"
           >
             {loading ? "Redirecting..." : "Confirm & Pay"}
           </button>
+
+          
 
       </div>
 

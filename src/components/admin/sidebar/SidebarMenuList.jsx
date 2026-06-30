@@ -83,7 +83,7 @@ export default function SidebarMenuList({
             </button>
 
             {hasChildren && isMenuOpen && !isTablet && (
-              <div className={isMobile ? "ml-[32px] mt-[6px] flex flex-col gap-[2px]" : "ml-2 mt-[2px] flex flex-col gap-1"}>
+              <div className={isMobile ? "ml-[42px] mt-[6px] flex flex-col gap-[2px]" : "ml-6 mt-[2px] flex flex-col gap-1"}>
                 {item.children.map((child) => (
                   <button
   key={child.key}
@@ -94,19 +94,19 @@ export default function SidebarMenuList({
       setSidebarOpen?.(false);
     }
   }}
-  className={
-    isMobile
-      ? `w-auto h-auto flex items-center gap-3 rounded-lg px-3 py-2 transition-all duration-200 group text-left ${
-          activeItem === child.key
-            ? "bg-[#4866F6]"
-            : "hover:bg-[#EEF3FF]"
-        }`
-      : `w-[270px] h-[40px] flex items-center gap-3 rounded-lg px-3 transition-all duration-200 group text-left ${
-          activeItem === child.key
-            ? "bg-[#4866F6]"
-            : "hover:bg-[#EEF3FF]"
-        }`
-  }
+ className={
+  isMobile
+    ? `w-auto h-auto flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer transition-all duration-200 group text-left ${
+        activeItem === child.key
+          ? "bg-[#4866F6]"
+          : "hover:bg-[#EEF3FF]"
+      }`
+    : `w-[270px] h-[40px] flex items-center gap-3 rounded-lg px-3 cursor-pointer transition-all duration-200 group text-left ${
+        activeItem === child.key
+          ? "bg-[#4866F6]"
+          : "hover:bg-[#EEF3FF]"
+      }`
+}
 >
                     <child.Icon
                       className={`w-5 h-5 ${
