@@ -21,6 +21,11 @@ import disputeIcon from "../../../assets/images/Dispute_icon.svg";
 import refundIcon from "../../../assets/images/Refund_icon.svg";
 import sparkleIcon from "../../../assets/images/Sparkle.svg";
 
+import {
+  getRefundKpis,
+  getRefundList,
+  exportRefunds,
+} from "../../../api/authApi";
 // -----------------------------------------------------------------------------
 // CONSTANTS
 // -----------------------------------------------------------------------------
@@ -115,11 +120,43 @@ export default function RefundDispute({
     setSelectedRequestId(null);
   };
 
+
+
+
+  const fetchRefundData = async () => {
+  try {
+    const [kpiRes, refundRes] = await Promise.all([
+      getRefundKpis(),
+      getRefundList({ page: 1 }),
+    ]);
+
+    console.log("KPI Response:", kpiRes);
+    console.log("Refund List Response:", refundRes);
+
+    setStats(kpiRes);
+
+    const formattedData = refundRes.map((item) => ({
+      id: item.request_id,
+      request_id: item.request_id,
+      request_code: item.request_code,
+      name: item.user_name,
+      amount: item.amount,
+      reason: item.reason,
+      status:
+        item.status.charAt(0).toUpperCase() +
+        item.status.slice(1).toLowerCase(),
+      date: new Date(item.created_at).toLocaleDateString(),
+    }));
+
+    setRequestsList(formattedData);
+  } catch (error) {
+    console.error("Refund API Error:", error);
+  }
+};
+
   useEffect(() => {
-    // TODO: replace mock data with API calls
-    setStats(MOCK_REFUND_KPI);
-    setRequestsList(MOCK_REFUND_REQUESTS);
-  }, []);
+  fetchRefundData();
+}, []);
 
   return (
     <div className="h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide">
@@ -240,6 +277,7 @@ function RefundManagementSection({
   onViewRequest,
   currentPage,
   onPageChange,
+  onExport,
 }) {
   const [selectedStatuses, setSelectedStatuses] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -248,6 +286,33 @@ function RefundManagementSection({
     setSearchQuery(event.target.value);
     onPageChange(1);
   };
+  const handleExport = async () => {
+  try {
+    const response = await exportRefunds({
+      search: searchQuery,
+      status: selectedStatuses.join(","),
+    });
+
+    const blob = new Blob([response], {
+      type: "text/csv",
+    });
+
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "refunds.csv";
+
+    document.body.appendChild(link);
+    link.click();
+
+    link.remove();
+
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Export failed:", error);
+  }
+};
 
   const toggleStatus = (value) => {
     setSelectedStatuses((prev) =>
@@ -281,6 +346,7 @@ function RefundManagementSection({
         onSearchChange={handleSearchChange}
         selectedStatuses={selectedStatuses}
         onToggleStatus={toggleStatus}
+        onExport={handleExport}
       />
       <SectionDivider />
       <RefundTableBlock
@@ -301,6 +367,7 @@ function RefundToolbar({
   onSearchChange,
   selectedStatuses,
   onToggleStatus,
+  onExport,
 }) {
   return (
     <div className="mb-0 flex w-full shrink-0 flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -319,7 +386,7 @@ function RefundToolbar({
           onToggle={onToggleStatus}
           className="w-full sm:w-auto"
         />
-        <ExportButton className="w-full sm:w-auto shrink-0 justify-center sm:inline-flex" />
+        <ExportButton onClick={onExport} className="w-full sm:w-auto shrink-0 justify-center sm:inline-flex" />
       </div>
     </div>
   );

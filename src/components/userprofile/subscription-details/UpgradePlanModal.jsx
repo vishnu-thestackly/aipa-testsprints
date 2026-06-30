@@ -1,11 +1,47 @@
-import React from "react";
+import React, { useState } from "react";
 import arrowIcon from "../../../assets/images/arrow.svg";
+
+import { createCheckoutSession } from "../../../api/authApi";
 
 export default function UpgradePlanModal({
   isOpen,
   onClose,
-}) {
+}) 
+{
+  const [selectedPlan, setSelectedPlan] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirmPayment = async () => {
+  if (!selectedPlan) {
+    alert("Please select a plan.");
+    return;
+  }
+
+  const payload = {
+    plan_type: selectedPlan,
+  };
+
+  console.log("Payload:", payload);
+
+  try {
+    setLoading(true);
+
+    const response = await createCheckoutSession(payload);
+
+    console.log("Checkout Response:", response);
+
+    if (response.checkout_url) {
+      window.location.href = response.checkout_url;
+    }
+  } catch (error) {
+    console.error("Checkout Error:", error.response?.data);
+  } finally {
+    setLoading(false);
+  }
+};
+
   if (!isOpen) return null;
+  
 
   return (
     <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center px-4">
@@ -34,12 +70,14 @@ export default function UpgradePlanModal({
         <div className="mt-6">
 <div className="relative">
   <select
+    value={selectedPlan}
+    onChange={(e) => setSelectedPlan(e.target.value)}
     className="w-full h-[46px] border border-[#D9D9D9] rounded-[8px] px-4 appearance-none text-[#A0A7B5] outline-none bg-white"
-  >
-    <option>Select Plan</option>
-    <option>Basic Plan</option>
-    <option>Premium Plan</option>
-  </select>
+>
+    <option value="">Select Plan</option>
+    <option value="monthly">Monthly</option>
+    <option value="annual">Yearly</option>
+</select>
 
   <img
     src={arrowIcon}
@@ -79,9 +117,13 @@ export default function UpgradePlanModal({
         </div>
 
         {/* Button */}
-        <button className="w-full h-[44px] rounded-full bg-[#4866F6] text-white mt-8 font-medium">
-          Confirm & Pay
-        </button>
+        <button
+            onClick={handleConfirmPayment}
+            disabled={loading}
+            className="w-full h-[44px] rounded-full bg-[#4866F6] text-white mt-8 font-medium disabled:opacity-50"
+          >
+            {loading ? "Redirecting..." : "Confirm & Pay"}
+          </button>
 
       </div>
 

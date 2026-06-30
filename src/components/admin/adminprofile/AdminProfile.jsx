@@ -5,18 +5,19 @@ import AdminEmail from "../../../assets/images/AdminEmail.svg";
 import AdminNumber from "../../../assets/images/AdminNumber.svg";
 import AdminPassword from "../../../assets/images/AdminPassword.svg";
 import AdminUser from "../../../assets/images/AdminUser.svg";
-import Profile from "../../../assets/images/Profile.png";
+import Profile from "../../../assets/images/profile.png";
 import Arrow from "../../../assets/images/Arrow.png";
 import Password_Visible from '../../../assets/images/Password_Visible.svg';
 import UploadImage from '../../../assets/images/UploadImage.svg';
 import India_Flag from "../../../assets/images/India_Flag.svg";
 import Italy_Flag from '../../../assets/images/Italy_Flag.svg';
-import Mobile from '../../../assets/images/Mobile.svg';
+import Mobile from '../../../assets/images/mobile.svg';
 
 
 import {
-  getAdminProfile,
-  updateAdminProfile,
+    getUserProfile,
+  updateUserProfile,
+  uploadAvatar,
   changeAdminPassword,
   getCountryCodes,
 } from "../../../api/authApi";
@@ -46,13 +47,16 @@ const AdminProfile = () => {
     });
 
     const fetchCountryCodes = async () => {
-    try {
-        const response = await getCountryCodes();
-        setSelectCountries(response);
-    } catch (error) {
-        console.log(error);
-    }
-};
+        try {
+            const response = await getCountryCodes();
+
+            console.log(response);
+
+            setSelectCountries(response.countries || []);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -81,30 +85,6 @@ const AdminProfile = () => {
     };
 
 
-    
-
-    const fetchAdminProfile = async () => {
-    try {
-        setLoading(true);
-
-        const response = await getAdminProfile();
-
-        setProfileData({
-            name: response.name || "",
-            email: response.email || "",
-            phone: response.phone || "",
-            countryCode: response.country_code || "+91",
-            avatarUrl: response.avatar_url || "",
-            image: null,
-        });
-    } catch (error) {
-        console.log(error);
-        alert(error.detail || "Failed to load profile");
-    } finally {
-        setLoading(false);
-    }
-};
-
        
     const handleProfileChange = (e) => {
         setProfileData({
@@ -125,34 +105,72 @@ const AdminProfile = () => {
                 }));
     };
 
-    const handleSaveProfile = async () => {
-    try {
-        setLoading(true);
 
-        const formData = new FormData();
+        const fetchProfile = async () => {
+              try {
+                setLoading(true);
+            
+                const response = await getUserProfile();
+            
+                console.log(response);
+            
+                setProfileData({
+                  name: response.name || "",
+                  email: response.email || "",
+                  phone: response.phone || "",
+                  countryCode: response.country_code || "+91",
+                  avatarUrl: response.avatar_url || "",
+                  image: null,
+                });
+              } catch (error) {
+                console.log(error);
+              } finally {
+                setLoading(false);
+              }
+            };
 
-        formData.append("name", profileData.name);
-        formData.append("email", profileData.email);
-        formData.append("phone", profileData.phone);
-        formData.append("country_code", profileData.countryCode);
 
-        if (profileData.image) {
-            formData.append("image", profileData.image);
-        }
+   const handleSaveProfile = async () => {
+              try {
+                setLoading(true);
+            
+                // Upload avatar first
+                if (profileData.image) {
+                  await uploadAvatar(profileData.image);
+                }
+            
+                // Update profile
+                const payload = {
+                  name: profileData.name,
+                  email: profileData.email,
+                  country_code: profileData.countryCode,
+                  phone: profileData.phone,
+                };
+            
+                const response = await updateUserProfile(payload);
 
-        const response = await updateAdminProfile(formData);
+                    if (profileData.image) {
+                      await uploadAvatar(profileData.image);
+                    }
 
-        alert(response.message);
+                    await fetchProfile();
 
-        await fetchAdminProfile();
+                    alert(response.message || "Profile updated successfully");
 
-        setActiveView("profile");
-    } catch (error) {
-        alert(error.detail || error.message || "Profile update failed");
-    } finally {
-        setLoading(false);
-    }
-};
+                    setActiveView("profile");
+              } catch (error) {
+                console.error(error);
+            
+                alert(
+                  error?.response?.data?.detail ||
+                  error?.message ||
+                  "Profile update failed"
+                );
+              } finally {
+                setLoading(false);
+              }
+            };
+
 
     const handlePasswordChange = (e) => {
         setPasswordData({
@@ -161,41 +179,46 @@ const AdminProfile = () => {
         });
     };
 
-    const handleSavePassword = async () => {
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-        alert("Passwords do not match");
-        return;
-    }
+        const handleSavePassword = async () => {
+            if (passwordData.newPassword !== passwordData.confirmPassword) {
+                alert("Passwords do not match");
+                return;
+            }
+        
+            try {
+                setLoading(true);
+            
+                const response = await changeAdminPassword({
+                    old_password: passwordData.oldPassword,
+                    new_password: passwordData.newPassword,
+                    confirm_password: passwordData.confirmPassword,
+                });
+            
+                alert(response.message || "Password updated successfully");
+            
+                setPasswordData({
+                    oldPassword: "",
+                    newPassword: "",
+                    confirmPassword: "",
+                });
+            
+                setActiveView("profile");
+            } catch (error) {
+                alert(
+                    error?.detail ||
+                    error?.message ||
+                    "Password change failed"
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+    
 
-    try {
-        setLoading(true);
-
-        const response = await changeAdminPassword({
-            old_password: passwordData.oldPassword,
-            new_password: passwordData.newPassword,
-            confirm_password: passwordData.confirmPassword,
-        });
-
-        alert(response.message);
-
-        setPasswordData({
-            oldPassword: "",
-            newPassword: "",
-            confirmPassword: "",
-        });
-
-        setActiveView("profile");
-    } catch (error) {
-        alert(error.detail || error.message || "Password change failed");
-    } finally {
-        setLoading(false);
-    }
-};
-
-         useEffect(() => {
-         fetchAdminProfile();
-         fetchCountryCodes();
-    }, []);
+        useEffect(() => {
+  fetchProfile();
+  fetchCountryCodes();
+}, []);
 
 
     return (
@@ -251,7 +274,13 @@ const AdminProfile = () => {
                             {/* Profile Image */}
                             <div className="absolute left-4 sm:left-8 md:left-12 top-[80px] sm:top-[105px] z-10">
                                 <img
-                                    src={profileData.avatarUrl || Profile}
+                                    src={
+                                      profileData.avatarUrl
+                                        ? profileData.avatarUrl.startsWith("blob:")
+                                          ? profileData.avatarUrl
+                                          : `http://127.0.0.1:8000${profileData.avatarUrl}`
+                                        : Profile
+                                    }
                                     alt=""
                                     className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 border-white object-cover"
                                 />
@@ -356,7 +385,13 @@ const AdminProfile = () => {
                                     >
                                         {profileData.avatarUrl ? (
                                             <img
-                                                src={profileData.avatarUrl}
+                                                src={
+                                                  profileData.avatarUrl
+                                                    ? profileData.avatarUrl.startsWith("blob:")
+                                                      ? profileData.avatarUrl
+                                                      : `http://127.0.0.1:8000${profileData.avatarUrl}`
+                                                    : Profile
+                                                }
                                                 alt="preview"
                                                 className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover mb-4"
                                             />
@@ -435,10 +470,10 @@ const AdminProfile = () => {
                                                 <div className="flex items-center gap-1">
                                                     <img
                                                         src={
-                                                            selectCountries.find(
-                                                                (country) =>
-                                                                    country.dial_code === profileData.countryCode
-                                                            )?.flag
+                                                          selectCountries?.find(
+                                                            (country) =>
+                                                              country.dial_code === profileData.countryCode
+                                                          )?.flag || India_Flag
                                                         }
                                                         alt=""
                                                         className="w-5 h-4 object-cover "
@@ -458,7 +493,7 @@ const AdminProfile = () => {
                                             </button>
 
                                             {selectedCountry && (
-                                                <div className="absolute left-0 top-[55px] w-full bg-white border border-[#8D97A9] rounded-lg shadow-lg z-50">
+                                                <div className="absolute left-0 top-[55px] w-full bg-white border border-[#8D97A9] rounded-lg shadow-lg z-50 max-h-[100px] overflow-y-auto dropdown-scroll">
                                                     {selectCountries.map((country) => (
                                                         <div
                                                             key={country.code}
@@ -515,7 +550,7 @@ const AdminProfile = () => {
                             <div className="flex justify-center gap-3 sm:gap-4 mt-8 sm:mt-10">
                                 <button
                                     onClick={async () => {
-                                        await fetchAdminProfile();
+                                        await fetchProfile();
                                         setActiveView("profile");
                                     }}
                                     className="border border-[#4866F6] text-[#4866F6] 

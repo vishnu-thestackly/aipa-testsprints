@@ -29,6 +29,8 @@ import eyeActionIcon from "../../../assets/images/eye_action.svg";
 import sparkleIcon from "../../../assets/images/Sparkle.svg";
 import creditCardIcon from "../../../assets/images/card.svg";
 
+import { getSubscriptionTracking } from "../../../api/authApi";
+
 // -----------------------------------------------------------------------------
 // CONSTANTS
 // -----------------------------------------------------------------------------
@@ -187,11 +189,25 @@ export default function SubscriptionTracking({ currentPage, onPageChange }) {
   // Row whose eye action was clicked; when set, the detail view replaces the list
   const [selectedSubscription, setSelectedSubscription] = useState(null);
 
+
+   const fetchSubscriptions = async () => {
+  try {
+    const response = await getSubscriptionTracking({
+      page: currentPage,
+    });
+
+    console.log("Subscription Tracking Response:", response);
+
+    setSubscriptions(Array.isArray(response) ? response : []);
+  } catch (error) {
+    console.error("Subscription Tracking Error:", error);
+  }
+};
+
   useEffect(() => {
-    // TODO: replace mock data with API calls
-    setSubscriptions(MOCK_SUBSCRIPTIONS);
-    setRenewalData(MOCK_RENEWAL_BY_MONTH);
-  }, []);
+  fetchSubscriptions();
+  setRenewalData(MOCK_RENEWAL_BY_MONTH);
+}, [currentPage]);
 
   // Detail view (eye action target) — mirrors the list/detail switch in Dashboard
   if (selectedSubscription) {
@@ -533,16 +549,16 @@ function SubscriptionTableBlock({
                     {rowNumber}
                   </td>
                   <td className="truncate whitespace-nowrap px-4 py-2.5 text-[#586D93]">
-                    {row.name}
+                    {row.user_name}
                   </td>
                   <td className="px-4 py-2.5">
-                    <PlanBadge plan={row.plan} />
+                    <PlanBadge plan={row.current_plan} />
                   </td>
                   <td className="whitespace-nowrap px-4 py-2.5 text-[#586D93]">
-                    {row.renewal_date}
+                    {row.renewal_date?.split("T")[0]}
                   </td>
                   <td className="whitespace-nowrap px-4 py-2.5 text-[#586D93]">
-                    {row.usage}
+                    {row.usage_prompts}
                   </td>
                   <td className="px-4 py-2.5 align-middle">
                     <div className="flex justify-start">

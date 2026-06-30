@@ -6,6 +6,7 @@
 // IMPORTS
 // -----------------------------------------------------------------------------
 import { Children, useEffect, useRef, useState } from "react";
+
 import dayjs from "dayjs";
 import {
   Check,
@@ -36,6 +37,12 @@ import calendarIcon from "../../../assets/images/calender.svg";
 import refundIcon from "../../../assets/images/Refund_icon.svg";
 import userStatusIcon from "../../../assets/images/user_status.svg";
 
+
+import {
+  getPaymentReportKPIs,
+  getTransactions,
+  getRevenueChart,
+} from "../../../api/authApi";
 // -----------------------------------------------------------------------------
 // CONSTANTS
 // -----------------------------------------------------------------------------
@@ -185,23 +192,76 @@ const PAYMENT_METHOD_TOTAL = 12405.0;
 // PaymentReport — payment reports home (KPIs + transactions + charts)
 // -----------------------------------------------------------------------------
 export default function PaymentReport({ currentPage, onPageChange }) {
+  console.log("Payment Report Component Rendered");
   const [stats, setStats] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [revenueData, setRevenueData] = useState([]);
   const [paymentMethodData, setPaymentMethodData] = useState([]);
 
-  useEffect(() => {
-    // TODO: replace mock data with API calls
-    setStats(MOCK_PAYMENT_KPI);
-    setTransactions(MOCK_TRANSACTIONS);
-    setRevenueData(MOCK_REVENUE_BY_MONTH);
-    setPaymentMethodData(MOCK_PAYMENT_METHOD_USAGE);
-  }, []);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [selectedPlans, setSelectedPlans] = useState([]);
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+
+
+  const fetchPaymentKPIs = async (filters = {}) => {
+  try {
+    const response = await getPaymentReportKPIs(filters);
+
+    console.log("Payment KPI Response:", response);
+
+    setStats(response?.data || response);
+  } catch (error) {
+    console.error("Failed to fetch payment KPIs:", error);
+  }
+};
+
+
+useEffect(() => {
+
+  setRevenueData(MOCK_REVENUE_BY_MONTH);
+  setPaymentMethodData(MOCK_PAYMENT_METHOD_USAGE);
+}, []);
+
+const fetchTransactions = async (filters = {}) => {
+  try {
+    const response = await getTransactions(filters);
+
+    console.log("Transactions Response:", response);
+
+    setTransactions(Array.isArray(response) ? response : []);
+  } catch (error) {
+    console.error("Failed to fetch transactions:", error);
+  }
+};
+
+useEffect(() => {
+  const filters = {
+    from_date: fromDate || undefined,
+    to_date: toDate || undefined,
+    plan: selectedPlans.join(",") || undefined,
+    status: selectedStatuses.join(",") || undefined,
+  };
+
+  fetchPaymentKPIs(filters);
+  fetchTransactions(filters);
+}, [fromDate, toDate, selectedPlans, selectedStatuses]);
+  
 
   return (
     <div className="h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide">
       <div className="w-full min-h-full flex flex-col gap-4 rounded-[20px] md:rounded-[25px] border-b border-gray-200 bg-white p-4 shadow-[0px_1px_4px_0px_#00000040] md:gap-5 md:p-5 lg:gap-6 lg:p-6">
-        <PaymentKpiSection stats={stats} />
+        <PaymentKpiSection
+              stats={stats}
+              fromDate={fromDate}
+              setFromDate={setFromDate}
+              toDate={toDate}
+              setToDate={setToDate}
+              selectedPlans={selectedPlans}
+              setSelectedPlans={setSelectedPlans}
+              selectedStatuses={selectedStatuses}
+              setSelectedStatuses={setSelectedStatuses}
+            />
         <RecentTransactionsSection
           transactions={transactions}
           currentPage={currentPage}
@@ -219,12 +279,16 @@ export default function PaymentReport({ currentPage, onPageChange }) {
 // -----------------------------------------------------------------------------
 // PaymentKpiSection — KPI summary with date/plan/status filters
 // -----------------------------------------------------------------------------
-function PaymentKpiSection({ stats }) {
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [selectedPlans, setSelectedPlans] = useState([]);
-  const [selectedStatuses, setSelectedStatuses] = useState([]);
-
+function PaymentKpiSection({  stats,
+  fromDate,
+  setFromDate,
+  toDate,
+  setToDate,
+  selectedPlans,
+  setSelectedPlans,
+  selectedStatuses,
+  setSelectedStatuses, }) {
+  
   const togglePlan = (value) => {
     setSelectedPlans((prev) =>
       prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
@@ -768,12 +832,12 @@ function TransactionTableBlock({ transactions, currentPage, onPageChange }) {
           <tbody className="divide-y divide-slate-200 bg-white">
             {tableSlots.map(({ transaction, rowNumber }, index) =>
               transaction ? (
-                <tr key={transaction.id} className="h-11 text-slate-800">
+                <tr key={transaction.payment_id} className="h-11 text-slate-800">
                   <td className="whitespace-nowrap px-3 py-2.5 text-[#586D93] md:px-3 lg:px-4">
                     {rowNumber}
                   </td>
                   <td className="truncate whitespace-nowrap px-4 py-2.5 text-[#586D93]">
-                    {transaction.name}
+                    {transaction.user_name}
                   </td>
                   <td className="truncate whitespace-nowrap px-4 py-2.5 text-[#586D93]">
                     {transaction.transaction_id}
@@ -785,7 +849,9 @@ function TransactionTableBlock({ transactions, currentPage, onPageChange }) {
                     {transaction.payment_method}
                   </td>
                   <td className="whitespace-nowrap px-4 py-2.5 text-[#586D93]">
-                    {transaction.date}
+                    {transaction.date
+    ? dayjs(transaction.date).format("DD MMM YYYY")
+    : "-"}
                   </td>
                   <td className="px-4 py-2.5 align-middle">
                     <div className="flex justify-start">

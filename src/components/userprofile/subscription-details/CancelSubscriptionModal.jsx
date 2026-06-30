@@ -1,10 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
+import { cancelSubscription } from "../../../api/authApi";
 
 export default function CancelSubscriptionModal({
   isOpen,
   onClose,
+  onSuccess,
 }) {
   if (!isOpen) return null;
+  const [reason, setReason] = useState("");
+  const [loading, setLoading] = useState(false);
+
+
+  const handleCancel = async (cancelNow) => {
+  try {
+    setLoading(true);
+
+    const response = await cancelSubscription({
+      reason,
+      cancel_now: cancelNow,
+    });
+
+    console.log(response);
+
+    alert(response.message || "Subscription cancelled successfully");
+
+    onClose();
+
+    if (onSuccess) {
+      onSuccess();
+    }
+  } catch (error) {
+  console.error("Cancel Subscription Error:", error);
+
+  if (error.response) {
+    console.log("Status:", error.response.status);
+    console.log("Data:", error.response.data);
+    alert(error.response.data.detail || JSON.stringify(error.response.data));
+  } else {
+    alert(error.message);
+  }
+}finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center px-4">
@@ -37,19 +75,29 @@ export default function CancelSubscriptionModal({
 
           <textarea
             placeholder="Enter Reason here"
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
             className="w-full h-[90px] border border-[#D9D9D9] rounded-[10px] p-3 resize-none outline-none"
           />
         </div>
 
         {/* Buttons */}
         <div className="flex justify-center items-center gap-2 mt-8">
-  <button className="flex-1 max-w-[140px] h-[42px] rounded-full bg-[#4866F6] text-white text-[13px]">
-    Cancel Now
-  </button>
+            <button
+            onClick={() => handleCancel(true)}
+            disabled={loading}
+            className="flex-1 max-w-[140px] h-[42px] rounded-full bg-[#4866F6] text-white text-[13px] disabled:opacity-50"
+          >
+            {loading ? "Please wait..." : "Cancel Now"}
+          </button>
 
-  <button className="flex-1 max-w-[170px] h-[42px] rounded-full bg-[#4866F6] text-white text-[13px]">
-    Cancel End of Cycle
-  </button>
+            <button
+            onClick={() => handleCancel(false)}
+            disabled={loading}
+            className="flex-1 max-w-[170px] h-[42px] rounded-full bg-[#4866F6] text-white text-[13px] disabled:opacity-50"
+          >
+            {loading ? "Please wait..." : "Cancel End of Cycle"}
+          </button>
 </div>
 
       </div>

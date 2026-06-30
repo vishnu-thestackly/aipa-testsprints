@@ -1,42 +1,63 @@
+import React, { useState, useEffect } from "react";
 import { ArrowLeft, Check, Sparkles, X } from "lucide-react";
 import sparkleIcon from "../../../assets/images/Sparkle.svg";
 import cardIcon from "../../../assets/images/card.svg";
 import eyeIcon from "../../../assets/images/eyes.svg";
 import downloadIcon from "../../../assets/images/download.svg";
 import rightArrow from "../../../assets/images/rightarrow.svg";
-import React, { useState } from "react";
 import CancelSubscriptionModal from "./CancelSubscriptionModal";
 import UpgradePlanModal from "./UpgradePlanModal";
 import DowngradePlanModal from "./DowngradePlanModal";
 
 
+
+import { getSubscriptionDetails, getInvoice } from "../../../api/authApi";
+import InvoicePopup from "../InvoicePopup";
+import { verifyPayment } from "../../../api/authApi";
+
 export default function SubscriptionDetails({
   setProfilePage,
 }) {
-      const billingHistory = [
-    {
-      id: 1,
-      invoice: "2626626651",
-      date: "22 May 2026",
-      amount: "₹0",
-    },
-    {
-      id: 2,
-      invoice: "2626626652",
-      date: "22 April 2026",
-      amount: "₹0",
-    },
-    {
-      id: 3,
-      invoice: "2626626653",
-      date: "22 March 2026",
-      amount: "₹0",
-    },
-  ];
+      
 const [showCancelModal, setShowCancelModal] = useState(false);
 const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 const [showDowngradeModal, setShowDowngradeModal] = useState(false);
 const [selectedPlanAction, setSelectedPlanAction] = useState("");
+const [showInvoice, setShowInvoice] = useState(false);
+const [invoiceData, setInvoiceData] = useState(null);
+
+const [subscription, setSubscription] = useState(null);
+
+useEffect(() => {
+  fetchSubscription();
+}, []);
+
+
+const handleViewInvoice = async (paymentId) => {
+  try {
+    const response = await getInvoice(paymentId);
+
+    console.log(response);
+
+    setInvoiceData(response);
+    setShowInvoice(true);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const fetchSubscription = async () => {
+  try {
+    const response = await getSubscriptionDetails();
+
+    console.log("Subscription Response:", response);
+    console.log("Billing History:", response.billing_history);
+
+    setSubscription(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <div className="px-3 sm:px-5 lg:px-7 pt-5 pb-10">
@@ -79,12 +100,12 @@ const [selectedPlanAction, setSelectedPlanAction] = useState("");
 
   <div>
     <h3 className="text-[20px] font-semibold text-[#3D3D3D]">
-      Free plan
-    </h3>
+  {subscription?.plan_name}
+</h3>
 
-    <p className="text-[#8D8D8D] text-sm">
-      Best plan for the fresher individuals
-    </p>
+<p className="text-[#8D8D8D] text-sm">
+  {subscription?.plan_description}
+</p>
   </div>
 </div>
 
@@ -97,7 +118,8 @@ const [selectedPlanAction, setSelectedPlanAction] = useState("");
     </p>
 
     <p className="text-[#8D8D8D] text-sm mt-3 whitespace-nowrap">
-  12 May 2026 - 12 June 2026
+  {new Date(subscription?.billing_cycle_start).toLocaleDateString()} -{" "}
+  {new Date(subscription?.billing_cycle_end).toLocaleDateString()}  
 </p>
   </div>
 
@@ -107,14 +129,14 @@ const [selectedPlanAction, setSelectedPlanAction] = useState("");
   </p>
 
   <p className="text-[#8D8D8D] text-sm mt-3 whitespace-nowrap">
-    12 June 2026
+    {new Date(subscription?.next_billing_date).toLocaleDateString()}
   </p>
 </div>
 
   {/* Status */}
 <div className="flex flex-col md:items-end">
 <p className="text-[#3D3D3D] font-medium text-[16px] mb-3 md:mr-10">
-        Status
+        {subscription?.status}
     </p>
 
     <div className="flex items-center gap-2 bg-[#36B66A] px-4 h-[28px] rounded-full w-fit">
@@ -198,12 +220,12 @@ className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full m
       <p className="text-[#3D3D3D] text-[14px] -ml-1 md:text-[13px] lg:text-[16px] font-medium leading-[20px] whitespace-nowrap">
   Rupay card ending in
   <span className="block md:inline whitespace-nowrap">
-    {" "}**** **** **** 2345
+    {subscription?.payment_method_brand} card ending in **** **** **** {subscription?.payment_method_last4}
   </span>
 </p>
 
         <p className="text-[#A0A7B5] text-[12px] md:text-[13px] lg:text-[14px] mt-1">
-  Expires in 12/30
+  Expires in {subscription?.payment_method_expires}
 </p>
       </div>
 
@@ -216,7 +238,7 @@ className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full m
 </p>
 
   <p className="text-[#A0A7B5] text-[12px] md:text-[13px] lg:text-[14px] mt-1 lg:mt-2">
-  12 June 2026
+  {new Date(subscription?.last_payment_date).toLocaleDateString()}
 </p>
 </div>
 
@@ -266,37 +288,38 @@ className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full m
     </thead>
 
     <tbody>
-      {billingHistory.map((item) => (
+      {subscription?.billing_history?.map((item, index) => (
         <tr
-          key={item.id}
+          key={index + 1}
           className="h-[50px] md:h-[46px] lg:h-[50px] border-t border-[#ECECEC]"
         >
           <td className="w-[12%] px-8 text-center text-[#586D93] text-[15px]">
-            {item.id}
+            {index + 1}
           </td>
 
           <td className="w-[28%] pl-22 md:pl-8 lg:pl-12 px-8 text-left text-[#586D93] text-[15px]">
-            {item.invoice}
+            {item.invoice_no}
           </td>
 
           <td className="w-[28%] pl-22 md:pl-8 lg:pl-12 px-8 text-left text-[#586D93] text-[15px]">
-            {item.date}
+            {new Date(item.date).toLocaleDateString()}
           </td>
 
           <td className="w-[12%] px-8 text-center text-[#586D93] text-[15px]">
-            {item.amount}
+            ₹{item.amount}
           </td>
 
           <td className="w-[20%] px-8">
             <div className="flex justify-center items-center gap-6 md:gap-4 lg:gap-5">
 
-              <button>
-                <img
-                  src={eyeIcon}
-                  alt="view"
-                  className="w-[18px] h-[18px]"
-                />
-              </button>
+              <button
+  onClick={() => {
+    console.log(item);
+    handleViewInvoice(item.payment_id);
+  }}
+>
+  <img src={eyeIcon} alt="view" className="w-[18px] h-[18px]" />
+</button>
 
               <button>
                 <img
@@ -356,6 +379,9 @@ className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full m
 <CancelSubscriptionModal
   isOpen={showCancelModal}
   onClose={() => setShowCancelModal(false)}
+  onSuccess={() => {
+    fetchSubscription();
+  }}
 />
 
 <UpgradePlanModal
@@ -367,6 +393,13 @@ className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full m
   isOpen={showDowngradeModal}
   onClose={() => setShowDowngradeModal(false)}
 />
+
+{showInvoice && (
+  <InvoicePopup
+    onClose={() => setShowInvoice(false)}
+    invoiceData={invoiceData}
+  />
+)}
 
     </div>
   );

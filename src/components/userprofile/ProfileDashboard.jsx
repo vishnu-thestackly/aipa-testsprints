@@ -11,7 +11,15 @@ import locationIcon from "../../assets/images/location.svg";
 import vectorIcon from "../../assets/images/Vector.svg";
 import sparkleIcon from "../../assets/images/Sparkle.svg";
 import { useNavigate } from "react-router-dom";
-import { getUserProfile } from "../../api/authApi";
+import { getUserProfile,  verifyPayment, } from "../../api/authApi";
+
+
+import PaymentSuccess from "./PaymentSuccess";
+import PaymentUnsuccessful from "./PaymentUnsuccessful";
+import { useLocation } from "react-router-dom";
+import { getInvoice } from "../../api/authApi";
+import InvoicePopup from "./InvoicePopup";
+
 
 
 export default function ProfileDashboard({ languageOpen,
@@ -25,12 +33,73 @@ export default function ProfileDashboard({ languageOpen,
   plan: true,
 });
 
-const toggleSection = (key) => {
-  setSections((prev) => ({
-    ...prev,
-    [key]: !prev[key],
-  }));
+
+const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
+const [showPaymentUnsuccessful, setShowPaymentUnsuccessful] = useState(false);
+const [showInvoice, setShowInvoice] = useState(false);
+const [invoiceData, setInvoiceData] = useState(null);
+const [paymentId, setPaymentId] = useState(null);
+
+
+const location = useLocation();
+
+const handleViewInvoice = async () => {
+  try {
+    const response = await getInvoice(paymentId);
+
+    setInvoiceData(response);
+    setShowPaymentSuccess(false);
+    setShowInvoice(true);
+  } catch (err) {
+    console.error(err);
+  }
 };
+
+
+useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const sessionId = params.get("session_id");
+
+  if (!sessionId) return;
+
+  const verify = async () => {
+  try {
+    const response = await verifyPayment(sessionId);
+
+    console.log("Verify Response:", response);
+
+    if (response.verified) {
+  setPaymentId(response.payment_id);
+
+  // Remove session_id from URL
+  window.history.replaceState({}, "", "/user-profile");
+
+  // Show Success Popup
+  setShowPaymentSuccess(true);
+}
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+  verify();
+}, [location]);
+
+  
+
+useEffect(() => {
+  const params = new URLSearchParams(location.search);
+
+  const cancelled = params.get("canceled");
+
+  if (cancelled === "true") {
+    setShowPaymentUnsuccessful(true);
+
+    window.history.replaceState({}, "", location.pathname);
+  }
+}, [location]);
+
+
 
 
 useEffect(() => {
@@ -324,6 +393,40 @@ Best plan for the fresher individuals
 </div>
 
 </div>
+
+{showPaymentSuccess && (
+  <PaymentSuccess
+  onClose={() => {
+    setShowPaymentSuccess(false);
+  }}
+  onGoHome={() => {
+    setShowPaymentSuccess(false);
+  }}
+  onViewInvoice={handleViewInvoice}
+  
+/>
+)}
+
+{showInvoice && (
+  <InvoicePopup
+    invoiceData={invoiceData}
+    onClose={() => setShowInvoice(false)}
+  />
+)}
+
+{showPaymentUnsuccessful && (
+  <PaymentUnsuccessful
+    onClose={() => setShowPaymentUnsuccessful(false)}
+    onRetry={() => {
+      setShowPaymentUnsuccessful(false);
+      setProfilePage("subscription");
+    }}
+    onChangeMethod={() => {
+      setShowPaymentUnsuccessful(false);
+      // Navigate to payment method page if you have one
+    }}
+  />
+)}
 </div>
 )
 

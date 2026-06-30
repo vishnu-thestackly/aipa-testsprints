@@ -30,8 +30,9 @@ export default function EditProfile({ onOpenChat, setProfilePage,setProfile, }) 
   const [image, setImage] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
 
-  const [countryCode, setCountryCode] = useState("IN");
-  const [altCountryCode, setAltCountryCode] = useState("IN");
+  const [countryCode, setCountryCode] = useState("+91");
+  const [altCountryCode, setAltCountryCode] = useState("+91");
+  
 
   const [countries, setCountries] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -42,10 +43,7 @@ export default function EditProfile({ onOpenChat, setProfilePage,setProfile, }) 
 
   const fileInputRef = useRef(null);
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({ ...prev, [name]: value }));
-  // };
+  
 
   const handleInputChange = (e) => {
   let { name, value } = e.target;
@@ -79,6 +77,8 @@ export default function EditProfile({ onOpenChat, setProfilePage,setProfile, }) 
           alternateMobile: response.alternate_phone || "",
           location: response.location || "",
         });
+        setCountryCode(response.country_code || "+91");
+        setAltCountryCode(response.alternate_country_code || "+91");
 
         if (response.avatar_url) setImage(response.avatar_url);
       } catch (error) {
@@ -89,19 +89,7 @@ export default function EditProfile({ onOpenChat, setProfilePage,setProfile, }) 
     fetchProfile();
   }, []);
 
-  // COUNTRIES
-  // useEffect(() => {
-  //   const fetchCountries = async () => {
-  //     try {
-  //       const res = await getCountryCodes();
-  //       setCountries(res.countries || []);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-
-  //   fetchCountries();
-  // }, []);
+  
 
   // COUNTRIES
 useEffect(() => {
@@ -239,8 +227,13 @@ setProfilePage("dashboard");
 }
   };
 
-  const selectedCountry = countries.find((c) => c.code === countryCode);
-  const selectedAltCountry = countries.find((c) => c.code === altCountryCode);
+  const selectedCountry = countries.find(
+  (c) => c.dial_code === countryCode
+);
+
+const selectedAltCountry = countries.find(
+  (c) => c.dial_code === altCountryCode
+);
 
   return (
     <div className="h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-10 scrollbar-hide">
@@ -368,13 +361,54 @@ setProfilePage("dashboard");
                 <div className="flex gap-2">
                   <div className="relative">
                     <button
-                      type="button"
-                      onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-                      className={input_style}
-                    >
-                      <span>{selectedCountry?.code}</span>
-                      <ChevronDown />
-                    </button>
+  type="button"
+  onClick={() => setShowCountryDropdown((prev) => !prev)}
+  className="w-[70px] h-11 px-1 border border-gray-200 rounded-lg flex items-center justify-between bg-white"
+>
+  <div className="flex items-center gap-1">
+    {selectedCountry?.flag && (
+      <img
+        src={selectedCountry.flag}
+        alt=""
+        className="w-4 h-3 object-cover rounded-sm"
+      />
+    )}
+
+    <span className="text-xs font-medium">
+      {countryCode}
+    </span>
+  </div>
+
+  <ChevronDown
+    size={14}
+    className={`flex-shrink-0 transition-transform ${
+      showCountryDropdown ? "rotate-180" : ""
+    }`}
+  />
+</button>
+
+{showCountryDropdown && (
+  <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-lg shadow-lg z-50 max-h-52 overflow-y-auto">
+    {countries.map((country) => (
+      <div
+        key={country.code}
+        onClick={() => {
+          setCountryCode(country.dial_code);
+          setShowCountryDropdown(false);
+        }}
+        className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+      >
+        <img
+          src={country.flag}
+          alt=""
+          className="w-5 h-4 object-cover"
+        />
+
+        <span>{country.dial_code}</span>
+      </div>
+    ))}
+  </div>
+)}
                   </div>
 
                   <input
@@ -390,14 +424,57 @@ setProfilePage("dashboard");
                 <label className={label_style}>Alternate mobile number</label>
                 <div className="flex gap-2">
                   <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-                      className={input_style}
-                    >
-                      <span>{selectedCountry?.code}</span>
-                      <ChevronDown />
-                    </button>
+                    <div className="relative">
+  <button
+  type="button"
+  onClick={() => setShowAltCountryDropdown((prev) => !prev)}
+  className="w-[70px] h-11 px-1 border border-gray-200 rounded-lg flex items-center justify-between bg-white"
+>
+  <div className="flex items-center gap-1">
+    {selectedAltCountry?.flag && (
+      <img
+        src={selectedAltCountry.flag}
+        alt=""
+        className="w-4 h-3 object-cover rounded-sm"
+      />
+    )}
+
+    <span className="text-xs font-medium">
+      {altCountryCode}
+    </span>
+  </div>
+
+  <ChevronDown
+    size={14}
+    className={`flex-shrink-0 transition-transform ${
+      showAltCountryDropdown ? "rotate-180" : ""
+    }`}
+  />
+</button>
+
+  {showAltCountryDropdown && (
+    <div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-lg shadow-lg z-50 max-h-52 overflow-y-auto">
+      {countries.map((country) => (
+        <div
+          key={country.code}
+          onClick={() => {
+            setAltCountryCode(country.dial_code);
+            setShowAltCountryDropdown(false);
+          }}
+          className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 cursor-pointer"
+        >
+          <img
+            src={country.flag}
+            alt=""
+            className="w-5 h-4 object-cover"
+          />
+
+          <span>{country.dial_code}</span>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
                   </div>
 
                   <input

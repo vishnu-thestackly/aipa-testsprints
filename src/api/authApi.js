@@ -572,25 +572,6 @@ export const getUserProfile = async () => {
 
 // ================= UpadteUserProfile =================
 
-// export const updateUserProfile = async (payload) => {
-//   try {
-//     const token = localStorage.getItem("token");
-
-//     const response = await API.patch(
-//       "/api/v1/users/me/profile",
-//       payload,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-
-//     return response.data;
-//   } catch (error) {
-//     throw error.response?.data || "Failed to update profile";
-//   }
-// };
 
 
 export const updateUserProfile = async (payload) => {
@@ -980,24 +961,24 @@ export const getLocations = async (limit = 20) => {
 
 // ================= ADMIN PROFILE =================
 
-export const getAdminProfile = async () => {
-  try {
-    const token = localStorage.getItem("token");
+// export const getAdminProfile = async () => {
+//   try {
+//     const token = localStorage.getItem("token");
 
-    const response = await API.get(
-      "/api/v1/admin/profile",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+//     const response = await API.get(
+//       "/api/v1/admin/profile",
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
 
-    return response.data;
-  } catch (error) {
-    throw error.response?.data || "Failed to fetch admin profile";
-  }
-};
+//     return response.data;
+//   } catch (error) {
+//     throw error.response?.data || "Failed to fetch admin profile";
+//   }
+// };
 
 
 // ================= UPDATE ADMIN PROFILE =================
@@ -1030,7 +1011,7 @@ export const changeAdminPassword = async (passwordData) => {
     const token = localStorage.getItem("token");
 
     const response = await API.post(
-      "/api/v1/admin/profile/change-password",
+      "/api/v1/users/me/change-password",
       passwordData,
       {
         headers: {
@@ -1042,5 +1023,374 @@ export const changeAdminPassword = async (passwordData) => {
     return response.data;
   } catch (error) {
     throw error.response?.data || "Password change failed";
+  }
+};
+
+
+
+// ================= PAYMENT REPORT KPIs =================
+
+export const getPaymentReportKPIs = async (params = {}) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin/payment-report/kpis",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch payment KPIs";
+  }
+};
+
+
+
+
+// ================= PAYMENT TRANSACTIONS =================
+
+export const getTransactions = async (params = {}) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin/payment-report/transactions",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch transactions";
+  }
+};
+
+
+
+export const getRevenueChart = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await axios.get(
+    `${BASE_URL}/api/v1/admin-management/subscriptions/transactions/charts/revenue`,
+    {
+      params: {
+        year: 2026,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+
+export const getSubscriptionTracking = async (params) => {
+  const token = localStorage.getItem("token");
+
+  const response = await API.get(
+    "/api/v1/admin-management/subscriptions/tracking",
+    {
+      params,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+
+
+export const getRefundKpis = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await API.get(
+    "/api/v1/admin-management/subscriptions/refunds/kpis",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+export const getRefundList = async (params) => {
+  const token = localStorage.getItem("token");
+
+  const response = await API.get(
+    "/api/v1/admin-management/subscriptions/refunds",
+    {
+      params,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+//  ADDED ENDPOINT FOR EXPORT BTN IN REFUND COMPONENT
+
+export const exportRefunds = async (params) => {
+  const token = localStorage.getItem("token");
+
+  const response = await API.get(
+    "/api/v1/admin-management/subscriptions/refunds/export",
+    {
+      params,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      responseType: "blob", // important for CSV download
+    }
+  );
+
+  return response.data;
+};
+
+
+
+
+// ================= TRANSACTION KPIS =================
+
+// ================= TRANSACTION KPIS =================
+
+export const getTransactionKpis = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/subscriptions/transactions/kpis",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch transaction KPIs";
+  }
+};
+
+// ================= TRANSACTION DETAILS =================
+
+export const getTransactionDetail = async (paymentId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      `/api/v1/admin-management/subscriptions/transactions/${paymentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch transaction details";
+  }
+};
+
+
+
+
+// ================= EXPORT TRANSACTIONS =================
+
+export const exportTransactions = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/subscriptions/transactions/export",
+      {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response;
+  } catch (error) {
+    throw error.response?.data || "Failed to export transactions";
+  }
+};
+
+
+export const getSubscriptionTransactions = async (params = {}) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/subscriptions/transactions",
+      {
+        params,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch subscription transactions"
+    );
+  }
+};
+
+
+
+// ================= CREATE CHECKOUT SESSION =================
+
+export const createCheckoutSession = async (payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/subscriptions/checkout",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(error.response?.data);
+    throw error;   // <-- throw the original error
+  }
+};
+
+
+
+export const downgradePlan = async (data) => {
+  const token = localStorage.getItem("token");
+
+  const res = await axios.post(
+    "/api/v1/user/subscription/downgrade",
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return res.data;
+};
+
+
+export const getSubscriptionDetails = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/user/subscription/details",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("API Error:", error.response?.data);
+    throw error;
+  }
+};
+
+
+// =============== INOVICE ==================
+
+export const getInvoice = async (paymentId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      `/api/v1/user/subscription/invoice/${paymentId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Invoice API Error:", error.response?.data);
+    throw error;
+  }
+};
+
+//============= verify payment ============
+
+export const verifyPayment = async (sessionId) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/subscriptions/verify?session_id=${sessionId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Payment verification failed");
+  }
+
+  return response.json();
+};
+
+
+
+// =================== Cancel subscription =================
+
+export const cancelSubscription = async (data) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/user/subscription/cancel",
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Cancel Subscription Error:", error.response?.data);
+    throw error;
   }
 };

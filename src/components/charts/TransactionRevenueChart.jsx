@@ -52,7 +52,7 @@ export default function TransactionRevenueChart({
 
               <YAxis
                 width={55}
-                domain={[0, 100]}
+                domain={['auto', 'auto']}
                 ticks={[0, 20, 40, 60, 80, 100]}
                 tickFormatter={(v) => `${v}%`}
                 tick={{ fill: "#6D83AA", fontSize: 14 }}
@@ -69,7 +69,7 @@ export default function TransactionRevenueChart({
 
               <Line
                 type="monotone"
-                dataKey="subscription"
+                dataKey="subscription_growth"
                 stroke="#4D6BFA"
                 strokeWidth={3}
                 dot={false}
@@ -77,7 +77,7 @@ export default function TransactionRevenueChart({
 
               <Line
                 type="monotone"
-                dataKey="revenue"
+                dataKey="monthly_revenue"
                 stroke="#33B267"
                 strokeWidth={3}
                 dot={false}
@@ -85,7 +85,7 @@ export default function TransactionRevenueChart({
 
               <Line
                 type="monotone"
-                dataKey="failed"
+                dataKey="failed_payments"
                 stroke="#F16464"
                 strokeWidth={3}
                 dot={false}

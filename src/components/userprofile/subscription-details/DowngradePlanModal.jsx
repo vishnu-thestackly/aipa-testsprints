@@ -2,15 +2,50 @@ import React, { useState, useRef } from "react";
 import arrowIcon from "../../../assets/images/arrow.svg";
 import calendarIcon from "../../../assets/images/calender.svg";
 
+import { downgradePlan } from "../../../api/authApi";
+
 export default function DowngradePlanModal({
   isOpen,
   onClose,
 })
+
+
  {
+  const [fromDate, setFromDate] = useState("");
+  const [effectiveDate, setEffectiveDate] = useState("");
+  const [selectedPlan, setSelectedPlan] = useState("");
+  const dateRef = useRef(null);
+
+
+  const handleDowngrade = async () => {
+  if (!selectedPlan) {
+    alert("Please select a plan");
+    return;
+  }
+
+  if (!effectiveDate) {
+  alert("Please select a date");
+  return;
+}
+
+  const payload = {
+  plan_id: Number(selectedPlan),
+  effective_date: effectiveDate,
+};
+
+  try {
+    const res = await downgradePlan(payload);
+
+    console.log(res);
+
+    onClose();
+  } catch (err) {
+    console.error(err);
+  }
+};
   if (!isOpen) return null;
 
-const [fromDate, setFromDate] = useState("");
-const dateRef = useRef(null);
+
   return (
     <div className="fixed inset-0 bg-black/50 z-[9999] flex items-center justify-center px-4">
 
@@ -41,11 +76,15 @@ const dateRef = useRef(null);
           </label>
 
           <div className="relative">
-            <select className="w-full h-[46px] border border-[#D9D9D9] rounded-[8px] px-4 appearance-none outline-none text-[#A0A7B5]">
-              <option>Select Plan</option>
-              <option>Free Plan</option>
-              <option>Basic Plan</option>
-            </select>
+            <select
+                value={selectedPlan}
+                onChange={(e) => setSelectedPlan(e.target.value)}
+                className="w-full h-[46px] border border-[#D9D9D9] rounded-[8px] px-4 appearance-none outline-none"
+              >
+                <option value="">Select Plan</option>
+                <option value="1">Free Plan</option>
+                <option value="2">Basic Plan</option>
+              </select>
 
             <img
               src={arrowIcon}
@@ -82,6 +121,8 @@ const dateRef = useRef(null);
 
         const date = new Date(e.target.value);
 
+        setEffectiveDate(date.toISOString());
+
         const formatted =
           String(date.getDate()).padStart(2, "0") +
           "-" +
@@ -111,7 +152,9 @@ const dateRef = useRef(null);
 </div>
 
 {/* Button */}
-<button className="w-full h-[44px] rounded-full bg-[#4866F6] text-white mt-6 font-medium">
+<button 
+onClick={handleDowngrade} 
+className="w-full h-[44px] rounded-full bg-[#4866F6] text-white mt-6 font-medium">
   Confirm Downgrade
 </button>
 </div></div>

@@ -28,6 +28,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import VerifyUserOTP from "./pages/VerifyUserOTP";
 import PersonalAssistant from "./components/editprofile/PersonalAssistant";
 
+import InvoicePopup from "./components/userprofile/InvoicePopup";
+import PaymentProcessing from "./components/userprofile/PaymentProcessing";
+import PaymentSuccess from "./components/userprofile/PaymentSuccess"
+import PaymentMethod from "./components/userprofile/PaymentMethod"
+import EditProfile from "./components/userprofile/EditProfile";
+import PaymentUnsuccessful from "./components/userprofile/PaymentUnsuccessful";
+
 
 function App() {
   const [showChat, setShowChat] = useState(false);
@@ -94,9 +101,51 @@ function App() {
                                           } />
           
 
+<Route
+          path="/editprofile"
+          element={<EditProfile onOpenChat={() => setShowChat(true)} />}
+        />
+       <Route
+       path="/"
+       element={<PersonalAssistant/>}
+       />
+           <Route
+           path="/paymentmethod"
+           element={<PaymentMethod/>}
+           />  
+ 
+         <Route
+                  path="/invoice"
+                  element={<InvoicePopup/>}
+                  />
+          <Route
+          path="/paymentprocess"
+          element={<PaymentProcessing/>}
+         
+          />  
+ 
+          <Route path="/user-profile/success" element={<PaymentSuccess />} />
+          <Route path="/user-profile/cancel" element={<PaymentUnsuccessful />} />
+ 
+ 
+  
+     
+           
+
+
+         
 
                                       </Routes> 
 
+{showChat && (
+             <PersonalAssistant onClose={() => setShowChat(false)} />
+          )}   
+          
+
+
+
+
+          
 
                     
     </BrowserRouter>
