@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import UpgradeIcon from "../../assets/images/UpgradeIcon.png";
 import Logo from "../../assets/images/logo.png";
-import audio from "../../assets/images/audio.png";
+import audio from "../../assets/images/Audio.png";
 import Sender from "../../assets/images/Sender.png";
 import converstation from "../../assets/images/converstation.png";
 import Clipgroup from "../../assets/images/Clipgroup.png";
