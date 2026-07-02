@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../assets/images/Logo.svg";
+import Logo from "../../assets/images/logo.png";
 import Language from "../../assets/images/Language.svg";
 import Notification from "../../assets/images/Notification.svg";
 import Darkmode from "../../assets/images/Darkmode.svg";

@@ -101,9 +101,9 @@ const HelpForm = () => {
         </div>
 
         <button
-          type="submit"
-          className="w-full h-[52px] rounded-full bg-[#4D5FFF] text-white font-medium hover:bg-[#3248ff] transition"
-        >
+  type="submit"
+  className="w-full h-[52px] rounded-full bg-[#4D5FFF] text-white font-medium hover:bg-[#3248ff] transition cursor-pointer"
+>
           Send Message
         </button>
       </form>
