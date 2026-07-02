@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import LoginButton from "../components/admin/LoginButton";
 
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logoimage.svg";
 import login_image from "../assets/images/login_image.png";
 
 // API
@@ -43,8 +43,6 @@ export default function AdminLoginOTP() {
     return () => clearInterval(timer);
   }, [remainingSeconds]);
 
-
-
   // resend api endpoint function
   const handleResend = async (event) => {
     event.preventDefault();
@@ -78,7 +76,7 @@ export default function AdminLoginOTP() {
     }
   };
 
-  const formattedTime = `00:${String(remainingSeconds).padStart(2, "0")}s`;
+  const formattedTime = `${String(remainingSeconds).padStart(2, "0")}s`;
 
   const handleOtpChange = (index, value) => {
     const digitOnly = value.replace(/\D/g, "").slice(-1);
@@ -96,8 +94,8 @@ export default function AdminLoginOTP() {
       inputRefs.current[index - 1]?.focus();
     }
     if (event.key === "Enter" && otpSlots.join("").length === 6) {
-  handleVerifyOtp();
-}
+      handleVerifyOtp();
+    }
   };
 
   // VERIFY OTP API
@@ -121,25 +119,22 @@ export default function AdminLoginOTP() {
       // Added token storage in localstorage
 
       localStorage.setItem(
-            "token",
-                
-            response?.access_token || response?.data?.access_token
-          );
+        "token",
+
+        response?.access_token || response?.data?.access_token,
+      );
 
       localStorage.setItem(
-  "refreshToken",
-  response?.refresh_token || response?.data?.refresh_token
-);
-    
-      
-      
+        "refreshToken",
+        response?.refresh_token || response?.data?.refresh_token,
+      );
 
       // Navigate after success
       // Navigate based on flow type
       if (type === "signup") {
         navigate("/login");
       } else if (type === "admin-login") {
-        navigate("/dashboard",{ replace: true });
+        navigate("/dashboard", { replace: true });
       }
     } catch (error) {
       console.log("OTP Verification Error:", error);

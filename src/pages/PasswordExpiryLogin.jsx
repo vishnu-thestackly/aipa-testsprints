@@ -4,7 +4,7 @@ import { AlertTriangle, Eye, EyeOff } from "lucide-react";
 import SessionTimeout from "../components/admin/SessionTimeout";
 import useIdleTimeout from "../hooks/useIdleTimeout";
 
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logoimage.svg";
 import login_image from "../assets/images/login_image.png";
 import mail from "../assets/images/Mails.png";
 import password from "../assets/images/Password.png";
@@ -70,7 +70,7 @@ export default function PasswordExpiryLogin() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-gray-400"
+                className="text-gray-400 cursor-pointer"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -102,14 +102,14 @@ export default function PasswordExpiryLogin() {
           <div className="flex w-full flex-row items-stretch gap-2 sm:gap-3">
             <button
               type="button"
-              className="min-w-0 flex-1 rounded-full bg-[#4866f6] py-2.5 text-center text-[16px] font-medium text-white transition hover:opacity-90"
+              className="cursor-pointer min-w-0 flex-1 rounded-full bg-[#4866f6] py-2.5 text-center text-[16px] font-medium text-white transition hover:opacity-97"
             >
               Log In
             </button>
             <Link to="/force-reset-password" className="min-w-0 flex-1">
               <button
                 type="button"
-                className="w-full min-w-0 rounded-full bg-[#4866f6] py-2.5 text-center text-[16px] font-medium text-white transition hover:opacity-90"
+                className="cursor-pointer w-full min-w-0 rounded-full bg-[#4866f6] py-2.5 text-center text-[16px] font-medium text-white transition hover:opacity-97"
               >
                 Reset password
               </button>

@@ -13,8 +13,9 @@ import ConnectIntegrations from "./pages/ConnectIntegrations";
 import NotificationSetup from "./pages/NotificationSetup";
 import Completion from "./pages/Completion";
 import PreferenceSetting from "./pages/PreferenceSetting";
-import Frame from "./assets/images/Frame.png"
+import Frame from "./assets/images/Frame.png";
 import UserProfile from "./pages/UserProfile";
+import NewChatPage from "./pages/NewChatPage";
 import AdminLogin from "./pages/AdminLogin";
 import AdminLoginOTP from "./pages/AdminLoginOTP";
 import ResetPassword from "./pages/ResetPassword";
@@ -30,45 +31,30 @@ import PersonalAssistant from "./components/editprofile/PersonalAssistant";
 
 import InvoicePopup from "./components/userprofile/InvoicePopup";
 import PaymentProcessing from "./components/userprofile/PaymentProcessing";
-import PaymentSuccess from "./components/userprofile/PaymentSuccess"
-import PaymentMethod from "./components/userprofile/PaymentMethod"
+import PaymentSuccess from "./components/userprofile/PaymentSuccess";
+import PaymentMethod from "./components/userprofile/PaymentMethod";
 import EditProfile from "./components/userprofile/EditProfile";
 import PaymentUnsuccessful from "./components/userprofile/PaymentUnsuccessful";
-
 
 function App() {
   const [showChat, setShowChat] = useState(false);
   return (
     <BrowserRouter>
       <Routes>
-
         {/* HOME */}
         <Route path="/" element={<HomePage />} />
 
         {/* CONVERSATION */}
-        <Route
-          path="/conversation"
-          element={<Conversation />}
-        />
+        <Route path="/conversation" element={<Conversation />} />
 
-        
         {/* FAQ */}
-        <Route
-          path="/faq"
-          element={<FaqPage />}
-        />
+        <Route path="/faq" element={<FaqPage />} />
 
         {/* HELP */}
-        <Route
-          path="/help"
-          element={<HelpPage />}
-        />
+        <Route path="/help" element={<HelpPage />} />
 
         {/* LOGIN */}
-        <Route
-          path="/login"
-          element={<LoginPage />}
-        />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/otp-verification" element={<AdminLoginOTP />} />
@@ -77,77 +63,46 @@ function App() {
         <Route path="/send-email-otp" element={<ForgotPasswordOTP />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/force-reset-password" element={<ForceResetPassword />} />
-        <Route path="/password-expiry-login" element={<PasswordExpiryLogin />} />
+        <Route
+          path="/password-expiry-login"
+          element={<PasswordExpiryLogin />}
+        />
         <Route path="/password-expired" element={<PasswordExpired />} />
 
         {/* sprint3 */}
-    
-<Route path="/user-profile" element={<UserProfile />} />
 
-<Route path="/preferences" element={<PreferenceSetting />} />
+        <Route path="/user-profile" element={<UserProfile />} />
+        <Route path="/new-chat/*" element={<NewChatPage />} />
 
-{/* Onboarding */}
-<Route path="/personal-details" element={<PersonalDetails />} />
-<Route path="/aipreferences" element={<AiPreferences />} />
-<Route path="/connect-integrations" element={<ConnectIntegrations />} />
-<Route path="/notification-setup" element={<NotificationSetup />} />
-<Route path="/completion" element={<Completion />} />
+        <Route path="/preferences" element={<PreferenceSetting />} />
+
+        {/* Onboarding */}
+        <Route path="/personal-details" element={<PersonalDetails />} />
+        <Route path="/aipreferences" element={<AiPreferences />} />
+        <Route path="/connect-integrations" element={<ConnectIntegrations />} />
+        <Route path="/notification-setup" element={<NotificationSetup />} />
+        <Route path="/completion" element={<Completion />} />
 
         {/* <Route path="/dashboard" element={<ProtectedRoute>
                                               <Dashboard />
                                           </ProtectedRoute>} /> */}
-                                          <Route path="/dashboard" element={
-                                              <Dashboard />
-                                          } />
-          
+        <Route path="/dashboard" element={<Dashboard />} />
 
-<Route
+        <Route
           path="/editprofile"
           element={<EditProfile onOpenChat={() => setShowChat(true)} />}
         />
-       <Route
-       path="/"
-       element={<PersonalAssistant/>}
-       />
-           <Route
-           path="/paymentmethod"
-           element={<PaymentMethod/>}
-           />  
- 
-         <Route
-                  path="/invoice"
-                  element={<InvoicePopup/>}
-                  />
-          <Route
-          path="/paymentprocess"
-          element={<PaymentProcessing/>}
-         
-          />  
- 
-          <Route path="/user-profile/success" element={<PaymentSuccess />} />
-          <Route path="/user-profile/cancel" element={<PaymentUnsuccessful />} />
- 
- 
-  
-     
-           
+        <Route path="/" element={<PersonalAssistant />} />
+        <Route path="/paymentmethod" element={<PaymentMethod />} />
 
+        <Route path="/invoice" element={<InvoicePopup />} />
+        <Route path="/paymentprocess" element={<PaymentProcessing />} />
 
-         
+        <Route path="/user-profile/success" element={<PaymentSuccess />} />
+        <Route path="/user-profile/cancel" element={<PaymentUnsuccessful />} />
+      </Routes>
 
-                                      </Routes> 
-
-{showChat && (
-             <PersonalAssistant onClose={() => setShowChat(false)} />
-          )}   
-          
-
-
-
-
-          
-
-                    
+      {showChat && <PersonalAssistant onClose={() => setShowChat(false)} />}
     </BrowserRouter>
   );
 }

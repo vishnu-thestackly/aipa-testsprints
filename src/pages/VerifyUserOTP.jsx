@@ -1,10 +1,8 @@
-
-
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import LoginButton from "../components/admin/LoginButton";
 
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logoimage.svg";
 import login_image from "../assets/images/login_image.png";
 
 // API
@@ -78,7 +76,7 @@ export default function VerifyUserOTP() {
     }
   };
 
-  const formattedTime = `00:${String(remainingSeconds).padStart(2, "0")}s`;
+  const formattedTime = `${String(remainingSeconds).padStart(2, "0")}s`;
 
   const handleOtpChange = (index, value) => {
     const digitOnly = value.replace(/\D/g, "").slice(-1);
@@ -149,7 +147,7 @@ export default function VerifyUserOTP() {
           </div>
 
           <h2 className="mb-1 text-left md:text-center text-[23px] font-semibold text-[#4866F6]">
-            OTP Verification 
+            OTP Verification
           </h2>
           <p className="mb-6 text-left md:text-center text-[16px] font-normal leading-tight text-[#8d97a9] sm:mb-8">
             We sent a verification code to your {email}

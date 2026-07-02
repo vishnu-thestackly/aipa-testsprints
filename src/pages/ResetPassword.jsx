@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import LoginButton from "../components/admin/LoginButton";
 
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logoimage.svg";
 import login_image from "../assets/images/login_image.png";
 import password from "../assets/images/Password.png";
 
@@ -139,7 +139,7 @@ export default function ResetPassword() {
               <button
                 type="button"
                 onClick={() => setShowNewPassword((prev) => !prev)}
-                className="text-gray-400"
+                className="text-gray-400 cursor-pointer"
                 aria-label="Toggle new password visibility"
               >
                 {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -169,7 +169,7 @@ export default function ResetPassword() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
-                className="text-gray-400"
+                className="text-gray-400 cursor-pointer"
                 aria-label="Toggle confirm password visibility"
               >
                 {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}

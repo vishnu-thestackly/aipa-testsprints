@@ -4,7 +4,7 @@ import { AlertTriangle, Eye, EyeOff } from "lucide-react";
 import SessionTimeout from "../components/admin/SessionTimeout";
 import useIdleTimeout from "../hooks/useIdleTimeout";
 
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logoimage.svg";
 import login_image from "../assets/images/login_image.png";
 import mail from "../assets/images/Mails.png";
 import password from "../assets/images/Password.png";
@@ -70,7 +70,7 @@ export default function PasswordExpired() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-gray-400"
+                className="text-gray-400 cursor-pointer"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -102,7 +102,7 @@ export default function PasswordExpired() {
           <Link to="/force-reset-password" className="block w-full">
             <button
               type="button"
-              className="w-full rounded-full bg-[#4866f6] py-2.5 text-[16px] text-white transition hover:opacity-90"
+              className="w-full rounded-full bg-[#4866f6] py-2.5 text-[16px] text-white transition hover:opacity-97 cursor-pointer"
             >
               Reset password
             </button>

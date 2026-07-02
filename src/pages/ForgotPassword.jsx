@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import LoginButton from "../components/admin/LoginButton";
 
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logoimage.svg";
 import login_image from "../assets/images/login_image.png";
 import mail from "../assets/images/Mails.png";
 
