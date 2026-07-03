@@ -189,25 +189,24 @@ export default function SubscriptionTracking({ currentPage, onPageChange }) {
   // Row whose eye action was clicked; when set, the detail view replaces the list
   const [selectedSubscription, setSelectedSubscription] = useState(null);
 
+  const fetchSubscriptions = async () => {
+    try {
+      const response = await getSubscriptionTracking({
+        page: currentPage,
+      });
 
-   const fetchSubscriptions = async () => {
-  try {
-    const response = await getSubscriptionTracking({
-      page: currentPage,
-    });
+      console.log("Subscription Tracking Response:", response);
 
-    console.log("Subscription Tracking Response:", response);
-
-    setSubscriptions(Array.isArray(response) ? response : []);
-  } catch (error) {
-    console.error("Subscription Tracking Error:", error);
-  }
-};
+      setSubscriptions(Array.isArray(response) ? response : []);
+    } catch (error) {
+      console.error("Subscription Tracking Error:", error);
+    }
+  };
 
   useEffect(() => {
-  fetchSubscriptions();
-  setRenewalData(MOCK_RENEWAL_BY_MONTH);
-}, [currentPage]);
+    fetchSubscriptions();
+    setRenewalData(MOCK_RENEWAL_BY_MONTH);
+  }, [currentPage]);
 
   // Detail view (eye action target) — mirrors the list/detail switch in Dashboard
   if (selectedSubscription) {
@@ -864,8 +863,13 @@ function SubscriptionRenewalCard({ data }) {
           )}
         </button>
       </div>
-
-      {expanded && <SubscriptionRenewalChart data={data} />}
+      <div
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+          expanded ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <SubscriptionRenewalChart data={data} />
+      </div>
     </section>
   );
 }

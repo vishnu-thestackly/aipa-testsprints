@@ -110,46 +110,11 @@ const Hero = () => {
 
         {/* BUTTON */}
         <button
-          onClick={() =>
-            navigate("/conversation")
-          }
-          className="
-            mt-[38px]
-
-            w-[82%]
-            sm:w-full
-
-            max-w-[280px]
-            sm:max-w-[375px]
-
-            h-[56px]
-            sm:h-[64px]
-
-            rounded-full
-
-            border-[2px]
-            border-[#4866F6]
-
-            bg-white
-
-            text-[#4866F6]
-
-            text-[16px]
-            sm:text-[20px]
-
-            font-[600]
-
-            shadow-[0_8px_20px_rgba(0,0,0,0.08)]
-
-            hover:bg-[#4866F6]
-            hover:text-white
-
-            transition-all
-            duration-300
-          "
-        >
-          Start New Conversation
-        </button>
+  onClick={() => navigate("/conversation")}
+  className="mt-[38px] w-[82%] sm:w-full max-w-[280px] sm:max-w-[375px] h-[56px] sm:h-[64px] rounded-full border-[2px] border-[#4866F6] bg-white text-[#4866F6] text-[16px] sm:text-[20px] font-[600] shadow-[0_8px_20px_rgba(0,0,0,0.08)] cursor-pointer hover:bg-[#4866F6] hover:text-white transition-all duration-300"
+>
+  Start New Conversation
+</button>
       </div>
     </section>
   );

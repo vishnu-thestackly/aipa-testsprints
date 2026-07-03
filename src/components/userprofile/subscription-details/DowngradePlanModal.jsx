@@ -52,10 +52,7 @@ export default function DowngradePlanModal({
       <div className="w-full max-w-[620px] bg-white rounded-[24px] px-10 py-8 relative">
 
         {/* Close */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 w-[16px] h-[16px] rounded-full bg-[#FF4D4F] text-white text-[10px] flex items-center justify-center"
-        >
+        <button onClick={onClose} className="absolute top-4 right-4 w-[16px] h-[16px] rounded-full bg-[#FF4D4F] text-white text-[10px] flex items-center justify-center cursor-pointer">
           ✕
         </button>
 
@@ -71,29 +68,20 @@ export default function DowngradePlanModal({
 
         {/* Plan */}
         <div className="mt-6">
-          <label className="text-[#3D3D3D] text-[15px] mb-2 block">
-            Select Plan
-          </label>
+  <label className="text-[#3D3D3D] text-[15px] mb-2 block">
+    Select Plan
+  </label>
 
-          <div className="relative">
-            <select
-                value={selectedPlan}
-                onChange={(e) => setSelectedPlan(e.target.value)}
-                className="w-full h-[46px] border border-[#D9D9D9] rounded-[8px] px-4 appearance-none outline-none"
-              >
-                <option value="">Select Plan</option>
-                <option value="1">Free Plan</option>
-                <option value="2">Basic Plan</option>
-              </select>
+  <div className="relative">
+    <select value={selectedPlan} onChange={(e) => setSelectedPlan(e.target.value)} className="w-full h-[46px] border border-[#D9D9D9] rounded-[8px] px-4 appearance-none outline-none cursor-pointer">
+      <option value="">Select Plan</option>
+      <option value="1">Free Plan</option>
+      <option value="2">Basic Plan</option>
+    </select>
 
-            <img
-              src={arrowIcon}
-              alt=""
-              className="absolute right-5 top-1/2 -translate-y-1/2 w-[12px] h-[12px] pointer-events-none"
-            />
-          </div>
-        </div>
-
+    <img src={arrowIcon} alt="" className="absolute right-5 top-1/2 -translate-y-1/2 w-[12px] h-[12px] pointer-events-none" />
+  </div>
+</div>
         {/* From */}
        <div className="mt-4">
   <label className="text-[#3D3D3D] text-[15px] mb-2 block">
@@ -154,7 +142,7 @@ export default function DowngradePlanModal({
 {/* Button */}
 <button 
 onClick={handleDowngrade} 
-className="w-full h-[44px] rounded-full bg-[#4866F6] text-white mt-6 font-medium">
+className="w-full h-[44px] rounded-full bg-[#4866F6] text-white mt-6 font-medium cursor-pointer">
   Confirm Downgrade
 </button>
 </div></div>

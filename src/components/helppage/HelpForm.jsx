@@ -44,32 +44,13 @@ const HelpForm = () => {
 
           <div className="mt-2 flex gap-3">
             <div className="relative w-[105px]">
-              <button
-                type="button"
-                onClick={() =>
-                  setShowCountries(!showCountries)
-                }
-                className="w-full h-[50px] bg-white border border-[#D9D9D9] rounded-[8px] px-2 flex items-center justify-between"
-              >
-                <div className="flex items-center gap-2">
-                  <img
-                    src={selectedCountry.flag}
-                    alt={selectedCountry.name}
-                    className="w-5 h-5 object-contain"
-                  />
-
-                  <span className="text-[13px] text-[#777]">
-                    {selectedCountry.code}
-                  </span>
-                </div>
-
-                <ChevronDown
-                  size={14}
-                  className={`text-[#888] transition-transform ${
-                    showCountries ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
+             <button type="button" onClick={() => setShowCountries(!showCountries)} className="w-full h-[50px] bg-white border border-[#D9D9D9] rounded-[8px] px-2 flex items-center justify-between cursor-pointer">
+               <div className="flex items-center gap-2">
+                 <img src={selectedCountry.flag} alt={selectedCountry.name} className="w-5 h-5 object-contain" />
+                 <span className="text-[13px] text-[#777]">{selectedCountry.code}</span>
+               </div>
+               <ChevronDown size={14} className={`text-[#888] transition-transform ${showCountries ? "rotate-180" : ""}`} />
+             </button>
 
               {showCountries && (
                 <div className="absolute left-0 top-[55px] z-50 w-[170px] bg-white border border-[#E5E5E5] rounded-[10px] shadow-[0px_4px_20px_rgba(0,0,0,0.12)] overflow-hidden">
@@ -120,9 +101,9 @@ const HelpForm = () => {
         </div>
 
         <button
-          type="submit"
-          className="w-full h-[52px] rounded-full bg-[#4D5FFF] text-white font-medium hover:bg-[#3248ff] transition"
-        >
+  type="submit"
+  className="w-full h-[52px] rounded-full bg-[#4D5FFF] text-white font-medium hover:bg-[#3248ff] transition cursor-pointer"
+>
           Send Message
         </button>
       </form>

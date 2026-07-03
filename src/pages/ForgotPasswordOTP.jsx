@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import LoginButton from "../components/admin/LoginButton";
 
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logoimage.svg";
 import login_image from "../assets/images/login_image.png";
 
 // API
@@ -102,7 +102,7 @@ export default function ForgotPasswordOTP() {
   };
 
   // Format timer
-  const formattedTime = `00:${String(remainingSeconds).padStart(2, "0")}s`;
+  const formattedTime = `${String(remainingSeconds).padStart(2, "0")}s`;
 
   // Handle OTP typing
   const handleOtpChange = (index, value) => {

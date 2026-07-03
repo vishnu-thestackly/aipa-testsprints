@@ -20,7 +20,6 @@
 // import exportIcon from "../../../assets/images/export_icon.svg";
 // import eyeActionIcon from "../../../assets/images/eye_action.svg";
 
-
 // // -----------------------------------------------------------------------------
 // // CONSTANTS
 // // -----------------------------------------------------------------------------
@@ -52,13 +51,11 @@
 //   { value: "premium", label: "Premium" },
 // ];
 
-
 // const PAGE_SIZE = 6;
 
 // // -----------------------------------------------------------------------------
 // // ManageHome — manage users home (list + KPIs)
 // // -----------------------------------------------------------------------------
-
 
 // export default function ManageHome({ onViewUser }) {
 
@@ -102,7 +99,7 @@
 //     console.error("Export failed:", error);
 //   }
 // };
-  
+
 //   return (
 //     <div className="h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide">
 //       <div className="w-full min-h-full flex flex-col gap-4 rounded-[20px] md:rounded-[25px] border-b border-gray-200 bg-white p-4 shadow-[0px_1px_4px_0px_#00000040] md:gap-5 md:p-5 lg:gap-6 lg:p-6">
@@ -364,8 +361,6 @@
 //   );
 // }
 
-
-
 // // getPaginationItems — page numbers with ellipsis for long page ranges
 // // -----------------------------------------------------------------------------
 // function getPaginationItems(currentPage, totalPages) {
@@ -403,7 +398,6 @@
 //   }
 //    return items;
 // }
-
 
 // // Pagination — page numbers and previous/next controls
 // // -----------------------------------------------------------------------------
@@ -642,13 +636,7 @@
 //   );
 // }
 
-
-
-
-
-// Added 
-
-
+// Added
 
 // =============================================================================
 // FILE: ManageHome.jsx
@@ -724,7 +712,7 @@ const subscriptionFilterOptions = [
 ];
 
 const COMPACT_SELECT_PADDING = "pr-8 md:pr-7 xl:pr-25";
-const COMPACT_SELECT_TRIGGER_CLASS = `w-full md:w-auto cursor-pointer appearance-none rounded-lg border border-[#CFCFCF] bg-white py-1.5 pl-3 md:py-2.5 md:text-sm lg:text-base text-left text-[#8D97A9] focus:outline-none focus:ring-0 ${COMPACT_SELECT_PADDING}`;
+const COMPACT_SELECT_TRIGGER_CLASS = `w-full cursor-pointer appearance-none rounded-lg border border-[#CFCFCF] bg-white py-1.5 pl-3 md:py-2.5 md:text-sm lg:text-base text-left text-[#8D97A9] focus:outline-none focus:ring-0 ${COMPACT_SELECT_PADDING}`;
 const COMPACT_SELECT_CHEVRON_CLASS =
   "pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-slate-400";
 
@@ -798,7 +786,7 @@ function SubscriptionsSection({ stats, onExport }) {
   return (
     <section className="shrink-0 rounded-2xl border border-slate-100 p-4 pt-2 shadow-[0_0_2px_0px_rgba(61,61,61,0.15)] md:p-5 lg:p-5">
       <div className="mb-0 flex w-full flex-col gap-3 md:flex-row md:flex-nowrap md:items-center md:justify-between md:gap-3 lg:gap-1">
-        <h2 className="shrink-0 text-lg font-semibold text-slate-800  min-[1024px]:max-[1073px]:w-min">
+        <h2 className="shrink-0 text-lg font-medium text-slate-800  min-[1024px]:max-[1073px]:w-min">
           Subscriptions KPI&apos;s
         </h2>
         <div className="flex flex-col mt-1 md:mt-0 md:flex-row md:flex-nowrap md:items-center gap-3 md:ml-auto md:gap-2 lg:gap-2">
@@ -947,7 +935,7 @@ function UsersSection({
 
   return (
     <section className="flex min-h-0 min-w-0 flex-col max-md:flex-none max-md:shrink-0 md:min-h-0 md:flex-1 md:overflow-visible">
-      <h2 className="mb-3 shrink-0 text-lg font-semibold text-slate-800">
+      <h2 className="mb-3 shrink-0 text-lg font-medium text-slate-800">
         Manage Users &amp; Roles
       </h2>
       <UsersToolbar
@@ -983,13 +971,13 @@ function UsersToolbar({
   onExport,
 }) {
   return (
-    <div className="mb-0 flex w-full shrink-0 flex-col gap-2 md:flex-row md:flex-nowrap md:items-center md:gap-2 lg:flex lg:flex-wrap lg:items-center lg:gap-2">
+    <div className="mb-0 flex w-full shrink-0 flex-col gap-2 md:flex-row md:flex-nowrap md:items-center md:gap-2 lg:grid lg:grid-cols-2 lg:items-stretch xl:flex xl:flex-row xl:flex-nowrap xl:items-center">
       <SearchInput
         value={searchQuery}
         onChange={onSearchChange}
-        className="min-w-0 w-full md:min-w-[140px] md:flex-1 lg:order-1 lg:flex-1"
+        className="min-w-0 w-full md:min-w-[140px] md:flex-1 lg:w-full lg:flex-none xl:flex-1"
       />
-      <div className="flex flex-col md:shrink-0 md:flex-nowrap md:flex-row md:items-center gap-3 md:gap-2 lg:order-2 lg:flex lg:flex-wrap lg:gap-2">
+      <div className="flex flex-col md:shrink-0 md:flex-nowrap md:flex-row md:items-center gap-3 md:gap-2 lg:contents xl:flex xl:shrink-0 xl:flex-row xl:items-center xl:gap-2">
         <CheckboxFilterField
           placeholder={STATUS_FILTER_PLACEHOLDER}
           options={statusFilterOptions}
@@ -1070,16 +1058,16 @@ function UsersTableBlock({ users, onViewUser, currentPage, onPageChange }) {
         <table className="w-full table-fixed text-sm max-lg:min-w-[720px] lg:min-w-0">
           <thead className="sticky top-0 z-10">
             <tr className="bg-blue-50 text-left text-slate-700">
-              <th className="w-[8%] whitespace-nowrap px-3 py-4 font-semibold md:px-3 lg:px-4">
+              <th className="w-[8%] whitespace-nowrap px-3 py-4 font-medium md:px-3 lg:px-4">
                 SL No
               </th>
-              <th className="w-[22%] whitespace-nowrap px-4 py-4 font-semibold">
+              <th className="w-[22%] whitespace-nowrap px-4 py-4 font-medium">
                 User Name
               </th>
-              <th className="w-[24%] whitespace-nowrap px-4 py-4 font-semibold">
+              <th className="w-[24%] whitespace-nowrap px-4 py-4 font-medium">
                 Email ID
               </th>
-              <th className="w-[18%] px-4 py-4 font-semibold">Status</th>
+              <th className="w-[18%] px-4 py-4 font-medium">Status</th>
               <th className="w-[18%] px-4 py-4 font-semibold">Subscription</th>
               <th className="w-[10%] px-4 py-4 font-semibold">Action</th>
             </tr>
@@ -1099,7 +1087,12 @@ function UsersTableBlock({ users, onViewUser, currentPage, onPageChange }) {
                   </td>
                   <td className="px-4 py-2.5 align-middle">
                     <div className="flex justify-start">
-                      <StatusBadge status={user.status?.charAt(0).toUpperCase() + user.status?.slice(1)} />
+                      <StatusBadge
+                        status={
+                          user.status?.charAt(0).toUpperCase() +
+                          user.status?.slice(1)
+                        }
+                      />
                     </div>
                   </td>
                   <td className="px-4 py-2.5">
@@ -1110,10 +1103,9 @@ function UsersTableBlock({ users, onViewUser, currentPage, onPageChange }) {
                       type="button"
                       // onClick={() => onViewUser(user_id)}
                       onClick={() => {
-  console.log("User ID:", user.user_id);
-  onViewUser(user.user_id);
-}}
-                      
+                        console.log("User ID:", user.user_id);
+                        onViewUser(user.user_id);
+                      }}
                       aria-label={`View ${user.name}`}
                       className="inline-flex h-6 w-6 items-center justify-center cursor-pointer transition-opacity hover:opacity-90"
                     >

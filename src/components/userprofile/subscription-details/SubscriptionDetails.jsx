@@ -59,6 +59,19 @@ const fetchSubscription = async () => {
   }
 };
 
+const PAGE_SIZE = 6;
+const [currentPage, setCurrentPage] = useState(1);
+
+const totalPages = Math.ceil(
+  (subscription?.billing_history?.length || 0) / PAGE_SIZE
+);
+
+const paginatedHistory =
+  subscription?.billing_history?.slice(
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
+  ) || [];
+
   return (
     <div className="px-3 sm:px-5 lg:px-7 pt-5 pb-10">
       <div className="w-full rounded-[25px] border border-[#DADADA] bg-white p-5 md:p-7 shadow-[0px_0px_4px_0px_#00000014]">
@@ -151,37 +164,15 @@ const fetchSubscription = async () => {
 </div>
 <div className="flex flex-col md:flex-row md:justify-between md:items-center mt-8 gap-4">
 <div className="grid grid-cols-2 gap-3 w-full md:flex md:w-[220px] lg:w-[240px]">  
-   <button
-  onClick={() => {
-    setSelectedPlanAction("upgrade");
-    setShowUpgradeModal(true);
-  }}
-  className={`h-[42px] rounded-full text-[14px] w-full transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
-    selectedPlanAction === "upgrade"
-      ? "bg-[#4866F6] text-white hover:bg-[#3554ED] active:bg-[#2746DD]"
-      : "bg-white border border-[#4866F6] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"
-  }`}
->
+   <button onClick={() => { setSelectedPlanAction("upgrade"); setShowUpgradeModal(true); }} className={`h-[42px] rounded-full text-[14px] w-full cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${selectedPlanAction === "upgrade" ? "bg-[#4866F6] text-white hover:bg-[#3554ED] active:bg-[#2746DD]" : "bg-white border border-[#4866F6] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"}`}>
   Upgrade
 </button>
 
-<button
-  onClick={() => {
-    setSelectedPlanAction("downgrade");
-    setShowDowngradeModal(true);
-  }}
-  className={`h-[42px] rounded-full text-[14px] w-full transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
-    selectedPlanAction === "downgrade"
-      ? "bg-[#4866F6] text-white hover:bg-[#3554ED] active:bg-[#2746DD]"
-      : "bg-white border border-[#4866F6] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"
-  }`}
->
+<button onClick={() => { setSelectedPlanAction("downgrade"); setShowDowngradeModal(true); }} className={`h-[42px] rounded-full text-[14px] w-full cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${selectedPlanAction === "downgrade" ? "bg-[#4866F6] text-white hover:bg-[#3554ED] active:bg-[#2746DD]" : "bg-white border border-[#4866F6] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"}`}>
   Downgrade
 </button>
 </div>
-  <button
-  onClick={() => setShowCancelModal(true)}
-className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full md:w-auto md:px-8">
+  <button onClick={() => setShowCancelModal(true)} className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full md:w-auto md:px-8 cursor-pointer">
   Cancel Subscription
 </button>
 
@@ -197,8 +188,7 @@ className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full m
     Payment Method
   </h3>
 
-  <button className="hidden md:flex h-[40px] w-auto px-5 rounded-full bg-[#4866F6] text-white text-[15px] lg:text-[17px] items-center justify-center gap-2 whitespace-nowrap">
-    Update Payment Method
+<button className="hidden md:flex h-[40px] w-auto px-5 rounded-full bg-[#4866F6] text-white text-[15px] lg:text-[17px] items-center justify-center gap-2 whitespace-nowrap cursor-pointer">    Update Payment Method
     <span>→</span>
   </button>
 </div>
@@ -288,7 +278,7 @@ className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full m
     </thead>
 
     <tbody>
-      {subscription?.billing_history?.map((item, index) => (
+      {paginatedHistory.map((item, index) => (
         <tr
           key={index + 1}
           className="h-[50px] md:h-[46px] lg:h-[50px] border-t border-[#ECECEC]"
@@ -338,39 +328,12 @@ className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full m
   </table>
 
   {/* Pagination */}
-  <div className="h-[56px] flex items-center justify-start sm:justify-end md:justify-center lg:justify-end gap-2 sm:gap-4 px-2 sm:px-6 border-t border-[#ECECEC]">
-
-    <button className="flex items-center gap-2 text-[#4866F6] text-[15px]">
-      <img
-        src={rightArrow}
-        alt=""
-        className="w-[10px]"
-      />
-      Previous
-    </button>
-
-    <button className="text-[#3D3D3D]">1</button>
-
-    <button className="w-[30px] h-[30px] bg-[#4866F6] text-white">
-      2
-    </button>
-
-    <button className="text-[#3D3D3D]">3</button>
-
-    <span className="text-[#B0B0B0]">....</span>
-
-    <button className="text-[#3D3D3D]">10</button>
-
-    <button className="flex items-center gap-2 text-[#4866F6] text-[15px]">
-      Next
-      <img
-        src={rightArrow}
-        alt=""
-        className="w-[10px] rotate-180"
-      />
-    </button>
-
-  </div>
+  <Pagination
+  currentPage={currentPage}
+  totalPages={totalPages}
+  onPageChange={setCurrentPage}
+/>
+  
 </div>
 
 </div>
@@ -401,6 +364,88 @@ className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full m
   />
 )}
 
+    </div>
+  );
+}
+function getPaginationItems(currentPage, totalPages) {
+  if (totalPages <= 4) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  const pages = new Set();
+
+  if (currentPage <= 2) {
+    pages.add(1);
+    pages.add(2);
+    pages.add(3);
+    pages.add(totalPages);
+  } else if (currentPage >= totalPages - 2) {
+    pages.add(1);
+    pages.add(totalPages - 2);
+    pages.add(totalPages - 1);
+    pages.add(totalPages);
+  } else {
+    pages.add(currentPage - 1);
+    pages.add(currentPage);
+    pages.add(currentPage + 1);
+    pages.add(totalPages);
+  }
+
+  const sorted = [...pages].sort((a, b) => a - b);
+  const items = [];
+
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) {
+      items.push("ellipsis");
+    }
+    items.push(sorted[i]);
+  }
+
+  return items;
+}
+
+function Pagination({ currentPage, totalPages, onPageChange }) {
+  const items = getPaginationItems(currentPage, totalPages);
+
+  return (
+    <div className="flex justify-end items-center gap-4 md:gap-8 py-6 pr-4 md:pr-10 text-[14px] text-[#3D3D3D] border-t border-[#ECECEC]">
+      <button
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="flex items-center gap-2 text-[#4866F6] disabled:text-gray-300 cursor-pointer disabled:cursor-not-allowed"
+      >
+        <img src={rightArrow} alt="" className="w-[10px]" />
+        Previous
+      </button>
+
+      {items.map((item, index) =>
+        item === "ellipsis" ? (
+          <span key={index} className="text-[#9CA3AF]">
+            ....
+          </span>
+        ) : (
+          <button
+            key={item}
+            onClick={() => onPageChange(item)}
+            className={`cursor-pointer ${
+              currentPage === item
+                ? "w-[36px] h-[36px] bg-[#4866F6] text-white rounded-[4px] flex items-center justify-center"
+                : "text-[#3D3D3D]"
+            }`}
+          >
+            {item}
+          </button>
+        )
+      )}
+
+      <button
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="flex items-center gap-2 text-[#4866F6] disabled:text-gray-300 cursor-pointer disabled:cursor-not-allowed"
+      >
+        Next
+        <img src={rightArrow} alt="" className="w-[10px] rotate-180" />
+      </button>
     </div>
   );
 }

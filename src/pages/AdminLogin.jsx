@@ -1,11 +1,11 @@
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import LoginButton from "../components/admin/LoginButton";
 import SessionTimeout from "../components/admin/SessionTimeout";
 // import useIdleTimeout from "../hooks/useIdleTimeout";
 
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logoimage.svg";
 import login_image from "../assets/images/login_image.png";
 import mail from "../assets/images/Mails.png";
 import password from "../assets/images/Password.png";
@@ -23,57 +23,56 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  if (token) {
-    navigate("/dashboard", { replace: true });
-  }
-}, [navigate]);
+    if (token) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [navigate]);
 
   // const handleSessionTimeout = useCallback(() => {
   //   setShowSessionTimeout(true);
   // }, []);
 
-// comented to check the error message for empty feilds
+  // comented to check the error message for empty feilds
 
-//   const handleLogin = async (event) => {
-//   event.preventDefault();
+  //   const handleLogin = async (event) => {
+  //   event.preventDefault();
 
-//   setEmailError(false);
-//   setPasswordError(false);
+  //   setEmailError(false);
+  //   setPasswordError(false);
 
-//   try {
-//     const response = await loginUser({
-//       email,
-//       password: userPassword,
-//     });
+  //   try {
+  //     const response = await loginUser({
+  //       email,
+  //       password: userPassword,
+  //     });
 
-//     console.log("Login Success:", response);
+  //     console.log("Login Success:", response);
 
-//     // ✅ SAVE TOKEN (IMPORTANT) 
-//     // const token = response?.token || response?.data?.token;
+  //     // ✅ SAVE TOKEN (IMPORTANT)
+  //     // const token = response?.token || response?.data?.token;
 
-//     // if (token) {
-//     //   localStorage.setItem("token", token);
-//     // } else {
-//     //   console.warn("Token not found in response");
-//     // }
+  //     // if (token) {
+  //     //   localStorage.setItem("token", token);
+  //     // } else {
+  //     //   console.warn("Token not found in response");
+  //     // }
 
-//     navigate("/otp-verification", {
-//       state: {
-//         email,
-//         type: "admin-login",
-//       },
-//     });
-//   } catch (error) {
-//     console.log("Login Error:", error);
+  //     navigate("/otp-verification", {
+  //       state: {
+  //         email,
+  //         type: "admin-login",
+  //       },
+  //     });
+  //   } catch (error) {
+  //     console.log("Login Error:", error);
 
-//     setEmailError(true);
-//     setPasswordError(true);
-//   }
-// };
+  //     setEmailError(true);
+  //     setPasswordError(true);
+  //   }
+  // };
 
- 
   // useIdleTimeout({
   //   timeoutMs: 15 * 60 * 1000,
   //   onTimeout: handleSessionTimeout,
@@ -81,42 +80,42 @@ export default function Login() {
   // });
 
   const handleLogin = async (event) => {
-  event.preventDefault();
+    event.preventDefault();
 
-  setEmailError(false);
-  setPasswordError(false);
+    setEmailError(false);
+    setPasswordError(false);
 
-  // Empty field validation
-  if (!email.trim()) {
-    setEmailError("Enter Email Address");
-  }
+    // Empty field validation
+    if (!email.trim()) {
+      setEmailError("Enter Email Address");
+    }
 
-  if (!userPassword.trim()) {
-    setPasswordError("Enter Password");
-  }
+    if (!userPassword.trim()) {
+      setPasswordError("Enter Password");
+    }
 
-  if (!email.trim() || !userPassword.trim()) {
-    return;
-  }
+    if (!email.trim() || !userPassword.trim()) {
+      return;
+    }
 
-  try {
-    await loginUser({
-      email,
-      password: userPassword,
-    });
-
-    navigate("/otp-verification", {
-      state: {
+    try {
+      await loginUser({
         email,
-        type: "admin-login",
-      },
-    });
-  } catch {
-    // Invalid credentials
-    setEmailError("Invalid Email");
-    setPasswordError("Invalid Password");
-  }
-};
+        password: userPassword,
+      });
+
+      navigate("/otp-verification", {
+        state: {
+          email,
+          type: "admin-login",
+        },
+      });
+    } catch {
+      // Invalid credentials
+      setEmailError("Invalid Email");
+      setPasswordError("Invalid Password");
+    }
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col items-center overflow-x-hidden bg-[#f5f7fa] px-5 py-8 sm:px-6 md:fixed md:inset-0 md:z-0 md:h-dvh md:min-h-0 md:justify-center md:overflow-hidden md:py-0 lg:relative lg:inset-auto lg:h-screen lg:min-h-screen">
@@ -196,7 +195,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-gray-400"
+                  className="text-gray-400 cursor-pointer"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>

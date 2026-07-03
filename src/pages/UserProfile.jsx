@@ -1,8 +1,7 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import Navbar from "../components/userprofile/Navbar";
 import Sidebar from "../components/userprofile/Sidebar";
-import Conversation from "../components/userprofile/Conversation";
 
 import { getUserProfile } from "../api/authApi";
 
@@ -22,19 +21,18 @@ export default function UserProfile() {
   const [profilePage, setProfilePage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-useEffect(() => {
-  const fetchProfile = async () => {
-    try {
-      const data = await getUserProfile();
-      setProfile(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const data = await getUserProfile();
+        setProfile(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  fetchProfile();
-}, []);
-
+    fetchProfile();
+  }, []);
 
   return (
     <div className="h-screen flex flex-col">
@@ -43,11 +41,10 @@ useEffect(() => {
         languageOpen={languageOpen}
         setLanguageOpen={setLanguageOpen}
         profile={profile}
-
         profilePage={profilePage}
-  setProfilePage={setProfilePage}
-  sidebarOpen={sidebarOpen}
-  setSidebarOpen={setSidebarOpen}
+        setProfilePage={setProfilePage}
+        sidebarOpen={sidebarOpen}
+        setSidebarOpen={setSidebarOpen}
       />
 
       {/* Main Layout */}
@@ -56,57 +53,43 @@ useEffect(() => {
         <Sidebar
           activeItem={activeItem}
           setActiveItem={setActiveItem}
-
-
           sidebarOpen={sidebarOpen}
-  setSidebarOpen={setSidebarOpen}
-  profilePage={profilePage}
-  setProfilePage={setProfilePage}
+          setSidebarOpen={setSidebarOpen}
+          profilePage={profilePage}
+          setProfilePage={setProfilePage}
         />
 
         {/* Content Wrapper */}
-      <div className="flex-1 overflow-y-auto bg-gray-100">
-         {activeItem === "profileDashboard" && (
-  <>
-   
+        <div className="flex-1 overflow-y-auto bg-gray-100">
+          {activeItem === "profileDashboard" && (
+            <>
+              {profilePage === "dashboard" && (
+                <ProfileDashboard
+                  languageOpen={languageOpen}
+                  setProfilePage={setProfilePage}
+                  profile={profile}
+                  setProfile={setProfile}
+                />
+              )}
 
-  
+              {profilePage === "edit" && (
+                <EditProfile
+                  setProfilePage={setProfilePage}
+                  setProfile={setProfile}
+                />
+              )}
+            </>
+          )}
 
-    {profilePage === "dashboard" && (
-  <ProfileDashboard
-    languageOpen={languageOpen}
-    setProfilePage={setProfilePage}
-    profile={profile}
-    setProfile={setProfile}
-  />
-)}
+          {activeItem === "preferenceSetting" && <PreferenceSetting />}
 
-{profilePage === "edit" && (
-  <EditProfile
-    setProfilePage={setProfilePage}
-    setProfile={setProfile}
-  />
-)}
-  </>
-)}
+          {profilePage === "subscription" && (
+            <SubscriptionPlans setProfilePage={setProfilePage} />
+          )}
 
-{activeItem === "preferenceSetting" && (
-  <PreferenceSetting />
-)}
-
-{profilePage === "subscription" && (
-  <SubscriptionPlans
-    setProfilePage={setProfilePage}
-  />
-)}
-
-{profilePage === "subscriptionDetails" && (
-      <SubscriptionDetails setProfilePage={setProfilePage} />
-    )}
-
-  {activeItem === "newchat" && (
-  <Conversation />
-)}
+          {profilePage === "subscriptionDetails" && (
+            <SubscriptionDetails setProfilePage={setProfilePage} />
+          )}
         </div>
       </div>
       <Outlet />

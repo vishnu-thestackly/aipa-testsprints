@@ -343,7 +343,7 @@ Best plan for the fresher individuals
 
 <button
   onClick={() => setProfilePage("subscription")}
-  className="mt-4 w-[200px] h-[42px] rounded-full bg-[#4866F6] text-white font-medium flex items-center justify-center gap-2"
+  className="mt-4 w-[200px] h-[42px] rounded-full bg-[#4866F6] text-white font-medium flex items-center justify-center gap-2 cursor-pointer"
 >
   Upgrade Plan
   <img src={sparkleIcon} alt="" className="w-[16px] h-[16px]" />

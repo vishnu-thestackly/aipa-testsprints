@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Eye, EyeOff, Check, X } from "lucide-react";
 import LoginButton from "../components/admin/LoginButton";
 
-import logo from "../assets/images/logo.png";
+import logo from "../assets/images/logoimage.svg";
 import login_image from "../assets/images/login_image.png";
 import password from "../assets/images/Password.png";
 
@@ -37,8 +37,8 @@ export default function ForceResetPassword() {
   })();
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center overflow-x-hidden bg-[#f5f7fa] px-5 py-8 sm:px-6 md:fixed md:inset-0 md:z-0 md:h-dvh md:min-h-0 md:justify-center md:overflow-hidden md:py-0 lg:relative lg:inset-auto lg:h-screen lg:min-h-screen">
-      <div className="flex w-full max-w-6xl flex-1 flex-col items-center bg-[#f5f7fa] md:flex-none lg:h-full lg:flex-1 lg:flex-row lg:items-center lg:justify-center lg:gap-18 lg:overflow-hidden lg:rounded-2xl">
+    <div className="flex min-h-screen w-full flex-col items-center overflow-x-hidden bg-[#f5f7fa] px-5 py-8 sm:px-6 md:min-h-0 md:justify-center overflow-y-auto md:py-0 lg:relative lg:inset-auto lg:min-h-screen">
+      <div className="flex w-full max-w-6xl flex-1 flex-col items-center bg-[#f5f7fa] md:flex-none lg:h-full lg:flex-1 lg:flex-row lg:items-center lg:justify-center lg:gap-18 lg:rounded-2xl">
         <div className="mx-auto flex w-full max-w-[420px] flex-col lg:max-w-none lg:flex-1 lg:px-6 lg:py-6">
           <div className="mb-20 mt-10 flex justify-center md:mb-20 md:mt-0 lg:mb-6 lg:justify-start">
             <img
@@ -72,7 +72,7 @@ export default function ForceResetPassword() {
               <button
                 type="button"
                 onClick={() => setShowOldPassword((prev) => !prev)}
-                className="text-gray-400"
+                className="text-gray-400 cursor-pointer"
                 aria-label="Toggle old password visibility"
               >
                 {showOldPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -98,7 +98,7 @@ export default function ForceResetPassword() {
               <button
                 type="button"
                 onClick={() => setShowNewPassword((prev) => !prev)}
-                className="text-gray-400"
+                className="text-gray-400 cursor-pointer"
                 aria-label="Toggle new password visibility"
               >
                 {showNewPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -122,7 +122,7 @@ export default function ForceResetPassword() {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
-                className="text-gray-400"
+                className="text-gray-400 cursor-pointer"
                 aria-label="Toggle confirm password visibility"
               >
                 {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
