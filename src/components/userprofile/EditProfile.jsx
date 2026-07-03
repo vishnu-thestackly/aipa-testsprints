@@ -2,8 +2,9 @@
 import { ArrowLeft, Upload, Calendar, ChevronDown, Search } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// import PersonalAssistant from "../editprofile/PersonalAssistant";
+import PersonalAssistant from "../editprofile/PersonalAssistant";
 import MessageFrame from "../../assets/images/MessageFrame.jpeg";
+import messageimg from "../../assets/images/messageimg.png";
 
 import {
   getUserProfile,
@@ -541,9 +542,14 @@ const selectedAltCountry = countries.find(
               </button>
             </div>
                     <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 md:bottom-6 md:right-6 z-40">
-                <button type="button" onClick={onOpenChat}>
+                {/* <button type="button" onClick={onOpenChat}>
                   <img src={MessageFrame} alt="Chat" className="h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12 hover:scale-110 transition shadow-lg rounded-full" />
+                </button> */}
+                <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40">
+                <button type="button" onClick={onOpenChat} className="lg:w-15 lg:h-15 h-10 w-10 rounded-full bg-[#4866F6] flex items-center justify-center shrink-0 hover:bg-[#3D5AE8] transition">
+                  <img src={messageimg} alt="Chat" className="lg:w-8 lg:h-8 w-5 h-5 cursor-pointer " />
                 </button>
+                </div>
               </div>
           </form>
         </div>

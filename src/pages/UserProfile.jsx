@@ -13,6 +13,8 @@ import PreferenceSetting from "../components/userprofile/PreferenceSetting";
 import SubscriptionPlans from "../components/userprofile/subscription-details/SubscriptionPlans";
 import SubscriptionDetails from "../components/userprofile/subscription-details/SubscriptionDetails";
 
+import { Outlet } from "react-router-dom";
+
 export default function UserProfile() {
   const [profile, setProfile] = useState(null);
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -107,6 +109,7 @@ useEffect(() => {
 )}
         </div>
       </div>
+      <Outlet />
     </div>
   );
 }

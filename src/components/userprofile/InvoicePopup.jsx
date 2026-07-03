@@ -3,12 +3,16 @@ import SparkleImg from "../../assets/images/SparkleImg.png"
 import logoimage from "../../assets/images/logoimage.svg"
 import VectorImg from "../../assets/images/VectorImg.png"
 import Download from "../../assets/images/Download.png"
+import { useNavigate } from "react-router-dom";
+
 
 
 
 export default function InvoicePopup({ onClose, invoiceData }) {
+  const navigate = useNavigate();
   const formatDate = (date) => {
   if (!date) return "-";
+  
 
   return new Date(date).toLocaleDateString("en-GB", {
     day: "2-digit",
@@ -61,7 +65,14 @@ const data = {
       
            <img src={VectorImg} 
            alt="close"
-           onClick={onClose}
+          //  onClick={onClose}
+          onClick={() => {
+              if (onClose) {
+                  onClose();
+              } else {
+                  navigate("/user-profile");
+              }
+          }}
              className="absolute top-3 right-3 lg:top-4 lg:right-4 w-5 h-5 lg:w-6 lg:h-6 flex items-center justify-center cursor-pointer hover:opacity-80"/>
     
      

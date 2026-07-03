@@ -82,7 +82,7 @@ function App() {
 
         {/* sprint3 */}
     
-<Route path="/user-profile" element={<UserProfile />} />
+{/* <Route path="/user-profile" element={<UserProfile />} /> */}
 
 <Route path="/preferences" element={<PreferenceSetting />} />
 
@@ -114,18 +114,23 @@ function App() {
            element={<PaymentMethod/>}
            />  
  
-         <Route
+         {/* <Route
                   path="/invoice"
                   element={<InvoicePopup/>}
-                  />
+                  /> */}
           <Route
           path="/paymentprocess"
           element={<PaymentProcessing/>}
          
           />  
  
-          <Route path="/user-profile/success" element={<PaymentSuccess />} />
-          <Route path="/user-profile/cancel" element={<PaymentUnsuccessful />} />
+          {/* <Route path="/user-profile/success" element={<PaymentSuccess />} /> */}
+          {/* <Route path="/user-profile/cancel" element={<PaymentUnsuccessful />} /> */}
+          <Route path="/user-profile" element={<UserProfile />}>
+  <Route path="success" element={<PaymentSuccess />} />
+  <Route path="cancel" element={<PaymentUnsuccessful />} />
+  <Route path="invoice" element={<InvoicePopup />} />
+</Route>
  
  
   
