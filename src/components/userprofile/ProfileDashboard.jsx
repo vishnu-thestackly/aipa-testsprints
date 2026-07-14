@@ -12,6 +12,7 @@ import vectorIcon from "../../assets/images/Vector.svg";
 import sparkleIcon from "../../assets/images/Sparkle.svg";
 import { useNavigate } from "react-router-dom";
 import { getUserProfile,  verifyPayment, } from "../../api/authApi";
+import { useOutletContext } from "react-router-dom";
 
 
 import PaymentSuccess from "./PaymentSuccess";
@@ -22,13 +23,20 @@ import InvoicePopup from "./InvoicePopup";
 
 
 
-export default function ProfileDashboard({ languageOpen,
-  setProfilePage,
-  profile,
-  setProfile,})  {
-    const navigate = useNavigate();
+export default function ProfileDashboard() {
+
+  const {
+    languageOpen,
+    profile,
+    setProfile,
+    profilePage,
+    setProfilePage,
+    activeItem,
+    setActiveItem,
+  } = useOutletContext();
+  const navigate = useNavigate();
     
-    const [sections, setSections] = useState({
+  const [sections, setSections] = useState({
   profile: true,
   plan: true,
 });
@@ -56,36 +64,74 @@ const handleViewInvoice = async () => {
 };
 
 
-useEffect(() => {
+// useEffect(() => {
+//   const params = new URLSearchParams(location.search);
+//   const sessionId = params.get("session_id");
+
+//   if (!sessionId) return;
+
+//   const verify = async () => {
+//   try {
+//     const response = await verifyPayment(sessionId);
+
+//     console.log("Verify Response:", response);
+
+//     if (response.verified) {
+//   setPaymentId(response.payment_id);
+
+//   // Remove session_id from URL
+//   window.history.replaceState({}, "", "/user/profile");
+
+//   // Show Success Popup
+//   setShowPaymentSuccess(true);
+// }
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+
+//   verify();
+// }, [location]);
+
+  useEffect(() => {
+  console.log("ProfileDashboard Mounted");
+  console.log("Current URL:", location.pathname + location.search);
+
   const params = new URLSearchParams(location.search);
   const sessionId = params.get("session_id");
 
-  if (!sessionId) return;
+  console.log("Session ID:", sessionId);
+
+  if (!sessionId) {
+    console.log("No session_id found");
+    return;
+  }
 
   const verify = async () => {
-  try {
-    const response = await verifyPayment(sessionId);
+    try {
+      console.log("Calling verifyPayment API...");
 
-    console.log("Verify Response:", response);
+      const response = await verifyPayment(sessionId);
 
-    if (response.verified) {
-  setPaymentId(response.payment_id);
+      console.log("Verify Response:", response);
 
-  // Remove session_id from URL
-  window.history.replaceState({}, "", "/user-profile");
+      if (response.verified) {
+        console.log("Payment verified");
+        console.log("Payment ID:", response.payment_id);
 
-  // Show Success Popup
-  setShowPaymentSuccess(true);
-}
-  } catch (err) {
-    console.error(err);
-  }
-};
+        setPaymentId(response.payment_id);
+
+        window.history.replaceState({}, "", "/user/profile");
+
+        setShowPaymentSuccess(true);
+      }
+    } catch (err) {
+      console.error("Verify Error:", err);
+    }
+  };
 
   verify();
 }, [location]);
-
-  
 
 useEffect(() => {
   const params = new URLSearchParams(location.search);
@@ -102,21 +148,42 @@ useEffect(() => {
 
 
 
+// useEffect(() => {
+//   const fetchProfile = async () => {
+//     try {
+//       const response = await getUserProfile();
+//       setProfile(response);
+//       console.log("Profile Response:", response);
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   };
+
+//   fetchProfile();
+// }, []);
 useEffect(() => {
+  console.log("fetchProfile useEffect triggered");
+
   const fetchProfile = async () => {
+    console.log("Inside fetchProfile");
+
     try {
       const response = await getUserProfile();
+
+      console.log("Profile Response:", response);
+
       setProfile(response);
     } catch (error) {
-      console.error(error);
+      console.error("Profile Error:", error);
     }
   };
 
   fetchProfile();
 }, []);
-// if (!profile) {
-//     return <div className=" h-full flex justify-center items-center">Loading...</div>;
-//   }
+
+if (!profile) {
+    return <div className=" h-full flex justify-center items-center">Loading...</div>;
+  }
 
 return (
 
@@ -149,7 +216,7 @@ return (
 <div className="relative h-[120px]" style={{backgroundImage:`url(${blueBg})`,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat"}}>
 <button
 onClick={() => {
-  setProfilePage("edit");
+    navigate("/user/profile/editprofile");
 }}
   className="absolute right-[15px] top-[68%] translate-y-[-50%] w-[100px] h-[42px] rounded-full bg-white flex items-center justify-center gap-2 text-[#4866F6] cursor-pointer"
 >
@@ -261,7 +328,11 @@ onClick={() => {
 
 <h3 className="font-semibold text-[22px] lg:text-[18px] xl:text-[22px] text-[#3D3D3D]">Mobile Number</h3>
 
-<p className="text-[#586D93] text-[15px] xl:text-[16px] break-words">{profile?.phone || "-"}</p>
+<p className="text-[#586D93] text-[15px] xl:text-[16px] break-words">
+  {profile?.phone
+    ? `${profile.country_code || ""} ${profile.phone}`
+    : "-"}
+    </p>
 
 </div>
 
@@ -279,7 +350,11 @@ onClick={() => {
 
 <h3 className="font-semibold text-[18px] md:text-[20px]  lg:text-[17px] xl:text-[22px] text-[#3D3D3D] whitespace-nowrap">
 Alternate Number
-</h3><p className="text-[#586D93] text-[15px] xl:text-[16px] break-words">{profile?.alternate_phone || "-"}</p>
+</h3><p className="text-[#586D93] text-[15px] xl:text-[16px] break-words">
+  {profile?.alternate_phone
+    ? `${profile.alternate_country_code || ""} ${profile.alternate_phone}`
+    : "-"}
+</p>
 
 </div>
 
@@ -342,7 +417,7 @@ Best plan for the fresher individuals
 </p>
 
 <button
-  onClick={() => setProfilePage("subscription")}
+  onClick={() => {navigate("/user/profile/plans")}}
   className="mt-4 w-[200px] h-[42px] rounded-full bg-[#4866F6] text-white font-medium flex items-center justify-center gap-2 cursor-pointer"
 >
   Upgrade Plan
@@ -397,9 +472,11 @@ Best plan for the fresher individuals
 {showPaymentSuccess && (
   <PaymentSuccess
   onClose={() => {
+    console.log("Close clicked");
     setShowPaymentSuccess(false);
   }}
   onGoHome={() => {
+    console.log("home clicked");
     setShowPaymentSuccess(false);
   }}
   onViewInvoice={handleViewInvoice}

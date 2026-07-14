@@ -12,7 +12,6 @@ import AiPreferences from "./pages/AiPreferences";
 import ConnectIntegrations from "./pages/ConnectIntegrations";
 import NotificationSetup from "./pages/NotificationSetup";
 import Completion from "./pages/Completion";
-import PreferenceSetting from "./pages/PreferenceSetting";
 import Frame from "./assets/images/Frame.png";
 import UserProfile from "./pages/UserProfile";
 import NewChatPage from "./pages/NewChatPage";
@@ -28,13 +27,20 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import VerifyUserOTP from "./pages/VerifyUserOTP";
 import PersonalAssistant from "./components/editprofile/PersonalAssistant";
-
 import InvoicePopup from "./components/userprofile/InvoicePopup";
 import PaymentProcessing from "./components/userprofile/PaymentProcessing";
 import PaymentSuccess from "./components/userprofile/PaymentSuccess";
 import PaymentMethod from "./components/userprofile/PaymentMethod";
 import EditProfile from "./components/userprofile/EditProfile";
 import PaymentUnsuccessful from "./components/userprofile/PaymentUnsuccessful";
+import NewChat from "./components/userprofile/new-chat/NewChat";
+import ProfileDashboard from "./components/userprofile/ProfileDashboard";
+import SubscriptionPlans from "./components/userprofile/subscription-details/SubscriptionPlans";
+import SubscriptionDetails from "./components/userprofile/subscription-details/SubscriptionDetails";
+import NewChatConversation from "./components/userprofile/new-chat/NewChatConversation";
+import PreferenceSetting from "./components/userprofile/PreferenceSetting";
+
+
 
 function App() {
   const [showChat, setShowChat] = useState(false);
@@ -71,10 +77,61 @@ function App() {
 
         {/* sprint3 */}
 
-        <Route path="/user-profile" element={<UserProfile />} />
-        <Route path="/new-chat/*" element={<NewChatPage />} />
+        <Route path="/user" element={<UserProfile />}>
 
-        <Route path="/preferences" element={<PreferenceSetting />} />
+  <Route
+    path="profile"
+    element={<ProfileDashboard />}
+  />
+
+  <Route
+    path="profile/editprofile"
+    element={<EditProfile onOpenChat={() => setShowChat(true)} />}
+  />
+
+  <Route
+    path="profile/plans"
+    element={<SubscriptionPlans />}
+  />
+
+  <Route
+    path="profile/details"
+    element={<SubscriptionDetails />}
+  />
+
+  <Route
+    path="profile/success"
+    element={<PaymentSuccess />}
+  />
+
+  <Route
+    path="profile/cancel"
+    element={<PaymentUnsuccessful />}
+  />
+
+  <Route
+    path="profile/invoice"
+    element={<InvoicePopup />}
+  />
+
+  <Route
+    path="settings/preferences"
+    element={<PreferenceSetting />}
+  />
+
+  <Route
+    path="new-chat"
+    element={<NewChat />}
+  />
+
+  <Route
+    path="chat/:chatId"
+    element={<NewChatConversation />}
+  />
+
+</Route>
+
+
 
         {/* Onboarding */}
         <Route path="/personal-details" element={<PersonalDetails />} />
@@ -88,18 +145,11 @@ function App() {
                                           </ProtectedRoute>} /> */}
         <Route path="/dashboard" element={<Dashboard />} />
 
-        <Route
-          path="/editprofile"
-          element={<EditProfile onOpenChat={() => setShowChat(true)} />}
-        />
+        
         <Route path="/" element={<PersonalAssistant />} />
         <Route path="/paymentmethod" element={<PaymentMethod />} />
 
-        <Route path="/invoice" element={<InvoicePopup />} />
-        <Route path="/paymentprocess" element={<PaymentProcessing />} />
-
-        <Route path="/user-profile/success" element={<PaymentSuccess />} />
-        <Route path="/user-profile/cancel" element={<PaymentUnsuccessful />} />
+        
       </Routes>
 
       {showChat && <PersonalAssistant onClose={() => setShowChat(false)} />}

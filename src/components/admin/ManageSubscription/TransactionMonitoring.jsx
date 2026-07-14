@@ -11,6 +11,7 @@ import {
   getTransactionDetail,
   getRevenueChart,
   exportTransactions,
+  getRevenueByPlan,
 } from "../../../api/authApi";
 
 export default function TransactionMonitoring() {
@@ -40,8 +41,10 @@ const [isMinimized, setIsMinimized] = useState(false);
 const [searchTerm, setSearchTerm] = useState("");
 const [revenueData, setRevenueData] = useState([]);
 const [isPieMinimized, setIsPieMinimized] = useState(false);
-const planData = [ { name: "Basic Plan", value: 45 },
-  { name: "Premium Plan", value: 55 }];
+const [planData, setPlanData] = useState({
+  grand_total: 0,
+  plans: [],
+});
 const [openModal, setOpenModal] = useState(false);
 const PAGE_SIZE = 6;
 const [currentPage, setCurrentPage] = useState(1);
@@ -64,6 +67,18 @@ const [subscriptionOpen, setSubscriptionOpen] = useState(false);
 
 const [selectedStatus, setSelectedStatus] = useState(["Success"]);
 const [selectedSubscription, setSelectedSubscription] = useState(["Basic"]);
+
+const loadRevenueByPlan = async () => {
+  try {
+    const data = await getRevenueByPlan();
+
+    console.log("Revenue By Plan:", data);
+
+    setPlanData(data);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const toggleStatus = (value) => {
   setSelectedStatus((prev) =>
@@ -153,17 +168,17 @@ const handleExport = async () => {
 
     const link = document.createElement("a");
     link.href = url;
-    link.download = "transactions.xlsx";
+    link.download = "transactions.csv"; // Change to .xlsx if your backend returns Excel
 
     document.body.appendChild(link);
     link.click();
 
-    link.remove();
+    document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error("Export failed:", error);
   }
-}; 
+};
 
 
 
@@ -171,6 +186,8 @@ useEffect(() => {
   loadKpis();
   loadTransactions();
   loadRevenueChart();
+  loadRevenueByPlan();
+
 }, []);
 
 
@@ -441,7 +458,7 @@ className="w-full h-[34px] border border-[#D9D9D9] rounded-[10px] px-4 flex item
 
             <td className="h-[52px] px-5 text-[14px] text-[#5A6B95]">{r.user_name}</td>
 
-            <td className="h-[52px] px-5 text-[14px] text-[#5A6B95]">{r.transaction_id}</td>
+            <td className="h-[52px] px-5 text-[14px] text-[#5A6B95] max-w-[180px] truncate">{r.transaction_id}</td>
 
             <td className="h-[52px] px-5 text-[14px] text-[#5A6B95]">{r.date
     ? new Date(r.date).toLocaleDateString("en-GB")
@@ -520,10 +537,10 @@ className="w-full h-[34px] border border-[#D9D9D9] rounded-[10px] px-4 flex item
     }`}
   >
     <TransactionRevenuePlanChart
-      planData={planData}
-      isPieMinimized={isPieMinimized}
-      setIsPieMinimized={setIsPieMinimized}
-    />
+  planData={planData}
+  isPieMinimized={isPieMinimized}
+  setIsPieMinimized={setIsPieMinimized}
+/>
   </div>
 
 </div>
@@ -556,7 +573,7 @@ className="w-full h-[34px] border border-[#D9D9D9] rounded-[10px] px-4 flex item
 <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 text-[15px]">
             <div>
           <span className="font-medium text-[#3D3D3D]">Transaction ID:</span>
-          <span className="ml-1 text-[#8B97AC]">{selectedTransaction?.transaction_id}</span>
+          <span className="ml-1 text-[#8B97AC] ">{selectedTransaction?.transaction_id}</span>
         </div>
 
 <div className="text-left sm:text-right">

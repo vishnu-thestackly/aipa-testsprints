@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/images/Logo.svg";
 import SignOut from "../../assets/images/SignOut.png";
 import profile from "../../assets/images/profile.png";
@@ -16,6 +16,19 @@ export default function Sidebar({
   setProfilePage,
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isNewChat = location.pathname === "/user/new-chat";
+  const isSettings = location.pathname.startsWith("/user/settings");
+  const isProfile =
+  location.pathname === "/user/profile" ||
+  location.pathname === "/user/profile/edit" ||
+  location.pathname.startsWith("/user/profile/subscription");
+
+  const isDashboard =
+  location.pathname === "/user/profile";
+
+const isPreferences =
+  location.pathname === "/user/settings/preferences";
   const [openMenu, setOpenMenu] = useState({
     tasks: false,
     integrations: false,
@@ -36,6 +49,25 @@ export default function Sidebar({
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+  const path = location.pathname;
+
+  if (path === "/user/new-chat") {
+    setActiveItem("newchat");
+  } else if (path === "/user/profile") {
+    setActiveItem("profileDashboard");
+  } else if (path === "/user/profile/edit") {
+    setActiveItem("editProfile");
+  } else if (path === "/user/settings/preferences") {
+    setActiveItem("preferences");
+  } else if (path === "/user/profile/subscription") {
+    setActiveItem("subscription");
+  } else if (path.startsWith("/chat/")) {
+    setActiveItem("newchat");
+  }
+}, [location.pathname]);
+
   return (
     <div className="hidden md:block">
       <div className="w-[115px] lg:w-[280px] xl:w-[375px] h-screen bg-white p-1 lg:p-4 flex flex-col overflow-hidden">
@@ -47,15 +79,18 @@ export default function Sidebar({
               <div
                 onClick={() => {
                   setActiveItem("newchat");
-                  navigate("/new-chat");
+                  navigate("/user/new-chat");
                   if (window.innerWidth < 1024) {
                     setSidebarOpen?.(true);
                   }
                 }}
-                className={`w-[50px] lg:w-[220px] xl:w-[315px] h-[38px] flex justify-center lg:justify-start gap-[10px] rounded-lg py-[6px] px-[6px] group items-center mt-2 cursor-pointer ${activeItem === "newchat" ? "bg-[#4866F6]" : "hover:bg-[#4866F6]"}`}
+                className={`w-[50px] lg:w-[220px] xl:w-[315px] h-[38px] flex justify-center lg:justify-start gap-[10px] rounded-lg py-[6px] px-[6px] group items-center mt-2 cursor-pointer ${isNewChat ? "bg-[#4866F6]" : "hover:bg-[#4866F6]"}`}
               >
                 <svg
-                  className={`w-[20px] h-[20.73px] ${activeItem === "newchat" ? "text-white" : "text-[#586D93]"} group-hover:text-white`}
+                  className={`w-[20px] h-[20.73px] ${isNewChat
+    ? "text-white"
+    : "text-[#586D93]"
+} group-hover:text-white`}
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +131,10 @@ export default function Sidebar({
                   </defs>
                 </svg>
                 <p
-                  className={`hidden lg:block ${activeItem === "newchat" ? "text-white" : "text-[#586D93] group-hover:text-white"}`}
+                  className={`hidden lg:block ${isNewChat
+    ? "text-white"
+    : "text-[#586D93]"
+} group-hover:text-white`}
                 >
                   New Chat
                 </p>
@@ -693,11 +731,11 @@ export default function Sidebar({
                     }
                     setOpenMenu({ ...openMenu, settings: !openMenu.settings });
                   }}
-                  className={`w-[50px] lg:w-[220px] xl:w-[315px] h-[38px] flex justify-center lg:justify-between rounded-lg py-[6px] px-[6px] group items-center mt-2 cursor-pointer ${activeItem === "communication" ? "bg-[#4866F6]" : "hover:bg-[#4866F6]"}`}
+                  className={`w-[50px] lg:w-[220px] xl:w-[315px] h-[38px] flex justify-center lg:justify-between rounded-lg py-[6px] px-[6px] group items-center mt-2 cursor-pointer ${isSettings ? "bg-[#4866F6]" : "hover:bg-[#4866F6]"}`}
                 >
                   <div className="flex items-center gap-[10px]">
                     <svg
-                      className={`w-[20px] h-[20.73px] ${activeItem === "communication" ? "text-white" : "text-[#586D93]"} group-hover:text-white`}
+                      className={`w-[20px] h-[20.73px] ${isSettings ? "text-white" : "text-[#586D93]"} group-hover:text-white`}
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -735,7 +773,7 @@ export default function Sidebar({
                       </defs>
                     </svg>
                     <p
-                      className={`hidden lg:block ${activeItem === "communication" ? "text-white" : "text-[#586D93]"} group-hover:text-white`}
+                      className={`hidden lg:block ${isSettings ? "text-white" : "text-[#586D93]"} group-hover:text-white`}
                     >
                       Settings
                     </p>
@@ -750,7 +788,7 @@ export default function Sidebar({
                     <path
                       d="M16.59 0.75L10.07 7.27C9.30002 8.04 8.04002 8.04 7.27002 7.27L0.75 0.75"
                       stroke={
-                        activeItem === "communication" ? "white" : "#586D93"
+                        isSettings ? "white" : "#586D93"
                       }
                       strokeWidth="1.5"
                       strokeLinecap="round"
@@ -761,16 +799,18 @@ export default function Sidebar({
                 {openMenu.settings && window.innerWidth >= 1024 && (
                   <div className="ml-[40px] mt-1 xl:mt-2 flex flex-col gap-3 min-[1024px]:gap-1 xl:gap-2">
                     <div
-                      onClick={() => setActiveItem("preferenceSetting")}
+                      onClick={() => {
+    navigate("/user/settings/preferences");
+}}
                       className={`flex items-center gap-[10px] cursor-pointer py-1 px-3 rounded-lg group ${
-                        activeItem === "preferenceSetting"
+                        isPreferences
                           ? "bg-[#4866F6]"
                           : "hover:bg-[#4866F6]"
                       }`}
                     >
                       <svg
                         className={`w-[18px] h-[18px] ${
-                          activeItem === "preferenceSetting"
+                          isPreferences
                             ? "text-white"
                             : "text-[#586D93] group-hover:text-white"
                         }`}
@@ -848,7 +888,7 @@ export default function Sidebar({
                       </svg>
                       <p
                         className={`${
-                          activeItem === "preferenceSetting"
+                          isPreferences
                             ? "text-white"
                             : "text-[#586D93] group-hover:text-white"
                         }`}
@@ -977,20 +1017,16 @@ export default function Sidebar({
 
               <div
                 onClick={() => {
-                  if (window.innerWidth < 1024) {
-                    setSidebarOpen?.(true);
-                    setSidebarOpen?.(true);
-                    return;
-                  }
-
-                  setActiveItem("profileDashboard");
-                  setProfilePage("dashboard");
-                  navigate("/user-profile");
-                }}
-                className={`w-[50px] lg:w-[220px] xl:w-[315px] h-[38px] flex justify-center lg:justify-start gap-[6px] rounded-lg py-[6px] px-[10px] group items-center mt-2 cursor-pointer transition-all duration-300 ${activeItem === "profileDashboard" || activeItem === "subscriptionPlans" ? "bg-[#4866F6]" : "hover:bg-[#4866F6]"}`}
+                    if (window.innerWidth < 1024) {
+                      setSidebarOpen(false);
+                    }
+                  
+                    navigate("/user/profile");
+                  }}
+                className={`w-[50px] lg:w-[220px] xl:w-[315px] h-[38px] flex justify-center lg:justify-start gap-[6px] rounded-lg py-[6px] px-[10px] group items-center mt-2 cursor-pointer transition-all duration-300 ${isProfile ? "bg-[#4866F6]" : "hover:bg-[#4866F6]"}`}
               >
                 <svg
-                  className={`w-[20px] h-[20.73px] ${activeItem === "profileDashboard" || activeItem === "subscriptionPlans" ? "text-white" : "text-[#586D93]"} group-hover:text-white`}
+                  className={`w-[20px] h-[20.73px] ${isProfile ? "text-white" : "text-[#586D93]"} group-hover:text-white`}
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -1024,7 +1060,7 @@ export default function Sidebar({
                   </g>
                 </svg>
                 <p
-                  className={`hidden lg:block ${activeItem === "profileDashboard" || activeItem === "subscriptionPlans" ? "text-white" : "text-[#586D93]"} group-hover:text-white`}
+                  className={`hidden lg:block ${isProfile ? "text-white" : "text-[#586D93]"} group-hover:text-white`}
                 >
                   {" "}
                   Profile{" "}

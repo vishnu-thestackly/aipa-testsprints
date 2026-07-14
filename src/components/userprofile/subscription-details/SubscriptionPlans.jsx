@@ -1,10 +1,11 @@
 import { ArrowLeft, Check, Sparkles, X } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 export default function SubscriptionPlans({
   setProfilePage
 }) {
 const [currentPlan, setCurrentPlan] = useState("");
+const navigate = useNavigate();
   const plans = [
     {
       id: "free",
@@ -62,11 +63,11 @@ const [currentPlan, setCurrentPlan] = useState("");
 
  const handlePlanAction = (planId) => {
   if (planId === "free") {
-    setProfilePage("subscriptionDetails");
+    navigate("/user/profile/details");
     return;
   }
 
-  setProfilePage("subscriptionDetails");
+  navigate("/user/profile/details");
 };
 
 
@@ -84,7 +85,7 @@ const [currentPlan, setCurrentPlan] = useState("");
             <div className="flex items-center gap-2 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-gray-100">
   <div className="w-6 h-6 sm:w-7 sm:h-7 bg-[#4866F6] rounded-full flex items-center justify-center lg:mt-[10px]">
     <ArrowLeft
-      onClick={() => setProfilePage("dashboard")}
+      onClick={() => navigate("/user/profile")}
       className="w-3 h-3 sm:w-4 sm:h-4 text-white"
       strokeWidth={2.5}
     />

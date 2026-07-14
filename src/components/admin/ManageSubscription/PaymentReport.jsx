@@ -41,6 +41,7 @@ import {
   getPaymentReportKPIs,
   getTransactions,
   getRevenueChart,
+  getPaymentMethodUsage,
 } from "../../../api/authApi";
 // -----------------------------------------------------------------------------
 // CONSTANTS
@@ -73,9 +74,9 @@ const STATUS_FILTER_OPTIONS = [
 ];
 
 const PAYMENT_METHOD_COLORS = {
-  "Credit / Debit Card": "#4866f6",
-  UPI: "#6d85f8",
-  NetBanking: "#92a4f8",
+  card: "#4866F6",
+  upi: "#6D82F8",
+  netbanking: "#92A4F8",
 };
 
 const PAYMENT_METHOD_LEGEND_ORDER = [
@@ -196,6 +197,7 @@ export default function PaymentReport({ currentPage, onPageChange }) {
   const [transactions, setTransactions] = useState([]);
   const [revenueData, setRevenueData] = useState([]);
   const [paymentMethodData, setPaymentMethodData] = useState([]);
+  
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -214,10 +216,7 @@ export default function PaymentReport({ currentPage, onPageChange }) {
     }
   };
 
-  useEffect(() => {
-    setRevenueData(MOCK_REVENUE_BY_MONTH);
-    setPaymentMethodData(MOCK_PAYMENT_METHOD_USAGE);
-  }, []);
+  
 
   const fetchTransactions = async (filters = {}) => {
     try {
@@ -231,18 +230,42 @@ export default function PaymentReport({ currentPage, onPageChange }) {
     }
   };
 
+
+  const fetchPaymentMethodUsage = async () => {
+  try {
+    const response = await getPaymentMethodUsage();
+
+    console.log("Payment Method Usage:", response);
+
+    const chartData = response.map((item) => ({
+      name: item.method,
+      value: item.percent,
+    }));
+
+    setPaymentMethodData(chartData);
+  } catch (error) {
+    console.error("Failed to fetch payment method usage:", error);
+  }
+};
+
+useEffect(() => {
+    setRevenueData(MOCK_REVENUE_BY_MONTH);
+  }, []);
+
   useEffect(() => {
-    const filters = {
-      from_date: fromDate || undefined,
-      to_date: toDate || undefined,
-      plan: selectedPlans.join(",") || undefined,
-      status: selectedStatuses.join(",") || undefined,
-    };
+  const filters = {
+    from_date: fromDate || undefined,
+    to_date: toDate || undefined,
+    plan: selectedPlans.join(",") || undefined,
+    status: selectedStatuses.join(",") || undefined,
+  };
 
-    fetchPaymentKPIs(filters);
-    fetchTransactions(filters);
-  }, [fromDate, toDate, selectedPlans, selectedStatuses]);
+  fetchPaymentKPIs(filters);
+  fetchTransactions(filters);
+  fetchPaymentMethodUsage();
+}, [fromDate, toDate, selectedPlans, selectedStatuses]);
 
+console.log("paymentMethodData State:", paymentMethodData);
   return (
     <div className="h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide">
       <div className="w-full min-h-full flex flex-col gap-4 rounded-[20px] md:rounded-[25px] border-b border-gray-200 bg-white p-4 shadow-[0px_1px_4px_0px_#00000040] md:gap-5 md:p-5 lg:gap-6 lg:p-6">
@@ -912,19 +935,19 @@ function TransactionTableBlock({ transactions, currentPage, onPageChange }) {
 // -----------------------------------------------------------------------------
 function TransactionStatusBadge({ status }) {
   const statusStyles = {
-    Success: "bg-[#33B46926] text-[#33B469]",
-    Pending: "bg-[#FDF5E6] text-[#F59E0B]",
-    Failed: "bg-[#FF000033] text-[#FF0000]",
+    completed: "bg-[#33B46926] text-[#33B469]",
+    pending: "bg-[#FDF5E6] text-[#F59E0B]",
+    failed: "bg-[#FF000033] text-[#FF0000]",
   };
   const dotStyles = {
-    Success: "bg-[#33B469]",
-    Pending: "bg-[#F59E0B]",
-    Failed: "bg-[#FF0000]",
+    completed: "bg-[#33B469]",
+    pending: "bg-[#F59E0B]",
+    failed: "bg-[#FF0000]",
   };
 
   return (
     <span
-      className={`inline-flex w-[95px] items-center justify-start gap-2 rounded-full py-1.5 pl-3 pr-3 text-sm font-medium ${statusStyles[status] ?? "bg-slate-100 text-slate-700"}`}
+      className={`inline-flex w-[110px] items-center justify-start gap-2 rounded-full py-1.5 pl-3 pr-3 text-sm font-medium ${statusStyles[status] ?? "bg-slate-100 text-slate-700"}`}
     >
       <span
         className={`h-2 w-2 shrink-0 rounded-full ${dotStyles[status] ?? "bg-slate-500"}`}
@@ -939,6 +962,7 @@ function TransactionStatusBadge({ status }) {
 // AnalyticsChartsSection — side-by-side revenue bar chart and payment donut
 // -----------------------------------------------------------------------------
 function AnalyticsChartsSection({ revenueData, paymentMethodData }) {
+  console.log("Analytics paymentMethodData:", paymentMethodData);
   return (
     <section className="grid grid-cols-1 items-start gap-4 xl:grid-cols-2 xl:items-stretch lg:gap-5">
       <RevenueChartCard data={revenueData} />
@@ -1073,6 +1097,10 @@ function PaymentMethodUsageCard({ data }) {
 // PaymentMethodDonut — recharts pie/donut with center total, callouts, and legend
 // -----------------------------------------------------------------------------
 function PaymentMethodDonut({ data }) {
+
+  console.log("Donut received:", data);
+
+
   return (
     <div className="mt-4 flex min-h-0 flex-1 flex-col border-t border-[#CFCFCF] pt-4">
       <div className="relative h-[260px] w-full shrink-0 sm:h-[300px]">

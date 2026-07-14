@@ -4,12 +4,16 @@ import logoimage from "../../assets/images/logoimage.svg"
 import VectorImg from "../../assets/images/VectorImg.png"
 import Download from "../../assets/images/Download.png"
 import { useNavigate } from "react-router-dom";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { useRef } from "react";
 
 
 
 
 export default function InvoicePopup({ onClose, invoiceData }) {
   const navigate = useNavigate();
+  const invoiceRef = useRef(null);
   const formatDate = (date) => {
   if (!date) return "-";
   
@@ -49,15 +53,31 @@ const data = {
   grandTotal: `₹${invoiceData?.grand_total ?? 0}`,
 };
 
-  const handleDownload = () => {
-    alert("Download functionality will be available soon");
-  };
+  const handleDownload = async () => {
+  const element = invoiceRef.current;
+
+  const canvas = await html2canvas(element, {
+    scale: 2,
+    useCORS: true,
+  });
+
+  const imgData = canvas.toDataURL("image/png");
+
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+
+  pdf.save(`Invoice-${data.invoiceId}.pdf`);
+};
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 z-50">
 
      
-      <div className="relative w-full max-w-[360px] sm:max-w-[480px] lg:max-w-[640px]  lg:h-[674px] bg-white rounded-[20px] px-5 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7 shadow-2xl flex-col overflow-y-auto no-scrollbar">
+      <div ref={invoiceRef} className="relative w-full max-w-[360px] sm:max-w-[480px] lg:max-w-[640px]  lg:h-[674px] bg-white rounded-[20px] px-5 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7 shadow-2xl flex-col overflow-y-auto no-scrollbar">
 
         {/* Close Button */}
         

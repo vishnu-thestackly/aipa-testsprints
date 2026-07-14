@@ -3,7 +3,11 @@ import paymentsuccess from "../../assets/images/paymentsuccess.png"
 import VectorImg from "../../assets/images/VectorImg.png"
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-export default function PaymentSuccess() {
+export default function PaymentSuccess({
+  onClose,
+  onGoHome,
+  onViewInvoice,
+}) {
     const navigate = useNavigate();
 const [searchParams] = useSearchParams();
 
@@ -18,7 +22,7 @@ const sessionId = searchParams.get("session_id");
         <img
           src={VectorImg}
           alt="close"
-          onClick={() => navigate("/user-profile")}
+          onClick={() => navigate("/user/profile")}
           className="absolute top-3 right-3 lg:top-4 lg:right-4 w-5 h-5 lg:w-6 lg:h-6 cursor-pointer hover:opacity-80 z-10"
         />
 
@@ -41,7 +45,7 @@ const sessionId = searchParams.get("session_id");
 
           {/* Button */}
           <button
-            onClick={() => navigate("/user-profile")}
+            onClick={() => navigate("/user/profile")}
             className="w-full max-w-[330px] h-11   sm:h-12 bg-[#4866F6] text-white rounded-full text-base font-medium hover:bg-blue-700 transition mb-4"
           >
             Go to Home

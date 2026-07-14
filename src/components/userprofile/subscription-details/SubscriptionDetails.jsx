@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ArrowLeft, Check, Sparkles, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import sparkleIcon from "../../../assets/images/Sparkle.svg";
 import cardIcon from "../../../assets/images/card.svg";
 import eyeIcon from "../../../assets/images/eyes.svg";
@@ -8,6 +9,7 @@ import rightArrow from "../../../assets/images/rightarrow.svg";
 import CancelSubscriptionModal from "./CancelSubscriptionModal";
 import UpgradePlanModal from "./UpgradePlanModal";
 import DowngradePlanModal from "./DowngradePlanModal";
+import { downloadInvoice } from "./utilis/downloadInvoice";
 
 
 
@@ -18,7 +20,7 @@ import { verifyPayment } from "../../../api/authApi";
 export default function SubscriptionDetails({
   setProfilePage,
 }) {
-      
+const navigate = useNavigate()
 const [showCancelModal, setShowCancelModal] = useState(false);
 const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 const [showDowngradeModal, setShowDowngradeModal] = useState(false);
@@ -43,6 +45,16 @@ const handleViewInvoice = async (paymentId) => {
     setShowInvoice(true);
   } catch (err) {
     console.log(err);
+  }
+};
+
+const handleDownloadInvoice = async (paymentId) => {
+  try {
+    const response = await getInvoice(paymentId);
+
+    // generate pdf using response
+  } catch (err) {
+    console.error(err);
   }
 };
 
@@ -82,7 +94,7 @@ const paginatedHistory =
   <div className="flex items-center gap-3">
     <div className="w-6 h-6 sm:w-7 sm:h-7 bg-[#4866F6] rounded-full flex items-center justify-center">
       <ArrowLeft
-        onClick={() => setProfilePage("dashboard")}
+        onClick={() => navigate("/user/profile/plans")}
         className="w-3 h-3 sm:w-4 sm:h-4 text-white cursor-pointer"
         strokeWidth={2.5}
       />
@@ -311,7 +323,7 @@ const paginatedHistory =
   <img src={eyeIcon} alt="view" className="w-[18px] h-[18px]" />
 </button>
 
-              <button>
+              <button onClick={() => handleDownloadInvoice(item.payment_id)}>
                 <img
                   src={downloadIcon}
                   alt="download"

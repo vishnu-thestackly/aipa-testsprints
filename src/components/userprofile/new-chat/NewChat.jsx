@@ -16,6 +16,7 @@ import NewChatMail from "../../../assets/images/newchat_mail.svg";
 import NewChatTask from "../../../assets/images/newchat_task.svg";
 import NewChatMeeting from "../../../assets/images/newchat_meeting.svg";
 import NewChatReminder from "../../../assets/images/newchat_reminder.svg";
+import { sendChatMessage } from "../../../api/authApi";
 
 // -----------------------------------------------------------------------------
 // CONSTANTS
@@ -88,17 +89,28 @@ export default function NewChat({ languageOpen }) {
     });
   };
 
-  const handleStartConversation = () => {
-    const message = input.trim();
+  const handleStartConversation = async () => {
+  const message = input.trim();
 
-    if (!message) return;
+  if (!message) return;
 
-    navigate("/new-chat/conversation", {
+  try {
+    const response = await sendChatMessage({
+      conversation_id: 0,
+      message,
+    });
+
+    navigate(`/user/chat/${response.conversation_id}`, {
       state: {
         firstMessage: message,
+        aiReply: response.reply,
       },
     });
-  };
+
+  } catch (error) {
+    console.error("Failed to start conversation:", error);
+  }
+};
 
   return (
     <div

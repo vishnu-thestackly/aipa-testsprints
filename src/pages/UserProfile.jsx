@@ -3,18 +3,20 @@ import { useState, useEffect } from "react";
 import Navbar from "../components/userprofile/Navbar";
 import Sidebar from "../components/userprofile/Sidebar";
 
+
 import { getUserProfile } from "../api/authApi";
 
-import ProfileDashboard from "../components/userprofile/ProfileDashboard";
-import EditProfile from "../components/userprofile/EditProfile";
-import PreferenceSetting from "../components/userprofile/PreferenceSetting";
-// import PersonalAssistant from "../../components/editprofile/PersonalAssistant";
-import SubscriptionPlans from "../components/userprofile/subscription-details/SubscriptionPlans";
-import SubscriptionDetails from "../components/userprofile/subscription-details/SubscriptionDetails";
+// import ProfileDashboard from "../components/userprofile/ProfileDashboard";
+// import EditProfile from "../components/userprofile/EditProfile";
+// import PreferenceSetting from "../components/userprofile/PreferenceSetting";
+// // import PersonalAssistant from "../../components/editprofile/PersonalAssistant";
+// import SubscriptionPlans from "../components/userprofile/subscription-details/SubscriptionPlans";
+// import SubscriptionDetails from "../components/userprofile/subscription-details/SubscriptionDetails";
 
 import { Outlet } from "react-router-dom";
 
 export default function UserProfile() {
+  
   const [profile, setProfile] = useState(null);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("profileDashboard");
@@ -26,6 +28,7 @@ export default function UserProfile() {
       try {
         const data = await getUserProfile();
         setProfile(data);
+        console.log("User Profile API Response:", data);
       } catch (error) {
         console.error(error);
       }
@@ -61,38 +64,21 @@ export default function UserProfile() {
 
         {/* Content Wrapper */}
         <div className="flex-1 overflow-y-auto bg-gray-100">
-          {activeItem === "profileDashboard" && (
-            <>
-              {profilePage === "dashboard" && (
-                <ProfileDashboard
-                  languageOpen={languageOpen}
-                  setProfilePage={setProfilePage}
-                  profile={profile}
-                  setProfile={setProfile}
-                />
-              )}
 
-              {profilePage === "edit" && (
-                <EditProfile
-                  setProfilePage={setProfilePage}
-                  setProfile={setProfile}
-                />
-              )}
-            </>
-          )}
-
-          {activeItem === "preferenceSetting" && <PreferenceSetting />}
-
-          {profilePage === "subscription" && (
-            <SubscriptionPlans setProfilePage={setProfilePage} />
-          )}
-
-          {profilePage === "subscriptionDetails" && (
-            <SubscriptionDetails setProfilePage={setProfilePage} />
-          )}
+          <Outlet
+    context={{
+      languageOpen,
+      profile,
+      setProfile,
+      profilePage,
+      setProfilePage,
+      activeItem,
+      setActiveItem,
+    }}
+  />
         </div>
       </div>
-      <Outlet />
+      
     </div>
   );
 }

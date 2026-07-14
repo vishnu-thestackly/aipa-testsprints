@@ -645,11 +645,11 @@ function PlanBadge({ plan }) {
 // -----------------------------------------------------------------------------
 function SubscriptionStatusBadge({ status, solid = false }) {
   const statusStyles = {
-    Active: solid ? "bg-[#33B469] text-white" : "bg-[#33B46926] text-[#33B469]",
+    active: solid ? "bg-[#33B469] text-white" : "bg-[#33B46926] text-[#33B469]",
     Inactive: "bg-[#FF000033] text-[#FF0000]",
   };
   const dotStyles = {
-    Active: solid ? "bg-white" : "bg-[#33B469]",
+    active: solid ? "bg-white" : "bg-[#33B469]",
     Inactive: "bg-[#FF0000]",
   };
 
@@ -1157,21 +1157,28 @@ function UsageMetricsCard({ subscription }) {
 // -----------------------------------------------------------------------------
 // UsageBar — labeled progress bar showing used vs. total
 // -----------------------------------------------------------------------------
-function UsageBar({ label, used, total }) {
-  const safeTotal = total || 1;
-  const percent = Math.min(100, Math.round((used / safeTotal) * 100));
+function UsageBar({ label, used = 0, total = 0 }) {
+  const safeUsed = Number(used) || 0;
+  const safeTotal = Number(total) || 1;
+
+  const percent = Math.min(
+    100,
+    Math.round((safeUsed / safeTotal) * 100)
+  );
 
   return (
     <div className="flex-1">
       <div className="flex items-center justify-between text-md font-medium">
         <span className="text-[#3D3D3D]">{label}</span>
+
         <span className="text-[#3D3D3D]">
-          {used.toLocaleString()} / {total.toLocaleString()}
+          {safeUsed.toLocaleString()} / {safeTotal.toLocaleString()}
         </span>
       </div>
+
       <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-[#E5E7EB]">
         <div
-          className="h-full rounded-full bg-[#4866F6] transition-[width] duration-300"
+          className="h-full rounded-full bg-[#4866F6]"
           style={{ width: `${percent}%` }}
         />
       </div>

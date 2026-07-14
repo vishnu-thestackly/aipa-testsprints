@@ -125,10 +125,19 @@ export const sidebarMenuItems = [
     Icon: CommunicationIcon,
   },
   {
-    key: "usage",
-    label: "Usage Dashboard",
-    Icon: UsageIcon,
-  },
+  key: "usage",
+  label: "Usage Dashboard",
+  Icon: UsageIcon,
+  toggleKey: "usage",
+  activeKeys: ["aimonitoring"],
+  children: [
+    {
+      key: "aimonitoring",
+      label: "AI Monitoring",
+      Icon: UsageIcon, // or create a separate AI icon
+    },
+  ],
+},
   {
     key: "configuration",
     label: "Configuration",

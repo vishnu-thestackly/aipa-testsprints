@@ -3,6 +3,8 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import bubbleSvg from "../../assets/images/Combined Shape.svg";
 
 function PercentageBubble({ value, className, reverse = false }) {
+
+  
   return (
     <div className={className}>
       <div className="relative w-[107px] h-[84px]">
@@ -29,6 +31,13 @@ export default function TransactionRevenuePlanChart({
   isPieMinimized,
   setIsPieMinimized,
 }) {
+
+  const chartData =
+  planData?.plans?.map((plan) => ({
+    name: plan.plan_name,
+    value: plan.total,
+    percent: plan.percent,
+  })) || [];
   return (
     <div className="border border-[#D9D9D9] rounded-[28px] bg-white p-6">
       <div className="flex items-center justify-between">
@@ -51,11 +60,11 @@ export default function TransactionRevenuePlanChart({
       >
         <div className="h-[1px] bg-[#D9D9D9] mt-6 mb-4" />
 
-        <div className="relative w-full h-[260px] sm:h-[320px]">
+        <div className="relative w-full h-[285px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={planData}
+                data={chartData}
                 dataKey="value"
                 innerRadius="60%"
                 outerRadius="80%"
@@ -74,12 +83,12 @@ export default function TransactionRevenuePlanChart({
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
             <span className="text-[18px] text-[#4B4B4B]">Total</span>
             <span className="text-[18px] font-semibold text-[#4B4B4B]">
-              ₹12405.00
+              ₹{planData?.grand_total ?? 0}
             </span>
           </div>
 
           <PercentageBubble
-            value="55%"
+            value={`${chartData[0]?.percent ?? 0}%`}
             className="
               absolute
               left-[-12%]
@@ -96,7 +105,7 @@ export default function TransactionRevenuePlanChart({
           />
 
           <PercentageBubble
-            value="45%"
+            value={`${chartData[1]?.percent ?? 0}%`}
             reverse
             className="
               absolute

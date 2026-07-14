@@ -174,7 +174,7 @@ export default function LoginPage() {
       recaptchaRef.current?.reset();
 
       // DIRECT NAVIGATION
-      navigate("/user-profile");
+      navigate("/user/new-chat");
     } catch (error) {
       console.log("FULL LOGIN ERROR:", error);
 

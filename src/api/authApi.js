@@ -11,12 +11,28 @@ const API = axios.create({
   },
 });
 
+
+
+API.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 //  Added for refresh token perpose
 
 API.interceptors.response.use(
   (response) => response,
 
   async (error) => {
+    console.log("401 interceptor running");
     const originalRequest = error.config;
 
     if (
@@ -36,15 +52,23 @@ API.interceptors.response.use(
           }
         );
 
-        const newAccessToken =
-          refreshResponse.data.access_token;
+        const newAccessToken = refreshResponse.data.access_token;
+const newRefreshToken = refreshResponse.data.refresh_token;
 
-        localStorage.setItem("token", newAccessToken);
+localStorage.setItem("token", newAccessToken);
 
-        originalRequest.headers.Authorization =
-          `Bearer ${newAccessToken}`;
+if (newRefreshToken) {
+  localStorage.setItem("refreshToken", newRefreshToken);
+}
 
-        return API(originalRequest);
+// IMPORTANT
+API.defaults.headers.common.Authorization =
+  `Bearer ${newAccessToken}`;
+
+originalRequest.headers.Authorization =
+  `Bearer ${newAccessToken}`;
+
+return API(originalRequest);
       } catch (refreshError) {
         localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
@@ -1212,31 +1236,6 @@ export const getTransactionDetail = async (paymentId) => {
 };
 
 
-
-
-// ================= EXPORT TRANSACTIONS =================
-
-export const exportTransactions = async () => {
-  try {
-    const token = localStorage.getItem("token");
-
-    const response = await API.get(
-      "/api/v1/admin-management/subscriptions/transactions/export",
-      {
-        responseType: "blob",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    return response;
-  } catch (error) {
-    throw error.response?.data || "Failed to export transactions";
-  }
-};
-
-
 export const getSubscriptionTransactions = async (params = {}) => {
   try {
     const token = localStorage.getItem("token");
@@ -1391,6 +1390,192 @@ export const cancelSubscription = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Cancel Subscription Error:", error.response?.data);
+    throw error;
+  }
+};
+
+
+// ================= SEND CHAT MESSAGE =================
+
+export const sendChatMessage = async (data) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/chat/message",
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Send Chat Message Error:", error.response?.data);
+    throw error;
+  }
+};
+
+
+
+
+// ================= INTENT ANALYSIS =================
+
+export const getIntentAnalysis = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin/ai-monitoring/intent-analysis",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Intent Analysis Error:", error.response?.data);
+    throw error;
+  }
+};
+
+// ================= ENTITY EXTRACTION =================
+
+export const getEntityExtraction = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin/ai-monitoring/entity-extraction",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Entity Extraction Error:", error.response?.data);
+    throw error;
+  }
+};
+
+// ================= VALIDATION CONFIDENCE =================
+
+export const getValidationConfidence = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin/ai-monitoring/validation-confidence",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Validation Confidence Error:", error.response?.data);
+    throw error;
+  }
+};
+
+// ================= FALLBACK ERROR =================
+
+export const getFallbackError = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin/ai-monitoring/fallback-error",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Fallback Error:", error.response?.data);
+    throw error;
+  }
+};
+
+
+// ================= REVENUE BY PLAN =================
+
+export const getRevenueByPlan = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/subscriptions/transactions/charts/revenue-by-plan",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Revenue By Plan:", error.response?.data);
+    throw error;
+  }
+};
+
+
+// ================= PAYMENT METHOD USAGE =================
+
+export const getPaymentMethodUsage = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/subscriptions/payment-report/charts/payment-methods",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Payment Method Usage:", error.response?.data);
+    throw error;
+  }
+};
+
+
+
+// ================= EXPORT TRANSACTIONS =================
+
+export const exportTransactions = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/subscriptions/transactions/export",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: "blob",
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Export Transactions:", error.response?.data);
     throw error;
   }
 };

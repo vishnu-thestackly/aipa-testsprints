@@ -15,22 +15,34 @@ export default function SidebarMenuList({
   const isMobile = variant === "mobile";
 
   const handleTopItemClick = (item, hasChildren, isMenuOpen) => {
-    if (isTablet) {
-      setActiveItem(item.key);
-      setSidebarOpen?.(true);
-      return;
-    }
-
+  if (isTablet) {
     if (hasChildren) {
-      setOpenMenus({ ...openMenus, [item.toggleKey]: !isMenuOpen });
+      setOpenMenus((prev) => ({
+        ...prev,
+        [item.toggleKey]: !prev[item.toggleKey],
+      }));
     } else {
       setActiveItem(item.key);
-      if (isMobile) {
-        setSidebarOpen?.(false);
-      }
     }
-  };
 
+    setSidebarOpen?.(true);
+    return;
+  }
+
+  if (hasChildren) {
+    setOpenMenus((prev) => ({
+      ...prev,
+      [item.toggleKey]: !prev[item.toggleKey],
+    }));
+  } else {
+    setActiveItem(item.key);
+
+    if (isMobile) {
+      setSidebarOpen?.(false);
+    }
+  }
+};
+ 
   return (
 <div className={`flex flex-col ${isTablet ? "items-center gap-3" : "gap-2"}`}>
         {sidebarMenuItems.map((item) => {

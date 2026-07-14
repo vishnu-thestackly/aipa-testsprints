@@ -8,6 +8,7 @@ export default function UpgradePlanModal({
   onClose,
 }) 
 {
+
   const [selectedPlan, setSelectedPlan] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -16,10 +17,12 @@ export default function UpgradePlanModal({
     alert("Please select a plan.");
     return;
   }
+  console.log("selectedPlan =", selectedPlan);
 
   const payload = {
-    plan_type: selectedPlan,
-  };
+  plan_id: selectedPlan === "monthly" ? 2 : selectedPlan === "annual" ? 3 : null,
+  plan_type: selectedPlan,
+};
 
   console.log("Payload:", payload);
 
@@ -66,11 +69,18 @@ export default function UpgradePlanModal({
         {/* Select Plan */}
         <div className="mt-6">
 <div className="relative">
-  <select className="w-full h-[46px] border border-[#D9D9D9] rounded-[8px] px-4 appearance-none text-[#A0A7B5] outline-none bg-white cursor-pointer">
-    <option className="cursor-pointer">Select Plan</option>
-  <option className="cursor-pointer">Basic Plan</option>
-  <option className="cursor-pointer">Premium Plan</option>
-  </select>
+  <select
+  value={selectedPlan}
+  onChange={(e) => {
+  alert(e.target.value);
+  setSelectedPlan(e.target.value);
+}}
+  className="w-full h-[46px] border border-[#D9D9D9] rounded-[8px] px-4 appearance-none text-[#A0A7B5] outline-none bg-white cursor-pointer"
+>
+  <option value="">Select Plan</option>
+  <option value="monthly">Basic Plan</option>
+  <option value="annual">Premium Plan</option>
+</select>
 
   <img src={arrowIcon} alt="arrow" className="absolute right-6 top-1/2 -translate-y-1/2 w-[12px] h-[12px] pointer-events-none" />
 </div>  
