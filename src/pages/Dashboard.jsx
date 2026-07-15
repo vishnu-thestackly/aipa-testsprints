@@ -159,7 +159,7 @@ import SubscriptionTracking from "../components/admin/ManageSubscription/Subscri
 import SubscriptionPlan from "../components/admin/adminprofile/SubscriptionPlan";
 import AddSubscription from "../components/admin/adminprofile/AddSubscription";
 import EditSubscription from "../components/admin/adminprofile/EditSubscription";
-import AIMonitoring from "../components/admin/AiMonitoring";
+import AiMonitoring from "../components/admin/AiMonitoring";
 import AdminProfile from "../components/admin/adminprofile/AdminProfile";
 
 // session timeout
@@ -250,7 +250,7 @@ export default function Dashboard() {
           {activeItem === "configuration" && <Configurations />}
 
           {/* Usage Dashboard - AI Monitoring */}
-          {activeItem === "aimonitoring" && <AIMonitoring />}
+          {activeItem === "aimonitoring" && <AiMonitoring />}
 
           {/*Manage Subscription - Transaction Monitoring */}
           {activeItem === "transaction" && <TransactionMonitoring />}
