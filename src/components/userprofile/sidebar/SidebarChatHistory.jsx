@@ -1,9 +1,8 @@
-import React, { useState, useRef, useLayoutEffect } from "react";
+import React, { useState } from "react";
 
 const CHAT_ITEM_HEIGHT = 36;
 const CHAT_ITEM_GAP = 10;
-const MIN_VISIBLE = 2;
-const MAX_VISIBLE = 5;
+const VISIBLE_ITEMS = 5;
 
 const CONVERSATIONS = [
   "What's on my schedule today?",
@@ -20,80 +19,14 @@ const CONVERSATIONS = [
   "Follow up on support ticket #4821.",
 ];
 
-function getScrollParent(element) {
-  let node = element?.parentElement;
-  while (node) {
-    const { overflowY } = window.getComputedStyle(node);
-    if (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") {
-      return node;
-    }
-    node = node.parentElement;
-  }
-  return null;
-}
-
-function getListMetrics(availableHeight, itemCount) {
-  const slotHeight = CHAT_ITEM_HEIGHT + CHAT_ITEM_GAP;
-  const slotsFromSpace = Math.floor((availableHeight + CHAT_ITEM_GAP) / slotHeight);
-  const visibleSlots = Math.min(
-    MAX_VISIBLE,
-    Math.max(MIN_VISIBLE, slotsFromSpace || MIN_VISIBLE)
-  );
-  const renderedSlots = Math.min(visibleSlots, itemCount);
-  const listHeight =
-    renderedSlots * CHAT_ITEM_HEIGHT +
-    Math.max(0, renderedSlots - 1) * CHAT_ITEM_GAP;
-
-  return { listHeight, needsScroll: itemCount > visibleSlots };
-}
+const listHeight =
+  VISIBLE_ITEMS * CHAT_ITEM_HEIGHT + (VISIBLE_ITEMS - 1) * CHAT_ITEM_GAP;
 
 export default function SidebarChatHistory() {
   const [activeChat, setActiveChat] = useState(null);
-  const [listHeight, setListHeight] = useState(
-    MIN_VISIBLE * CHAT_ITEM_HEIGHT + (MIN_VISIBLE - 1) * CHAT_ITEM_GAP
-  );
-
-  const rootRef = useRef(null);
-  const listRef = useRef(null);
-
-  useLayoutEffect(() => {
-    const updateListHeight = () => {
-      const scrollParent = getScrollParent(rootRef.current);
-      if (!scrollParent || !listRef.current) return;
-
-      const parentRect = scrollParent.getBoundingClientRect();
-      const listRect = listRef.current.getBoundingClientRect();
-      const availableHeight = parentRect.bottom - listRect.top - 8;
-
-      const { listHeight: nextHeight } = getListMetrics(
-        availableHeight,
-        CONVERSATIONS.length
-      );
-      setListHeight(nextHeight);
-    };
-
-    updateListHeight();
-
-    const scrollParent = getScrollParent(rootRef.current);
-    const resizeObserver = new ResizeObserver(updateListHeight);
-
-    if (scrollParent) resizeObserver.observe(scrollParent);
-    if (rootRef.current?.parentElement) {
-      resizeObserver.observe(rootRef.current.parentElement);
-    }
-
-    scrollParent?.addEventListener("scroll", updateListHeight, { passive: true });
-    window.addEventListener("resize", updateListHeight);
-
-    return () => {
-      resizeObserver.disconnect();
-      scrollParent?.removeEventListener("scroll", updateListHeight);
-      window.removeEventListener("resize", updateListHeight);
-    };
-  }, []);
 
   return (
-    <div ref={rootRef} className="w-full flex flex-col min-h-0 select-none">
+    <div className="w-full flex flex-col min-h-0 select-none">
       {/* Divider */}
       <div className="w-full border-t border-[#E5E7EB] my-4 lg:my-5" />
 
@@ -120,9 +53,8 @@ export default function SidebarChatHistory() {
         </button>
       </div>
 
-      {/* Scrollable list — 2 to 5 visible items based on sidebar space */}
+      {/* Always 5 visible — scroll for anything beyond */}
       <div
-        ref={listRef}
         className="flex flex-col gap-[10px] overflow-y-auto no-scrollbar shrink-0"
         style={{ height: listHeight, minHeight: listHeight, maxHeight: listHeight }}
       >
