@@ -17,6 +17,19 @@ import { getSubscriptionDetails, getInvoice } from "../../../api/authApi";
 import InvoicePopup from "../InvoicePopup";
 import { verifyPayment } from "../../../api/authApi";
 
+const formatDisplayDate = (value) => {
+  if (!value) return "—";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+};
+
 export default function SubscriptionDetails({
   setProfilePage,
 }) {
@@ -85,50 +98,50 @@ const paginatedHistory =
   ) || [];
 
   return (
-    <div className="px-3 sm:px-5 lg:px-7 pt-5 pb-10">
-      <div className="w-full rounded-[25px] border border-[#DADADA] bg-white p-5 md:p-7 shadow-[0px_0px_4px_0px_#00000014]">
+    <div className="px-2 sm:px-4 lg:px-7 pt-3 md:pt-5 pb-10">
+      <div className="w-full rounded-[18px] md:rounded-[25px] border border-[#DADADA] bg-white p-3 sm:p-5 md:p-7 shadow-[0px_0px_4px_0px_#00000014]">
 
         {/* Header */}
         {/* Header */}
 <div>
-  <div className="flex items-center gap-3">
-    <div className="w-6 h-6 sm:w-7 sm:h-7 bg-[#4866F6] rounded-full flex items-center justify-center">
+  <div className="flex items-center gap-2 sm:gap-3">
+    <div className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 bg-[#4866F6] rounded-full flex items-center justify-center">
       <ArrowLeft
         onClick={() => navigate("/user/profile/plans")}
-        className="w-3 h-3 sm:w-4 sm:h-4 text-white cursor-pointer"
+        className="w-3 h-3 md:w-4 md:h-4 text-white cursor-pointer"
         strokeWidth={2.5}
       />
     </div>
 
-    <h2 className="text-[16px] lg:text-[24px] font-medium text-[#3D3D3D]">
+    <h2 className="text-[13px] sm:text-[15px] lg:text-[24px] font-medium text-[#3D3D3D]">
       Subscription Details
     </h2>
   </div>
 
   {/* Divider line */}
-  <div className="w-full border-t border-[#D9D9D9] mt-4"></div>
+  <div className="w-full border-t border-[#D9D9D9] mt-3 md:mt-4"></div>
 </div>
 
         {/* Subscription Card */}
-        <div className="mt-6 rounded-[14px] border border-[#4866F6] bg-[#F5F7FF] p-5">
+        <div className="mt-3 md:mt-6 rounded-[8px] md:rounded-[14px] border border-[#4866F6] bg-[#F5F7FF] p-3 md:p-5">
 
           <div className="flex justify-between flex-wrap gap-4">
 
-            <div className="flex items-start gap-3">
-  <div className="w-[52px] h-[52px] rounded-[12px] bg-[#4866F6] flex items-center justify-center flex-shrink-0">
+            <div className="flex items-start gap-2 md:gap-3">
+  <div className="w-[34px] h-[34px] md:w-[52px] md:h-[52px] rounded-[8px] md:rounded-[12px] bg-[#4866F6] flex items-center justify-center flex-shrink-0">
     <img
       src={sparkleIcon}
       alt="sparkle"
-      className="w-[24px] h-[24px]"
+      className="w-[17px] h-[17px] md:w-[24px] md:h-[24px]"
     />
   </div>
 
   <div>
-    <h3 className="text-[20px] font-semibold text-[#3D3D3D]">
+    <h3 className="text-[12px] md:text-[20px] font-semibold text-[#3D3D3D]">
   {subscription?.plan_name}
 </h3>
 
-<p className="text-[#8D8D8D] text-sm">
+<p className="text-[#8D8D8D] text-[9px] md:text-sm">
   {subscription?.plan_description}
 </p>
   </div>
@@ -136,55 +149,55 @@ const paginatedHistory =
 
           </div>
 
-<div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-6 md:mt-8">  {/* Billing Cycle */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5 mt-4 md:mt-8">  {/* Billing Cycle */}
   <div>
-    <p className="text-[#3D3D3D] font-medium text-[16px]">
+    <p className="text-[#3D3D3D] font-medium text-[11px] md:text-[16px]">
       Billing Cycle
     </p>
 
-    <p className="text-[#8D8D8D] text-sm mt-3 whitespace-nowrap">
-  {new Date(subscription?.billing_cycle_start).toLocaleDateString()} -{" "}
-  {new Date(subscription?.billing_cycle_end).toLocaleDateString()}  
+    <p className="text-[#8D8D8D] text-[9px] md:text-sm mt-1 md:mt-3 whitespace-nowrap">
+  {formatDisplayDate(subscription?.billing_cycle_start)} -{" "}
+  {formatDisplayDate(subscription?.billing_cycle_end)}
 </p>
   </div>
 
   {/* Next Billing Date */}<div className="md:ml-8 lg:ml-10">
-  <p className="text-[#3D3D3D] font-medium text-[16px] whitespace-nowrap">
+  <p className="text-[#3D3D3D] font-medium text-[11px] md:text-[16px] whitespace-nowrap">
     Next Billing Date
   </p>
 
-  <p className="text-[#8D8D8D] text-sm mt-3 whitespace-nowrap">
-    {new Date(subscription?.next_billing_date).toLocaleDateString()}
+  <p className="text-[#8D8D8D] text-[9px] md:text-sm mt-1 md:mt-3 whitespace-nowrap">
+    {formatDisplayDate(subscription?.next_billing_date)}
   </p>
 </div>
 
   {/* Status */}
 <div className="flex flex-col md:items-end">
-<p className="text-[#3D3D3D] font-medium text-[16px] mb-3 md:mr-10">
-        {subscription?.status}
+<p className="text-[#3D3D3D] font-medium text-[11px] md:text-[16px] mb-1 md:mb-3 md:mr-10">
+        Status
     </p>
 
-    <div className="flex items-center gap-2 bg-[#36B66A] px-4 h-[28px] rounded-full w-fit">
-      <span className="w-[10px] h-[10px] bg-white rounded-full"></span>
+    <div className="flex items-center gap-1.5 md:gap-2 bg-[#36B66A] px-2.5 md:px-4 h-[18px] md:h-[28px] rounded-full w-fit">
+      <span className="w-[6px] h-[6px] md:w-[10px] md:h-[10px] bg-white rounded-full"></span>
 
-      <span className="text-white text-[14px] font-medium">
-        Active
+      <span className="text-white text-[9px] md:text-[14px] font-medium">
+        {subscription?.status || "Active"}
       </span>
     </div>
   </div>
 
 </div>
-<div className="flex flex-col md:flex-row md:justify-between md:items-center mt-8 gap-4">
-<div className="grid grid-cols-2 gap-3 w-full md:flex md:w-[220px] lg:w-[240px]">  
-   <button onClick={() => { setSelectedPlanAction("upgrade"); setShowUpgradeModal(true); }} className={`h-[42px] rounded-full text-[14px] w-full cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${selectedPlanAction === "upgrade" ? "bg-[#4866F6] text-white hover:bg-[#3554ED] active:bg-[#2746DD]" : "bg-white border border-[#4866F6] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"}`}>
+<div className="flex flex-col md:flex-row md:justify-between md:items-center mt-5 md:mt-8 gap-3 md:gap-4">
+<div className="grid grid-cols-2 gap-2 md:gap-3 w-full md:flex md:w-[220px] lg:w-[240px]">
+   <button onClick={() => { setSelectedPlanAction("upgrade"); setShowUpgradeModal(true); }} className={`h-[30px] md:h-[42px] rounded-full text-[10px] md:text-[14px] w-full cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${selectedPlanAction === "upgrade" ? "bg-[#4866F6] text-white hover:bg-[#3554ED] active:bg-[#2746DD]" : "bg-white border border-[#4866F6] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"}`}>
   Upgrade
 </button>
 
-<button onClick={() => { setSelectedPlanAction("downgrade"); setShowDowngradeModal(true); }} className={`h-[42px] rounded-full text-[14px] w-full cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${selectedPlanAction === "downgrade" ? "bg-[#4866F6] text-white hover:bg-[#3554ED] active:bg-[#2746DD]" : "bg-white border border-[#4866F6] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"}`}>
+<button onClick={() => { setSelectedPlanAction("downgrade"); setShowDowngradeModal(true); }} className={`h-[30px] md:h-[42px] rounded-full text-[10px] md:text-[14px] w-full cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${selectedPlanAction === "downgrade" ? "bg-[#4866F6] text-white hover:bg-[#3554ED] active:bg-[#2746DD]" : "bg-white border border-[#4866F6] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"}`}>
   Downgrade
 </button>
 </div>
-  <button onClick={() => setShowCancelModal(true)} className="border border-[#FF4D4F] text-[#FF4D4F] h-[42px] rounded-full w-full md:w-auto md:px-8 cursor-pointer">
+  <button onClick={() => setShowCancelModal(true)} className="border border-[#FF4D4F] text-[#FF4D4F] h-[30px] md:h-[42px] rounded-full text-[10px] md:text-[14px] w-full md:w-auto md:px-8 cursor-pointer transition-all duration-200 hover:bg-[#FF4D4F] hover:text-white hover:shadow-md active:scale-[0.98]">
   Cancel Subscription
 </button>
 
@@ -192,75 +205,89 @@ const paginatedHistory =
 </div>
 
         {/* Payment Method */}
-        <div className="mt-5 rounded-[20px] border border-[#E5E5E5] p-6">
+        <div className="mt-3 md:mt-5 rounded-[12px] md:rounded-[20px] border border-[#E5E5E5] p-3 md:p-6">
 
   {/* Header */}
   <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
-  <h3 className="text-[18px] font-medium text-[#3D3D3D]">
+  <h3 className="text-[12px] md:text-[18px] font-medium text-[#3D3D3D]">
     Payment Method
   </h3>
 
-<button className="hidden md:flex h-[40px] w-auto px-5 rounded-full bg-[#4866F6] text-white text-[15px] lg:text-[17px] items-center justify-center gap-2 whitespace-nowrap cursor-pointer">    Update Payment Method
+<button className="hidden md:flex h-[40px] w-auto px-5 rounded-full bg-[#4866F6] text-white text-[15px] lg:text-[17px] items-center justify-center gap-2 whitespace-nowrap cursor-pointer transition-all duration-200 hover:bg-[#3554ED] hover:shadow-md hover:-translate-y-0.5 active:translate-y-0">    Update Payment Method
     <span>→</span>
   </button>
 </div>
 
-  <div className="border-t border-[#D9D9D9] mt-4"></div>
+  <div className="border-t border-[#D9D9D9] mt-2 md:mt-4"></div>
 
   {/* Card */}
-<div className="mt-5 border border-[#4866F6] rounded-[14px] bg-[#F5F7FF] p-4 mx-[-4px] min-[375px]:mx-0 md:px-4 md:py-4 lg:px-5 lg:py-5 flex flex-col md:flex-row md:items-center gap-4"> 
-   <div className="flex items-start gap-3 md:flex-[1.5]"> 
-<div className="flex-shrink-0 w-[42px] h-[42px] md:w-[42px] md:h-[42px] lg:w-[54px] lg:h-[54px] rounded-[10px] lg:rounded-[12px] bg-[#4866F6] flex items-center justify-center">
-  <img
-    src={cardIcon}
-    alt="card"
-    className="w-[18px] h-[18px] md:w-[18px] md:h-[18px] lg:w-[24px] lg:h-[24px]"
-  />
-</div>
+<div className="mt-3 md:mt-5 border border-[#4866F6] rounded-[8px] md:rounded-[14px] bg-[#F5F7FF] p-3 md:px-4 md:py-3 lg:px-5 lg:py-4 flex flex-col md:grid md:grid-cols-[1fr_auto] md:items-center gap-3 md:gap-4">
 
-      <div>
-      <p className="text-[#3D3D3D] text-[14px] -ml-1 md:text-[13px] lg:text-[16px] font-medium leading-[20px] whitespace-nowrap">
-  Rupay card ending in
-  <span className="block md:inline whitespace-nowrap">
-    {subscription?.payment_method_brand} card ending in **** **** **** {subscription?.payment_method_last4}
-  </span>
-</p>
+  {/* Left Section */}
+  <div className="flex items-start gap-3">
 
-        <p className="text-[#A0A7B5] text-[12px] md:text-[13px] lg:text-[14px] mt-1">
-  Expires in {subscription?.payment_method_expires}
-</p>
+    <div className="flex-shrink-0 w-[34px] h-[34px] md:w-[42px] md:h-[42px] lg:w-[54px] lg:h-[54px] rounded-[8px] md:rounded-[10px] lg:rounded-[12px] bg-[#4866F6] flex items-center justify-center">
+      <img
+        src={cardIcon}
+        alt="card"
+        className="w-[16px] h-[16px] md:w-[18px] md:h-[18px] lg:w-[24px] lg:h-[24px]"
+      />
+    </div>
+
+    <div className="flex-1 min-w-0">
+
+      <p className="text-[#3D3D3D] text-[12px] md:text-[15px] lg:text-[16px] font-medium leading-[18px] break-words">
+        {subscription?.payment_method_brand || "Rupay"} card ending in
+        <br className="md:hidden" />
+        **** **** **** {subscription?.payment_method_last4 || "—"}
+      </p>
+
+      <p className="mt-1 text-[#A0A7B5] text-[10px] md:text-[13px] lg:text-[14px] leading-[14px]">
+        Expires in {subscription?.payment_method_expires}
+      </p>
+
+      <div className="mt-3 md:hidden">
+        <p className="text-[#3D3D3D] text-[11px] font-medium">
+          Last Payment Date
+        </p>
+
+        <p className="mt-1 text-[#A0A7B5] text-[10px]">
+          {subscription?.last_payment_date || "12 June 2026"}
+        </p>
       </div>
 
     </div>
 
-    {/* Right Side */}
-<div className="ml-12 md:ml-auto lg:ml-0 text-left md:text-right lg:text-left md:min-w-[140px] lg:min-w-[170px]">
-           <p className="text-[#3D3D3D] text-[14px] md:text-[14px] lg:text-[16px] font-medium">
-  Last Payment Date
-</p>
+  </div>
 
-  <p className="text-[#A0A7B5] text-[12px] md:text-[13px] lg:text-[14px] mt-1 lg:mt-2">
-  {new Date(subscription?.last_payment_date).toLocaleDateString()}
-</p>
-</div>
+  {/* Desktop Right Section */}
+  <div className="hidden md:block text-right">
+    <p className="text-[#3D3D3D] text-[15px] font-medium">
+      Last Payment Date
+    </p>
 
+    <p className="mt-1 text-[#A0A7B5] text-[13px]">
+      {subscription?.last_payment_date || "12 June 2026"}
+    </p>
   </div>
 
 </div>
 
+</div>
+
         {/* Billing History */}
-        <div className="mt-5 rounded-[20px] border border-[#E5E5E5] p-6">
+        <div className="mt-3 md:mt-5 rounded-[12px] md:rounded-[20px] border border-[#E5E5E5] p-3 md:p-6">
 
   {/* Header */}
-  <h3 className="text-[18px] font-medium text-[#3D3D3D]">
+  <h3 className="text-[12px] md:text-[18px] font-medium text-[#3D3D3D]">
     Billing History
   </h3>
 
-  <div className="border-t border-[#D9D9D9] mt-4"></div>
+  <div className="border-t border-[#D9D9D9] mt-2 md:mt-4"></div>
 
   {/* Table Container */}
 {/* Table Container */}
-<div className="mt-5 overflow-x-auto border border-[#D9D9D9] rounded-[16px]">
+<div className="mt-3 md:mt-5 overflow-x-auto border border-[#D9D9D9] rounded-[8px] md:rounded-[16px]">
   <table className="w-full min-w-[850px]">
 
     <thead>
@@ -304,7 +331,7 @@ const paginatedHistory =
           </td>
 
           <td className="w-[28%] pl-22 md:pl-8 lg:pl-12 px-8 text-left text-[#586D93] text-[15px]">
-            {new Date(item.date).toLocaleDateString()}
+            {formatDisplayDate(item.date)}
           </td>
 
           <td className="w-[12%] px-8 text-center text-[#586D93] text-[15px]">
@@ -319,11 +346,12 @@ const paginatedHistory =
     console.log(item);
     handleViewInvoice(item.payment_id);
   }}
->
+                className="rounded-full p-1 transition-all duration-200 hover:bg-[#E9EDFF] hover:scale-110 active:scale-95"
+              >
   <img src={eyeIcon} alt="view" className="w-[18px] h-[18px]" />
 </button>
 
-              <button onClick={() => handleDownloadInvoice(item.payment_id)}>
+              <button className="rounded-full p-1 transition-all duration-200 hover:bg-[#E9EDFF] hover:scale-110 active:scale-95" onClick={() => handleDownloadInvoice(item.payment_id)}>
                 <img
                   src={downloadIcon}
                   alt="download"
@@ -424,7 +452,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex items-center gap-2 text-[#4866F6] disabled:text-gray-300 cursor-pointer disabled:cursor-not-allowed"
+        className="flex items-center gap-2 rounded-md px-2 py-1 text-[#4866F6] transition-colors hover:bg-[#E9EDFF] disabled:text-gray-300 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-transparent"
       >
         <img src={rightArrow} alt="" className="w-[10px]" />
         Previous
@@ -439,7 +467,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
           <button
             key={item}
             onClick={() => onPageChange(item)}
-            className={`cursor-pointer ${
+            className={`cursor-pointer transition-all duration-200 hover:bg-[#E9EDFF] hover:text-[#4866F6] ${
               currentPage === item
                 ? "w-[36px] h-[36px] bg-[#4866F6] text-white rounded-[4px] flex items-center justify-center"
                 : "text-[#3D3D3D]"
@@ -453,7 +481,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex items-center gap-2 text-[#4866F6] disabled:text-gray-300 cursor-pointer disabled:cursor-not-allowed"
+        className="flex items-center gap-2 rounded-md px-2 py-1 text-[#4866F6] transition-colors hover:bg-[#E9EDFF] disabled:text-gray-300 cursor-pointer disabled:cursor-not-allowed disabled:hover:bg-transparent"
       >
         Next
         <img src={rightArrow} alt="" className="w-[10px] rotate-180" />

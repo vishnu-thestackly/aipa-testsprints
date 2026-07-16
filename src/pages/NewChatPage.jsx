@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Navbar from "../components/userprofile/Navbar";
-import Sidebar from "../components/userprofile/Sidebar";
+import Sidebar from "../components/userprofile/sidebar/Sidebar";
 import NewChat from "../components/userprofile/new-chat/NewChat";
 import NewChatConversation from "../components/userprofile/new-chat/NewChatConversation";
 

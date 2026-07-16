@@ -39,6 +39,7 @@ import SubscriptionPlans from "./components/userprofile/subscription-details/Sub
 import SubscriptionDetails from "./components/userprofile/subscription-details/SubscriptionDetails";
 import NewChatConversation from "./components/userprofile/new-chat/NewChatConversation";
 import PreferenceSetting from "./components/userprofile/PreferenceSetting";
+import SidebarEmptyPage from "./components/userprofile/sidebar/SidebarEmptyPage";
 
 
 
@@ -118,6 +119,14 @@ function App() {
     path="settings/preferences"
     element={<PreferenceSetting />}
   />
+  <Route path="settings/security" element={<SidebarEmptyPage title="Security" />} />
+  <Route path="settings/notifications" element={<SidebarEmptyPage title="Notifications" />} />
+  <Route path="tasks/my" element={<SidebarEmptyPage title="My Tasks" />} />
+  <Route path="tasks/upcoming" element={<SidebarEmptyPage title="Upcoming Tasks" />} />
+  <Route path="tasks/completed" element={<SidebarEmptyPage title="Completed Tasks" />} />
+  <Route path="integrations/calendar" element={<SidebarEmptyPage title="Calendar" />} />
+  <Route path="integrations/email" element={<SidebarEmptyPage title="Email" />} />
+
 
   <Route
     path="new-chat"
