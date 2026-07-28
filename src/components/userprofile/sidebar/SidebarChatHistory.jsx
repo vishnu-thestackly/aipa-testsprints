@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import React, {
   useState,
   useRef,
@@ -7,9 +7,9 @@ import React, {
 } from "react";
 import { getChatConversations } from "../../../api/authApi";
 import { useNavigate } from "react-router-dom";
-=======
-import React, { useState } from "react";
->>>>>>> 1929a19aa60df9380a0fd34c63ebaf01c150f4ca
+
+
+
 
 const CHAT_ITEM_HEIGHT = 36;
 const CHAT_ITEM_GAP = 10;
@@ -21,7 +21,7 @@ const listHeight =
   VISIBLE_ITEMS * CHAT_ITEM_HEIGHT + (VISIBLE_ITEMS - 1) * CHAT_ITEM_GAP;
 
 export default function SidebarChatHistory() {
-<<<<<<< HEAD
+
   console.log("SidebarChatHistory Rendered");
   const [conversations, setConversations] = useState([]);
   const navigate = useNavigate();
@@ -89,9 +89,7 @@ useEffect(() => {
       window.removeEventListener("resize", updateListHeight);
     };
   }, [conversations.length]);
-=======
-  const [activeChat, setActiveChat] = useState(null);
->>>>>>> 1929a19aa60df9380a0fd34c63ebaf01c150f4ca
+
 
   return (
     <div className="w-full flex flex-col min-h-0 select-none">
