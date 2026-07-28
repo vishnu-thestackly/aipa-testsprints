@@ -4,6 +4,7 @@ import {
   useContext,
   useMemo,
   useState,
+  useEffect,
 } from "react";
 
 export const initialOnboardingState = {
@@ -44,35 +45,67 @@ export const getCalendarIntegrationStatus = (connectedIntegrations) =>
     : "Not connected";
 
 export function OnboardingProvider({ children }) {
-  const [data, setData] = useState(initialOnboardingState);
+  const [data, setData] = useState(() => {
+  const savedData = localStorage.getItem("onboardingData");
+
+  return savedData
+    ? JSON.parse(savedData)
+    : initialOnboardingState;
+});
+
+
+useEffect(() => {
+  localStorage.setItem("onboardingData", JSON.stringify(data));
+}, [data]);
 
   const updateOnboarding = useCallback((partial) => {
     setData((prev) => ({ ...prev, ...partial }));
   }, []);
 
-  const toggleMeetingTime = useCallback((time) => {
-    setData((prev) => {
-      const exists = prev.meetingTimes.includes(time);
-      return {
-        ...prev,
-        meetingTimes: exists
-          ? prev.meetingTimes.filter((t) => t !== time)
-          : [...prev.meetingTimes, time],
-      };
-    });
-  }, []);
+  const toggleMeetingTime = useCallback((item) => {
+  let updated = [...data.meetingTimes];
+
+  if (item === "All") {
+    if (updated.includes("All")) {
+      // Don't allow removing the last selected option
+      if (updated.length === 1) return;
+
+      updated = updated.filter((time) => time !== "All");
+    } else {
+      updated = ["All"];
+    }
+  } else {
+    updated = updated.filter((time) => time !== "All");
+
+    if (updated.includes(item)) {
+      // Prevent deselecting the last remaining option
+      if (updated.length === 1) return;
+
+      updated = updated.filter((time) => time !== item);
+    } else {
+      updated.push(item);
+    }
+  }
+
+  updateOnboarding({
+    meetingTimes: updated,
+  });
+}, [data.meetingTimes, updateOnboarding]);
 
   const toggleReminderFrequency = useCallback((frequency) => {
-    setData((prev) => {
-      const exists = prev.reminderFrequency.includes(frequency);
-      return {
-        ...prev,
-        reminderFrequency: exists
-          ? prev.reminderFrequency.filter((item) => item !== frequency)
-          : [...prev.reminderFrequency, frequency],
-      };
-    });
-  }, []);
+  setData((prev) => {
+    // Don't allow deselecting the only selected option
+    if (prev.reminderFrequency.includes(frequency)) {
+      return prev;
+    }
+
+    // Only one selection allowed
+    return {
+      ...prev,
+      reminderFrequency: [frequency],
+    };
+  });
+}, []);
 
   const toggleIntegration = useCallback((name) => {
     setData((prev) => ({

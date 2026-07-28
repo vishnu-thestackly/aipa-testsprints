@@ -1579,3 +1579,102 @@ export const exportTransactions = async () => {
     throw error;
   }
 };
+
+
+
+// ================= SUBSCRIPTION PLANS =================
+
+export const getSubscriptionPlans = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/admin-management/subscriptions/plans",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Subscription Plans Error:", error.response?.data);
+    throw error;
+  }
+};
+
+
+
+// ================= UPDATE SUBSCRIPTION PLAN =================
+
+export const updateSubscriptionPlan = async (planId, payload) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.put(
+      `/api/v1/admin-management/subscriptions/plans/${planId}`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Update Subscription Plan Error:", error.response?.data);
+    throw error;
+  }
+};
+
+
+
+// ================= GET CHAT CONVERSATIONS =================
+
+export const getChatConversations = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/chat/conversations",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Get Chat Conversations Error:",
+      error.response?.data
+    );
+    throw error;
+  }
+};
+
+
+// ================= GET CONVERSATION MESSAGES =================
+
+export const getConversationMessages = async (conversationId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      `/api/v1/chat/conversations/${conversationId}/messages`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Get Conversation Messages Error:", error.response?.data);
+    throw error;
+  }
+};

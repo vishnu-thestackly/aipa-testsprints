@@ -67,11 +67,33 @@ const handleRecommendationSourceChange = (value) => {
   fetchPreferences();
 }, []);
 const handleMeetingTimeChange = (value) => {
-  setMeetingTimes((prev) =>
-    prev.includes(value)
-      ? prev.filter((item) => item !== value)
-      : [...prev, value]
-  );
+  setMeetingTimes((prev) => {
+    let updated = [...prev];
+
+    if (value === "All") {
+      if (updated.includes("All")) {
+        // Don't allow deselecting the last option
+        if (updated.length === 1) return prev;
+
+        updated = updated.filter((item) => item !== "All");
+      } else {
+        updated = ["All"];
+      }
+    } else {
+      updated = updated.filter((item) => item !== "All");
+
+      if (updated.includes(value)) {
+        // Don't allow removing the last selected option
+        if (updated.length === 1) return prev;
+
+        updated = updated.filter((item) => item !== value);
+      } else {
+        updated.push(value);
+      }
+    }
+
+    return updated;
+  });
 };
   const handleSave = async () => {
   try {
@@ -95,12 +117,19 @@ const handleMeetingTimeChange = (value) => {
     alert("Failed to Update Preferences");
   }
 };
+
+
 const handleReminderChange = (value) => {
-  setReminderFrequency((prev) =>
-    prev.includes(value)
-      ? prev.filter((item) => item !== value)
-      : [...prev, value]
-  );
+  setReminderFrequency((prev) => {
+    // If the clicked option is already selected,
+    // don't allow deselecting it.
+    if (prev.includes(value)) {
+      return prev;
+    }
+
+    // Otherwise replace the current selection.
+    return [value];
+  });
 };
 
   return (
@@ -129,7 +158,12 @@ const handleReminderChange = (value) => {
                     key={item}
                     className="flex items-center gap-[10px] cursor-pointer"
                   >
-                    <input type="checkbox" checked={meetingTimes.includes(item)} onChange={() => handleMeetingTimeChange(item)} className="appearance-none w-4 h-4 rounded-[4px] border-2 border-[#4866F6] checked:bg-[#4866F6] checked:border-[#4866F6] relative after:content-[''] after:absolute after:w-[4px] after:h-[8px] after:border-r-2 after:border-b-2 after:border-white after:rotate-45 after:left-[4px] after:top-[1px] after:hidden checked:after:block cursor-pointer" />
+                    <input type="checkbox" onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleMeetingTimeChange(item);
+    }
+  }} checked={meetingTimes.includes(item)} onChange={() => handleMeetingTimeChange(item)} className="appearance-none w-4 h-4 rounded-[4px] border-2 border-[#4866F6] checked:bg-[#4866F6] checked:border-[#4866F6] relative after:content-[''] after:absolute after:w-[4px] after:h-[8px] after:border-r-2 after:border-b-2 after:border-white after:rotate-45 after:left-[4px] after:top-[1px] after:hidden checked:after:block cursor-pointer" />
 
                     <span className="text-[13px] sm:text-[14px] text-[#5C6B8A]">
                       {item}
@@ -212,7 +246,12 @@ const handleReminderChange = (value) => {
                       key={item}
                       className="flex items-center gap-[10px] cursor-pointer"
                     >
-                      <input type="checkbox" checked={reminderFrequency.includes(item)} onChange={() => handleReminderChange(item)} className="appearance-none w-4 h-4 rounded-[4px] border-2 border-[#4866F6] checked:bg-[#4866F6] checked:border-[#4866F6] relative after:content-[''] after:absolute after:w-[4px] after:h-[8px] after:border-r-2 after:border-b-2 after:border-white after:rotate-45 after:left-[4px] after:top-[1px] after:hidden checked:after:block cursor-pointer" />
+                      <input type="checkbox" onKeyDown={(e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    handleReminderChange(item);
+  }
+}} checked={reminderFrequency.includes(item)} onChange={() => handleReminderChange(item)} className="appearance-none w-4 h-4 rounded-[4px] border-2 border-[#4866F6] checked:bg-[#4866F6] checked:border-[#4866F6] relative after:content-[''] after:absolute after:w-[4px] after:h-[8px] after:border-r-2 after:border-b-2 after:border-white after:rotate-45 after:left-[4px] after:top-[1px] after:hidden checked:after:block cursor-pointer" />
 
                       <span className="text-[13px] sm:text-[14px] text-[#5C6B8A]">
                         {item}
@@ -246,7 +285,12 @@ const handleReminderChange = (value) => {
         key={item}
         className="flex items-center gap-[10px] cursor-pointer"
       >
-        <input type="checkbox" checked={recommendationSources.includes(item)} onChange={() => handleRecommendationSourceChange(item)} className="appearance-none w-4 h-4 rounded-[4px] border-2 border-[#4866F6] checked:bg-[#4866F6] checked:border-[#4866F6] relative after:content-[''] after:absolute after:w-[4px] after:h-[8px] after:border-r-2 after:border-b-2 after:border-white after:rotate-45 after:left-[4px] after:top-[1px] after:hidden checked:after:block cursor-pointer" />
+        <input type="checkbox" onKeyDown={(e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    handleRecommendationSourceChange(item);
+  }
+}} checked={recommendationSources.includes(item)} onChange={() => handleRecommendationSourceChange(item)} className="appearance-none w-4 h-4 rounded-[4px] border-2 border-[#4866F6] checked:bg-[#4866F6] checked:border-[#4866F6] relative after:content-[''] after:absolute after:w-[4px] after:h-[8px] after:border-r-2 after:border-b-2 after:border-white after:rotate-45 after:left-[4px] after:top-[1px] after:hidden checked:after:block cursor-pointer" />
 
         <span className="text-[14px] text-[#5C6B8A]">
           {item}

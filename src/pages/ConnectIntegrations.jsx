@@ -44,8 +44,9 @@ const ConnectIntegrations = () => {
     const response = await skipOnboarding();
 
     console.log(response.message); // Onboarding skipped.
+    localStorage.removeItem("onboardingData");
 
-    navigate("/user-profile");
+    navigate("/user/new-chat");
   } catch (error) {
     console.error("Skip Onboarding Error:", error);
   } finally {

@@ -1,24 +1,18 @@
-import React, { useState, useRef, useLayoutEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useLayoutEffect,
+  useEffect,
+} from "react";
+import { getChatConversations } from "../../../api/authApi";
+import { useNavigate } from "react-router-dom";
 
 const CHAT_ITEM_HEIGHT = 36;
 const CHAT_ITEM_GAP = 10;
 const MIN_VISIBLE = 2;
 const MAX_VISIBLE = 5;
 
-const CONVERSATIONS = [
-  "What's on my schedule today?",
-  "Set a reminder for the client call.",
-  "Draft an email to my manager.",
-  "Create a task for UI audit review.",
-  "Show my pending tasks.",
-  "Summarize yesterday's meeting notes.",
-  "Plan tasks for next sprint.",
-  "Review Q3 budget proposal.",
-  "Schedule team standup for Monday.",
-  "Find documents from last workshop.",
-  "Prepare slides for client demo.",
-  "Follow up on support ticket #4821.",
-];
+
 
 function getScrollParent(element) {
   let node = element?.parentElement;
@@ -48,13 +42,37 @@ function getListMetrics(availableHeight, itemCount) {
 }
 
 export default function SidebarChatHistory() {
-  const [activeChat, setActiveChat] = useState(null);
+  console.log("SidebarChatHistory Rendered");
+  const [conversations, setConversations] = useState([]);
+  const navigate = useNavigate();
   const [listHeight, setListHeight] = useState(
     MIN_VISIBLE * CHAT_ITEM_HEIGHT + (MIN_VISIBLE - 1) * CHAT_ITEM_GAP
   );
 
   const rootRef = useRef(null);
   const listRef = useRef(null);
+  console.log("Conversations:", conversations);
+
+  useEffect(() => {
+  const fetchConversations = async () => {
+    try {
+      const response = await getChatConversations();
+
+      console.log("API Response:", response);
+      console.log("Is Array:", Array.isArray(response));
+
+      setConversations(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchConversations();
+}, []);
+
+useEffect(() => {
+  console.log("Conversations State:", conversations);
+}, [conversations]);
 
   useLayoutEffect(() => {
     const updateListHeight = () => {
@@ -67,7 +85,7 @@ export default function SidebarChatHistory() {
 
       const { listHeight: nextHeight } = getListMetrics(
         availableHeight,
-        CONVERSATIONS.length
+        conversations.length
       );
       setListHeight(nextHeight);
     };
@@ -90,7 +108,7 @@ export default function SidebarChatHistory() {
       scrollParent?.removeEventListener("scroll", updateListHeight);
       window.removeEventListener("resize", updateListHeight);
     };
-  }, []);
+  }, [conversations.length]);
 
   return (
     <div ref={rootRef} className="w-full flex flex-col min-h-0 select-none">
@@ -126,21 +144,19 @@ export default function SidebarChatHistory() {
         className="flex flex-col gap-[10px] overflow-y-auto no-scrollbar shrink-0"
         style={{ height: listHeight, minHeight: listHeight, maxHeight: listHeight }}
       >
-        {CONVERSATIONS.map((chat, index) => {
-          const isActive = activeChat === index;
+        {conversations.map((chat) => {
+          
           return (
             <div
-              key={index}
-              onClick={() => setActiveChat(index)}
+              key={chat.conversation_id}
+              onClick={() =>
+    navigate(`/user/chat/${chat.conversation_id}`)
+  }
               style={{ height: CHAT_ITEM_HEIGHT, minHeight: CHAT_ITEM_HEIGHT }}
-              className={`w-full flex items-center text-left text-[14px] leading-none cursor-pointer rounded-lg px-[10px] transition-all duration-200 truncate shrink-0 ${
-                isActive
-                  ? "bg-[#4866F6] text-white font-medium"
-                  : "text-[#586D93] hover:bg-[#4866F6] hover:text-white"
-              }`}
-              title={chat}
+              className={`w-full flex items-center text-left text-[14px] leading-none cursor-pointer rounded-lg px-[10px] transition-all duration-200 hover:bg-[#4866F6] hover:text-[#ffffff] truncate shrink-0 text-[#586D93]`}
+              title={chat.title}
             >
-              {chat}
+              {chat.title}
             </div>
           );
         })}
