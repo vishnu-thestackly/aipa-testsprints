@@ -298,13 +298,13 @@ const handleReminderChange = (value) => {
 
           {/* Buttons */}
           <div className="flex justify-center mt-8 sm:mt-12 gap-10">
-            {/* <button
+            <button
               type="button"
               onClick={() => navigate(-1)}
-              className="w-[102px] h-[44px] rounded-full border border-[#4C6FFF] bg-white text-[#4C6FFF] text-[14px] font-medium transition-all hover:bg-[#F5F7FF]"
+              className="w-[102px] h-[44px] rounded-full border border-[#4C6FFF] bg-white text-[#4C6FFF] text-[14px] font-medium transition-all hover:bg-[#F5F7FF] cursor-pointer"
             >
               Cancel
-            </button> */}
+            </button>
 
             <button type="button" onClick={handleSave} className="w-[102px] h-[44px] rounded-full bg-[#4866F6] text-white text-[14px] hover:opacity-90 transition cursor-pointer">
               Save

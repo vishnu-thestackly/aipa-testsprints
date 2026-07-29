@@ -67,7 +67,7 @@ return (
 </p></div></div>
 <img src={profile?.avatar_url
       ? `http://54.188.108.28${profile.avatar_url}`
-      : defaultProfile} alt="" alt="" className="w-[45px] h-[45px] min-[360px]:w-[48px] min-[360px]:h-[48px] min-[390px]:w-[52px] min-[390px]:h-[52px]" />
+      : defaultProfile}  alt="" className="w-[45px] h-[45px] min-[360px]:w-[48px] min-[360px]:h-[48px] min-[390px]:w-[52px] min-[390px]:h-[52px]" />
 </div>
 <div className="flex justify-between items-center mt-[25px]">
 <div className="w-[120px]"></div>

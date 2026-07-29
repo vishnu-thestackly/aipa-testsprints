@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
-
 import Navbar from "../components/userprofile/Navbar";
 import Sidebar from "../components/userprofile/sidebar/Sidebar";
-
-
 import { getUserProfile } from "../api/authApi";
 
 // import ProfileDashboard from "../components/userprofile/ProfileDashboard";

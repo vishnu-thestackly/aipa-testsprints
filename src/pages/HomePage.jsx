@@ -111,17 +111,17 @@ const HomePage = () => {
     >
       {/* BACKGROUND */}
 
-{/* BACKGROUND */}
-<div
-  className="
+      {/* BACKGROUND */}
+      <div
+        className="
     fixed
     inset-0
     -z-10
     overflow-hidden
   "
->
-  <div
-    className="
+      >
+        <div
+          className="
       absolute
       inset-0
 
@@ -138,20 +138,20 @@ const HomePage = () => {
       bg-top
       lg:bg-center
     "
-    style={{
-      backgroundImage: `linear-gradient(
+          style={{
+            backgroundImage: `linear-gradient(
         to bottom,
         rgba(0,0,0,0.18),
         rgba(0,0,0,0.08),
         rgba(0,0,0,0)
       ), url(${bgHome})`,
-    }}
-  />
-</div>
+          }}
+        />
+      </div>
 
       {/* PAGE CONTENT */}
-    <div
-className={`
+      <div
+        className={`
 relative
 z-10
 w-full
@@ -167,10 +167,10 @@ ${showLangSpace ? "pt-[115px]" : "pt-[45px]"}
 sm:pt-[20px]
 lg:pt-[25px]
 `}
->
+      >
         {/* HEADER */}
-       <div
-  className={`
+        <div
+          className={`
     transition-all
     duration-300
 
@@ -179,21 +179,21 @@ lg:pt-[25px]
     sm:h-[105px]
     lg:h-[115px]
   `}
->
-  <div className="h-[95px] sm:h-[105px] lg:h-[115px]">
-    <Header onLanguageClick={setShowLangSpace}
-    fixed={true}
-     />
-  </div>
-</div>
+        >
+          <div className="h-[95px] sm:h-[105px] lg:h-[115px]">
+            <Header onLanguageClick={setShowLangSpace}
+              fixed={true}
+            />
+          </div>
+        </div>
         {/* HERO */}
         <Hero />
 
         {/* FEATURE CARDS */}
         <FeatureCards />
 
-{/* PRICING PLANS */}
-<PricingPlans />
+        {/* PRICING PLANS */}
+        <PricingPlans />
 
         {/* FOOTER */}
         <Footer />
