@@ -76,7 +76,9 @@ const Completion = () => {
 
     await completeOnboarding();
 
-    navigate("/user-profile");
+    localStorage.removeItem("onboardingData");
+
+    navigate("/user/new-chat");
   } catch (error) {
     console.error("Complete Onboarding Error:", error);
   } finally {
@@ -147,9 +149,16 @@ if (loading) {
               <SummaryField label="Full Name" value={summary?.name || "—"} />
               <SummaryField label="Mobile number" value={summary?.phone || "—"} />
               <SummaryField
-                label="Preferred Meeting Times"
-                value={summary?.preferred_meeting_times || "—"}
-              />
+  label="Preferred Meeting Times"
+  value={
+    summary?.preferred_meeting_times
+      ?.split(", ")
+      .map(
+        (item) => item.charAt(0).toUpperCase() + item.slice(1)
+      )
+      .join(", ") || "—"
+  }
+/>
               <SummaryField
                 label="Email Tone Preference"
                 value={summary?.email_tone || "—"}

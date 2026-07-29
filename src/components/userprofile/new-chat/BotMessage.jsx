@@ -5,14 +5,17 @@ import ChatSpeaker from "../../../assets/images/chat_speaker.png";
 import ChatCopy from "../../../assets/images/chat_copy.png";
 import ChatSave from "../../../assets/images/chat_save.png";
 import ChatShare from "../../../assets/images/chat_share.png";
+import BotMessageContent from "./BotMessageContent";
 
-export default function BotMessage({ message }) {
+export default function BotMessage({ message, onAction, }) {
   const actions = [
     ChatSpeaker,
     ChatCopy,
     ChatSave,
     ChatShare,
   ];
+console.log("Bot Message:", message);
+
 
   return (
     <div className="flex items-end gap-3">
@@ -22,8 +25,21 @@ export default function BotMessage({ message }) {
 
       <div className="w-fit max-w-[70%] min-w-0">
         <div className="max-w-full whitespace-pre-wrap wrap-anywhere rounded-[16px] rounded-bl-none rounded-tl-[30px] bg-[#F3F3F3] px-5 py-4 text-[14px] text-[#111111]">
-          {message.text}
+          {message.text && (
+  <p className="whitespace-pre-wrap break-words">
+    {message.text}
+  </p>
+)}
+
+<div className="mt-3">
+  <BotMessageContent
+    message={message}
+    onAction={onAction}
+  />
+</div>
+          
         </div>
+        
 
         <div className="mt-2 flex w-full items-center justify-between gap-8">
           <div className="flex items-center gap-2">

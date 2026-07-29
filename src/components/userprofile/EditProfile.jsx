@@ -591,7 +591,7 @@ const selectedAltCountry = countries.find(
 
   onClick={() => setShowCountryDropdown((prev) => !prev)}
 
-  className="w-[70px] h-11 px-1 border border-gray-200 rounded-lg flex items-center justify-between bg-white"
+  className="w-[90px] h-11 px-1 border border-gray-200 rounded-lg flex items-center justify-between bg-white"
 >
 <div className="flex items-center gap-1">
 
@@ -626,7 +626,7 @@ const selectedAltCountry = countries.find(
 </button>
 
 {showCountryDropdown && (
-<div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-lg shadow-lg z-50 max-h-52 overflow-y-auto">
+<div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-lg shadow-lg z-50 max-h-52 overflow-y-auto scrollbar-hide">
 
     {countries.map((country) => (
 <div
@@ -686,7 +686,7 @@ const selectedAltCountry = countries.find(
 
   onClick={() => setShowAltCountryDropdown((prev) => !prev)}
 
-  className="w-[70px] h-11 px-1 border border-gray-200 rounded-lg flex items-center justify-between bg-white"
+  className="w-[90px] h-11 px-1 border border-gray-200 rounded-lg flex items-center justify-between bg-white"
 >
 <div className="flex items-center gap-1">
 
@@ -721,7 +721,7 @@ const selectedAltCountry = countries.find(
 </button>
 
   {showAltCountryDropdown && (
-<div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-lg shadow-lg z-50 max-h-52 overflow-y-auto">
+<div className="absolute left-0 top-full mt-1 w-full bg-white border rounded-lg shadow-lg z-50 max-h-52 overflow-y-auto scrollbar-hide">
 
       {countries.map((country) => (
 <div

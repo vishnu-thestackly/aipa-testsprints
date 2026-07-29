@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import UserNavbar from "../components/common/Navbar";
 import OnboardingStepper from "../components/preference/OnboardingStepper";
+import { ChevronDown } from "lucide-react";
 
 import BackGroundImage from "../assets/images/bghome.png";
 import Downarrow from "../assets/images/Downarrow.png";
@@ -11,6 +12,7 @@ import { useOnboarding } from "../context/OnboardingContext";
 import { savePersonalDetails, uploadAvatar,skipOnboarding,  getCountryCodes, } from "../api/authApi";
 
 const PersonalDetails = () => {
+  const countryDropdownRef = useRef(null);
   const [showLanguage, setShowLanguage] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -33,7 +35,8 @@ const PersonalDetails = () => {
 
     console.log(response.message); // Onboarding skipped.
 
-    navigate("/user-profile");
+
+    navigate("/user/new-chat");
   } catch (error) {
     console.error("Skip Onboarding Error:", error);
   } finally {
@@ -50,6 +53,23 @@ const PersonalDetails = () => {
     "Completion",
   ];
 
+
+  useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (
+      countryDropdownRef.current &&
+      !countryDropdownRef.current.contains(event.target)
+    ) {
+      setShowCountryDropdown(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
  
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -314,62 +334,62 @@ const selectedCountry = countries.find(
 
               <div className="flex gap-2 sm:gap-3">
                 {/* Country Code */}
-                <div className="relative w-[110px] sm:w-[130px] md:w-[160px] flex-shrink-0">
-                  <button
-                    type="button"
-                    onClick={() =>setShowCountryDropdown(!showCountryDropdown)}
-                    className="w-full h-[54px] border border-[#D9D9D9] rounded-[8px] flex items-center justify-between px-2 sm:px-3 bg-white"
-                  >
-                    <div className="flex items-center gap-2 overflow-hidden">
-                      <img
-                        src={selectedCountry?.flag}
-                        alt="flag"
-                        className="w-5 h-4 object-cover flex-shrink-0"
-                      />
+                <div ref={countryDropdownRef} className="relative w-[110px] sm:w-[130px] md:w-[160px] flex-shrink-0">
+  <button
+    type="button"
+    onClick={() => setShowCountryDropdown((prev) => !prev)}
+    className="w-full h-[54px] border border-[#D9D9D9] rounded-[8px] flex items-center justify-between px-2 sm:px-3 bg-white"
+  >
+    <div className="flex items-center gap-2 overflow-hidden">
+      {selectedCountry?.flag && (
+        <img
+          src={selectedCountry.flag}
+          alt=""
+          className="w-5 h-4 object-cover flex-shrink-0"
+        />
+      )}
 
-                      <span className="text-sm truncate">
-                        {selectedCountry?.code}
-                      </span>
-                    </div>
+      <span className="text-sm text-[#8D97A9] truncate">
+        {data.countryCode}
+      </span>
+    </div>
 
-                    <img
-                      src={Downarrow}
-                      alt="arrow"
-                      className={`w-6 h-5 transition-transform ${showCountryDropdown ? "rotate-180" : ""
-                        }`}
-                    />
-                  </button>
+    <ChevronDown
+  size={25}
+  className={`text-[#8D97A9] transition-transform duration-200 ${
+    showCountryDropdown ? "rotate-180" : ""
+  }`}
+/>
+  </button>
 
-                  {showCountryDropdown && (
-                    <div className="absolute left-0 top-[60px] w-[110px] sm:w-[130px] md:w-[160px] bg-white border border-[#D9D9D9] rounded-lg shadow-xl z-[9999] max-h-[220px] overflow-y-auto scrollbar-none">
-                      {countries.map((country) => (
-                        <div
-                          key={country.code}
-                          onClick={() => {
-                          setSelectedCountry(country);
-                        
-                          updateOnboarding({
-                            countryCode: country.dial_code,
-                          });
-                        
-                          setShowCountryDropdown(false);
-                        }}
-                          className="flex items-center gap-2 px-3 py-3 cursor-pointer hover:bg-gray-100"
-                        >
-                      <img
-                        src={country.flag}
-                        alt={country.name}
-                        className="w-5 h-4 object-cover flex-shrink-0"
-                      />
-                          <span className="text-xs flex items-center gap-1">
-                            <span>{country.code}</span>
-                            <span>{country.name}</span>
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+  {showCountryDropdown && (
+    <div className="absolute left-0 top-[60px] w-full text-[#8D97A9] bg-white border border-[#D9D9D9] rounded-lg shadow-xl z-[9999] max-h-[150px] overflow-y-auto scrollbar-none scrollbar-hide">
+      {countries.map((country) => (
+        <div
+          key={country.code}
+          onClick={() => {
+            updateOnboarding({
+              countryCode: country.dial_code,
+            });
+
+            setShowCountryDropdown(false);
+          }}
+          className="flex items-center gap-2 px-3 py-3 cursor-pointer  hover:bg-gray-100"
+        >
+          <img
+            src={country.flag}
+            alt={country.name}
+            className="w-5 h-4 object-cover flex-shrink-0"
+          />
+
+          <span className="text-sm">
+            {country.dial_code}
+          </span>
+        </div>
+      ))}
+    </div>
+  )}
+</div>
 
                 {/* Mobile Input */}
                 <input

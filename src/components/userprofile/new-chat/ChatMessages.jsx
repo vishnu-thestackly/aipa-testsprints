@@ -5,6 +5,7 @@ import UserMessage from "./UserMessage";
 export default function ChatMessages({
   messages,
   onEdit,
+  onAction,
 }) {
   return (
     <div className="flex flex-col gap-8 lg:gap-3">
@@ -13,6 +14,7 @@ export default function ChatMessages({
           <BotMessage
             key={message.id}
             message={message}
+            onAction={onAction}
           />
         ) : (
           <UserMessage

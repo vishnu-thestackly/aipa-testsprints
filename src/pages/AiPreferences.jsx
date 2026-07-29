@@ -24,8 +24,9 @@ const AiPreferences = () => {
     const response = await skipOnboarding();
 
     console.log(response.message); // Onboarding skipped.
+    localStorage.removeItem("onboardingData");
 
-    navigate("/user-profile");
+    navigate("/user/new-chat");
   } catch (error) {
     console.error("Skip Onboarding Error:", error);
   } finally {
@@ -49,12 +50,23 @@ const AiPreferences = () => {
     setLoading(true);
 
     const payload = {
-      preferred_meeting_times: data.meetingTimes[0] || "All",
-      email_tone: data.emailTone,
-      default_task_priority: data.taskPriority,
-      auto_mark_urgent: data.autoMarkUrgent,
-      reminder_frequency: data.reminderFrequency[0] || "Daily",
-    };
+  preferred_meeting_times:
+    data.meetingTimes.length > 0
+      ? data.meetingTimes.join(", ").toLowerCase()
+      : "all",
+
+  email_tone: data.emailTone,
+
+  default_task_priority: data.taskPriority,
+
+  auto_mark_urgent: data.autoMarkUrgent,
+
+  reminder_frequency:
+    data.reminderFrequency.length > 0
+      ? data.reminderFrequency.join(", ")
+      : "Daily",
+};
+
 
     const response = await saveAiPreferences(payload);
 

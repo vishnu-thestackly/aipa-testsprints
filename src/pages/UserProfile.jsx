@@ -19,6 +19,7 @@ export default function UserProfile() {
   const [activeItem, setActiveItem] = useState("profileDashboard");
   const [profilePage, setProfilePage] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedConversationId, setSelectedConversationId] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
@@ -79,6 +80,7 @@ export default function UserProfile() {
           setSidebarOpen={setSidebarOpen}
           profilePage={profilePage}
           setProfilePage={setProfilePage}
+          setSelectedConversationId={setSelectedConversationId}
         />
 
         {/* Content Wrapper */}
@@ -93,6 +95,7 @@ export default function UserProfile() {
       setProfilePage,
       activeItem,
       setActiveItem,
+      selectedConversationId,
     }}
   />
         </div>

@@ -12,7 +12,7 @@ import ChatMessages from "./ChatMessages";
 import ActionCards from "./ActionCards";
 import useChat from "./hooks/useChat";
 
-import { sendChatMessage } from "../../../api/authApi";
+import { sendChatMessage, getConversationMessages, } from "../../../api/authApi";
 // -----------------------------------------------------------------------------
 // HELPERS
 // -----------------------------------------------------------------------------
@@ -49,22 +49,42 @@ export default function NewChatConversation({ languageOpen }) {
 } = useChat(firstMessage, aiReply);
 
 useEffect(() => {
+  if (!chatId) return;
+
+  const fetchConversation = async () => {
+    try {
+      const response = await getConversationMessages(chatId);
+
+      setConversationId(response.conversation_id);
+
+      const formattedMessages = response.messages.map((msg) => ({
+        id: msg.message_id,
+        type: msg.sender === "assistant" ? "bot" : "user",
+        text: msg.message_text,
+        time: new Date(msg.timestamp).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      }));
+
+      setMessages(formattedMessages);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchConversation();
+}, [chatId]);
+
+useEffect(() => {
   if (messagesContainerRef.current) {
     messagesContainerRef.current.scrollTop =
       messagesContainerRef.current.scrollHeight;
   }
 }, [messages]);
 
-  const handleSend = async () => {
-  const message = input.trim();
 
-  if (!message) return;
-
-  // Edit existing message
-  if (editingMessageId) {
-  setEditingMessageId(null);
-}
-
+const sendMessageToBackend = async (message) => {
   // Create user message
   const userMessage = {
     id: `user-${Date.now()}`,
@@ -73,31 +93,41 @@ useEffect(() => {
     time: getCurrentTime(),
   };
 
-  // Show it immediately
+  // Show immediately
   setMessages((prev) => [...prev, userMessage]);
-
-  // Clear input
-  setInput("");
 
   try {
     const response = await sendChatMessage({
       conversation_id: conversationId,
-      message: message,
+      message,
     });
 
-    // Save conversation id (important for future messages)
-    
+    if (response.conversation_id) {
+      setConversationId(response.conversation_id);
+    }
 
-
-    // Add AI reply
     const botMessage = {
   id: `bot-${Date.now()}`,
   type: "bot",
   text: response.reply,
   time: getCurrentTime(),
+
+  // New backend fields
+  needs_date_trigger: response.needs_date_trigger,
+  needs_time_trigger: response.needs_time_trigger,
+  needs_priority_trigger: response.needs_priority_trigger,
+
+  quick_actions: response.quick_actions,
+  task_summary: response.task_summary,
+  editable_fields: response.editable_fields,
+  suggested_actions: response.suggested_actions,
+
+  requires_clarification: response.requires_clarification,
+  intent: response.intent,
+  task_id: response.task_id,
 };
 
-setMessages((prev) => [...prev, botMessage]);
+    setMessages((prev) => [...prev, botMessage]);
 
   } catch (error) {
     console.error(error);
@@ -114,6 +144,37 @@ setMessages((prev) => [...prev, botMessage]);
   }
 };
 
+//   const handleSend = async () => {
+//   const message = input.trim();
+
+//   if (!message) return;
+
+//   // Edit existing message
+//   if (editingMessageId) {
+//   setEditingMessageId(null);
+// }
+
+
+const handleSend = async () => {
+  const message = input.trim();
+
+  if (!message) return;
+
+  if (editingMessageId) {
+    setEditingMessageId(null);
+  }
+
+  setInput("");
+
+  await sendMessageToBackend(message);
+};
+
+const handleUiAction = async (value) => {
+  await sendMessageToBackend(value);
+};
+
+
+
   const handleEditMessage = (message) => {
     setEditingMessageId(message.id);
     setInput(message.text);
@@ -124,6 +185,9 @@ setMessages((prev) => [...prev, botMessage]);
     setEditingMessageId(null);
     setInput("");
   };
+
+
+  
 
   return (
     <div
@@ -138,6 +202,7 @@ setMessages((prev) => [...prev, botMessage]);
           <ChatMessages
   messages={messages}
   onEdit={handleEditMessage}
+  onAction={handleUiAction}
 />
 
 
