@@ -1,4 +1,3 @@
-
 import React, {
   useState,
   useRef,
@@ -8,20 +7,41 @@ import React, {
 import { getChatConversations } from "../../../api/authApi";
 import { useNavigate } from "react-router-dom";
 
-
-
-
 const CHAT_ITEM_HEIGHT = 36;
 const CHAT_ITEM_GAP = 10;
-const VISIBLE_ITEMS = 5;
+const MIN_VISIBLE = 2;
+const MAX_VISIBLE = 5;
 
 
 
-const listHeight =
-  VISIBLE_ITEMS * CHAT_ITEM_HEIGHT + (VISIBLE_ITEMS - 1) * CHAT_ITEM_GAP;
+function getScrollParent(element) {
+  let node = element?.parentElement;
+  while (node) {
+    const { overflowY } = window.getComputedStyle(node);
+    if (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") {
+      return node;
+    }
+    node = node.parentElement;
+  }
+  return null;
+}
+
+function getListMetrics(availableHeight, itemCount) {
+  const slotHeight = CHAT_ITEM_HEIGHT + CHAT_ITEM_GAP;
+  const slotsFromSpace = Math.floor((availableHeight + CHAT_ITEM_GAP) / slotHeight);
+  const visibleSlots = Math.min(
+    MAX_VISIBLE,
+    Math.max(MIN_VISIBLE, slotsFromSpace || MIN_VISIBLE)
+  );
+  const renderedSlots = Math.min(visibleSlots, itemCount);
+  const listHeight =
+    renderedSlots * CHAT_ITEM_HEIGHT +
+    Math.max(0, renderedSlots - 1) * CHAT_ITEM_GAP;
+
+  return { listHeight, needsScroll: itemCount > visibleSlots };
+}
 
 export default function SidebarChatHistory() {
-
   console.log("SidebarChatHistory Rendered");
   const [conversations, setConversations] = useState([]);
   const navigate = useNavigate();
@@ -90,9 +110,8 @@ useEffect(() => {
     };
   }, [conversations.length]);
 
-
   return (
-    <div className="w-full flex flex-col min-h-0 select-none">
+    <div ref={rootRef} className="w-full flex flex-col min-h-0 select-none">
       {/* Divider */}
       <div className="w-full border-t border-[#E5E7EB] my-4 lg:my-5" />
 
@@ -119,8 +138,9 @@ useEffect(() => {
         </button>
       </div>
 
-      {/* Always 5 visible — scroll for anything beyond */}
+      {/* Scrollable list — 2 to 5 visible items based on sidebar space */}
       <div
+        ref={listRef}
         className="flex flex-col gap-[10px] overflow-y-auto no-scrollbar shrink-0"
         style={{ height: listHeight, minHeight: listHeight, maxHeight: listHeight }}
       >

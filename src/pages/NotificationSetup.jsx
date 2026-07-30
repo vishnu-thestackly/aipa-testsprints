@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import UserNavbar from "../components/common/Navbar";
+import ProfileNavbar from "../components/common/ProfileNavbar";
 import OnboardingStepper from "../components/preference/OnboardingStepper";
 import { saveNotificationSettings,skipOnboarding } from "../api/authApi";
 import BackGroundImage from "../assets/images/bghome.png";
@@ -43,7 +43,7 @@ const NotificationSetup = () => {
     console.log(response.message); // Onboarding skipped.
     localStorage.removeItem("onboardingData");
 
-    navigate("/user/new-chat");
+    navigate("/completion");
   } catch (error) {
     console.error("Skip Onboarding Error:", error);
   } finally {
@@ -102,7 +102,7 @@ const NotificationSetup = () => {
 
       <div className="relative z-10">
         <div className="w-full mb-[20px]">
-          <UserNavbar onLanguageClick={setShowLanguage} />
+          <ProfileNavbar onLanguageClick={setShowLanguage} />
         </div>
 
         <div className="w-full bg-white rounded-[40px] min-h-[85vh] border border-[#E7E7E7] shadow-sm px-[clamp(20px,4vw,60px)] py-[clamp(25px,4vw,45px)] transition-all duration-300">

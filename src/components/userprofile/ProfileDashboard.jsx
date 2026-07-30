@@ -200,9 +200,9 @@ const isUpgraded = Boolean(
     fetchProfile();
   }, []);
 
-  // if (!profile) {
-  //     return <div className=" h-full flex justify-center items-center">Loading...</div>;
-  //   }
+  if (!profile) {
+      return <div className=" h-full flex justify-center items-center">Loading...</div>;
+    }
 
   return (
 

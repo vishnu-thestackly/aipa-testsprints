@@ -406,7 +406,7 @@ const selectedAltCountry = countries.find(
 
           {/* HEADER */}
 <div className="flex items-center gap-2 mb-4 border-b border-gray-300 pb-4">
-<button onClick={() => setProfilePage("dashboard")} className="w-7 h-7 bg-[#4866F6] rounded-full flex items-center justify-center">
+<button onClick={() => navigate(-1)} className="w-7 h-7 bg-[#4866F6] rounded-full flex items-center justify-center">
 <ArrowLeft
 
                 className="w-4 h-4 text-white"
@@ -837,7 +837,7 @@ const selectedAltCountry = countries.find(
 
             {/* BUTTONS */}
 <div className="flex gap-3 justify-center">
-<button type="button" onClick={() => setProfilePage("dashboard")} className="px-6 h-11 border rounded-full">
+<button type="button" onClick={() => navigate(-1)} className="px-6 h-11 border rounded-full">
 
                 Cancel
 </button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import UserNavbar from "../components/common/Navbar";
+import ProfileNavbar from "../components/common/ProfileNavbar";
 import OnboardingStepper from "../components/preference/OnboardingStepper";
 import { ChevronDown } from "lucide-react";
 
@@ -27,23 +27,7 @@ const PersonalDetails = () => {
   
 
   const navigate = useNavigate();
-  const handleSkip = async () => {
-  try {
-    setSkipLoading(true);
-
-    const response = await skipOnboarding();
-
-    console.log(response.message); // Onboarding skipped.
-
-
-    navigate("/user/new-chat");
-  } catch (error) {
-    console.error("Skip Onboarding Error:", error);
-  } finally {
-    setSkipLoading(false);
-  }
-};
-
+  
   // STEP DATA
   const steps = [
     "Personal Details",
@@ -70,6 +54,12 @@ const PersonalDetails = () => {
     document.removeEventListener("mousedown", handleClickOutside);
   };
 }, []);
+
+useEffect(() => {
+  if (data.avatarPreview) {
+    setProfilePreview(data.avatarPreview);
+  }
+}, [data.avatarPreview]);
  
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -98,6 +88,8 @@ const PersonalDetails = () => {
     if (!file) return;
 
     const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+    console.log("avatarFile:", data.avatarFile);
+console.log("avatarFileName:", data.avatarFileName);
 
     if (!validTypes.includes(file.type)) {
       setImageError("Please upload JPG, JPEG or PNG image.");
@@ -108,10 +100,18 @@ const PersonalDetails = () => {
     updateOnboarding({ avatarFileName: file.name , avatarFile: file});
 
     const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfilePreview(reader.result);
-    };
-    reader.readAsDataURL(file);
+
+reader.onloadend = () => {
+  setProfilePreview(reader.result);
+
+  updateOnboarding({
+    avatarFileName: file.name,
+    avatarFile: file,
+    avatarPreview: reader.result,
+  });
+};
+
+reader.readAsDataURL(file);
   };
 
   const handleContinue = async () => {
@@ -137,15 +137,13 @@ try {
   setLoading(true);
 
   // Upload avatar first
-  if (data.avatarFile) {
-    const avatarResponse = await uploadAvatar(data.avatarFile);
+  if (data.avatarFile instanceof File) {
+  const avatarResponse = await uploadAvatar(data.avatarFile);
 
-    console.log("Avatar Uploaded:", avatarResponse);
-
-    updateOnboarding({
-      avatarUrl: avatarResponse.avatar_url,
-    });
-  }
+  updateOnboarding({
+    avatarUrl: avatarResponse.avatar_url,
+  });
+}
 
   const payload = {
   name: data.fullName,
@@ -159,9 +157,10 @@ try {
 
   setCurrentStep(2);
   navigate("/aipreferences");
-} catch (error) {
+}catch (error) {
   console.error("Personal Details Error:", error);
-} finally {
+  alert(error.response?.data?.message || "Failed to save personal details.");
+}finally {
   setLoading(false);
 }
   };
@@ -225,7 +224,7 @@ const selectedCountry = countries.find(
       <div className="relative z-10">
         {/* NAVBAR */}
         <div className="w-full mb-[20px]">
-          <UserNavbar onLanguageClick={setShowLanguage} />
+          <ProfileNavbar onLanguageClick={setShowLanguage} />
         </div>
 
         {/* CARD SECTION */}
@@ -242,19 +241,7 @@ const selectedCountry = countries.find(
               AI Personal Assistant
             </h1>
 
-            {/* SKIP BUTTON */}
-            <button
-                onClick={handleSkip}
-                disabled={skipLoading}
-                className="absolute right-0 top-[-65px] md:top-[-40px] lg:top-0 bg-[#4866F6] text-white px-6 py-2 rounded-full text-m font-sfpro hover:bg-[#3d5cf4] transition-all duration-300 flex items-center disabled:opacity-50"
-              >
-                {skipLoading ? "Skipping..." : "Skip"}
-                <img
-                  src={Downarrow}
-                  alt="downarrow"
-                  className="inline-block w-4 h-4 ml-1"
-                />
-              </button>
+            
           </div>
 
           <OnboardingStepper currentStep={currentStep} steps={steps} />
@@ -273,7 +260,15 @@ const selectedCountry = countries.find(
               />
 
               {/* UPLOAD BOX */}
-              <label htmlFor="profileUpload" className={uploadBoxClass}>
+              <label htmlFor="profileUpload" className={uploadBoxClass} 
+              tabIndex={0}
+                role="button"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    document.getElementById("profileUpload").click();
+                  }
+                }}>
                 {profilePreview ? (
                   <img
                     src={profilePreview}
@@ -420,7 +415,7 @@ const selectedCountry = countries.find(
                   disabled={loading}
                   className="bg-[#4866F6] hover:bg-[#3d5cf4] transition-all duration-300 text-white md:px-16 md:py-3 px-7 py-2 rounded-full text-[16px] font-medium cursor-pointer disabled:opacity-50"
                 >
-                  {loading ? "Saving..." : "Continue"}
+                  {loading ? "Saving..." : "save & Continue"}
             </button>
           </div>
         </div>

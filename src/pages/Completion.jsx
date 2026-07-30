@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import UserNavbar from "../components/common/Navbar";
+import ProfileNavbar from "../components/common/ProfileNavbar";
 import OnboardingStepper from "../components/preference/OnboardingStepper";
 import {
   getOnboardingSummary,
@@ -116,7 +116,7 @@ if (loading) {
 
       <div className="relative z-10">
         <div className="w-full mb-[20px]">
-          <UserNavbar onLanguageClick={setShowLanguage} />
+          <ProfileNavbar onLanguageClick={setShowLanguage} />
         </div>
 
         <div className="w-full bg-white rounded-[40px] min-h-[85vh] border border-[#E7E7E7] shadow-sm px-[clamp(20px,4vw,60px)] py-[clamp(25px,4vw,45px)] transition-all duration-300">
@@ -148,17 +148,17 @@ if (loading) {
 
               <SummaryField label="Full Name" value={summary?.name || "—"} />
               <SummaryField label="Mobile number" value={summary?.phone || "—"} />
-              <SummaryField
-  label="Preferred Meeting Times"
-  value={
-    summary?.preferred_meeting_times
-      ?.split(", ")
+              {summary?.preferred_meeting_times && (
+  <SummaryField
+    label="Preferred Meeting Times"
+    value={summary.preferred_meeting_times
+      .split(", ")
       .map(
         (item) => item.charAt(0).toUpperCase() + item.slice(1)
       )
-      .join(", ") || "—"
-  }
-/>
+      .join(", ")}
+  />
+)}
               <SummaryField
                 label="Email Tone Preference"
                 value={summary?.email_tone || "—"}

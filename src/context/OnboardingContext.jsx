@@ -9,17 +9,18 @@ import {
 
 export const initialOnboardingState = {
   avatarFileName: "",
-  avatarFile: null,
+  avatarFile: "",
   avatarUrl: "", 
+  avatarPreview: "",
   fullName: "",
   mobile: "",
   AlterMobile: "",
   countryCode: "+91",
-  meetingTimes: ["All"],
+  meetingTimes: [],
   emailTone: "Formal",
   taskPriority: "High",
   autoMarkUrgent: true,
-  reminderFrequency: ["Daily"],
+  reminderFrequency: [],
   connectedIntegrations: {},
   emailAlerts: true,
   reminders: true,
@@ -62,35 +63,44 @@ useEffect(() => {
     setData((prev) => ({ ...prev, ...partial }));
   }, []);
 
-  const toggleMeetingTime = useCallback((item) => {
-  let updated = [...data.meetingTimes];
+ const toggleMeetingTime = useCallback(
+  (item) => {
+    let updated = [...data.meetingTimes];
 
-  if (item === "All") {
-    if (updated.includes("All")) {
-      // Don't allow removing the last selected option
-      if (updated.length === 1) return;
-
+    if (item === "All") {
+      // Toggle All
+      if (updated.includes("All")) {
+        updated = [];
+      } else {
+        updated = ["All"];
+      }
+    } else {
+      // Remove All first
       updated = updated.filter((time) => time !== "All");
-    } else {
-      updated = ["All"];
+
+      if (updated.includes(item)) {
+        updated = updated.filter((time) => time !== item);
+      } else {
+        updated.push(item);
+      }
+
+      // If all three are selected, replace them with All
+      const allSelected =
+        updated.includes("Morning") &&
+        updated.includes("Afternoon") &&
+        updated.includes("Evening");
+
+      if (allSelected) {
+        updated = ["All"];
+      }
     }
-  } else {
-    updated = updated.filter((time) => time !== "All");
 
-    if (updated.includes(item)) {
-      // Prevent deselecting the last remaining option
-      if (updated.length === 1) return;
-
-      updated = updated.filter((time) => time !== item);
-    } else {
-      updated.push(item);
-    }
-  }
-
-  updateOnboarding({
-    meetingTimes: updated,
-  });
-}, [data.meetingTimes, updateOnboarding]);
+    updateOnboarding({
+      meetingTimes: updated,
+    });
+  },
+  [data.meetingTimes, updateOnboarding]
+);
 
   const toggleReminderFrequency = useCallback((frequency) => {
   setData((prev) => {

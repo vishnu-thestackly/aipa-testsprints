@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import UserNavbar from "../components/common/Navbar";
+import ProfileNavbar from "../components/common/ProfileNavbar";
 import OnboardingStepper from "../components/preference/OnboardingStepper";
 
 import BackGroundImage from "../assets/images/bghome.png";
@@ -26,7 +26,7 @@ const AiPreferences = () => {
     console.log(response.message); // Onboarding skipped.
     localStorage.removeItem("onboardingData");
 
-    navigate("/user/new-chat");
+    navigate("/connect-integrations");
   } catch (error) {
     console.error("Skip Onboarding Error:", error);
   } finally {
@@ -51,9 +51,9 @@ const AiPreferences = () => {
 
     const payload = {
   preferred_meeting_times:
-    data.meetingTimes.length > 0
-      ? data.meetingTimes.join(", ").toLowerCase()
-      : "all",
+  data.meetingTimes.length > 0
+    ? data.meetingTimes.join(", ").toLowerCase()
+    : "",
 
   email_tone: data.emailTone,
 
@@ -84,7 +84,7 @@ const AiPreferences = () => {
   // BACK BUTTON
   const handleBack = () => {
     setCurrentStep(1);
-    navigate("/");
+    navigate("/personal-details");
   };
 
   
@@ -102,7 +102,7 @@ const AiPreferences = () => {
       <div className="relative z-10">
         {/* NAVBAR */}
         <div className="w-full mb-[20px]">
-          <UserNavbar onLanguageClick={setShowLanguage} />
+          <ProfileNavbar onLanguageClick={setShowLanguage} />
         </div>
 
         {/* CARD */}
