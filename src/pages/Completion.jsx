@@ -181,10 +181,17 @@ if (loading) {
                 checked={data.autoMarkUrgent}
                 disabled
               />
-                <SummaryField
-                  label="Reminder Frequency"
-                  value={reminderFrequencyDisplay}
-                />
+                {summary?.reminder_frequency && summary.reminder_frequency.trim() !== "" && (
+  <SummaryField
+    label="Reminder Frequency"
+    value={summary.reminder_frequency
+      .split(", ")
+      .map(
+        (item) => item.charAt(0).toUpperCase() + item.slice(1)
+      )
+      .join(", ")}
+  />
+)}
 
                 <h3 className="text-[18px] font-semibold text-[#3D3D3D] mb-6 mt-8 font-sfpro">
                   Integrations

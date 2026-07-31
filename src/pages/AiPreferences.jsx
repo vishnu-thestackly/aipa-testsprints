@@ -62,9 +62,9 @@ const AiPreferences = () => {
   auto_mark_urgent: data.autoMarkUrgent,
 
   reminder_frequency:
-    data.reminderFrequency.length > 0
-      ? data.reminderFrequency.join(", ")
-      : "Daily",
+  data.reminderFrequency.length > 0
+    ? data.reminderFrequency.join(", ")
+    : "",
 };
 
 

@@ -104,15 +104,19 @@ useEffect(() => {
 
   const toggleReminderFrequency = useCallback((frequency) => {
   setData((prev) => {
-    // Don't allow deselecting the only selected option
-    if (prev.reminderFrequency.includes(frequency)) {
-      return prev;
+    let updated = [...prev.reminderFrequency];
+
+    if (updated.includes(frequency)) {
+      // Remove the selected frequency
+      updated = updated.filter((item) => item !== frequency);
+    } else {
+      // Add the selected frequency
+      updated.push(frequency);
     }
 
-    // Only one selection allowed
     return {
       ...prev,
-      reminderFrequency: [frequency],
+      reminderFrequency: updated,
     };
   });
 }, []);
