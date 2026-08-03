@@ -48,3 +48,30 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+/* Hide scrollbar but keep scrolling */
+html,
+body {
+  overflow-y: auto;
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+#root {
+  min-height: 100vh;
+}
+/* Hide scrollbar but keep scrolling */
+.hide-scrollbar {
+  overflow-y: auto;
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}

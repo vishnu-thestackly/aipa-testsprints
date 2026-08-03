@@ -169,8 +169,7 @@ export default function SubscriptionDetails({
   const isFreePlan = !subscription?.plan_name || (subscription?.plan_name || "").toLowerCase().includes("free");
 
   return (
-    <div className="px-2 sm:px-4 lg:px-7 pt-3 md:pt-5 pb-10">
-      <div className="w-full rounded-[18px] md:rounded-[25px] border border-[#DADADA] bg-white p-3 sm:p-5 md:p-7 shadow-[0px_0px_4px_0px_#00000014]">
+<div className="px-2 sm:px-4 lg:px-7 pt-3 md:pt-5 pb-10 h-full overflow-y-auto hide-scrollbar">      <div className="w-full rounded-[18px] md:rounded-[25px] border border-[#DADADA] bg-white p-3 sm:p-5 md:p-7 shadow-[0px_0px_4px_0px_#00000014]">
 
         {/* Header */}
         {/* Header */}

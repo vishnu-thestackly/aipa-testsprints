@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Search, Download, Eye, IndianRupee, Users, CreditCard, RefreshCw } from "lucide-react";
 // import bubbleSvg from "../../assets/images/Combined Shape.svg";
 import TransactionRevenueChart from "../../charts/TransactionRevenueChart";
@@ -64,6 +64,31 @@ const paginatedRows = filteredRows.slice(
 
 const [statusOpen, setStatusOpen] = useState(false);
 const [subscriptionOpen, setSubscriptionOpen] = useState(false);
+
+const statusDropdownRef = useRef(null);
+const subscriptionDropdownRef = useRef(null);
+
+useEffect(() => {
+  const handleClickOutside = (event) => {
+    if (
+      statusDropdownRef.current &&
+      !statusDropdownRef.current.contains(event.target)
+    ) {
+      setStatusOpen(false);
+    }
+    if (
+      subscriptionDropdownRef.current &&
+      !subscriptionDropdownRef.current.contains(event.target)
+    ) {
+      setSubscriptionOpen(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
 
 const [selectedStatus, setSelectedStatus] = useState(["Success"]);
 const [selectedSubscription, setSelectedSubscription] = useState(["Basic"]);
@@ -264,7 +289,7 @@ md:flex-row md:flex-nowrap md:items-center    lg:grid lg:grid-cols-2
   {/* Status */}
 {/* Status */}
 {/* Status */}
-<div className="relative w-full md:w-[180px] lg:w-full xl:w-[180px]">
+<div ref={statusDropdownRef} className="relative w-full md:w-[180px] lg:w-full xl:w-[180px]">
   <button
   onClick={() => setStatusOpen(!statusOpen)}
 
@@ -332,7 +357,7 @@ md:flex-row md:flex-nowrap md:items-center    lg:grid lg:grid-cols-2
   )}
 </div>
 
-<div className="relative w-full md:w-[240px] lg:w-full xl:w-[220px]">
+<div ref={subscriptionDropdownRef} className="relative w-full md:w-[240px] lg:w-full xl:w-[220px]">
   <button
     onClick={() => setSubscriptionOpen(!subscriptionOpen)}
 className="w-full h-[34px] border border-[#D9D9D9] rounded-[10px] px-4 flex items-center justify-between bg-white text-[14px] text-[#8D99AE] cursor-pointer"  >

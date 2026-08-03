@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/admin/Navbar";
 import Sidebar from "../components/admin/sidebar/Sidebar";
@@ -21,7 +21,13 @@ import AdminProfile from "../components/admin/adminprofile/AdminProfile";
 import useIdleTimeout from "../hooks/useIdleTimeout";
 
 export default function Dashboard() {
-  const [activeItem, setActiveItem] = useState("dashboard");
+  const [activeItem, setActiveItem] = useState(() => {
+    return sessionStorage.getItem("adminActiveItem") || "dashboard";
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("adminActiveItem", activeItem);
+  }, [activeItem]);
   const [userId, setUserId] = useState(null);
   console.log("Dashboard userId:", userId);
   console.log("userId: after");

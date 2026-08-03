@@ -40,7 +40,7 @@ export default function SignUpPage() {
     uppercase: /[A-Z]/.test(password),
     lowercase: /[a-z]/.test(password),
     number: /\d/.test(password),
-    specialChar: /[@$!%*?&]/.test(password),
+    specialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
   };
 
   const isPasswordValid = Object.values(validations).every(Boolean);
@@ -174,10 +174,11 @@ export default function SignUpPage() {
         <div className="w-full lg:w-1/2 max-w-md md:max-w-lg flex flex-col justify-start lg:justify-center px-6 md:px-8 pt-12 pb-8 lg:px-0 lg:pt-0 lg:pb-0">
           <div className="flex items-center justify-center lg:justify-start gap-2 mb-4 md:mb-6 lg:mb-4 lg:mt-0">
             <img
-              src={logo}
-              alt="logo"
-              className="h-9 md:h-10 lg:h-10  w-auto object-contain"
-            />
+  src={logo}
+  alt="logo"
+  onClick={() => navigate("/")}
+  className="h-9 md:h-10 lg:h-10 w-auto object-contain cursor-pointer"
+/>
           </div>
 
           <h1 className="text-[#4866F6] text-2xl md:text-3xl mt-[30px] lg:text-2xl font-semibold mb-1  mt-[10px]  lg:mt-[10px] lg:text-left">
@@ -264,9 +265,11 @@ export default function SignUpPage() {
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   {showPassword ? (
-                    <EyeOff className="w-4 h-4 md:w-5 md:h-5" />
+                                        <Eye className="w-4 h-4 md:w-5 md:h-5" />
+
                   ) : (
-                    <Eye className="w-4 h-4 md:w-5 md:h-5" />
+                                        <EyeOff className="w-4 h-4 md:w-5 md:h-5" />
+
                   )}
                 </button>
               </div>
@@ -303,7 +306,7 @@ export default function SignUpPage() {
 
             <button
               type="submit"
-              className="w-full h-11 md:h-14 lg:h-11 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm hover:bg-[#4338CA] transition"
+              className="w-full h-11 md:h-14 lg:h-11 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm hover:bg-[#4338CA] transition cursor-pointer"
             >
               Sign Up
             </button>
@@ -346,7 +349,7 @@ export default function SignUpPage() {
                   googleBtn.click();
                 }
               }}
-              className="h-10 md:h-14 lg:h-10 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm flex items-center justify-center gap-2 hover:bg-[#4338CA] transition"
+              className="h-10 md:h-14 lg:h-10 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm flex items-center justify-center gap-2 hover:bg-[#4338CA] transition cursor-pointer"
             >
               Google{" "}
               <span>

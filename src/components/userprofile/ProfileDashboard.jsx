@@ -63,12 +63,12 @@ export default function ProfileDashboard() {
     fetchSub();
   }, []);
 
-const isUpgraded = Boolean(
-  subscription &&
+  const isUpgraded = Boolean(
+    subscription &&
     subscription.plan_name &&
     subscription.plan_name !== "Free plan" &&
     subscription.plan_name !== "free"
-);
+  );
 
   const location = useLocation();
 
@@ -200,17 +200,16 @@ const isUpgraded = Boolean(
     fetchProfile();
   }, []);
 
-  if (!profile) {
-      return <div className=" h-full flex justify-center items-center">Loading...</div>;
-    }
+  // if (!profile) {
+  //     return <div className=" h-full flex justify-center items-center">Loading...</div>;
+  //   }
 
   return (
 
     <div
-  className={`h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-10 scrollbar-hide transition-all duration-300 ${
-    languageOpen
-        ? "mt-[60px] md:mt-[70px] lg:mt-[80px]"
-        : "mt-0"
+      className={`h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-10 scrollbar-hide transition-all duration-300 ${languageOpen
+          ? "mt-[60px] md:mt-[70px] lg:mt-[80px]"
+          : "mt-0"
         }`}
     >
       <div className="w-full flex flex-col gap-5">
@@ -231,7 +230,7 @@ const isUpgraded = Boolean(
 
             {/* Banner */}
 
-<div className="relative h-[120px]" style={{backgroundImage:`url(${blueBg})`,backgroundSize:"cover",backgroundPosition:"center",backgroundRepeat:"no-repeat"}}>
+            <div className="relative h-[120px]" style={{ backgroundImage: `url(${blueBg})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}>
               <button
                 onClick={() => {
                   navigate("/user/profile/editprofile");
@@ -266,127 +265,101 @@ const isUpgraded = Boolean(
 
             {/* Details */}
 
-            <div className="px-6 md:px-8 lg:px-4 xl:px-10 pt-4 pb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-y-8 md:gap-y-7 lg:gap-y-8 gap-x-4 xl:gap-x-8">     <div className="flex gap-3 min-w-0 md:order-1 lg:order-none">
-
-              <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center">
-                <img src={nameIcon} alt="name" className="w-[20px] h-[20px] md:w-[20px] md:h-[20px] min-[320px]:w-[24px] min-[320px]:h-[24px]" />
+            <div className="px-6 md:px-8 lg:px-4 xl:px-10 pt-4 pb-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-y-8 md:gap-y-7 lg:gap-y-8 gap-x-4 xl:gap-x-8">
+              {/* Full Name */}
+              <div className="flex gap-3 min-w-0 md:order-1 lg:order-none">
+                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0">
+                  <img src={nameIcon} alt="name" className="w-[20px] h-[20px] md:w-[20px] md:h-[20px] min-[320px]:w-[24px] min-[320px]:h-[24px]" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-[20px] sm:text-[22px] lg:text-[15px] xl:text-[22px] text-[#3D3D3D] truncate" title="Full Name">Full Name</h3>
+                  <p className="text-[#586D93] text-[15px] lg:text-[13px] xl:text-[16px] truncate" title={profile?.name || "-"}>
+                    {profile?.name || "-"}
+                  </p>
+                </div>
               </div>
-              <div>
 
-                <h3 className="font-semibold text-[22px] lg:text-[18px] xl:text-[22px] text-[#3D3D3D]">Full Name</h3>
-
-                <p className="text-[#586D93] text-[15px] xl:text-[16px] break-words">
-                  {profile?.name || "-"}
-                </p>
-
-              </div>
-
-            </div>
-
+              {/* Date of Birth */}
               <div className="flex gap-3 min-w-0 md:order-2 lg:order-none">
-
-                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center">
+                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0">
                   <img src={dobIcon} alt="date of birth" className="w-[20px] h-[20px] md:w-[20px] md:h-[20px] min-[320px]:w-[24px] min-[320px]:h-[24px]" />
                 </div>
-                <div>
-
-                  <h3 className="font-semibold text-[22px] lg:text-[18px] xl:text-[22px] text-[#3D3D3D]">Date of Birth</h3>
-
-                  <p className="text-[#586D93] text-[15px] xl:text-[16px] break-words">{profile?.date_of_birth || "-"}</p>
-
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-[20px] sm:text-[22px] lg:text-[15px] xl:text-[22px] text-[#3D3D3D] truncate" title="Date of Birth">Date of Birth</h3>
+                  <p className="text-[#586D93] text-[15px] lg:text-[13px] xl:text-[16px] truncate" title={profile?.date_of_birth || "-"}>
+                    {profile?.date_of_birth || "-"}
+                  </p>
                 </div>
-
               </div>
 
+              {/* Gender */}
               <div className="flex gap-3 min-w-0 md:order-3 lg:order-none">
-
-                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center">
+                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0">
                   <img src={genderIcon} alt="gender" className="w-[20px] h-[20px] md:w-[20px] md:h-[20px] min-[320px]:w-[24px] min-[320px]:h-[24px]" />
                 </div>
-
-                <div>
-
-                  <h3 className="font-semibold text-[22px] lg:text-[18px] xl:text-[22px] text-[#3D3D3D]">Gender</h3>
-
-                  <p className="text-[#586D93] text-[15px] xl:text-[16px] break-words">{profile?.gender || "-"}</p>
-
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-[20px] sm:text-[22px] lg:text-[15px] xl:text-[22px] text-[#3D3D3D] truncate" title="Gender">Gender</h3>
+                  <p className="text-[#586D93] text-[15px] lg:text-[13px] xl:text-[16px] truncate" title={profile?.gender || "-"}>
+                    {profile?.gender || "-"}
+                  </p>
                 </div>
-
               </div>
 
-              <div className="flex gap-3 min-w-[220px] xl:min-w-0 md:order-4 lg:order-none">
-                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center">
+              {/* Email Address */}
+              <div className="flex gap-3 min-w-0 md:order-4 lg:order-none">
+                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0">
                   <img src={emailIcon} alt="email" className="w-[20px] h-[20px] md:w-[20px] md:h-[20px] min-[320px]:w-[24px] min-[320px]:h-[24px]" />
                 </div>
-
-                <div>
-
-                  <h3 className="font-semibold text-[22px] lg:text-[18px] xl:text-[22px] text-[#3D3D3D]">Email Address</h3>
-
-                  <p className="text-[#586D93] text-[15px] md:text-[13px] whitespace-nowrap">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-[20px] sm:text-[22px] lg:text-[15px] xl:text-[22px] text-[#3D3D3D] truncate" title="Email Address">
+                    Email Address
+                  </h3>
+                  <p className="text-[#586D93] text-[15px] lg:text-[13px] xl:text-[16px] truncate" title={profile?.email || "-"}>
                     {profile?.email || "-"}
                   </p>
-
                 </div>
-
               </div>
 
-              <div className="flex gap-3 min-w-[220px] xl:min-w-0 md:order-5 lg:order-none">
-                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center">
+              {/* Mobile Number */}
+              <div className="flex gap-3 min-w-0 md:order-5 lg:order-none">
+                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0">
                   <img src={mobileIcon} alt="mobile" className="w-[20px] h-[20px] md:w-[20px] md:h-[20px] min-[320px]:w-[24px] min-[320px]:h-[24px]" />
                 </div>
-
-                <div>
-
-                  <h3 className="font-semibold text-[22px] lg:text-[18px] xl:text-[22px] text-[#3D3D3D]">Mobile Number</h3>
-
-                  <p className="text-[#586D93] text-[15px] xl:text-[16px] break-words">
-                    {profile?.phone
-                      ? `${profile.country_code || ""} ${profile.phone}`
-                      : "-"}
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-[20px] sm:text-[22px] lg:text-[15px] xl:text-[22px] text-[#3D3D3D] truncate" title="Mobile Number">Mobile Number</h3>
+                  <p className="text-[#586D93] text-[15px] lg:text-[13px] xl:text-[16px] truncate" title={profile?.phone ? `${profile.country_code || ""} ${profile.phone}` : "-"}>
+                    {profile?.phone ? `${profile.country_code || ""} ${profile.phone}` : "-"}
                   </p>
-
                 </div>
-
               </div>
 
+              {/* Alternate Number */}
               <div className="flex gap-2 min-w-0 md:order-6 lg:order-none">
-
-                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center">
+                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0">
                   <img src={mobileIcon} alt="mobile" className="w-[20px] h-[20px] md:w-[20px] md:h-[20px] min-[320px]:w-[24px] min-[320px]:h-[24px]" />
                 </div>
-
-                <div>
-
-<h3 className="font-semibold text-[22px] md:text-[20px]  lg:text-[17px] xl:text-[22px] text-[#3D3D3D] ">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-[20px] sm:text-[22px] lg:text-[15px] xl:text-[22px] text-[#3D3D3D] truncate" title="Alternate Number">
                     Alternate Number
-                  </h3><p className="text-[#586D93] text-[15px] xl:text-[16px] break-words">
-                    {profile?.alternate_phone
-                      ? `${profile.alternate_country_code || ""} ${profile.alternate_phone}`
-                      : "-"}
+                  </h3>
+                  <p className="text-[#586D93] text-[15px] lg:text-[13px] xl:text-[16px] truncate" title={profile?.alternate_phone ? `${profile.alternate_country_code || ""} ${profile.alternate_phone}` : "-"}>
+                    {profile?.alternate_phone ? `${profile.alternate_country_code || ""} ${profile.alternate_phone}` : "-"}
                   </p>
-
                 </div>
-
               </div>
 
+              {/* Location */}
               <div className="flex gap-3 min-w-0 md:order-7 lg:order-none">
-
-                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center">
+                <div className="w-[46px] h-[46px] rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0">
                   <img src={locationIcon} alt="location" className="w-[20px] h-[20px] md:w-[20px] md:h-[20px] min-[320px]:w-[24px] min-[320px]:h-[24px]" />
                 </div>
-
-                <div>
-
-                  <h3 className="font-semibold text-[22px] lg:text-[18px] xl:text-[22px] text-[#3D3D3D]">Location</h3>
-
-                  <p className="text-[#586D93] text-[15px] xl:text-[16px] whitespace-nowrap">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-[20px] sm:text-[22px] lg:text-[15px] xl:text-[22px] text-[#3D3D3D] truncate" title="Location">Location</h3>
+                  <p className="text-[#586D93] text-[15px] lg:text-[13px] xl:text-[16px] truncate" title={profile?.location || "-"}>
                     {profile?.location || "-"}
                   </p>
                 </div>
-
               </div>
-
             </div>
 
           </div>
@@ -401,18 +374,18 @@ const isUpgraded = Boolean(
               </h2>
 
               {isUpgraded && (
-                 <button
-  onClick={() => navigate("/user/profile/details")}
-  className="w-full md:w-auto h-[36px] md:h-[40px] px-4 md:px-5 rounded-full bg-[#4866F6] text-white text-[13px] md:text-[15px] font-medium flex items-center justify-center gap-2 cursor-pointer transition-all hover:bg-[#3554ED]"
->
-  <span>Subscription Details</span>
+                <button
+                  onClick={() => navigate("/user/profile/details")}
+                  className="w-full md:w-auto h-[36px] md:h-[40px] px-4 md:px-5 rounded-full bg-[#4866F6] text-white text-[13px] md:text-[15px] font-medium flex items-center justify-center gap-2 cursor-pointer transition-all hover:bg-[#3554ED]"
+                >
+                  <span>Subscription Details</span>
 
-  <img
-    src={ArrowRight}
-    alt="Arrow"
-    className="w-4 h-4 md:w-5 md:h-5 object-contain"
-  />
-</button>
+                  <img
+                    src={ArrowRight}
+                    alt="Arrow"
+                    className="w-4 h-4 md:w-5 md:h-5 object-contain"
+                  />
+                </button>
 
 
               )}
@@ -430,31 +403,31 @@ const isUpgraded = Boolean(
                     {subscription?.plan_name || "Basic plan"}
                   </h3>
 
-<p className="mt-1 text-[12px] md:text-[14px] text-[#586D93]">
-        Next Billing Date :{" "}
-      <span className="font-medium text-[#3D3D3D]">
-        {subscription?.next_billing_date
-          ? new Date(subscription.next_billing_date).toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })
-          : "12 June 2026"}
-      </span>
-    </p>
+                  <p className="mt-1 text-[12px] md:text-[14px] text-[#586D93]">
+                    Next Billing Date :{" "}
+                    <span className="font-medium text-[#3D3D3D]">
+                      {subscription?.next_billing_date
+                        ? new Date(subscription.next_billing_date).toLocaleDateString("en-GB", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })
+                        : "12 June 2026"}
+                    </span>
+                  </p>
 
-    <button
-  onClick={() => navigate("/user/profile/plans")}
-  className="mt-4 w-[160px] md:w-[180px] h-[38px] md:h-[42px] rounded-full bg-[#4866F6] text-white font-medium text-[13px] md:text-[14px] flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3554ED] transition-all"
->
-  <span>View Plans</span>
+                  <button
+                    onClick={() => navigate("/user/profile/plans")}
+                    className="mt-4 w-[160px] md:w-[180px] h-[38px] md:h-[42px] rounded-full bg-[#4866F6] text-white font-medium text-[13px] md:text-[14px] flex items-center justify-center gap-2 cursor-pointer hover:bg-[#3554ED] transition-all"
+                  >
+                    <span>View Plans</span>
 
-  <img
-    src={Sparkle}
-    alt="Sparkle"
-    className="w-4 h-4 md:w-5 md:h-5 object-contain"
-  />
-</button>
+                    <img
+                      src={Sparkle}
+                      alt="Sparkle"
+                      className="w-4 h-4 md:w-5 md:h-5 object-contain"
+                    />
+                  </button>
                 </div>
               ) : (
                 <div className="flex flex-col">

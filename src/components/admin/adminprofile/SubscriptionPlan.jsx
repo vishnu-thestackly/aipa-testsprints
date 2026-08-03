@@ -254,7 +254,7 @@ const SubscriptionPlan = ({ setActiveItem }) => {
  
             <button
               onClick={() => setActiveItem("addSubscription")}
-              className="w-full sm:w-auto bg-[#4866F6] text-white rounded-[25px] px-15 py-3 text-center">
+              className="w-full sm:w-auto bg-[#4866F6] text-white rounded-[25px] px-15 py-3 text-center cursor-pointer">
               Add plan +
             </button>
           </div>

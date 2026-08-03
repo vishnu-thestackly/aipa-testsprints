@@ -14,6 +14,7 @@ import ClockCountdown from "../assets/images/ClockCountdown.svg";
 import google from "../assets/images/google.svg";
 import apple from "../assets/images/apple.png";
 
+
 //API
 import { GoogleLogin } from "@react-oauth/google";
 import { loginUser, verifyCaptcha, googleLogin } from "../api/authApi";
@@ -253,7 +254,7 @@ export default function LoginPage() {
       <div className="rounded-xl p-5 md:p-6 w-full max-w-[380px] md:max-w-[450px] lg:w-[500px] lg:max-w-none lg:h-[270px] mx-4 lg:mx-0 text-center relative bg-white">
         <button
           onClick={() => setShowSessionTimeout(false)}
-          className="absolute right-3 lg:right-4 top-3 lg:top-4 flex h-5 w-5 items-center justify-center rounded-full bg-[#f15055] text-white"
+          className="absolute right-3 lg:right-4 top-3 lg:top-4 flex h-5 w-5 items-center justify-center rounded-full bg-[#f15055] text-white cursor-pointer"
         >
           <X size={12} strokeWidth={3} />
         </button>
@@ -273,7 +274,8 @@ export default function LoginPage() {
         </p>
         <button
           onClick={() => setShowSessionTimeout(false)}
-          className="w-full md:w-[280px] lg:w-[300px] h-10 bg-[#4866F6] text-white rounded-3xl font-medium text-sm hover:bg-[#4338CA] transition"
+          className="w-full md:w-[280px] lg:w-[300px] h-10 bg-[#4866F6] text-white rounded-3xl font-medium text-sm hover:bg-[#4338CA] transition cursor-pointer
+          "
         >
           Log In
         </button>
@@ -350,14 +352,15 @@ export default function LoginPage() {
         <div className="w-full max-w-6xl lg:w-[1000px] bg-transparent min-h-screen lg:min-h-[600px] lg:h-[600px] flex flex-col lg:flex-row items-center lg:items-center justify-start lg:justify-center gap-0 lg:gap-25">
           <div className="w-full lg:w-1/2 max-w-md md:max-w-lg flex flex-col justify-start lg:justify-center px-6 md:px-8 pt-12 pb-8 lg:px-0 lg:pt-0 lg:pb-0">
             <div className="flex items-center justify-center lg:justify-start gap-2 mb-6 lg:mb-1">
-              <img
-                src={logo}
-                alt="logo"
-                className="h-9 md:h-10 lg:h-11 w-auto lg:w-[171px] object-contain"
-              />
+             <img
+  src={logo}
+  alt="logo"
+  onClick={() => navigate("/")}
+  className="h-9 md:h-10 lg:h-11 w-auto lg:w-[171px] object-contain cursor-pointer"
+/>
             </div>
 
-            <h1 className="text-[#4866F6] text-2xl md:text-3xl lg:text-2xl font-semibold mb-1 mt-5 lg:text-left">
+            <h1 className="text-[#4866F6] text-2xl md:text-3xl lg:text-2xl font-semibold mb-1 mt-5 lg:text-left cursor-pointer">
               Log In
             </h1>
             <p className="text-[#8D97A9] text-sm md:text-base lg:text-sm mb-6 lg:mb-5 lg:text-left">
@@ -433,9 +436,11 @@ export default function LoginPage() {
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:cursor-not-allowed"
                   >
                     {showPassword ? (
-                      <EyeOff className="w-4 h-4 md:w-5 md:h-5" />
+                                            <Eye className="w-4 h-4 md:w-5 md:h-5" />
+
                     ) : (
-                      <Eye className="w-4 h-4 md:w-5 md:h-5" />
+                      <EyeOff className="w-4 h-4 md:w-5 md:h-5" />
+
                     )}
                   </button>
                 </div>
@@ -451,7 +456,7 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => navigate("/send-email")}
                   disabled={isLocked}
-                  className="text-[#4F46E5] text-sm md:text-base lg:mt-[-8px] lg:text-sm font-medium hover:underline disabled:text-gray-400 disabled:cursor-not-allowed"
+                  className="text-[#4F46E5] text-sm md:text-base lg:mt-[-8px] lg:text-sm font-medium hover:underline disabled:text-gray-400 disabled:cursor-not-allowed cursor-pointer"
                 >
                   Forgot Password?
                 </button>
@@ -493,11 +498,12 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={isLocked}
-                className="w-full h-12 md:h-14 lg:h-11 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm hover:bg-[#4338CA] transition disabled:bg-gray-300 disabled:cursor-not-allowed"
-              >
+             <button
+  type="submit"
+  disabled={isLocked}
+  className="w-full h-12 md:h-14 lg:h-11 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm cursor-pointer hover:bg-[#4338CA] transition disabled:bg-gray-300 disabled:cursor-not-allowed"
+>
+  
                 Log In
               </button>
             </form>
@@ -538,7 +544,7 @@ export default function LoginPage() {
                     googleBtn.click();
                   }
                 }}
-                className="h-12 md:h-14 lg:h-10 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm flex items-center justify-center gap-2 hover:bg-[#4338CA] transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="h-12 md:h-14 lg:h-10 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm flex items-center justify-center gap-2 hover:bg-[#4338CA] transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
               >
                 Google{" "}
                 <span>

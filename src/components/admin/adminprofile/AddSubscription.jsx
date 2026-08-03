@@ -706,7 +706,7 @@ addPlan(newPlan);
 
                     {/* Arrow & Name */}
                     <div className="flex items-center gap-2 text-sm md:text-base font-medium text-gray-800">
-                        <div className="bg-[#4866F6] w-8 h-8 rounded-full flex items-center justify-center">
+                        <div className="bg-[#4866F6] w-8 h-8 rounded-full flex items-center justify-center cursor-pointer">
                             <img onClick={() => setActiveItem("subscriptionplan")} src={Arrow} alt="Arrow" className="w-4 h-3" />
                         </div>
 
@@ -1032,7 +1032,7 @@ addPlan(newPlan);
                                                     alert("You can add a maximum of 10 features.");
                                                 }
                                             }}
-                                            className="w-8 h-8 bg-[#4866F6] text-white rounded-lg hover:bg-[#3D54C9]"
+                                            className="w-8 h-8 bg-[#4866F6] text-white rounded-lg hover:bg-[#3D54C9] cursor-pointer"
                                         >
                                             +
                                         </button>
@@ -1045,14 +1045,14 @@ addPlan(newPlan);
                     <div className="flex justify-center items-center gap-4 mt-8">
                         <button
                             onClick={() => setActiveItem("subscriptionplan")}
-                            className="w-1/2 sm:w-40 border border-[#4866F6] bg-white text-[#4866F6] py-3 rounded-[25px] transition-colors duration-300"
+                            className="w-1/2 sm:w-40 border border-[#4866F6] bg-white text-[#4866F6] py-3 rounded-[25px] transition-colors duration-300 cursor-pointer"
                         >
                             Cancel
                         </button>
 
                         <button
                             onClick={handleSave}
-                            className="w-1/2 sm:w-40 bg-[#4866F6] text-white py-3 rounded-[25px] transition-colors duration-300 hover:bg-[#3D54C9]"
+                            className="w-1/2 sm:w-40 bg-[#4866F6] text-white py-3 rounded-[25px] transition-colors duration-300 hover:bg-[#3D54C9] cursor-pointer"
                         >
                             Save
                         </button>

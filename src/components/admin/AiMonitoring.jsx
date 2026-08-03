@@ -155,19 +155,19 @@ useEffect(() => {
 <div className="px-4 md:px-5 lg:px-7">
   <div className="w-full border border-[#D9D9D9] rounded-full bg-white p-1.5 overflow-hidden">
 
-    <div className="overflow-x-auto scrollbar-hide">
-      <div className="flex min-w-max xl:grid xl:grid-cols-4 xl:min-w-0 gap-2">
+    <div className="overflow-x-auto scrollbar-hide ">
+      <div className="flex min-w-max xl:grid xl:grid-cols-4 xl:min-w-0 gap-2 ">
 
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`h-[44px] min-w-[200px] xl:min-w-0 px-6 xl:px-0 whitespace-nowrap rounded-full text-[14px] font-medium transition-all duration-200 xl:w-full flex-shrink-0
-              ${
-                activeTab === tab.id
-                  ? "bg-[#4866F6] text-white"
-                  : "text-[#586D93]"
-              }`}
+            className={`h-[44px] min-w-[200px] xl:min-w-0 px-6 xl:px-0 whitespace-nowrap rounded-full text-[14px] font-medium transition-all duration-200 xl:w-full flex-shrink-0 cursor-pointer
+  ${
+    activeTab === tab.id
+      ? "bg-[#4866F6] text-white"
+      : "text-[#586D93]"
+  }`}
           >
             {tab.label}
           </button>
@@ -231,7 +231,7 @@ useEffect(() => {
 
     </div>
 
-<button onClick={fetchMonitoringData} className="w-full md:w-[110px] min-[1024px]:max-[1279px]:!w-[120px] lg:w-[140px] h-[44px] rounded-full bg-[#4866F6] text-white flex items-center justify-center gap-1 flex-shrink-0">       Refresh
+<button onClick={fetchMonitoringData} className="w-full md:w-[110px] min-[1024px]:max-[1279px]:!w-[120px] lg:w-[140px] h-[44px] rounded-full bg-[#4866F6] text-white flex items-center justify-center gap-1 flex-shrink-0 cursor-pointer">       Refresh
       <RefreshCw size={18} 
       className={loading ? "animate-spin" : ""} />
     </button>

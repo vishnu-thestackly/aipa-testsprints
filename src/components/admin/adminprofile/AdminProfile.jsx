@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import AdminBG from "../../../assets/images/AdminBG.svg";
 import AdminEdit from "../../../assets/images/AdminEdit.svg";
 import AdminEmail from "../../../assets/images/AdminEmail.svg";
@@ -12,6 +12,7 @@ import UploadImage from '../../../assets/images/UploadImage.svg';
 import India_Flag from "../../../assets/images/India_Flag.svg";
 import Italy_Flag from '../../../assets/images/Italy_Flag.svg';
 import Mobile from '../../../assets/images/mobile.svg';
+import { ChevronDown } from "lucide-react";
 
 
 import {
@@ -23,10 +24,11 @@ import {
 } from "../../../api/authApi";
 
 const AdminProfile = () => {
+    const countryDropdownRef = useRef(null);
     const [activeView, setActiveView] = useState("profile");
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [selectedCountry, setSelectedCountry] = useState(false);
+    const [showCountryDropdown, setShowCountryDropdown] = useState(false);
     const [mobileError, setMobileError] = useState("");
     const [loading, setLoading] = useState(false);
     const [selectCountries, setSelectCountries] = useState([]);
@@ -118,7 +120,11 @@ const AdminProfile = () => {
                   name: response.name || "",
                   email: response.email || "",
                   phone: response.phone || "",
-                  countryCode: response.country_code || "+91",
+                  countryCode: response.country_code
+                    ? response.country_code.startsWith("+")
+                      ? response.country_code
+                      : `+${response.country_code}`
+                    : "+91",
                   avatarUrl: response.avatar_url || "",
                   image: null,
                 });
@@ -216,6 +222,21 @@ const AdminProfile = () => {
     
 
         useEffect(() => {
+            const handleClickOutside = (event) => {
+                if (
+                    countryDropdownRef.current &&
+                    !countryDropdownRef.current.contains(event.target)
+                ) {
+                    setShowCountryDropdown(false);
+                }
+            };
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, []);
+
+        useEffect(() => {
   fetchProfile();
   fetchCountryCodes();
 }, []);
@@ -247,7 +268,7 @@ const AdminProfile = () => {
                                 {/* Change Password */}
                                 <button
                                     onClick={() => setActiveView("password")}
-                                    className="order-2 md:order-1 flex items-center gap-2 bg-white px-3 sm:px-4 py-2 rounded-full text-[#4866F6] text-[11px] sm:text-sm shadow-md w-fit pointer-events-auto"
+                                    className="order-2 md:order-1 flex items-center gap-2 bg-white px-3 sm:px-4 py-2 rounded-full text-[#4866F6] text-[11px] sm:text-sm shadow-md w-fit pointer-events-auto cursor-pointer"
                                 >
                                     <span>Change Password</span>
                                     <img
@@ -260,7 +281,7 @@ const AdminProfile = () => {
                                 {/* Edit */}
                                 <button
                                     onClick={() => setActiveView("edit")}
-                                    className="order-1 md:order-2 flex items-center gap-2 bg-white px-3 sm:px-4 py-2 rounded-full text-[#4866F6] text-[11px] sm:text-sm shadow-md w-fit pointer-events-auto"
+                                    className="order-1 md:order-2 flex items-center gap-2 bg-white px-3 sm:px-4 py-2 rounded-full text-[#4866F6] text-[11px] sm:text-sm shadow-md w-fit pointer-events-auto cursor-pointer"
                                 >
                                     <span>Edit</span>
                                     <img
@@ -292,50 +313,50 @@ const AdminProfile = () => {
                                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
 
                                     {/* Full Name */}
-                                    <div className="flex items-center gap-5 ">
+                                    <div className="flex items-center gap-5 min-w-0">
                                         <div className="w-10 h-10 bg-[#4866F6] rounded-full flex justify-center items-center flex-shrink-0">
                                             <img src={AdminUser} alt="" />
                                         </div>
 
-                                        <div className="min-w-0">
-                                            <p className="text-sm sm:text-base lg:text-lg font-semibold text-[#3D3D3D]">
+                                        <div className="min-w-0 flex-1">
+                                            <p className="text-sm sm:text-base lg:text-lg font-semibold text-[#3D3D3D] truncate" title="Full Name">
                                                 Full Name
                                             </p>
 
-                                            <p className="text-xs sm:text-sm lg:text-base text-[#6B7280] break-words">
-                                                {profileData.name}
+                                            <p className="text-xs sm:text-sm lg:text-base text-[#6B7280] truncate" title={profileData.name || "-"}>
+                                                {profileData.name || "-"}
                                             </p>
                                         </div>
                                     </div>
 
                                     {/* Email */}
-                                    <div className="flex items-center gap-5 ">
+                                    <div className="flex items-center gap-5 min-w-0">
                                         <div className="w-10 h-10 bg-[#4866F6] rounded-full flex justify-center items-center flex-shrink-0">
                                             <img src={AdminEmail} alt="" />
                                         </div>
 
-                                        <div className="min-w-0">
-                                            <p className="text-sm sm:text-base lg:text-lg font-semibold text-[#3D3D3D]">
+                                        <div className="min-w-0 flex-1">
+                                            <p className="text-sm sm:text-base lg:text-lg font-semibold text-[#3D3D3D] truncate" title="Email Address">
                                                 Email Address
                                             </p>
-                                            <p className="text-xs sm:text-sm lg:text-base text-[#6B7280] break-all">
-                                                {profileData.email}
+                                            <p className="text-xs sm:text-sm lg:text-base text-[#6B7280] truncate" title={profileData.email || "-"}>
+                                                {profileData.email || "-"}
                                             </p>
                                         </div>
                                     </div>
 
                                     {/* Mobile */}
-                                    <div className="flex items-center gap-5 ">
+                                    <div className="flex items-center gap-5 min-w-0">
                                         <div className="w-10 h-10 bg-[#4866F6] rounded-full flex justify-center items-center flex-shrink-0">
                                             <img src={AdminNumber} alt="" />
                                         </div>
 
-                                        <div>
-                                            <p className="text-sm sm:text-base lg:text-lg font-semibold text-[#3D3D3D]">
+                                        <div className="min-w-0 flex-1">
+                                            <p className="text-sm sm:text-base lg:text-lg font-semibold text-[#3D3D3D] truncate" title="Mobile Number">
                                                 Mobile Number
                                             </p>
-                                            <p className="text-xs sm:text-sm lg:text-base text-[#6B7280]">
-                                                {profileData.countryCode} {profileData.phone}
+                                            <p className="text-xs sm:text-sm lg:text-base text-[#6B7280] truncate" title={profileData.phone ? `${profileData.countryCode} ${profileData.phone}` : "-"}>
+                                                {profileData.phone ? `${profileData.countryCode} ${profileData.phone}` : "-"}
                                             </p>
                                         </div>
                                     </div>
@@ -353,7 +374,7 @@ const AdminProfile = () => {
                         <div className="flex items-center gap-3 mb-5">
                             <button
                                 onClick={() => setActiveView("profile")}
-                                className="w-8 h-8 rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0"
+                                className="w-8 h-8 rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0 cursor-pointer"
                             >
                                 <img src={Arrow} alt="" />
                             </button>
@@ -418,132 +439,136 @@ const AdminProfile = () => {
                             </div>
 
                             {/* Form Fields */}
+                            <div className="flex justify-center">
+                                <div className="w-full max-w-[1320px]">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-5 px-0">
 
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 px-0 sm:px-4 md:px-10 lg:px-14">
+                                        {/* Full Name */}
+                                        <div className="flex flex-col gap-2">
+                                            <label className="text-sm sm:text-base font-medium text-[#3D3D3D]">
+                                                Full Name*
+                                            </label>
 
-                                {/* Full Name */}
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm sm:text-base lg:text-lg font-semibold">
-                                        Full Name*
-                                    </label>
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                value={profileData.name}
+                                                onChange={handleProfileChange}
+                                                placeholder="Enter Full Name"
+                                                className="w-full h-[50px] px-3 sm:px-4 border border-[#8D97A9] rounded-lg text-xs sm:text-sm lg:text-base outline-none focus:border-[#4866F6] text-[#8D97A9]"
+                                            />
+                                        </div>
 
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={profileData.name}
-                                        onChange={handleProfileChange}
-                                        placeholder="Full Name"
-                                        className="w-full border text-xs sm:text-sm lg:text-base rounded-lg p-3 outline-none focus:border-[#4866F6] text-[#8D97A9]"
-                                    />
-                                </div>
+                                        {/* Email */}
+                                        <div className="flex flex-col gap-2">
+                                            <label className="text-sm sm:text-base font-medium text-[#3D3D3D]">
+                                                Email Address*
+                                            </label>
 
-                                {/* Email */}
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm sm:text-base lg:text-lg font-semibold">
-                                        Email Address*
-                                    </label>
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                value={profileData.email}
+                                                onChange={handleProfileChange}
+                                                placeholder="Enter Email Address"
+                                                className="w-full h-[50px] px-3 sm:px-4 border border-[#8D97A9] rounded-lg text-xs sm:text-sm lg:text-base outline-none focus:border-[#4866F6] text-[#8D97A9]"
+                                            />
+                                        </div>
 
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={profileData.email}
-                                        onChange={handleProfileChange}
-                                        placeholder="Email"
-                                        className="w-full border text-xs sm:text-sm lg:text-base rounded-lg p-3 text-[#8D97A9] outline-none focus:border-[#4866F6] "
-                                    />
-                                </div>
+                                        {/* Mobile Number */}
+                                        <div className="flex flex-col gap-2">
+                                            <label className="text-sm sm:text-base font-medium text-[#3D3D3D]">
+                                                Mobile number
+                                            </label>
 
-                                {/* Mobile Number */}
-                                <div className="flex flex-col gap-2">
-                                    <label className="text-sm sm:text-base lg:text-lg font-semibold">
-                                        Mobile Number*
-                                    </label>
-
-                                    <div className="flex w-full gap-2 sm:gap-3">
-                                        {/* Country Code Dropdown */}
-                                        <div className="relative w-[90px] sm:w-[110px] md:w-[120px] flex-shrink-0">
-                                            <button
-                                                type="button"
-                                                onClick={() => setSelectedCountry((prev) => !prev)}
-                                                className="w-full h-[50px] border border-[#8D97A9] rounded-lg flex items-center justify-between px-3 bg-white text-xs sm:text-sm lg:text-base focus:border-[#4866F6]"
-                                            >
-                                                <div className="flex items-center gap-1">
-                                                    <img
-                                                        src={
-                                                          selectCountries?.find(
-                                                            (country) =>
-                                                              country.dial_code === profileData.countryCode
-                                                          )?.flag || India_Flag
-                                                        }
-                                                        alt=""
-                                                        className="w-5 h-4 object-cover "
-                                                    />
-
-                                                    <span className="text-s lg:text-m">
-                                                        {profileData.countryCode}
-                                                    </span>
-                                                </div>
-
-                                                <img
-                                                    src={Mobile}
-                                                    alt=""
-                                                    className={`w-4 h-4 transition-transform ${selectedCountry ? "rotate-180" : ""
-                                                        }`}
-                                                />
-                                            </button>
-
-                                            {selectedCountry && (
-                                                <div className="absolute left-0 top-[55px] w-full bg-white border border-[#8D97A9] rounded-lg shadow-lg z-50 max-h-[100px] overflow-y-auto dropdown-scroll">
-                                                    {selectCountries.map((country) => (
-                                                        <div
-                                                            key={country.code}
-                                                            onClick={() => {
-                                                                setProfileData((prev) => ({
-                                                                    ...prev,
-                                                                    countryCode: country.dial_code,
-                                                                }));
-                                                            
-                                                                setSelectedCountry(false);
-                                                            }}
-                                                            className="flex items-center gap-2 px-3 py-3 cursor-pointer hover:bg-gray-200"
-                                                        >
+                                            <div className="flex w-full gap-2 sm:gap-3">
+                                                {/* Country Code Dropdown */}
+                                                <div ref={countryDropdownRef} className="relative w-[90px] sm:w-[110px] md:w-[120px] flex-shrink-0">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowCountryDropdown((prev) => !prev)}
+                                                        className="w-full h-[50px] border border-[#8D97A9] rounded-lg flex items-center justify-between px-3 bg-white text-xs sm:text-sm lg:text-base focus:border-[#4866F6] cursor-pointer"
+                                                    >
+                                                        <div className="flex items-center gap-1 cursor-pointer">
                                                             <img
-                                                                src={country.flag}
-                                                                alt={country.name}
-                                                                className="w-5 h-4 object-cover"
+                                                                src={
+                                                                  (selectCountries?.find(
+                                                                    (country) =>
+                                                                      country.dial_code === profileData.countryCode ||
+                                                                      country.dial_code?.replace("+", "") === profileData.countryCode?.replace("+", "")
+                                                                  ))?.flag || India_Flag
+                                                                }
+                                                                alt=""
+                                                                className="w-5 h-4 object-cover cursor-pointer"
                                                             />
 
-                                                            <span className="text-sm">
-                                                                {country.dial_code}
+                                                            <span className="text-xs sm:text-sm lg:text-base cursor-pointer">
+                                                                {profileData.countryCode}
                                                             </span>
                                                         </div>
-                                                    ))}
+
+                                                        <ChevronDown
+                                                            size={16}
+                                                            className={`text-[#8D97A9] transition-transform duration-200 cursor-pointer ${
+                                                                showCountryDropdown ? "rotate-180" : ""
+                                                            }`}
+                                                        />
+                                                    </button>
+
+                                                    {showCountryDropdown && (
+                                                        <div className="absolute left-0 top-[55px] w-full bg-white border border-[#8D97A9] rounded-lg shadow-lg z-50 max-h-52 overflow-y-auto dropdown-scroll">
+                                                            {selectCountries.map((country) => (
+                                                                <div
+                                                                    key={country.code}
+                                                                    onClick={() => {
+                                                                        setProfileData((prev) => ({
+                                                                            ...prev,
+                                                                            countryCode: country.dial_code,
+                                                                        }));
+                                                                    
+                                                                        setShowCountryDropdown(false);
+                                                                    }}
+                                                                    className="flex items-center gap-2 px-3 py-3 cursor-pointer hover:bg-gray-200"
+                                                                >
+                                                                    <img
+                                                                        src={country.flag}
+                                                                        alt={country.name}
+                                                                        className="w-5 h-4 object-cover"
+                                                                    />
+
+                                                                    <span className="text-sm">
+                                                                        {country.dial_code}
+                                                                    </span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
                                                 </div>
+
+                                                {/* Mobile Input */}
+                                                <input
+                                                    type="tel"
+                                                    name="phone"
+                                                    value={profileData.phone}
+                                                    onChange={handleChange}
+                                                    maxLength={10}
+                                                    placeholder="Enter mobile number"
+                                                    className={`text-xs sm:text-sm lg:text-base flex-1 border min-w-0 text-[#8D97A9] rounded-lg h-[50px] px-3 sm:px-4 outline-none ${mobileError
+                                                        ? "border-red-500"
+                                                        : "focus:border-[#4866F6]"
+                                                        }`}
+                                                />
+                                            </div>
+
+                                            {mobileError && (
+                                                <p className="text-red-500 text-sm mt-1">
+                                                    {mobileError
+                                                }</p>
                                             )}
                                         </div>
 
-                                        {/* Mobile Input */}
-                                        <input
-                                            type="tel"
-                                            name="phone"
-                                            value={profileData.phone}
-                                            onChange={handleChange}
-                                            maxLength={10}
-                                            placeholder="Enter mobile number"
-                                            className={`text-xs sm:text-sm lg:text-base flex-1 border min-w-0 text-[#8D97A9] rounded-lg p-3 outline-none ${mobileError
-                                                ? "border-red-500"
-                                                : "focus:border-[#4866F6]"
-                                                }`}
-                                        />
                                     </div>
-
-                                    {mobileError && (
-                                        <p className="text-red-500 text-sm mt-1">
-                                            {mobileError}
-                                        </p>
-                                    )}
                                 </div>
-
                             </div>
 
                             {/* Action Buttons */}
@@ -558,7 +583,7 @@ const AdminProfile = () => {
                                     py-2 sm:py-2.5 lg:py-3
                                     text-xs sm:text-sm lg:text-base
                                     rounded-full
-                                    min-w-[100px] sm:min-w-[120px] lg:min-w-[140px]"
+                                    min-w-[100px] sm:min-w-[120px] lg:min-w-[140px] cursor-pointer"
                                 >
                                     Cancel
                                 </button>
@@ -571,7 +596,7 @@ const AdminProfile = () => {
                                     py-2 sm:py-2.5 lg:py-3
                                     text-xs sm:text-sm lg:text-base
                                     rounded-full
-                                    min-w-[100px] sm:min-w-[120px] lg:min-w-[140px]"
+                                    min-w-[100px] sm:min-w-[120px] lg:min-w-[140px] cursor-pointer"
                                 >
                                     {loading ? "Saving..." : "Save"}
                                 </button>
@@ -587,7 +612,7 @@ const AdminProfile = () => {
                         <div className="flex items-center gap-3 mb-5">
                             <button
                                 onClick={() => setActiveView("profile")}
-                                className="w-8 h-8 rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0"
+                                className="w-8 h-8 rounded-full bg-[#4866F6] flex items-center justify-center flex-shrink-0 cursor-pointer"
                             >
                                 <img src={Arrow} alt="" />
                             </button> 
@@ -697,31 +722,38 @@ const AdminProfile = () => {
 
                                 {/* Buttons */}
                                 <div className="flex justify-center gap-3 sm:gap-4 mt-8 sm:mt-10">
-                                    <button
-                                        onClick={() => setActiveView("profile")}
-                                        className="border border-[#4866F6] text-[#4866F6] 
-                    px-4 sm:px-6 lg:px-8
-                    py-2 sm:py-2.5 lg:py-3
-                    text-xs sm:text-sm lg:text-base
-                    rounded-full
-                    min-w-[100px] sm:min-w-[120px] lg:min-w-[140px]"
-                                    >
-                                        Cancel
-                                    </button>
+  <button
+    onClick={() => setActiveView("profile")}
+    className="border border-[#4866F6] text-[#4866F6] 
+      px-4 sm:px-6 lg:px-8
+      py-2 sm:py-2.5 lg:py-3
+      text-xs sm:text-sm lg:text-base
+      rounded-full
+      min-w-[100px] sm:min-w-[120px] lg:min-w-[140px]
+      cursor-pointer
+      transition-all duration-200
+      hover:bg-[#3554ED] hover:text-white"
+  >
+    Cancel
+  </button>
 
-                                    <button
-                                        onClick={handleSavePassword}
-                                        disabled={loading}
-                                        className="bg-[#4866F6] text-white
-                                             px-4 sm:px-6 lg:px-8
-                                             py-2 sm:py-2.5 lg:py-3
-                                             text-xs sm:text-sm lg:text-base
-                                             rounded-full
-                                             min-w-[100px] sm:min-w-[120px] lg:min-w-[140px]"
-                                    >
-                                        {loading ? "Saving..." : "Save"}
-                                    </button>
-                                </div>
+  <button
+    onClick={handleSavePassword}
+    disabled={loading}
+    className="bg-[#4866F6] text-white
+      px-4 sm:px-6 lg:px-8
+      py-2 sm:py-2.5 lg:py-3
+      text-xs sm:text-sm lg:text-base
+      rounded-full
+      min-w-[100px] sm:min-w-[120px] lg:min-w-[140px]
+      cursor-pointer
+      transition-all duration-200
+      hover:bg-[#3554ED]
+      disabled:hover:bg-[#4866F6]"
+  >
+    {loading ? "Saving..." : "Save"}
+  </button>
+</div>
                             </div>
                         </div>
                     </div>

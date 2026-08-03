@@ -22,7 +22,7 @@ export default function TransactionRevenueChart({
 
         <button
           onClick={() => setIsMinimized(!isMinimized)}
-          className="w-[28px] h-[28px] rounded-full bg-[#4866F6] text-white flex items-center justify-center text-[18px]"
+          className="w-[28px] h-[28px] rounded-full bg-[#4866F6] text-white flex items-center justify-center text-[18px] cursor-pointer"
         >
           {isMinimized ? "+" : "−"}
         </button>

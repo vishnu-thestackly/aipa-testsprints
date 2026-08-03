@@ -604,7 +604,7 @@ const EditSubscription = ({ setActiveItem }) => {
 
                     {/* Arrow & Name */}
                     <div className="flex items-center gap-2 text-sm md:text-base font-medium text-gray-800">
-                        <div className="bg-[#4866F6] w-8 h-8 rounded-full flex items-center justify-center">
+                        <div className="bg-[#4866F6] w-8 h-8 rounded-full flex items-center justify-center cursor-pointer">
                             <img onClick={() => setActiveItem("subscriptionplan")} src={Arrow} alt="Arrow" className="w-4 h-3" />
                         </div>
 
@@ -734,7 +734,8 @@ const EditSubscription = ({ setActiveItem }) => {
                             <button
                                 type="button"
                                 onClick={() => setTimeOpen(!timeOpen)}
-                                className={button_Style}
+                                  className={`${button_Style} cursor-pointer`}
+
                             >
                                 <span className="text-[#8D97A9]">{timePeriod}</span>
                                 <img
@@ -768,7 +769,7 @@ const EditSubscription = ({ setActiveItem }) => {
                             <button
                                 type="button"
                                 onClick={() => setStatusOpen(!statusOpen)}
-                                className={button_Style}
+  className={`${button_Style} cursor-pointer`}
                             >
                                 <span className="text-[#8D97A9]">{status}</span>
                                 <img
@@ -863,9 +864,9 @@ const EditSubscription = ({ setActiveItem }) => {
                                             <button
                                                 type="button"
                                                 onClick={() => clearFeature(index)}
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center"
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center cursor-pointer"
                                             >
-                                                <span className="text-white text-sm font-bold">
+                                                <span className="text-white text-sm font-bold cursor-pointer">
                                                     ×
                                                 </span>
                                             </button>
@@ -915,7 +916,7 @@ const EditSubscription = ({ setActiveItem }) => {
                                                     alert("You can add a maximum of 10 features.");
                                                 }
                                             }}
-                                            className="w-8 h-8 bg-[#4866F6] text-white rounded-lg hover:bg-[#3D54C9]"
+                                            className="w-8 h-8 bg-[#4866F6] text-white rounded-lg hover:bg-[#3D54C9] cursor-pointer"
                                         >
                                             +
                                         </button>
@@ -929,7 +930,7 @@ const EditSubscription = ({ setActiveItem }) => {
                         <button
                             type="button"
                             onClick={() => setActiveItem("subscriptionplan")}
-                            className="hidden sm:flex sm:flex-1 md:flex-1 lg:w-40 lg:flex-none items-center justify-center border border-[#4866F6] bg-white text-[#4866F6] py-3 rounded-[25px]"
+                            className="hidden sm:flex sm:flex-1 md:flex-1 lg:w-40 lg:flex-none items-center justify-center border border-[#4866F6] bg-white text-[#4866F6] py-3 rounded-[25px] cursor-pointer"
                         >
                             Cancel
                         </button>
@@ -978,7 +979,7 @@ const EditSubscription = ({ setActiveItem }) => {
                                 updatePlan(updatedPlan);
 
                             }}
-                            className="flex-1 sm:flex-1 md:flex-1 lg:w-40 lg:flex-none bg-[#4866F6] text-white py-3 rounded-[25px]"
+                            className="flex-1 sm:flex-1 md:flex-1 lg:w-40 lg:flex-none bg-[#4866F6] text-white py-3 rounded-[25px] cursor-pointer"
                         >
                             Save
                         </button>
