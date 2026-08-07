@@ -51,24 +51,27 @@ export default function ProfileDashboard() {
   const [subscription, setSubscription] = useState(null);
 
   useEffect(() => {
-    const fetchSub = async () => {
-      try {
-        const res = await getSubscriptionDetails();
-        console.log("ProfileDashboard Subscription Details:", res);
-        setSubscription(res);
-      } catch (err) {
-        console.error("Error fetching subscription in ProfileDashboard:", err);
-      }
-    };
-    fetchSub();
-  }, []);
+  const fetchSub = async () => {
+    try {
+      const res = await getSubscriptionDetails();
 
-  const isUpgraded = Boolean(
-    subscription &&
-    subscription.plan_name &&
-    subscription.plan_name !== "Free plan" &&
-    subscription.plan_name !== "free"
-  );
+      console.log("Subscription Response:", res);
+      console.log("My Plan:", res.my_plan);
+      console.log("Features:", res.my_plan?.features);
+
+      setSubscription(res);
+      
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchSub();
+}, []);
+
+ const myPlan = profile?.my_plan;
+const hasTransaction = profile?.has_transaction;
+
 
   const location = useLocation();
 
@@ -84,34 +87,6 @@ export default function ProfileDashboard() {
     }
   };
 
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   const sessionId = params.get("session_id");
-
-  //   if (!sessionId) return;
-
-  //   const verify = async () => {
-  //   try {
-  //     const response = await verifyPayment(sessionId);
-
-  //     console.log("Verify Response:", response);
-
-  //     if (response.verified) {
-  //   setPaymentId(response.payment_id);
-
-  //   // Remove session_id from URL
-  //   window.history.replaceState({}, "", "/user/profile");
-
-  //   // Show Success Popup
-  //   setShowPaymentSuccess(true);
-  // }
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  //   verify();
-  // }, [location]);
 
   useEffect(() => {
     console.log("ProfileDashboard Mounted");
@@ -166,20 +141,6 @@ export default function ProfileDashboard() {
   }, [location]);
 
 
-
-  // useEffect(() => {
-  //   const fetchProfile = async () => {
-  //     try {
-  //       const response = await getUserProfile();
-  //       setProfile(response);
-  //       console.log("Profile Response:", response);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchProfile();
-  // }, []);
   useEffect(() => {
     console.log("fetchProfile useEffect triggered");
 
@@ -287,7 +248,9 @@ export default function ProfileDashboard() {
                 <div className="min-w-0 flex-1">
                   <h3 className="font-semibold text-[20px] sm:text-[22px] lg:text-[15px] xl:text-[22px] text-[#3D3D3D] truncate" title="Date of Birth">Date of Birth</h3>
                   <p className="text-[#586D93] text-[15px] lg:text-[13px] xl:text-[16px] truncate" title={profile?.date_of_birth || "-"}>
-                    {profile?.date_of_birth || "-"}
+                    {profile?.date_of_birth
+    ? profile.date_of_birth.split("-").reverse().join("-")
+    : "-"}
                   </p>
                 </div>
               </div>
@@ -367,13 +330,14 @@ export default function ProfileDashboard() {
           {/* My Plan */}
 
           <div className="mt-5 rounded-[20px] border border-[#E3E3E3] p-4 md:p-5">
+      
 
             <div className="flex justify-between items-center flex-wrap gap-3">
               <h2 className="font-medium text-[22px] md:text-[25px] text-[#3D3D3D]">
                 My Plan
               </h2>
 
-              {isUpgraded && (
+              {hasTransaction && (
                 <button
                   onClick={() => navigate("/user/profile/details")}
                   className="w-full md:w-auto h-[36px] md:h-[40px] px-4 md:px-5 rounded-full bg-[#4866F6] text-white text-[13px] md:text-[15px] font-medium flex items-center justify-center gap-2 cursor-pointer transition-all hover:bg-[#3554ED]"
@@ -397,10 +361,10 @@ export default function ProfileDashboard() {
 
               {/* Left */}
 
-              {isUpgraded ? (
+              {hasTransaction ? (
                 <div className="flex flex-col">
                   <h3 className="text-[20px] md:text-[24px] font-semibold text-[#3D3D3D]">
-                    {subscription?.plan_name || "Basic plan"}
+                    {myPlan?.plan_name || ""}
                   </h3>
 
                   <p className="mt-1 text-[12px] md:text-[14px] text-[#586D93]">
@@ -432,19 +396,20 @@ export default function ProfileDashboard() {
               ) : (
                 <div className="flex flex-col">
                   <p className="text-[#4866F6] font-bold text-[22px] leading-none">
-                    $0.00
-                    <span className="text-[14px] font-normal text-[#586D93]">
-                      {" "}
-                      / month
-                    </span>
-                  </p>
+  ${myPlan?.price?.toFixed(2) ?? "0.00"}
+
+  <span className="text-[14px] font-normal text-[#586D93]">
+    {" "}
+    / {myPlan?.interval || "month"}
+  </span>
+</p>
 
                   <h3 className="mt-2 text-[26px] font-semibold text-[#3D3D3D]">
-                    Free plan
+                    {myPlan?.plan_name || "Free"}
                   </h3>
 
                   <p className="mt-2 text-[15px] text-[#586D93] leading-[24px]">
-                    Best plan for the fresher individuals
+                    {myPlan?.description || "Best plan for fresher individuals"}
                   </p>
 
                   <button
@@ -460,33 +425,17 @@ export default function ProfileDashboard() {
               {/* Right */}
 
               <div className="w-[220px] rounded-[14px] bg-[#F1F3FF] px-4 py-3">
-
+                
                 <div className="flex flex-col gap-[10px] text-[#586D93] text-[14px]">
 
-                  <div className="flex items-center gap-3">
-                    <img src={vectorIcon} alt="" className="w-[14px] h-[14px]" />
-                    <p>Culpa qui official</p>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <img src={vectorIcon} alt="" className="w-[14px] h-[14px]" />
-                    <p>Deserunt mollitia an</p>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <img src={vectorIcon} alt="" className="w-[14px] h-[14px]" />
-                    <p>Imi, id est laborum et</p>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <img src={vectorIcon} alt="" className="w-[14px] h-[14px]" />
-                    <p>Dolorum fuga Et har</p>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <img src={vectorIcon} alt="" className="w-[14px] h-[14px]" />
-                    <p>Um quidem rerum</p>
-                  </div>
+                  <div className="flex flex-col gap-[10px] text-[#586D93] text-[14px]">
+  {myPlan?.features?.map((feature, index) => (
+    <div key={index} className="flex items-center gap-3">
+      <img src={vectorIcon} alt="" className="w-[14px] h-[14px]" />
+      <p>{feature}</p>
+    </div>
+  ))}
+</div>
 
                 </div>
 

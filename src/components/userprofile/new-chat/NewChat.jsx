@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../../assets/images/Logo.svg";
 import FileUpload from "../../../assets/images/FileUpload.png";
-import Audio from "../../../assets/images/Audio.png";
+import Audio from "../../../assets/images/audio.png";
 import EnterFrame from "../../../assets/images/EnterFrame.png";
 import Sparkle from "../../../assets/images/newchat_sparkle.svg";
 import NewChatMail from "../../../assets/images/newchat_mail.svg";

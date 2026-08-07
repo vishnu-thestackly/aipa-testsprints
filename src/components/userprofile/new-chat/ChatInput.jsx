@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 
 import FileUpload from "../../../assets/images/FileUpload.png";
-import Audio from "../../../assets/images/Audio.png";
+import Audio from "../../../assets/images/audio.png";
 import EnterFrame from "../../../assets/images/EnterFrame.png";
 
 export default function ChatInput({

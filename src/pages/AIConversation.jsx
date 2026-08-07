@@ -7,7 +7,7 @@ import Navbar from "../components/common/Navbar";
 
 import Arrow from "../assets/images/Arrow.png";
 import EnterFrame from "../assets/images/EnterFrame.png";
-import Audio from "../assets/images/Audio.png";
+import Audio from "../assets/images/audio.png";
 import FileUpload from "../assets/images/FileUpload.png";
 import AiImage from "../assets/images/AiImage.png";
 import Copy from "../assets/images/Copy.png";

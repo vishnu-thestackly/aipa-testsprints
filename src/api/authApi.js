@@ -1678,3 +1678,28 @@ export const getConversationMessages = async (conversationId) => {
     throw error;
   }
 };
+
+
+
+export const getUserSubscriptionPlans = async (currentPlan = "") => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get("/api/v1/subscriptions/plans", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        current_plan: currentPlan,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "User Subscription Plans Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};

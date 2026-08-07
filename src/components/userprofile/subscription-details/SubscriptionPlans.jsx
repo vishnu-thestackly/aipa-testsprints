@@ -1,7 +1,10 @@
 import { ArrowLeft, Check, Sparkles, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSubscriptionDetails } from "../../../api/authApi";
+import {
+  getSubscriptionDetails,
+  getUserSubscriptionPlans,
+} from "../../../api/authApi";
 
 export default function SubscriptionPlans() {
   const navigate = useNavigate();
@@ -9,81 +12,63 @@ export default function SubscriptionPlans() {
   const [centerIndex, setCenterIndex] = useState(0);
   const [featurePages, setFeaturePages] = useState({});
 
-  const plans = [
-    {
-      id: "free",
-      price: "$0.00",
-      period: "/ month",
-      name: "Free plan",
-      desc: "Best plan for the fresher individuals",
-      features: [
-        { text: "Culpa qui official", included: true },
-        { text: "Deserunt mollitia an", included: true },
-        { text: "Imi, id est laborum et", included: true },
-        { text: "Dolorum fuga Et har", included: false },
-        { text: "Um quidem rerum", included: false },
-        { text: "Excepteur sint occaecat", included: false },
-        { text: "Sunt in culpa qui officia", included: false },
-      ],
-    },
-    {
-      id: "basic",
-      price: "$99.00",
-      period: "/ monthly",
-      name: "Basic plan",
-      desc: "Best plan for the fresher individuals",
-      features: [
-        { text: "Culpa qui official", included: true },
-        { text: "Deserunt mollitia an", included: true },
-        { text: "Imi, id est laborum et", included: true },
-        { text: "Dolorum fuga Et har", included: true },
-        { text: "Um quidem rerum", included: true },
-        { text: "Excepteur sint occaecat", included: true },
-        { text: "Sunt in culpa qui officia", included: true },
-      ],
-    },
-    {
-      id: "premium",
-      price: "$999.00",
-      period: "/ yearly",
-      name: "Premium plan",
-      desc: "Best plan for the fresher individuals",
-      features: [
-        { text: "Culpa qui official", included: true },
-        { text: "Deserunt mollitia an", included: true },
-        { text: "Imi, id est laborum et", included: true },
-        { text: "Dolorum fuga Et har", included: true },
-        { text: "Um quidem rerum", included: true },
-        { text: "Excepteur sint occaecat", included: true },
-        { text: "Sunt in culpa qui officia", included: true },
-      ],
-    },
-  ];
+  
 
+
+  const [plans, setPlans] = useState([]);
+  
+
+  
   useEffect(() => {
-    const fetchCurrentPlan = async () => {
-      try {
-        const response = await getSubscriptionDetails();
-        console.log("SubscriptionPlans API Response:", response);
-        const name = (response?.plan_name || "").toLowerCase();
+  const fetchSubscriptionData = async () => {
+    try {
+      // Get current user's subscription
+      const subscription = await getSubscriptionDetails();
 
-        if (name.includes("free")) {
-          setCurrentPlan("free");
-          setCenterIndex(0);
-        } else if (name.includes("premium")) {
-          setCurrentPlan("premium");
-          setCenterIndex(2);
-        } else {
-          setCurrentPlan("basic");
-          setCenterIndex(1);
-        }
-      } catch (err) {
-        console.error("Error fetching subscription plans:", err);
-      }
-    };
+      const currentPlanName =
+        subscription?.my_plan?.plan_name || "";
 
-    fetchCurrentPlan();
-  }, []);
+      // Get all available plans
+      const plansResponse = await getUserSubscriptionPlans(currentPlanName);
+
+      console.log("Current Plan:", currentPlanName);
+      console.log("Plans Response:", plansResponse);
+
+      // Format API response
+      const formattedPlans = plansResponse.map((plan) => ({
+  id: plan.name.toLowerCase(),
+  price: `$${Number(plan.price).toFixed(2)}`,
+  period: `/ ${plan.interval}`,
+  name: plan.name,
+  desc: "", // API doesn't return description
+  features: (plan.features || []).map((feature) => ({
+    text: feature,
+    included: true,
+  })),
+}));
+
+      setPlans(formattedPlans);
+
+      // Save current plan
+      setCurrentPlan(currentPlanName.toLowerCase());
+
+      // Find current plan index dynamically
+      const index = formattedPlans.findIndex(
+        (plan) =>
+          plan.name.toLowerCase() === currentPlanName.toLowerCase()
+      );
+
+      setCenterIndex(index >= 0 ? index : 0);
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchSubscriptionData();
+}, []);
+
+  
 
   const handleNextFeatures = (planId) => {
     setFeaturePages((prev) => ({
@@ -105,21 +90,30 @@ export default function SubscriptionPlans() {
   };
 
   const handlePrev = () => {
-    setCenterIndex((prev) => (prev - 1 + 3) % 3);
+    setCenterIndex((prev) =>
+  plans.length ? (prev - 1 + plans.length) % plans.length : 0
+);
   };
 
   const handleNext = () => {
-    setCenterIndex((prev) => (prev + 1) % 3);
+    setCenterIndex((prev) =>
+  plans.length ? (prev + 1) % plans.length : 0
+);
   };
 
   const isUpgraded = currentPlan !== "free";
 
   // Carousel order centered on centerIndex is used always
-  const visibleCards = [
-    plans[(centerIndex - 1 + 3) % 3],
-    plans[centerIndex],
-    plans[(centerIndex + 1) % 3],
-  ];
+ const totalPlans = plans.length;
+
+const visibleCards =
+  totalPlans > 0
+    ? [
+        plans[(centerIndex - 1 + totalPlans) % totalPlans],
+        plans[centerIndex],
+        plans[(centerIndex + 1) % totalPlans],
+      ]
+    : [];
 
   return (
     <div className="h-full overflow-y-auto px-1.5 sm:px-4 lg:px-6 pt-4 lg:pt-4 pb-10 scrollbar-hide">

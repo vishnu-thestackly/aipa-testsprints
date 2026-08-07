@@ -596,6 +596,7 @@ export default function EditProfile({ onOpenChat }) {
                     ref={dateInputRef}
                     name="dob"
                     type="date"
+                    max={new Date().toISOString().split("T")[0]}
                     value={formData.dob ? formData.dob.split("-").reverse().join("-") : ""}
                     onChange={(e) => {
                       const val = e.target.value; // YYYY-MM-DD
