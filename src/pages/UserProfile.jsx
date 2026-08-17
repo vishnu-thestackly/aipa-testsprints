@@ -25,16 +25,17 @@ export default function UserProfile() {
   useEffect(() => {
     const path = location.pathname;
     const menuKey =
-      path.includes("/new-chat") ? "newchat" :
-      path.includes("/tasks/my") ? "myTasks" :
-      path.includes("/tasks/upcoming") ? "upcomingTasks" :
-      path.includes("/tasks/completed") ? "completedTasks" :
-      path.includes("/integrations/calendar") ? "calendar" :
-      path.includes("/integrations/email") ? "email" :
-      path.includes("/settings/preferences") ? "preferenceSetting" :
-      path.includes("/settings/security") ? "security" :
-      path.includes("/settings/notifications") ? "notifications" :
-      "profileDashboard";
+  path.includes("/new-chat") ? "newchat" :
+  path.includes("/ai-usage") ? "aiUsage" :
+  path.includes("/tasks/my") ? "myTasks" :
+  path.includes("/tasks/upcoming") ? "upcomingTasks" :
+  path.includes("/tasks/completed") ? "completedTasks" :
+  path.includes("/integrations/calendar") ? "calendar" :
+  path.includes("/integrations/email") ? "email" :
+  path.includes("/settings/preferences") ? "preferenceSetting" :
+  path.includes("/settings/security") ? "security" :
+  path.includes("/settings/notifications") ? "notifications" :
+  "profileDashboard";
 
     setActiveItem(menuKey);
     if (path.includes("/settings/preferences")) setProfilePage("preferenceSetting");
@@ -84,7 +85,7 @@ export default function UserProfile() {
         />
 
         {/* Content Wrapper */}
-        <div className="flex-1 overflow-y-auto bg-gray-100">
+        <div className="flex-1 overflow-y-auto bg-gray-100 scrollbar-hide ">
 
           <Outlet
     context={{

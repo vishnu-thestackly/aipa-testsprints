@@ -40,6 +40,7 @@ import SubscriptionDetails from "./components/userprofile/subscription-details/S
 import NewChatConversation from "./components/userprofile/new-chat/NewChatConversation";
 import PreferenceSetting from "./components/userprofile/PreferenceSetting";
 import SidebarEmptyPage from "./components/userprofile/sidebar/SidebarEmptyPage";
+import AiUsageDashboard from "./components/userprofile/AiUsageDashboard";
 
 
 
@@ -119,6 +120,8 @@ function App() {
     path="settings/preferences"
     element={<PreferenceSetting />}
   />
+ 
+  <Route path="ai-usage" element={<AiUsageDashboard/>}/>
   <Route path="settings/security" element={<SidebarEmptyPage title="Security" />} />
   <Route path="settings/notifications" element={<SidebarEmptyPage title="Notifications" />} />
   <Route path="tasks/my" element={<SidebarEmptyPage title="My Tasks" />} />

@@ -133,7 +133,7 @@ export default function CancelConfirmationModal({
                   px-1
                 "
               >
-                Cancel Now
+                No
               </button>
 
               <button
@@ -163,7 +163,7 @@ export default function CancelConfirmationModal({
                   disabled:opacity-50
                 "
               >
-                {loading ? "Please wait..." : "Cancel End of Cycle"}
+                {loading ? "Please wait..." : "Yes"}
               </button>
             </div>
           </div>

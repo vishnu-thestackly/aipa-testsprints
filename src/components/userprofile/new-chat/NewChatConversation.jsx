@@ -12,7 +12,7 @@ import ChatMessages from "./ChatMessages";
 import ActionCards from "./ActionCards";
 import useChat from "./hooks/useChat";
 
-import { sendChatMessage, getConversationMessages, } from "../../../api/authApi";
+import { sendChatMessage, getConversationMessages,executeTask, } from "../../../api/authApi";
 // -----------------------------------------------------------------------------
 // HELPERS
 // -----------------------------------------------------------------------------
@@ -118,7 +118,10 @@ const sendMessageToBackend = async (message) => {
   needs_priority_trigger: response.needs_priority_trigger,
 
   quick_actions: response.quick_actions,
-  task_summary: response.task_summary,
+  task_summary: {
+  ...response.task_summary,
+  task_id: response.task_id,
+},
   editable_fields: response.editable_fields,
   suggested_actions: response.suggested_actions,
 
@@ -169,11 +172,45 @@ const handleSend = async () => {
   await sendMessageToBackend(message);
 };
 
-const handleUiAction = async (value) => {
+const handleUiAction = async (value, taskId, platform) => {
+  if (value === "proceed") {
+    // Step 1: Show user message
+    const userMessage = {
+      id: `user-${Date.now()}`,
+      type: "user",
+      text: value,
+      time: getCurrentTime(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+
+    try {
+      // Step 2: Execute task
+      const response = await executeTask(taskId, platform);
+
+      // Step 3: Show execute API response
+      const botMessage = {
+        id: `bot-${Date.now()}`,
+        type: "bot",
+        text: response.reply || response.message,
+        time: getCurrentTime(),
+
+        task_summary: response.task_summary,
+        suggested_actions: response.suggested_actions || [],
+        quick_actions: response.quick_actions || [],
+      };
+
+      setMessages((prev) => [...prev, botMessage]);
+    } catch (error) {
+      console.error(error);
+    }
+
+    return;
+  }
+
+  // Other actions (edit, retry, etc.)
   await sendMessageToBackend(value);
 };
-
-
 
   const handleEditMessage = (message) => {
     setEditingMessageId(message.id);

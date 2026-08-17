@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import sparkleIcon from "../../../assets/images/Sparkle.svg";
@@ -11,7 +12,11 @@ import CancelSubscriptionModal from "./CancelSubscriptionModal";
 import UpgradePlanModal from "./UpgradePlanModal";
 import DowngradePlanModal from "./DowngradePlanModal";
 
-import { getSubscriptionDetails, getInvoice } from "../../../api/authApi";
+import {
+  getSubscriptionDetails,
+  getInvoice,
+  getUserSubscriptionPlans,
+} from "../../../api/authApi";
 import InvoicePopup from "../InvoicePopup";
 
 const formatDisplayDate = (value) => {
@@ -31,18 +36,39 @@ export default function SubscriptionDetails({
   setProfilePage,
 }) {
   const navigate = useNavigate()
+  const [plans, setPlans] = useState([]);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showDowngradeModal, setShowDowngradeModal] = useState(false);
   const [selectedPlanAction, setSelectedPlanAction] = useState("");
   const [showInvoice, setShowInvoice] = useState(false);
   const [invoiceData, setInvoiceData] = useState(null);
+  const formatDate = (date) => dayjs(date).format("DD MMMM YYYY");
 
   const [subscription, setSubscription] = useState(null);
 
+
+const fetchSubscriptionPlans = async () => {
+  try {
+    const response = await getUserSubscriptionPlans();
+
+    console.log("User Plans:", response);
+
+    // adjust based on response shape
+    setPlans(response);
+    // or setPlans(response.data);
+  } catch (error) {
+    console.error("User Plans Error:", error);
+  }
+};
+
   useEffect(() => {
-    fetchSubscription();
-  }, []);
+
+    console.log("SubscriptionDetails mounted");
+  fetchSubscription();
+  fetchSubscriptionPlans();
+}, []);
+
 
 
   const handleViewInvoice = async (paymentId) => {
@@ -137,10 +163,21 @@ export default function SubscriptionDetails({
     localStorage.setItem("mock_subscription_data", JSON.stringify(updatedSub));
   };
 
-  const handleCancelSuccess = () => {
-    localStorage.removeItem("mock_subscription_data");
-    setSubscription(null); // resets back to free/null plan
-  };
+  const handleCancelSuccess = async () => {
+  try {
+    const response = await getSubscriptionDetails();
+
+    console.log("Subscription after cancellation:", response);
+
+    if (response) {
+      setSubscription(response);
+    }
+
+    setShowCancelModal(false);
+  } catch (error) {
+    console.error("Failed to refresh subscription details:", error);
+  }
+};
 
   const PAGE_SIZE = 6;
   const [currentPage, setCurrentPage] = useState(1);
@@ -220,7 +257,29 @@ export default function SubscriptionDetails({
                 </div>
 
                 {/* Status on Right */}
-                <div className="flex flex-col items-end">
+                
+              </div>
+
+              <div className="grid grid-cols-3 gap-4 mt-6">
+  <div>
+    <p className="text-sm font-medium text-[#303030]">Billing Cycle</p>
+    <p className="text-sm text-[#8A8A8A] mt-1">
+      {formatDisplayDate(subscription?.billing_cycle_start)} -{" "}
+      {formatDisplayDate(subscription?.billing_cycle_end)}
+    </p>
+  </div>
+
+  <div>
+    <p className="text-sm font-medium text-[#303030]">Next Billing Date</p>
+    <p className="text-sm text-[#8A8A8A] mt-1">
+      {formatDisplayDate(subscription?.next_billing_date)}
+    </p>
+  </div>
+
+  
+
+
+              <div className="flex flex-col items-end">
                   <p className="text-[#3D3D3D] font-medium text-[11px] md:text-[16px] mb-1">
                     Status
                   </p>
@@ -233,7 +292,7 @@ export default function SubscriptionDetails({
                     </span>
                   </div>
                 </div>
-              </div>
+                </div>
 
               {/* Bottom Row: Buttons */}
               <div className="flex justify-between items-center mt-5 md:mt-8 gap-3">
@@ -552,11 +611,12 @@ export default function SubscriptionDetails({
       />
 
       <UpgradePlanModal
-        isOpen={showUpgradeModal}
-        onClose={() => setShowUpgradeModal(false)}
-        subscription={subscription}
-        onSuccess={handleUpgradeSuccess}
-      />
+  isOpen={showUpgradeModal}
+  onClose={() => setShowUpgradeModal(false)}
+  subscription={subscription}
+  plans={plans}
+  onSuccess={handleUpgradeSuccess}
+/>
 
       <DowngradePlanModal
         isOpen={showDowngradeModal}

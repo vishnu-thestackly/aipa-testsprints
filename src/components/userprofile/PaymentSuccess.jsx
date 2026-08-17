@@ -54,7 +54,7 @@ const sessionId = searchParams.get("session_id");
           {/* View Invoice Link */}
           <button
             onClick={() =>
-  navigate(`/user-profile/invoice?session_id=${sessionId}`)
+  navigate(`/user/profile/invoice?payment_id=${paymentId}`)
 }
             className="text-sm sm:text-base text-[#4866F6] lg:mt-[5px] mt-[-10px] font-medium underline hover:text-blue-700"
           >

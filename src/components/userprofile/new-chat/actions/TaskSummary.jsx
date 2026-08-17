@@ -50,7 +50,9 @@ export default function TaskSummary({
             <button
               key={button.id}
               type="button"
-              onClick={() => onAction(button.value)}
+              onClick={() =>
+  onAction(button.value, data.task_id, data.application)
+}
               className={`flex-1 rounded-lg border py-2 text-sm font-medium transition-all duration-200 ${
                 button.kind === "confirm"
                   ? "border-[#4866F6] bg-[#4866F6] text-white"

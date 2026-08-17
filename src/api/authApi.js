@@ -802,7 +802,7 @@ export const getAvailableIntegrations = async () => {
     const token = localStorage.getItem("token");
 
     const response = await API.get(
-      "/api/v1/onboarding/integrations/available",
+      "/api/v1/integrations/available",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -815,6 +815,30 @@ export const getAvailableIntegrations = async () => {
     throw error.response?.data || "Failed to fetch integrations";
   }
 };
+
+
+// ================= CONNECT INTEGRATION =================
+
+export const connectIntegration = async (appName) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      `/api/v1/integrations/connect/${appName}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to connect integration";
+  }
+};
+
+
 
 
 // ================= SAVE CONNECTED INTEGRATIONS =================
@@ -1685,7 +1709,7 @@ export const getUserSubscriptionPlans = async (currentPlan = "") => {
   try {
     const token = localStorage.getItem("token");
 
-    const response = await API.get("/api/v1/subscriptions/plans", {
+    const response = await API.get("/api/v1/user/subscription/plans", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -1698,6 +1722,86 @@ export const getUserSubscriptionPlans = async (currentPlan = "") => {
   } catch (error) {
     console.error(
       "User Subscription Plans Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+
+
+
+// ================= AI USAGE ANALYTICS =================
+
+export const getAiUsage = async (trendsPeriod) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      "/api/v1/analytics/ai-usage",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          trends_period: trendsPeriod,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to fetch AI usage";
+  }
+};
+
+
+
+export const executeTask = async (taskId, platform) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/chat/execute-task",
+      {
+        task_id: taskId,
+        platform,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Execute Task Error:",
+      error.response?.data || error.message
+    );
+    throw error;
+  }
+};
+
+
+
+
+
+export const getUserIntegrations = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get("/api/v1/integrations/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Get User Integrations Error:",
       error.response?.data || error.message
     );
     throw error;

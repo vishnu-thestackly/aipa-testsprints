@@ -3,7 +3,10 @@ import ProfileNavbar from "../components/common/ProfileNavbar";
 import OnboardingStepper from "../components/preference/OnboardingStepper";
 import {
   getAvailableIntegrations,
-  saveConnectedIntegrations,skipOnboarding,
+  getUserIntegrations,
+  saveConnectedIntegrations,
+  skipOnboarding,
+  connectIntegration,
 } from "../api/authApi";
 
 import BackGroundImage from "../assets/images/bghome.png";
@@ -82,20 +85,54 @@ const handleContinue = async () => {
   }
 };
 
+
+const handleIntegrationClick = async (integration) => {
+  try {
+    const response = await connectIntegration(integration.app_name);
+
+    if (response.authorize_url) {
+      window.location.href = response.authorize_url;
+      return;
+    }
+
+    toggleIntegration(integration.app_name);
+  } catch (error) {
+    console.error("Integration Error:", error);
+  }
+};
+
   const handleBack = () => {
     navigate("/aipreferences");
   };
 
   useEffect(() => {
   const loadIntegrations = async () => {
-    try {
-      const response = await getAvailableIntegrations();
+  try {
+    // Available integrations
+    const availableResponse = await getAvailableIntegrations();
 
-      setIntegrations(response.integrations || []);
-    } catch (error) {
-      console.error("Load Integrations Error:", error);
-    }
-  };
+    // Connected integrations
+    const connectedResponse = await getUserIntegrations();
+
+    const connectedApps = new Set(
+      connectedResponse
+        .filter((item) => item.status === "active")
+        .map((item) => item.app_name)
+    );
+
+    const updatedIntegrations = (availableResponse.integrations || []).map(
+      (integration) => ({
+        ...integration,
+        connected: connectedApps.has(integration.app_name),
+      })
+    );
+
+    setIntegrations(updatedIntegrations);
+
+  } catch (error) {
+    console.error("Load Integrations Error:", error);
+  }
+};
 
   loadIntegrations();
 }, []);
@@ -142,8 +179,7 @@ console.log("Length:", integrations.length);
 
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-[70px] max-w-full mx-auto">
             {integrations.map((integration) => {
-              const isConnected =
-                !!data.connectedIntegrations[integration.app_name];
+              const isConnected = integration.connected;
 
               return (
                 <div
@@ -160,8 +196,8 @@ console.log("Length:", integrations.length);
                       </div>
                     <button
                       type="button"
-                      onClick={() => toggleIntegration(integration.app_name)}
-                      className={`text-[16px] px-5 py-1.5 rounded-full font-medium transition-all duration-300 ${
+                     onClick={() => handleIntegrationClick(integration)}
+                      className={`text-[16px] px-5 py-1.5 rounded-full font-medium transition-all duration-300 cursor-pointer ${
                         isConnected
                           ? "bg-white border border-[#4866F6] text-[#4866F6]"
                           : "bg-[#4866F6] text-white hover:bg-[#3d5cf9]"

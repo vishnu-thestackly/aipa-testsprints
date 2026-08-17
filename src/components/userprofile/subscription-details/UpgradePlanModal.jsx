@@ -7,32 +7,19 @@ export default function UpgradePlanModal({
   isOpen,
   onClose,
   subscription,
+  plans
 }) {
   const [selectedPlan, setSelectedPlan] = useState("");
   const [selectedDuration, setSelectedDuration] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handlePlanChange = (plan) => {
-    setSelectedPlan(plan);
-    if (plan === "basic") {
-      setSelectedDuration("monthly");
-    } else if (plan === "premium") {
-      setSelectedDuration("annual");
-    } else {
-      setSelectedDuration("");
-    }
-  };
+  setSelectedPlan(plan);
+};
 
-  const handleDurationChange = (duration) => {
-    setSelectedDuration(duration);
-    if (duration === "monthly") {
-      setSelectedPlan("basic");
-    } else if (duration === "annual") {
-      setSelectedPlan("premium");
-    } else {
-      setSelectedPlan("");
-    }
-  };
+ const handleDurationChange = (duration) => {
+  setSelectedDuration(duration);
+};
 
   const getRemainingDays = () => {
     if (!subscription?.billing_cycle_end) return "0 days";
@@ -60,11 +47,19 @@ export default function UpgradePlanModal({
     }
     console.log("selectedPlan =", selectedPlan, "selectedDuration =", selectedDuration);
 
-    const payload = {
-      plan_id: selectedPlan === "basic" ? 2 : selectedPlan === "premium" ? 3 : null,
-      plan_type: selectedDuration,
-    };
+    // const payload = {
+    //   plan_id: selectedPlan === "basic" ? 2 : selectedPlan === "premium" ? 3 : null,
+    //   plan_type: selectedDuration,
+    // };
 
+    const selectedPlanObj = plans.find(
+  (plan) => plan.name === selectedPlan
+);
+
+const payload = {
+  plan_id: selectedPlanObj?.plan_id,
+  plan_type: selectedDuration,
+};
     console.log("Payload:", payload);
 
     try {
@@ -117,8 +112,13 @@ export default function UpgradePlanModal({
                   }`}
               >
                 <option value="">Select Plan</option>
-                <option value="basic">Basic Plan</option>
-                <option value="premium">Premium Plan</option>
+           
+
+{plans?.map((plan) => (
+  <option key={plan.plan_id} value={plan.name}>
+    {plan.name}
+  </option>
+))}
               </select>
               <img src={arrowIcon} alt="arrow" className="absolute right-3 sm:right-4 md:right-5 top-1/2 -translate-y-1/2 w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] pointer-events-none" />
             </div>
@@ -153,7 +153,7 @@ export default function UpgradePlanModal({
               </span>
 
               <span className="text-[#A0A7B5]">
-                {getRemainingDays()}
+                {subscription?.remaining_days ?? 0} days
               </span>
             </div>
 
@@ -163,7 +163,7 @@ export default function UpgradePlanModal({
               </span>
 
               <span className="text-[#A0A7B5]">
-                {getProratedCharges()}
+               ₹{Number(subscription?.prorated_charges ?? 0).toFixed(2)}
               </span>
             </div>
 
