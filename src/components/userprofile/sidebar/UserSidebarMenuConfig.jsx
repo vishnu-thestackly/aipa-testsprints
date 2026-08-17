@@ -246,6 +246,15 @@ const PreferencesIcon = ({ className }) => (
   </svg>
 );
 
+const AiIntelligenceIcon = ({ className }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="4" y1="9" x2="20" y2="9" />
+    <line x1="4" y1="15" x2="20" y2="15" />
+    <circle cx="9" cy="9" r="2.5" fill="white" stroke="currentColor" strokeWidth="1.5" />
+    <circle cx="15" cy="15" r="2.5" fill="white" stroke="currentColor" strokeWidth="1.5" />
+  </svg>
+);
+
 const SecurityIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none">
     <g clipPath="url(#clip0_sec)">
@@ -337,9 +346,10 @@ export const userSidebarMenuItems = [
     label: "Settings",
     Icon: SettingsIcon,
     toggleKey: "settings",
-    activeKeys: ["preferenceSetting", "security", "notifications"],
+    activeKeys: ["preferenceSetting", "aiIntelligence", "security", "notifications"],
     children: [
       { key: "preferenceSetting", label: "Preferences", Icon: PreferencesIcon, navigateTo: "/user/settings/preferences", profilePageKey: "preferenceSetting" },
+      { key: "aiIntelligence", label: "AI Intelligence", Icon: PreferencesIcon, navigateTo: "/user/settings/ai-intelligence", profilePageKey: "aiIntelligence" },
       { key: "security", label: "Security", Icon: SecurityIcon, navigateTo: "/user/settings/security", profilePageKey: "security" },
       { key: "notifications", label: "Notifications", Icon: NotificationsIcon, navigateTo: "/user/settings/notifications", profilePageKey: "notifications" },
     ],

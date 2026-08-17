@@ -33,12 +33,14 @@ export default function UserProfile() {
   path.includes("/integrations/calendar") ? "calendar" :
   path.includes("/integrations/email") ? "email" :
   path.includes("/settings/preferences") ? "preferenceSetting" :
+  path.includes("/settings/ai-intelligence") ? "aiIntelligence" :
   path.includes("/settings/security") ? "security" :
   path.includes("/settings/notifications") ? "notifications" :
   "profileDashboard";
 
     setActiveItem(menuKey);
     if (path.includes("/settings/preferences")) setProfilePage("preferenceSetting");
+    if (path.includes("/settings/ai-intelligence")) setProfilePage("aiIntelligence");
     if (path.includes("/settings/security")) setProfilePage("security");
     if (path.includes("/settings/notifications")) setProfilePage("notifications");
     if (path.endsWith("/profile")) setProfilePage("dashboard");

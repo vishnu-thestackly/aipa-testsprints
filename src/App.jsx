@@ -38,9 +38,12 @@ import ProfileDashboard from "./components/userprofile/ProfileDashboard";
 import SubscriptionPlans from "./components/userprofile/subscription-details/SubscriptionPlans";
 import SubscriptionDetails from "./components/userprofile/subscription-details/SubscriptionDetails";
 import NewChatConversation from "./components/userprofile/new-chat/NewChatConversation";
-import PreferenceSetting from "./components/userprofile/PreferenceSetting";
+import PreferenceSetting from "./components/userprofile/settings/PreferenceSetting";
+import AIIntelligence from "./components/userprofile/settings/AIIntelligence";
 import SidebarEmptyPage from "./components/userprofile/sidebar/SidebarEmptyPage";
 import AiUsageDashboard from "./components/userprofile/AiUsageDashboard";
+import NotificationsPage from "./components/userprofile/settings/NotificationsPage";
+import TasksDashboard from "./components/userprofile/tasks/TasksDashboard";
 
 
 
@@ -120,13 +123,18 @@ function App() {
     path="settings/preferences"
     element={<PreferenceSetting />}
   />
+
+  <Route
+    path="settings/ai-intelligence"
+    element={<AIIntelligence />}
+  />
  
   <Route path="ai-usage" element={<AiUsageDashboard/>}/>
   <Route path="settings/security" element={<SidebarEmptyPage title="Security" />} />
-  <Route path="settings/notifications" element={<SidebarEmptyPage title="Notifications" />} />
-  <Route path="tasks/my" element={<SidebarEmptyPage title="My Tasks" />} />
-  <Route path="tasks/upcoming" element={<SidebarEmptyPage title="Upcoming Tasks" />} />
-  <Route path="tasks/completed" element={<SidebarEmptyPage title="Completed Tasks" />} />
+  <Route path="settings/notifications" element={<NotificationsPage />} />
+  <Route path="tasks/my" element={<TasksDashboard />} />
+  <Route path="tasks/upcoming" element={<TasksDashboard />} />
+  <Route path="tasks/completed" element={<TasksDashboard />} />
   <Route path="integrations/calendar" element={<SidebarEmptyPage title="Calendar" />} />
   <Route path="integrations/email" element={<SidebarEmptyPage title="Email" />} />
 
