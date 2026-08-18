@@ -16,6 +16,8 @@ import AddSubscription from "../components/admin/adminprofile/AddSubscription";
 import EditSubscription from "../components/admin/adminprofile/EditSubscription";
 import AiMonitoring from "../components/admin/AiMonitoring";
 import AdminProfile from "../components/admin/adminprofile/AdminProfile";
+import BehaviorLearning from "../components/admin/ai/BehaviorLearning/BehaviorLearning";
+import SemanticMemory from "../components/admin/ai/SemanticMemory/SemanticMemory";
 
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
@@ -86,7 +88,6 @@ export default function Dashboard() {
           onLogout={handleLogout}
         />
 
-
         {/* Content Wrapper */}
         <div className="flex-1 overflow-hidden bg-gray-100 ">
           {activeItem === "dashboard" && <DashboardContent />}
@@ -112,6 +113,12 @@ export default function Dashboard() {
 
           {/* Usage Dashboard - AI Monitoring */}
           {activeItem === "aimonitoring" && <AiMonitoring />}
+
+          {/* AI - Semantic Memory */}
+          {activeItem === "semanticmemory" && <SemanticMemory />}
+
+          {/* AI - Behavior Learning */}
+          {activeItem === "behaviorlearning" && <BehaviorLearning />}
 
           {/*Manage Subscription - Transaction Monitoring */}
           {activeItem === "transaction" && <TransactionMonitoring />}
@@ -141,17 +148,17 @@ export default function Dashboard() {
           )}
 
           {activeItem === "subscriptionplan" && (
-  <SubscriptionPlan setActiveItem={setActiveItem} />
-)}
+            <SubscriptionPlan setActiveItem={setActiveItem} />
+          )}
 
-  {activeItem === "addSubscription" && (
-    <AddSubscription setActiveItem={setActiveItem} />
-  )}
+          {activeItem === "addSubscription" && (
+            <AddSubscription setActiveItem={setActiveItem} />
+          )}
 
-  {activeItem === "editSubscription" && (
-    <EditSubscription setActiveItem={setActiveItem} />
-  )}
-  {activeItem === "profile" && <AdminProfile />}
+          {activeItem === "editSubscription" && (
+            <EditSubscription setActiveItem={setActiveItem} />
+          )}
+          {activeItem === "profile" && <AdminProfile />}
         </div>
       </div>
       <SessionTimeout
@@ -162,4 +169,3 @@ export default function Dashboard() {
     </div>
   );
 }
- 
