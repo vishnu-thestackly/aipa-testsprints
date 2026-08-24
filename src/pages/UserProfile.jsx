@@ -27,7 +27,7 @@ export default function UserProfile() {
     const menuKey =
       path.includes("/new-chat") ? "newchat" :
         path.includes("/ai-usage") ? "aiUsage" :
-          path.includes("/tasks/") ? "tasks" :
+          path.includes("/tasks") ? "tasks" :
             path.includes("/integrations") ? "integrations" :
                     path.includes("/settings/preferences") ? "preferenceSetting" :
                       path.includes("/settings/ai-intelligence") ? "aiIntelligence" :

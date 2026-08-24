@@ -45,19 +45,9 @@ export default function TasksDashboard() {
 
   useEffect(() => { localStorage.setItem("aipa_user_tasks", JSON.stringify(tasks)); }, [tasks]);
 
-  useEffect(() => {
-    const path = location.pathname;
-    if (path.includes("/tasks/upcoming")) setActiveTab("upcoming");
-    else if (path.includes("/tasks/completed")) setActiveTab("completed");
-    else if (path.includes("/tasks/my-tasks")) setActiveTab("pending");
-  }, [location.pathname]);
-
   const handleTabChange = (tab) => {
     setShowCreateNewTask(false);
     setActiveTab(tab);
-    if (tab === "upcoming") navigate("/user/tasks/upcoming");
-    else if (tab === "completed") navigate("/user/tasks/completed");
-    else navigate("/user/tasks/my-tasks");
   };
 
   const getFilteredTasks = () => {

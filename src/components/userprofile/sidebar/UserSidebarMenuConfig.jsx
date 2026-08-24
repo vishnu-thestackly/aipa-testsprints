@@ -313,7 +313,7 @@ export const userSidebarMenuItems = [
     key: "tasks",
     label: "Tasks",
     Icon: TasksIcon,
-    navigateTo: "/user/tasks/my-tasks",
+    navigateTo: "/user/tasks",
   },
   {
     key: "integrations",
