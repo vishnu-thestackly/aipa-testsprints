@@ -9,6 +9,7 @@ import downloadIcon from "../../../assets/images/download.svg";
 import rightArrow from "../../../assets/images/rightarrow.svg";
 import nodataIcon from "../../../assets/images/nodata.png";
 import CancelSubscriptionModal from "./CancelSubscriptionModal";
+import { downloadInvoicePdf } from "../subscription-details/utilis/downloadInvoicePdf"
 import UpgradePlanModal from "./UpgradePlanModal";
 import DowngradePlanModal from "./DowngradePlanModal";
 
@@ -72,49 +73,50 @@ const fetchSubscriptionPlans = async () => {
 
 
   const handleViewInvoice = async (paymentId) => {
-    try {
-      const response = await getInvoice(paymentId);
+  try {
+    console.log("Payment ID:", paymentId);
 
-      console.log(response);
+    const response = await getInvoice(paymentId);
 
-      setInvoiceData(response);
-      setShowInvoice(true);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+    console.log("Invoice API Response:", response);
+
+    setInvoiceData(response);
+    setShowInvoice(true);
+  } catch (error) {
+    console.error("Failed to fetch invoice:", error);
+  }
+};
+
+
 
   const handleDownloadInvoice = async (paymentId) => {
-    try {
-      const response = await getInvoice(paymentId);
+  try {
+    const response = await getInvoice(paymentId);
 
-      // generate pdf using response
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    console.log("Invoice data:", response);
+
+    await downloadInvoicePdf(response);
+  } catch (error) {
+    console.error("Failed to download invoice:", error);
+  }
+};
+
 
   const fetchSubscription = async () => {
-    // Check localStorage first for simulated subscription data
-    const saved = localStorage.getItem("mock_subscription_data");
-    if (saved) {
-      setSubscription(JSON.parse(saved));
-      return;
+  try {
+    const response = await getSubscriptionDetails();
+
+    console.log("Subscription Response:", response);
+    console.log("Billing History:", response?.billing_history);
+
+    if (response) {
+      setSubscription(response);
     }
+  } catch (error) {
+    console.error("Failed to fetch subscription:", error);
+  }
+};
 
-    try {
-      const response = await getSubscriptionDetails();
-
-      console.log("Subscription Response:", response);
-      console.log("Billing History:", response.billing_history);
-
-      if (response) {
-        setSubscription(response);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleUpgradeSuccess = (plan, duration) => {
     const today = new Date();

@@ -10,21 +10,48 @@ import { useState } from "react";
 
 import SemanticMemoryContent from "./tabs/Semantic";
 import CollectionDetails from "./tabs/CollectionDetails";
+import {
+  getSemanticMemoryCollectionDetails,
+} from "../../../../api/authApi";
 
 export default function SemanticMemory() {
   // Active tab: "qdrant" | "dashboard"
   const [activeTab, setActiveTab] = useState("qdrant");
   // Selected collection for details drill-down (null = list / dashboard view)
   const [selectedCollection, setSelectedCollection] = useState(null);
+ 
+  const [collectionLoading, setCollectionLoading] = useState(false);
+  const [collectionError, setCollectionError] = useState("");
 
   const tabs = [
     { id: "qdrant", label: "Qdrant Collection Management" },
     { id: "dashboard", label: "Semantic Memory Dashboard" },
   ];
 
-  const handleViewCollection = (collection) => {
-    setSelectedCollection(collection);
-  };
+  const handleViewCollection = async (collection) => {
+  try {
+    setCollectionLoading(true);
+    setCollectionError("");
+
+    const response = await getSemanticMemoryCollectionDetails(
+      collection.id
+    );
+
+    console.log("Collection Details Response:", response);
+
+    if (response?.success) {
+      setSelectedCollection(response.data);
+    } else {
+      setCollectionError("Failed to load collection details.");
+    }
+  } catch (error) {
+    console.error("Collection Details API Error:", error);
+    setCollectionError("Failed to load collection details.");
+  } finally {
+    setCollectionLoading(false);
+  }
+};
+
 
   const handleBackFromDetails = () => {
     setSelectedCollection(null);

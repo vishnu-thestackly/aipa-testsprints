@@ -90,7 +90,7 @@ const data = {
               if (onClose) {
                   onClose();
               } else {
-                  navigate("/user-profile");
+                  navigate("/user/profile");
               }
           }}
              className="absolute top-3 right-3 lg:top-4 lg:right-4 w-5 h-5 lg:w-6 lg:h-6 flex items-center justify-center cursor-pointer hover:opacity-80"/>

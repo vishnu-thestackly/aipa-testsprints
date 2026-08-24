@@ -7,45 +7,78 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Search, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 import eyeActionIcon from "../../../../../assets/images/eye_action.svg";
+import { getQdrantDashboard } from "../../../../../api/authApi";
 
 // -----------------------------------------------------------------------------
 // CONSTANTS
 // -----------------------------------------------------------------------------
 const PAGE_SIZE = 6;
 
-const COLLECTION_NAMES = ["User Memory", "Conversations", "Recommendations"];
-
-const VECTOR_COUNTS = ["125,000", "85,000", "75,000"];
-
-// 60 rows (10 pages × 6) pagination
-const MOCK_COLLECTIONS = Array.from({ length: 60 }, (_, index) => {
-  const patternIndex = index % COLLECTION_NAMES.length;
-
-  return {
-    id: index + 1,
-    name: COLLECTION_NAMES[patternIndex],
-    vectors: VECTOR_COUNTS[patternIndex],
-    status: "Active",
-  };
-});
-
 // -----------------------------------------------------------------------------
 // Collection — Memory Collection list (Qdrant Collection Management)
 // -----------------------------------------------------------------------------
 export default function Collection({ onViewCollection }) {
+  const [collections, setCollections] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const tableScrollRef = useRef(null);
 
+  // ---------------------------------------------------------------------------
+  // Fetch Qdrant collections
+  // ---------------------------------------------------------------------------
+  useEffect(() => {
+    const fetchQdrantDashboard = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await getQdrantDashboard();
+
+        console.log("Qdrant Dashboard Response:", response);
+
+        if (response?.success) {
+          const formattedCollections = response.data.map((item) => ({
+            id: item.collection_id,
+            name: item.collection_name,
+            vectors: item.current_vector_count,
+            status: item.status,
+          }));
+
+          setCollections(formattedCollections);
+        } else {
+          setCollections([]);
+          setError("Failed to load memory collections.");
+        }
+      } catch (error) {
+        console.error("Qdrant Dashboard API Error:", error);
+        setError("Failed to load memory collections.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQdrantDashboard();
+  }, []);
+
+  // ---------------------------------------------------------------------------
+  // Search
+  // ---------------------------------------------------------------------------
   const filteredRows = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
-    if (!query) return MOCK_COLLECTIONS;
 
-    return MOCK_COLLECTIONS.filter((row) =>
+    if (!query) return collections;
+
+    return collections.filter((row) =>
       row.name.toLowerCase().includes(query),
     );
-  }, [searchQuery]);
+  }, [collections, searchQuery]);
 
+  // ---------------------------------------------------------------------------
+  // Pagination
+  // ---------------------------------------------------------------------------
   const totalPages = Math.ceil(filteredRows.length / PAGE_SIZE) || 1;
   const start = (currentPage - 1) * PAGE_SIZE;
   const pageRows = filteredRows.slice(start, start + PAGE_SIZE);
@@ -56,13 +89,16 @@ export default function Collection({ onViewCollection }) {
     }
   }, [currentPage, totalPages]);
 
+  // ---------------------------------------------------------------------------
+  // Search handler
+  // ---------------------------------------------------------------------------
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
     setCurrentPage(1);
   };
 
   return (
-    <div className="mx-4 md:mx-5 lg:mx-7 mb-6 rounded-[20px] p-1 md:border md:border-[#E2E2E2] md:p-5 md:shadow-sm">
+    <div className="mx-4 mb-6 rounded-[20px] p-1 md:mx-5 md:border md:border-[#E2E2E2] md:p-5 md:shadow-sm lg:mx-7">
       {/* Header: title + search */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h3 className="text-[18px] font-medium text-[#3D3D3D]">
@@ -77,6 +113,7 @@ export default function Collection({ onViewCollection }) {
             placeholder="Search by Collection Name"
             className="w-full rounded-lg border border-[#CFCFCF] bg-white py-2.5 pl-3 pr-10 text-[14px] text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-0"
           />
+
           <Search
             className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
             aria-hidden="true"
@@ -98,15 +135,19 @@ export default function Collection({ onViewCollection }) {
                 <th className="w-[10%] whitespace-nowrap px-4 py-4 font-medium">
                   SL No
                 </th>
+
                 <th className="w-[28%] whitespace-nowrap px-4 py-4 font-medium">
                   Collection Name
                 </th>
+
                 <th className="w-[22%] whitespace-nowrap px-4 py-4 font-medium">
                   Vectors
                 </th>
+
                 <th className="w-[22%] whitespace-nowrap px-4 py-4 font-medium">
                   Status
                 </th>
+
                 <th className="w-[18%] whitespace-nowrap px-4 py-4 text-center font-medium">
                   Action
                 </th>
@@ -114,32 +155,63 @@ export default function Collection({ onViewCollection }) {
             </thead>
 
             <tbody className="divide-y divide-slate-200 bg-white">
-              {pageRows.length > 0 ? (
+              {/* Loading */}
+              {loading ? (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="px-4 py-8 text-center text-[#586D93]"
+                  >
+                    Loading collections...
+                  </td>
+                </tr>
+              ) : error ? (
+                /* Error */
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="px-4 py-8 text-center text-red-500"
+                  >
+                    {error}
+                  </td>
+                </tr>
+              ) : pageRows.length > 0 ? (
+                /* Collection rows */
                 pageRows.map((row, index) => (
-                  <tr key={row.id} className="h-12 text-[#586D93]">
+                  <tr
+                    key={row.id}
+                    className="h-12 text-[#586D93]"
+                  >
                     <td className="whitespace-nowrap px-4 py-3">
                       {start + index + 1}
                     </td>
+
                     <td className="truncate whitespace-nowrap px-4 py-3">
                       {row.name}
                     </td>
+
                     <td className="whitespace-nowrap px-4 py-3">
                       {row.vectors}
                     </td>
+
                     <td className="px-4 py-3">
                       <span className="inline-flex w-[95px] items-center justify-start gap-2 rounded-full bg-[#33B46926] py-1.5 pl-4 pr-3 text-sm font-normal text-[#33B469]">
                         <span
                           className="h-2 w-2 shrink-0 rounded-full bg-[#33B469]"
                           aria-hidden="true"
                         />
-                        <span className="leading-none">{row.status}</span>
+
+                        <span className="leading-none">
+                          {row.status}
+                        </span>
                       </span>
                     </td>
+
                     <td className="px-4 py-3 text-center">
                       <button
                         type="button"
                         onClick={() => onViewCollection?.(row)}
-                        className="inline-flex items-center justify-center cursor-pointer"
+                        className="inline-flex cursor-pointer items-center justify-center"
                         title="View Details"
                       >
                         <img
@@ -152,6 +224,7 @@ export default function Collection({ onViewCollection }) {
                   </tr>
                 ))
               ) : (
+                /* Empty */
                 <tr>
                   <td
                     colSpan={5}
@@ -165,7 +238,7 @@ export default function Collection({ onViewCollection }) {
           </table>
         </div>
 
-        {/* Pagination footer + horizontal slidebar */}
+        {/* Pagination footer + horizontal scrollbar */}
         <div className="border-t border-slate-200 px-4 py-3">
           <div className="flex min-h-9 items-center justify-center sm:justify-end">
             {totalPages > 1 ? (
@@ -180,14 +253,18 @@ export default function Collection({ onViewCollection }) {
                 className="invisible flex items-center gap-1 text-[15px]"
               >
                 <span className="px-2 py-1">Previous</span>
-                <span className="min-w-8 rounded px-2 py-1">1</span>
+                <span className="min-w-8 rounded px-2 py-1">
+                  1
+                </span>
                 <span className="px-2 py-1">Next</span>
               </nav>
             )}
           </div>
 
           <div className="mt-3 min-h-1 lg:hidden">
-            <HorizontalScrollIndicator scrollRef={tableScrollRef} />
+            <HorizontalScrollIndicator
+              scrollRef={tableScrollRef}
+            />
           </div>
         </div>
       </div>
@@ -200,7 +277,10 @@ export default function Collection({ onViewCollection }) {
 // -----------------------------------------------------------------------------
 function getPaginationItems(currentPage, totalPages) {
   if (totalPages <= 4) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
+    return Array.from(
+      { length: totalPages },
+      (_, i) => i + 1,
+    );
   }
 
   const pages = new Set();
@@ -226,9 +306,13 @@ function getPaginationItems(currentPage, totalPages) {
   const items = [];
 
   for (let i = 0; i < sorted.length; i++) {
-    if (i > 0 && sorted[i] - sorted[i - 1] > 1) {
+    if (
+      i > 0 &&
+      sorted[i] - sorted[i - 1] > 1
+    ) {
       items.push("ellipsis");
     }
+
     items.push(sorted[i]);
   }
 
@@ -236,15 +320,29 @@ function getPaginationItems(currentPage, totalPages) {
 }
 
 // -----------------------------------------------------------------------------
-function Pagination({ currentPage, totalPages, onPageChange }) {
-  const items = getPaginationItems(currentPage, totalPages);
+// Pagination
+// -----------------------------------------------------------------------------
+function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}) {
+  const items = getPaginationItems(
+    currentPage,
+    totalPages,
+  );
+
   const isFirstPage = currentPage <= 1;
   const isLastPage = currentPage >= totalPages;
 
   const navButtonClass =
     "inline-flex items-center gap-1 rounded px-2 py-1 transition-colors";
-  const navButtonEnabled = "text-[#4866F6] hover:text-blue-800";
-  const navButtonDisabled = "cursor-not-allowed text-slate-300";
+
+  const navButtonEnabled =
+    "text-[#4866F6] hover:text-blue-800";
+
+  const navButtonDisabled =
+    "cursor-not-allowed text-slate-300";
 
   return (
     <nav
@@ -254,10 +352,19 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
       <button
         type="button"
         disabled={isFirstPage}
-        onClick={() => onPageChange(currentPage - 1)}
-        className={`${navButtonClass} ${isFirstPage ? navButtonDisabled : navButtonEnabled}`}
+        onClick={() =>
+          onPageChange(currentPage - 1)
+        }
+        className={`${navButtonClass} ${
+          isFirstPage
+            ? navButtonDisabled
+            : navButtonEnabled
+        }`}
       >
-        <ChevronsLeft className="h-4 w-4" aria-hidden="true" />
+        <ChevronsLeft
+          className="h-4 w-4"
+          aria-hidden="true"
+        />
         Previous
       </button>
 
@@ -275,7 +382,11 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
             key={item}
             type="button"
             onClick={() => onPageChange(item)}
-            aria-current={item === currentPage ? "page" : undefined}
+            aria-current={
+              item === currentPage
+                ? "page"
+                : undefined
+            }
             className={`min-w-[2rem] rounded px-2 py-1 transition-colors focus:outline-none ${
               item === currentPage
                 ? "bg-[#4866F6] font-medium text-white"
@@ -290,50 +401,102 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
       <button
         type="button"
         disabled={isLastPage}
-        onClick={() => onPageChange(currentPage + 1)}
-        className={`${navButtonClass} ${isLastPage ? navButtonDisabled : navButtonEnabled}`}
+        onClick={() =>
+          onPageChange(currentPage + 1)
+        }
+        className={`${navButtonClass} ${
+          isLastPage
+            ? navButtonDisabled
+            : navButtonEnabled
+        }`}
       >
         Next
-        <ChevronsRight className="h-4 w-4" aria-hidden="true" />
+        <ChevronsRight
+          className="h-4 w-4"
+          aria-hidden="true"
+        />
       </button>
     </nav>
   );
 }
 
 // -----------------------------------------------------------------------------
-function HorizontalScrollIndicator({ scrollRef, className = "" }) {
-  const [thumb, setThumb] = useState({ width: 75, left: 0 });
-  const [hasOverflow, setHasOverflow] = useState(false);
+// Horizontal Scroll Indicator
+// -----------------------------------------------------------------------------
+function HorizontalScrollIndicator({
+  scrollRef,
+  className = "",
+}) {
+  const [thumb, setThumb] = useState({
+    width: 75,
+    left: 0,
+  });
+
+  const [hasOverflow, setHasOverflow] =
+    useState(false);
 
   useEffect(() => {
     const element = scrollRef?.current;
+
     if (!element) return;
 
     const update = () => {
-      const { scrollLeft, scrollWidth, clientWidth } = element;
-      const overflow = scrollWidth > clientWidth + 1;
+      const {
+        scrollLeft,
+        scrollWidth,
+        clientWidth,
+      } = element;
+
+      const overflow =
+        scrollWidth > clientWidth + 1;
+
       setHasOverflow(overflow);
 
       if (!overflow) {
-        setThumb({ width: 100, left: 0 });
+        setThumb({
+          width: 100,
+          left: 0,
+        });
         return;
       }
 
-      const widthPercent = (clientWidth / scrollWidth) * 100;
-      const maxLeft = 100 - widthPercent;
-      const leftPercent =
-        maxLeft <= 0 ? 0 : (scrollLeft / (scrollWidth - clientWidth)) * maxLeft;
+      const widthPercent =
+        (clientWidth / scrollWidth) * 100;
 
-      setThumb({ width: widthPercent, left: leftPercent });
+      const maxLeft = 100 - widthPercent;
+
+      const leftPercent =
+        maxLeft <= 0
+          ? 0
+          : (scrollLeft /
+              (scrollWidth - clientWidth)) *
+            maxLeft;
+
+      setThumb({
+        width: widthPercent,
+        left: leftPercent,
+      });
     };
 
     update();
-    element.addEventListener("scroll", update, { passive: true });
-    const resizeObserver = new ResizeObserver(update);
+
+    element.addEventListener(
+      "scroll",
+      update,
+      { passive: true },
+    );
+
+    const resizeObserver =
+      new ResizeObserver(update);
+
     resizeObserver.observe(element);
 
     return () => {
-      element.removeEventListener("scroll", update);
+      element.removeEventListener(
+        "scroll",
+        update,
+      );
+
       resizeObserver.disconnect();
     };
   }, [scrollRef]);
@@ -346,7 +509,11 @@ function HorizontalScrollIndicator({ scrollRef, className = "" }) {
       <div
         className="absolute top-1/2 h-2 -translate-y-1/2 rounded-full bg-[#4866F6] transition-[left,width] duration-150 ease-out"
         style={{
-          width: `${hasOverflow ? thumb.width : 75}%`,
+          width: `${
+            hasOverflow
+              ? thumb.width
+              : 75
+          }%`,
           left: `${thumb.left}%`,
         }}
       />

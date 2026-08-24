@@ -1807,3 +1807,187 @@ export const getUserIntegrations = async () => {
     throw error;
   }
 };
+
+
+
+
+// ================= Quadrant =================
+
+export const getQdrantDashboard = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/admin/semantic-memory/qdrant-dashboard`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch Qdrant dashboard");
+  }
+
+  return response.json();
+};
+
+
+
+export const getSemanticMemoryDashboard = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/admin/semantic-memory/dashboard`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch semantic memory dashboard");
+  }
+
+  return response.json();
+};
+
+
+export const getRetrievalPerformance = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/admin/semantic-memory/retrieval-performance`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch retrieval performance");
+  }
+
+  return response.json();
+};
+
+
+
+export const getMemoryTrend = async (period = "weekly") => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/admin/semantic-memory/memory-trend?period=${period}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch memory trend");
+  }
+
+  return response.json();
+};
+
+
+
+export const getBehaviorLearningDashboard = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/behavior-learning/dashboard`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch behavior learning dashboard");
+  }
+
+  return response.json();
+};
+
+
+export const getAiLearningEngine = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/admin/ai-learning-engine`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch AI learning engine data");
+  }
+
+  return response.json();
+};
+
+
+
+export const getExplicitFeedback = async (page = 1, limit = 10) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/admin/ai-learning-engine/explicit-feedback?page=${page}&limit=${limit}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch explicit feedback");
+  }
+
+  return response.json();
+};
+
+
+export const getSemanticMemoryCollectionDetails = async (collectionId) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/admin/semantic-memory/collections/${collectionId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch collection details");
+  }
+
+  return response.json();
+};

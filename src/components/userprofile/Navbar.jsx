@@ -247,7 +247,7 @@ return (
       : defaultProfile} alt="" className="w-[55px] h-[55px] md:w-[42px] md:h-[42px] lg:w-[60px] lg:h-[60px] rounded-full" />
 <div className="hidden lg:flex flex-col">
   <h4 className="font-semibold text-[16px] text-[#4866F6]">{profile?.name || "User"}</h4>
-  <p className="text-[14px] text-[#586D93]">{profile?.status || "User"}</p>
+  <p className="text-[14px] text-[#586D93]">{profile?.role || "-"}</p>
 </div>
 </div></div></div>
 <div className="hidden md:flex justify-start items-center pl-4 lg:pl-5">
