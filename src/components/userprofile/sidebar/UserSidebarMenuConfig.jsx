@@ -176,7 +176,7 @@ const AiUsageIcon = ({ className }) => (
         id="mask0_aiusage"
         style={{ maskType: "luminance" }}
         maskUnits="userSpaceOnUse"
-        x="0"  
+        x="0"
         y="0"
         width="24"
         height="24"
@@ -202,7 +202,7 @@ const AiUsageIcon = ({ className }) => (
     </defs>
   </svg>
 );
- 
+
 
 const SettingsIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -313,34 +313,23 @@ export const userSidebarMenuItems = [
     key: "tasks",
     label: "Tasks",
     Icon: TasksIcon,
-    toggleKey: "tasks",
-    activeKeys: ["myTasks", "upcomingTasks", "completedTasks"],
-    children: [
-      { key: "myTasks", label: "My Tasks", Icon: MyTasksIcon, navigateTo: "/user/tasks/my" },
-      { key: "upcomingTasks", label: "Upcoming Tasks", Icon: UpcomingTasksIcon, navigateTo: "/user/tasks/upcoming" },
-      { key: "completedTasks", label: "Completed Tasks", Icon: CompletedTasksIcon, navigateTo: "/user/tasks/completed" },
-    ],
+    navigateTo: "/user/tasks/my-tasks",
   },
   {
-    key: "track",
+    key: "integrations",
     label: "Integrations",
     Icon: IntegrationsIcon,
-    toggleKey: "integrations",
-    activeKeys: ["calendar", "email"],
-    children: [
-      { key: "calendar", label: "Calendar", Icon: CalendarIcon, navigateTo: "/user/integrations/calendar" },
-      { key: "email", label: "Email", Icon: EmailIcon, navigateTo: "/user/integrations/email" },
-    ],
+    navigateTo: "/user/integrations",
   },
 
   {
-      key: "aiUsage",
-      label: "AI Usage",
-      Icon: AiUsageIcon,
-      navigateTo: "/user/ai-usage",
-      profilePageKey: "aiUsage",
-    },
- 
+    key: "aiUsage",
+    label: "AI Usage",
+    Icon: AiUsageIcon,
+    navigateTo: "/user/ai-usage",
+    profilePageKey: "aiUsage",
+  },
+
   {
     key: "communication",
     label: "Settings",

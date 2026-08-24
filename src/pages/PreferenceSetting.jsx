@@ -1,7 +1,7 @@
 
 import Navbar from '../components/userprofile/Navbar'
 import Sidebar from '../components/userprofile/Sidebar'
-import PreferenceSetting from "../components/userprofile/PreferenceSetting";
+import PreferenceSetting from "../components/userprofile/settings/PreferenceSetting";
 
 export default function UserProfile() {
   return (

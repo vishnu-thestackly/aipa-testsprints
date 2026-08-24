@@ -42,6 +42,8 @@ import PreferenceSetting from "./components/userprofile/PreferenceSetting";
 import AIIntelligence from "./components/userprofile/settings/AIIntelligence";
 import SidebarEmptyPage from "./components/userprofile/sidebar/SidebarEmptyPage";
 import AiUsageDashboard from "./components/userprofile/AiUsageDashboard";
+import NotificationsPage from "./components/userprofile/settings/NotificationsPage";
+import TasksDashboard from "./components/userprofile/tasks/TasksDashboard";
 
 
 
@@ -129,6 +131,10 @@ function App() {
  
   <Route path="ai-usage" element={<AiUsageDashboard/>}/>
   <Route path="settings/security" element={<SidebarEmptyPage title="Security" />} />
+  <Route path="settings/notifications" element={<NotificationsPage />} />
+  <Route path="tasks/my" element={<TasksDashboard />} />
+  <Route path="tasks/upcoming" element={<TasksDashboard />} />
+  <Route path="tasks/completed" element={<TasksDashboard />} />
   <Route path="integrations/calendar" element={<SidebarEmptyPage title="Calendar" />} />
   <Route path="integrations/email" element={<SidebarEmptyPage title="Email" />} />
 

@@ -13,7 +13,7 @@ import { getUserProfile } from "../api/authApi";
 import { Outlet, useLocation } from "react-router-dom";
 
 export default function UserProfile() {
-  
+
   const [profile, setProfile] = useState(null);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("profileDashboard");
@@ -25,18 +25,15 @@ export default function UserProfile() {
   useEffect(() => {
     const path = location.pathname;
     const menuKey =
-  path.includes("/new-chat") ? "newchat" :
-  path.includes("/ai-usage") ? "aiUsage" :
-  path.includes("/tasks/my") ? "myTasks" :
-  path.includes("/tasks/upcoming") ? "upcomingTasks" :
-  path.includes("/tasks/completed") ? "completedTasks" :
-  path.includes("/integrations/calendar") ? "calendar" :
-  path.includes("/integrations/email") ? "email" :
-  path.includes("/settings/preferences") ? "preferenceSetting" :
-  path.includes("/settings/ai-intelligence") ? "aiIntelligence" :
-  path.includes("/settings/security") ? "security" :
-  path.includes("/settings/notifications") ? "notifications" :
-  "profileDashboard";
+      path.includes("/new-chat") ? "newchat" :
+        path.includes("/ai-usage") ? "aiUsage" :
+          path.includes("/tasks/") ? "tasks" :
+            path.includes("/integrations") ? "integrations" :
+                    path.includes("/settings/preferences") ? "preferenceSetting" :
+                      path.includes("/settings/ai-intelligence") ? "aiIntelligence" :
+                        path.includes("/settings/security") ? "security" :
+                          path.includes("/settings/notifications") ? "notifications" :
+                            "profileDashboard";
 
     setActiveItem(menuKey);
     if (path.includes("/settings/preferences")) setProfilePage("preferenceSetting");
@@ -90,20 +87,20 @@ export default function UserProfile() {
         <div className="flex-1 overflow-y-auto bg-gray-100 scrollbar-hide ">
 
           <Outlet
-    context={{
-      languageOpen,
-      profile,
-      setProfile,
-      profilePage,
-      setProfilePage,
-      activeItem,
-      setActiveItem,
-      selectedConversationId,
-    }}
-  />
+            context={{
+              languageOpen,
+              profile,
+              setProfile,
+              profilePage,
+              setProfilePage,
+              activeItem,
+              setActiveItem,
+              selectedConversationId,
+            }}
+          />
         </div>
       </div>
-      
+
     </div>
   );
 }
