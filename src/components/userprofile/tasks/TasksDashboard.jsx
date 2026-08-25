@@ -134,13 +134,13 @@ export default function TasksDashboard() {
   };
 
   return (
-    <div className={`h-full overflow-y-auto px-4 sm:px-6 lg:px-8 pt-4 lg:pt-6 pb-12 scrollbar-hide transition-all duration-300 ${languageOpen ? "mt-[60px] md:mt-[70px] lg:mt-[80px]" : "mt-0"}`}>
+    <div className={`h-full overflow-y-auto px-4 sm:px-6 lg:px-4 xl:px-8 pt-4 lg:pt-6 pb-12 scrollbar-hide transition-all duration-300 ${languageOpen ? "mt-[60px] md:mt-[70px] lg:mt-[80px]" : "mt-0"}`}>
       <div className="w-full flex flex-col min-h-[calc(100vh-90px)]">
         {showCreateNewTask ? (
           <CreateNewTask onCancel={() => setShowCreateNewTask(false)} onSave={handleCreateTaskSave} />
         ) : (
           /* Outer White Card Container wrapping everything */
-          <div className="w-full flex-1 rounded-[25px] border border-[#DADADA] bg-white p-4 md:p-8 shadow-[0px_0px_4px_0px_#00000014] flex flex-col">
+          <div className="w-full flex-1 rounded-[25px] border border-[#DADADA] bg-white p-4 md:p-6 lg:p-4 xl:p-8 shadow-[0px_0px_4px_0px_#00000014] flex flex-col">
             {/* Main Title: Tasks & Reminders */}
             <div className="pb-4 border-b border-[#E8E8E8] mb-5">
               <h2 className="font-semibold text-[20px] md:text-[24px] text-[#3D3D3D]">Tasks & Reminders</h2>
@@ -148,22 +148,22 @@ export default function TasksDashboard() {
 
             {/* Right-Aligned Switcher: Tasks | Reminders below the line */}
             <div className="flex justify-end mb-6">
-              <div className="bg-white border border-[#E8E8E8] p-1 rounded-full flex w-full sm:w-[600px] shrink-0 shadow-[0px_2px_4px_rgba(0,0,0,0.02)]">
+              <div className="bg-white border border-[#E8E8E8] p-1 rounded-full flex w-full lg:w-[600px] shrink-0 shadow-[0px_2px_4px_rgba(0,0,0,0.02)]">
                 <button className="flex-1 text-center py-2 rounded-full text-sm font-semibold bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)] transition-all cursor-pointer">Tasks</button>
                 <button className="flex-1 text-center py-2 rounded-full text-sm font-medium text-[#586D93] hover:text-[#4866F6] transition-all cursor-pointer">Reminders</button>
               </div>
             </div>
-            <div className="w-full flex-1 rounded-[20px] md:rounded-[25px] border border-[#DADADA] bg-white p-4 md:p-6 shadow-[0px_2px_8px_rgba(0,0,0,0.02)] flex flex-col mt-2">
+            <div className="w-full flex-1 lg:rounded-[25px] lg:border lg:border-[#DADADA] lg:bg-white p-0 lg:p-4 xl:p-6 lg:shadow-[0px_2px_8px_rgba(0,0,0,0.02)] flex flex-col mt-2">
               {/* Sub Header: Tasks Title + Action Buttons */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-[#E8E8E8] mb-5">
                 <h3 className="font-semibold text-[20px] text-[#3D3D3D]">Tasks</h3>
-                <div className="flex items-center gap-3">
-                  <button onClick={handleRefresh} className="flex items-center justify-center gap-2 h-10 px-8 min-w-[150px] rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white transition-all cursor-pointer font-semibold text-sm shadow-[0_4px_10px_rgba(72,102,246,0.15)]"><span>Refresh</span><RefreshCw className="w-4 h-4 text-white" /></button>
-                  <button onClick={() => setShowCreateNewTask(true)} className="flex items-center justify-center gap-2 h-10 px-8 min-w-[165px] rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white transition-all cursor-pointer font-semibold text-sm shadow-[0_4px_10px_rgba(72,102,246,0.25)] whitespace-nowrap"><span>New Task</span><Plus className="w-4 h-4" /></button>
+                <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                  <button onClick={handleRefresh} className="w-full sm:w-auto flex items-center justify-center gap-2 h-10 px-8 sm:min-w-[150px] rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white transition-all cursor-pointer font-semibold text-sm shadow-[0_4px_10px_rgba(72,102,246,0.15)]"><span>Refresh</span><RefreshCw className="w-4 h-4 text-white" /></button>
+                  <button onClick={() => setShowCreateNewTask(true)} className="w-full sm:w-auto flex items-center justify-center gap-2 h-10 px-8 sm:min-w-[165px] rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white transition-all cursor-pointer font-semibold text-sm shadow-[0_4px_10px_rgba(72,102,246,0.25)] whitespace-nowrap"><span>New Task</span><Plus className="w-4 h-4" /></button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4 mb-6">
                 <div onClick={() => handleTabChange("upcoming")} className={`flex items-center gap-4 p-4 rounded-[18px] border transition-all cursor-pointer ${activeTab === "upcoming" ? "border-[#4866F6] bg-[#4866F604] shadow-[0px_4px_12px_rgba(72,102,246,0.08)]" : "border-[#E3E3E3] bg-white hover:border-[#4866F6aa]"}`}>
                   <div className="w-[60px] h-[60px] rounded-full flex-shrink-0 flex items-center justify-center bg-[#E4E8FE]"><img src={upcomingIcon} alt="upcoming" className="w-[32px] h-[32px]" /></div>
                   <div className="flex flex-col"><span className="text-[24px] font-bold text-[#3D3D3D]">{upcomingCount}</span><span className="text-sm text-[#586D93] font-medium">Upcoming Tasks</span></div>
@@ -179,9 +179,9 @@ export default function TasksDashboard() {
               </div>
               <div className="w-full mb-6 border-t border-[#E8E8E8] pt-4">
                 <div className="w-full bg-[#FAFBFD] border border-[#E8E8E8] p-1.5 rounded-full flex gap-1 overflow-x-auto md:overflow-visible no-scrollbar">
-                  <button onClick={() => handleTabChange("upcoming")} className={`shrink-0 min-w-[280px] md:min-w-0 md:flex-1 text-center py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === "upcoming" ? "bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)]" : "text-[#586D93] hover:text-[#4866F6]"}`}>Upcoming Task</button>
-                  <button onClick={() => handleTabChange("pending")} className={`shrink-0 min-w-[140px] md:min-w-0 md:flex-1 text-center py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === "pending" ? "bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)]" : "text-[#586D93] hover:text-[#4866F6]"}`}>Pending Task</button>
-                  <button onClick={() => handleTabChange("completed")} className={`shrink-0 min-w-[140px] md:min-w-0 md:flex-1 text-center py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === "completed" ? "bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)]" : "text-[#586D93] hover:text-[#4866F6]"}`}>Completed Task</button>
+                  <button onClick={() => handleTabChange("upcoming")} className={`shrink-0 min-w-[240px] md:min-w-0 md:flex-1 text-center py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === "upcoming" ? "bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)]" : "text-[#586D93] hover:text-[#4866F6]"}`}>Upcoming Task</button>
+                  <button onClick={() => handleTabChange("pending")} className={`shrink-0 min-w-[240px] md:min-w-0 md:flex-1 text-center py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === "pending" ? "bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)]" : "text-[#586D93] hover:text-[#4866F6]"}`}>Pending Task</button>
+                  <button onClick={() => handleTabChange("completed")} className={`shrink-0 min-w-[240px] md:min-w-0 md:flex-1 text-center py-2.5 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${activeTab === "completed" ? "bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)]" : "text-[#586D93] hover:text-[#4866F6]"}`}>Completed Task</button>
                 </div>
               </div>
 
@@ -189,9 +189,9 @@ export default function TasksDashboard() {
                 <h3 className="font-semibold text-lg text-[#3D3D3D]">{activeTab === "upcoming" ? "Upcoming Tasks" : activeTab === "completed" ? "Completed Tasks" : "Pending Tasks"}</h3>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 lg:gap-3 xl:gap-5">
                 {getFilteredTasks().map((task, idx) => (
-                  <div key={task.id} className="rounded-[24px] border border-[#E3E3E3] bg-white p-5 flex flex-col justify-between shadow-[0px_4px_12px_rgba(0,0,0,0.02)] hover:shadow-[0px_4px_18px_rgba(0,0,0,0.06)] transition-all min-h-[250px]">
+                  <div key={task.id} className="rounded-[24px] border border-[#E3E3E3] bg-white p-4 lg:p-3.5 xl:p-5 flex flex-col justify-between shadow-[0px_4px_12px_rgba(0,0,0,0.02)] hover:shadow-[0px_4px_18px_rgba(0,0,0,0.06)] transition-all min-h-[250px]">
                     <div>
                       <h4 className="font-semibold text-[17px] text-[#3D3D3D] line-clamp-1 mb-3">{idx + 1}.{task.title}</h4>
                       <div className="flex items-center gap-2 mb-3">
@@ -208,9 +208,9 @@ export default function TasksDashboard() {
                       </div>
                     </div>
                     <div className="w-full border-t border-[#E8E8E8] my-1"></div>
-                    <div className="flex items-center gap-6 py-2.5 text-[#586D93]">
-                      <div className="flex items-center gap-2 text-xs font-medium"><img src={calendarIcon} alt="Calendar" className="w-4 h-4" /><span>{task.dueDate}</span></div>
-                      <div className="flex items-center gap-2 text-xs font-medium"><Clock className="w-4 h-4 text-[#586D93]" /><span>{task.dueTime}</span></div>
+                    <div className="flex items-center gap-3 lg:gap-1.5 xl:gap-6 py-2.5 text-[#586D93]">
+                      <div className="flex items-center gap-1 sm:gap-2 text-[11px] xl:text-xs font-medium whitespace-nowrap shrink-0"><img src={calendarIcon} alt="Calendar" className="w-3.5 h-3.5" /><span>{task.dueDate}</span></div>
+                      <div className="flex items-center gap-1 sm:gap-2 text-[11px] xl:text-xs font-medium whitespace-nowrap shrink-0"><Clock className="w-3.5 h-3.5 text-[#586D93]" /><span>{task.dueTime}</span></div>
                     </div>
                     <div className="w-full border-t border-[#E8E8E8] my-1"></div>
                     <div className="pt-2">

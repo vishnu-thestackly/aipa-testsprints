@@ -5,17 +5,18 @@ import logo from "../../assets/images/Logo.svg";
 import SignOut from "../../assets/images/SignOut.png";
 import defaultProfile from "../../assets/images/profile.png";
 import logos from "../../assets/images/logo.png";
-import TabletSidebar from "./sidebar/TabletSidebar";
 import { mockNotifications } from "../../utils/mockNotifications";
 import notificationTaskImg from "../../assets/images/notification-task.png";
 
 const icon_bg = "w-[36px] h-[36px] bg-[#4866F626] rounded-[18px] flex justify-center items-center text-[#4866F6] transition-all duration-300 ease-in-out";
 
-export default function Navbar({ profile }) {
+export default function Navbar({
+  profile,
+  sidebarOpen,
+  setSidebarOpen,
+}) {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState({ tasks: false, integrations: false, settings: false, language: false });
-  const [activeItem, setActiveItem] = useState("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showLanguages, setShowLanguages] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("English");
   const [showNotifications, setShowNotifications] = useState(false);
@@ -40,7 +41,7 @@ export default function Navbar({ profile }) {
       {/* MOBILE VIEW */}
       <div className="md:hidden px-[20px] pt-[10px] pb-[14px]">
         <div className="flex justify-between items-center">
-          <div onClick={() => { setSidebarOpen(true); setActiveItem("tasks"); setOpenMenu({ ...openMenu, tasks: !openMenu.tasks }); }} className="w-[38px] h-[38px] min-[360px]:w-[40px] min-[360px]:h-[40px] min-[390px]:w-[42px] min-[390px]:h-[42px] rounded-full bg-[#F3F3F3] flex justify-center items-center cursor-pointer">
+          <div onClick={() => setSidebarOpen(true)} className="w-[38px] h-[38px] min-[360px]:w-[40px] min-[360px]:h-[40px] min-[390px]:w-[42px] min-[390px]:h-[42px] rounded-full bg-[#F3F3F3] flex justify-center items-center cursor-pointer">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#586D93" strokeWidth="2"><path d="M3 6H21M3 12H21M3 18H21" /></svg>
           </div>
           <div onClick={() => navigate("/")} className="flex items-center gap-[8px]">
@@ -112,9 +113,7 @@ export default function Navbar({ profile }) {
           </div>
         </div>
       </div>
-      {/* MOBILE SIDEBAR — uses shared TabletSidebar component */}
-      {sidebarOpen && <div className="fixed inset-0 bg-black/30 z-40 md:hidden" onClick={() => setSidebarOpen(false)} />}
-      <TabletSidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} activeItem={activeItem} setActiveItem={setActiveItem} openMenu={openMenu} setOpenMenu={setOpenMenu} navigate={navigate} logos={logos} onLogout={() => navigate("/")} />
+
 
 {/* normal mobile view */}
 <div className="hidden md:flex w-full max-w-none h-[80px] md:h-[80px] lg:h-[100px]">{/* LEFT */}

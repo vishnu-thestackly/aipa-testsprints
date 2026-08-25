@@ -516,23 +516,34 @@ export default function EditProfile({ onOpenChat }) {
               >
 
                 {image ? (
-                  <img
-
-                    src={
-
-                      image?.startsWith("blob:")
-
-                        ? image
-
-                        : `http://127.0.0.1:8000${image}`
-
-                    }
-
-                    alt="Preview"
-
-                    className="h-full object-contain rounded-lg"
-
-                  />
+                  <div className="h-full py-2">
+                    <div className="relative h-full aspect-square">
+                      <img
+                        src={
+                          image?.startsWith("blob:")
+                            ? image
+                            : `http://127.0.0.1:8000${image}`
+                        }
+                        alt="Preview"
+                        className="h-full w-full object-cover rounded-lg"
+                      />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setImage(null);
+                          setAvatarFile(null);
+                          if (fileInputRef.current) fileInputRef.current.value = "";
+                        }}
+                        className="absolute top-1 -right-[26px] w-[20px] h-[20px] bg-[#E11D48] rounded-full flex items-center justify-center text-white cursor-pointer hover:bg-rose-600 transition shadow z-30"
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
 
                 ) : (
                   <>

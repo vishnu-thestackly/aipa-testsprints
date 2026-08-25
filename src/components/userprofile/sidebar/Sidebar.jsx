@@ -74,7 +74,7 @@ export default function Sidebar({
           <button
             type="button"
             aria-label="Close sidebar"
-            className="fixed inset-0 bg-black/40 z-40 md:block lg:hidden"
+            className="fixed inset-0 bg-black/40 z-40 lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
           <TabletSidebar
