@@ -522,7 +522,7 @@ export default function EditProfile({ onOpenChat }) {
                         src={
                           image?.startsWith("blob:")
                             ? image
-                            : `http://127.0.0.1:8000${image}`
+                            : `${import.meta.env.VITE_API_BASE_URL}${image}`
                         }
                         alt="Preview"
                         className="h-full w-full object-cover rounded-lg"

@@ -9,7 +9,7 @@ import { SubscriptionProvider } from './context/SubscriptionContext';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId="95599438061-mrd1t6c3havsfjrej19kmuqmbd5vhto5.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
       <OnboardingProvider>
         <SubscriptionProvider>
           <App />

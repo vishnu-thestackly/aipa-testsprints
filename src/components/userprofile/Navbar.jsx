@@ -51,7 +51,7 @@ export default function Navbar({
               <p className="text-[#4866F6] text-[8px] min-[360px]:text-[9px] min-[390px]:text-[10px] tracking-[0.5em] mt-[4px]">ASSISTANT</p>
             </div>
           </div>
-          <img src={profile?.avatar_url ? `http://54.188.108.28${profile.avatar_url}` : defaultProfile} alt="" className="w-[45px] h-[45px] min-[360px]:w-[48px] min-[360px]:h-[48px] min-[390px]:w-[52px] min-[390px]:h-[52px]" />
+          <img src={profile?.avatar_url ? `${import.meta.env.VITE_API_BASE_URL}${profile.avatar_url}` : defaultProfile} alt="" className="w-[45px] h-[45px] min-[360px]:w-[48px] min-[360px]:h-[48px] min-[390px]:w-[52px] min-[390px]:h-[52px]" />
         </div>
         <div className="flex justify-between items-center mt-[25px]">
           <div className="w-[120px]"></div>
@@ -211,7 +211,7 @@ export default function Navbar({
 )}
 
 <img src={profile?.avatar_url
-      ? `http://54.188.108.28${profile.avatar_url}`
+      ? `${import.meta.env.VITE_API_BASE_URL}${profile.avatar_url}`
       : defaultProfile} alt="" className="w-[55px] h-[55px] md:w-[42px] md:h-[42px] lg:w-[60px] lg:h-[60px] rounded-full" />
 <div className="hidden lg:flex flex-col">
   <h4 className="font-semibold text-[16px] text-[#4866F6]">{profile?.name || "User"}</h4>

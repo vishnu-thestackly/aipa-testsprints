@@ -43,7 +43,7 @@ export default function LoginPage() {
   const recaptchaRef = useRef();
   const navigate = useNavigate();
 
-  const RECAPTCHA_SITE_KEY = "6LdIBOYsAAAAAN_9QolnI6KEqLk3HhPH1FBlw89b";
+  const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
   useEffect(() => {
     const interval = setInterval(() => {

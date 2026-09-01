@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Backend Base URL
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "import.meta.env.VITE_API_BASE_URL";
 
 // Axios Instance
 const API = axios.create({
@@ -1987,6 +1987,54 @@ export const getSemanticMemoryCollectionDetails = async (collectionId) => {
 
   if (!response.ok) {
     throw new Error("Failed to fetch collection details");
+  }
+
+  return response.json();
+};
+
+
+
+export const updateAiIntelligence = async (data) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/users/me/ai-intelligence`,
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to update AI intelligence settings");
+  }
+
+  return response.json();
+};
+
+
+
+export const getAiIntelligence = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(
+    `${BASE_URL}/api/v1/users/me/ai-intelligence`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch AI intelligence settings");
   }
 
   return response.json();
