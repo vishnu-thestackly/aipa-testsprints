@@ -9,7 +9,8 @@ export default function SidebarMenuList({
   sidebarOpen,
   setSidebarOpen,
   variant = "desktop",
-}) {
+})
+ {
   const isDesktop = variant === "desktop";
   const isTablet = variant === "tablet";
   const isMobile = variant === "mobile";

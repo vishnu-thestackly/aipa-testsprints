@@ -1,10 +1,11 @@
 // Footer.jsx
 
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
 
 const Footer = () => {
-
   const navigate = useNavigate();
+  const { isDark } = useTheme();
 
   return (
     <footer
@@ -15,39 +16,32 @@ const Footer = () => {
         shrink-0
       "
     >
-
       <div className="w-full">
-
         <div
           className="
             flex
             items-center
             justify-between
-
             md:grid
             md:grid-cols-3
-
             gap-3
             sm:gap-6
             xl:gap-8
-
             w-full
           "
         >
-
           {/* LEFT */}
           <p
-            className="
-              text-[#8D97A9]
-
+            className={`
+              ${isDark ? "text-white" : "text-[#8D97A9]"}
               text-[12px]
               min-[375px]:text-[13px]
               sm:text-[18px]
-
               font-bold
-
               whitespace-nowrap
-            "
+              transition-colors
+              duration-300
+            `}
           >
             © All Rights Reserved
           </p>
@@ -57,59 +51,52 @@ const Footer = () => {
 
           {/* RIGHT */}
           <div
-            className="
+            className={`
               flex
               items-center
-
               md:justify-self-end
-
               gap-2
               sm:gap-3
-
-              text-[#8D97A9]
-
+              ${isDark ? "text-white" : "text-[#8D97A9]"}
               text-[12px]
               min-[375px]:text-[13px]
               sm:text-[18px]
-
               font-bold
-
               whitespace-nowrap
-            "
+              transition-colors
+              duration-300
+            `}
           >
-
             {/* HELP */}
             <button
               onClick={() => navigate("/help")}
-              className="
+              className={`
                 cursor-pointer
                 hover:underline
+                ${isDark ? "text-white hover:text-[#4866F6]" : ""}
                 transition
-              "
+              `}
             >
               Help
             </button>
 
-            <span>|</span>
+            <span className={isDark ? "text-white" : ""}>|</span>
 
             {/* FAQ */}
             <button
               onClick={() => navigate("/faq")}
-              className="
+              className={`
                 cursor-pointer
                 hover:underline
+                ${isDark ? "text-white hover:text-[#4866F6]" : ""}
                 transition
-              "
+              `}
             >
               FAQ
             </button>
-
           </div>
-
         </div>
-
       </div>
-
     </footer>
   );
 };

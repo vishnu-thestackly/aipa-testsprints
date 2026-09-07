@@ -6,16 +6,18 @@ import App from './App.jsx'
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { OnboardingProvider } from "./context/OnboardingContext";
 import { SubscriptionProvider } from './context/SubscriptionContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-      <OnboardingProvider>
-        <SubscriptionProvider>
-          <App />
-        </SubscriptionProvider>
-      </OnboardingProvider>
-
+      <ThemeProvider>
+        <OnboardingProvider>
+          <SubscriptionProvider>
+            <App />
+          </SubscriptionProvider>
+        </OnboardingProvider>
+      </ThemeProvider>
     </GoogleOAuthProvider>
 </React.StrictMode>
 )
