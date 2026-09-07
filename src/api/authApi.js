@@ -1814,228 +1814,234 @@ export const getUserIntegrations = async () => {
 // ================= Quadrant =================
 
 export const getQdrantDashboard = async () => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${BASE_URL}/api/v1/admin/semantic-memory/qdrant-dashboard`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    },
-  );
+    const response = await API.get(
+      "/api/v1/admin/semantic-memory/qdrant-dashboard",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch Qdrant dashboard");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch Qdrant dashboard"
+    );
   }
-
-  return response.json();
 };
-
-
 
 export const getSemanticMemoryDashboard = async () => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${BASE_URL}/api/v1/admin/semantic-memory/dashboard`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    },
-  );
+    const response = await API.get(
+      "/api/v1/admin/semantic-memory/dashboard",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch semantic memory dashboard");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch semantic memory dashboard"
+    );
   }
-
-  return response.json();
 };
-
 
 export const getRetrievalPerformance = async () => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${BASE_URL}/api/v1/admin/semantic-memory/retrieval-performance`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    },
-  );
+    const response = await API.get(
+      "/api/v1/admin/semantic-memory/retrieval-performance",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch retrieval performance");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch retrieval performance"
+    );
   }
-
-  return response.json();
 };
 
-
-
 export const getMemoryTrend = async (period = "weekly") => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${BASE_URL}/api/v1/admin/semantic-memory/memory-trend?period=${period}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    }
-  );
+    const response = await API.get(
+      "/api/v1/admin/semantic-memory/memory-trend",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          period,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch memory trend");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch memory trend"
+    );
   }
-
-  return response.json();
 };
 
 
 
 export const getBehaviorLearningDashboard = async () => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${BASE_URL}/api/v1/behavior-learning/dashboard`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    }
-  );
+    const response = await API.get(
+      "/api/v1/behavior-learning/dashboard",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch behavior learning dashboard");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch behavior learning dashboard"
+    );
   }
-
-  return response.json();
 };
 
 
 export const getAiLearningEngine = async () => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${BASE_URL}/api/v1/admin/ai-learning-engine`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    }
-  );
+    const response = await API.get(
+      "/api/v1/admin/ai-learning-engine",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch AI learning engine data");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch AI learning engine data"
+    );
   }
-
-  return response.json();
 };
 
 
-
 export const getExplicitFeedback = async (page = 1, limit = 10) => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${BASE_URL}/api/v1/admin/ai-learning-engine/explicit-feedback?page=${page}&limit=${limit}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    }
-  );
+    const response = await API.get(
+      "/api/v1/admin/ai-learning-engine/explicit-feedback",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          page,
+          limit,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch explicit feedback");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch explicit feedback"
+    );
   }
-
-  return response.json();
 };
 
 
 export const getSemanticMemoryCollectionDetails = async (collectionId) => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${BASE_URL}/api/v1/admin/semantic-memory/collections/${collectionId}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    },
-  );
+    const response = await API.get(
+      `/api/v1/admin/semantic-memory/collections/${collectionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch collection details");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch collection details"
+    );
   }
-
-  return response.json();
 };
-
-
 
 export const updateAiIntelligence = async (data) => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${BASE_URL}/api/v1/users/me/ai-intelligence`,
-    {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    },
-  );
+    const response = await API.put(
+      "/api/v1/users/me/ai-intelligence",
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to update AI intelligence settings");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to update AI intelligence settings"
+    );
   }
-
-  return response.json();
 };
 
-
-
 export const getAiIntelligence = async () => {
-  const token = localStorage.getItem("token");
+  try {
+    const token = localStorage.getItem("token");
 
-  const response = await fetch(
-    `${BASE_URL}/api/v1/users/me/ai-intelligence`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-      },
-    },
-  );
+    const response = await API.get(
+      "/api/v1/users/me/ai-intelligence",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch AI intelligence settings");
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch AI intelligence settings"
+    );
   }
-
-  return response.json();
 };
