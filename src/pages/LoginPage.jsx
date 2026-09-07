@@ -5,7 +5,9 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { IoLogoGoogle } from "react-icons/io";
 import { FaApple } from "react-icons/fa";
 import logo from "../assets/images/logoimage.svg";
+import LogoDark from "../assets/images/Logoimg.svg";
 import login_image from "../assets/images/login_image.png";
+import login_image_dark from "../assets/images/login_image_dark.png";
 import Password from "../assets/images/Password.png";
 import Mails from "../assets/images/Mails.png";
 import Group from "../assets/images/Group.jpeg";
@@ -13,6 +15,7 @@ import Groups from "../assets/images/Groups.jpeg";
 import ClockCountdown from "../assets/images/ClockCountdown.svg";
 import google from "../assets/images/google.svg";
 import apple from "../assets/images/apple.png";
+import { useTheme } from "../context/ThemeContext";
 
 
 //API
@@ -20,6 +23,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { loginUser, verifyCaptcha, googleLogin } from "../api/authApi";
 
 export default function LoginPage() {
+  const { isDark } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -250,8 +254,9 @@ export default function LoginPage() {
   };
 
   const SessionTimeoutPopup = () => (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black/40">
-      <div className="rounded-xl p-5 md:p-6 w-full max-w-[380px] md:max-w-[450px] lg:w-[500px] lg:max-w-none lg:h-[270px] mx-4 lg:mx-0 text-center relative bg-white">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black/60 backdrop-blur-sm">
+      <div className={`rounded-xl p-5 md:p-6 w-full max-w-[380px] md:max-w-[450px] lg:w-[500px] lg:max-w-none lg:h-[270px] mx-4 lg:mx-0 text-center relative ${isDark ? "bg-[#050B1A] border border-[#1E3A6D] text-white" : "bg-white"
+        }`}>
         <button
           onClick={() => setShowSessionTimeout(false)}
           className="absolute right-3 lg:right-4 top-3 lg:top-4 flex h-5 w-5 items-center justify-center rounded-full bg-[#f15055] text-white cursor-pointer"
@@ -268,14 +273,13 @@ export default function LoginPage() {
         <h3 className="text-xl md:text-2xl font-semibold mb-2 text-[#4866F6]">
           Session Timeout
         </h3>
-        <p className="text-[#8D97A9] text-xs md:text-sm mb-4 md:mb-5 px-2 md:px-0">
+        <p className={`${isDark ? "text-[#94A3B8]" : "text-[#8D97A9]"} text-xs md:text-sm mb-4 md:mb-5 px-2 md:px-0`}>
           For security reasons, your session has timed out. Please Log in again
           to access your account.
         </p>
         <button
           onClick={() => setShowSessionTimeout(false)}
-          className="w-full md:w-[280px] lg:w-[300px] h-10 bg-[#4866F6] text-white rounded-3xl font-medium text-sm hover:bg-[#4338CA] transition cursor-pointer
-          "
+          className="w-full md:w-[280px] lg:w-[300px] h-10 bg-[#4866F6] text-white rounded-3xl font-medium text-sm hover:bg-[#4338CA] transition cursor-pointer"
         >
           Log In
         </button>
@@ -284,8 +288,9 @@ export default function LoginPage() {
   );
 
   const LockedPopup = () => (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black/40">
-      <div className="rounded-xl p-5 md:p-6 w-full max-w-[380px] md:max-w-[450px] lg:w-[500px] lg:max-w-none lg:h-[270px] mx-4 lg:mx-0 text-center relative bg-white">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black/60 backdrop-blur-sm">
+      <div className={`rounded-xl p-5 md:p-6 w-full max-w-[380px] md:max-w-[450px] lg:w-[500px] lg:max-w-none lg:h-[270px] mx-4 lg:mx-0 text-center relative ${isDark ? "bg-[#050B1A] border border-[#1E3A6D] text-white" : "bg-white"
+        }`}>
         <button
           onClick={() => setShowLockedPopup(false)}
           className="absolute right-3 lg:right-4 top-3 lg:top-4 flex h-5 w-5 items-center justify-center rounded-full bg-[#f15055] text-white"
@@ -295,7 +300,8 @@ export default function LoginPage() {
         <div className="flex justify-center mb-3 md:mb-4">
           <img src={Group} alt="" className="w-10 h-10 md:w-12 md:h-12" />
         </div>
-        <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-lg p-3 mb-4 w-full md:w-[380px] lg:w-[330px] mx-auto">
+        <div className={`flex items-center gap-2 ${isDark ? "bg-red-950/40 border-red-800" : "bg-red-50 border-red-200"
+          } border rounded-lg p-3 mb-4 w-full md:w-[380px] lg:w-[330px] mx-auto`}>
           <AlertTriangle className="w-4 h-4 text-red-500 flex-shrink-0" />
           <p className="text-[#ED3A3A] text-xs text-left">
             Account locked due to multiple failed login attempts. Please try
@@ -304,7 +310,8 @@ export default function LoginPage() {
         </div>
         <button
           onClick={() => setShowLockedPopup(false)}
-          className="w-full md:w-[380px] lg:w-[330px] h-10 bg-[#CFCFCF] text-gray-600 rounded-3xl font-medium text-sm hover:bg-gray-300 transition"
+          className={`w-full md:w-[380px] lg:w-[330px] h-10 ${isDark ? "bg-[#1E3A6D] text-gray-300 hover:bg-[#2A4D8D]" : "bg-[#CFCFCF] text-gray-600 hover:bg-gray-300"
+            } rounded-3xl font-medium text-sm transition`}
         >
           Continue
         </button>
@@ -313,8 +320,9 @@ export default function LoginPage() {
   );
 
   const UnlockedPopup = () => (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="rounded-xl p-5 md:p-6 w-full max-w-[380px] md:max-w-[450px] lg:w-[500px] lg:max-w-none lg:h-[270px] mx-4 lg:mx-0 text-center relative bg-white">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className={`rounded-xl p-5 md:p-6 w-full max-w-[380px] md:max-w-[450px] lg:w-[500px] lg:max-w-none lg:h-[270px] mx-4 lg:mx-0 text-center relative ${isDark ? "bg-[#050B1A] border border-[#1E3A6D] text-white" : "bg-white"
+        }`}>
         <button
           onClick={handleCloseUnlockedPopup}
           className="absolute right-3 lg:right-4 top-3 lg:top-4 flex h-5 w-5 items-center justify-center rounded-full bg-[#f15055] text-white"
@@ -324,15 +332,16 @@ export default function LoginPage() {
         <div className="flex justify-center mb-3 md:mb-4">
           <img src={Groups} alt="" className="w-10 h-10 md:w-12 md:h-12 mt-2" />
         </div>
-        <div className="flex items-center gap-2 bg-green-50 w-full md:w-[380px] lg:w-[330px] mx-auto border border-green-200 rounded-lg p-3 mb-5">
+        <div className={`flex items-center gap-2 ${isDark ? "bg-green-950/40 border-green-800" : "bg-green-50 border-green-200"
+          } w-full md:w-[380px] lg:w-[330px] mx-auto border rounded-lg p-3 mb-5`}>
           <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-          <p className="text-green-600 text-xs text-left">
+          <p className="text-green-500 text-xs text-left">
             "Account unlocked. Please try logging in again."
           </p>
         </div>
         <button
           onClick={handleCloseUnlockedPopup}
-          className="w-full md:w-[380px] lg:w-[290px] h-10 bg-[#4F46E5] text-white rounded-3xl font-medium text-sm hover:bg-[#4338CA] transition"
+          className="w-full md:w-[380px] lg:w-[290px] h-10 bg-[#4866F6] text-white rounded-3xl font-medium text-sm hover:bg-[#4338CA] transition"
         >
           Continue
         </button>
@@ -348,22 +357,22 @@ export default function LoginPage() {
       }
     `}</style>
 
-      <div className="min-h-screen w-full bg-white lg:bg-[#F6F7FA] flex items-start lg:items-center justify-center p-0 lg:p-4">
-        <div className="w-full max-w-6xl lg:w-[1000px] bg-transparent min-h-screen lg:min-h-[600px] lg:h-[600px] flex flex-col lg:flex-row items-center lg:items-center justify-start lg:justify-center gap-0 lg:gap-25">
-          <div className="w-full lg:w-1/2 max-w-md md:max-w-lg flex flex-col justify-start lg:justify-center px-6 md:px-8 pt-12 pb-8 lg:px-0 lg:pt-0 lg:pb-0">
-            <div className="flex items-center justify-center lg:justify-start gap-2 mb-6 lg:mb-1">
-             <img
-  src={logo}
-  alt="logo"
-  onClick={() => navigate("/")}
-  className="h-9 md:h-10 lg:h-11 w-auto lg:w-[171px] object-contain cursor-pointer"
-/>
+      <div className={`min-h-screen w-full ${isDark ? "bg-[#030712] text-white" : "bg-white lg:bg-[#F6F7FA]"} flex items-center justify-center p-4 sm:p-6 lg:p-8 xl:p-10 transition-colors duration-300`}>
+        <div className="w-full max-w-[1540px] 2xl:max-w-[1680px] mx-auto bg-transparent min-h-fit lg:h-[calc(100vh-64px)] lg:max-h-[880px] 2xl:max-h-[940px] flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 xl:gap-16 px-4 sm:px-6 lg:px-8">
+          <div className="w-full lg:w-[420px] xl:w-[460px] 2xl:w-[480px] shrink-0 flex flex-col justify-center py-4 lg:py-0">
+            <div className="flex items-center justify-center lg:justify-start gap-2 mb-4 lg:mb-1">
+              <img
+                src={isDark ? LogoDark : logo}
+                alt="logo"
+                onClick={() => navigate("/")}
+                className="h-9 md:h-10 lg:h-11 w-auto object-contain cursor-pointer"
+              />
             </div>
 
-            <h1 className="text-[#4866F6] text-2xl md:text-3xl lg:text-2xl font-semibold mb-1 mt-5 lg:text-left cursor-pointer">
+            <h1 className="text-[#4866F6] text-2xl md:text-3xl lg:text-[28px] font-semibold mb-1 mt-4 lg:mt-6 lg:text-left cursor-pointer">
               Log In
             </h1>
-            <p className="text-[#8D97A9] text-sm md:text-base lg:text-sm mb-6 lg:mb-5 lg:text-left">
+            <p className="text-[#8D97A9] text-sm md:text-base mb-6 lg:mb-5 lg:text-left">
               Enter your details below to continue
             </p>
 
@@ -372,12 +381,12 @@ export default function LoginPage() {
               className="space-y-4 md:space-y-5 lg:space-y-4"
             >
               <div>
-                <label className="text-gray-700 text-sm md:text-base lg:text-sm mb-1.5 block">
+                <label className={`${isDark ? "text-white" : "text-gray-700"} text-sm md:text-base lg:text-sm mb-1.5 block`}>
                   Email Address
                 </label>
                 <div className="relative">
                   <img
-                    className="w-4 h-4 md:w-5 md:h-5 absolute left-3.5 top-1/2 -translate-y-1/2"
+                    className={`w-4 h-4 md:w-5 md:h-5 absolute left-3.5 top-1/2 -translate-y-1/2 ${isDark ? "opacity-75" : ""}`}
                     src={Mails}
                     alt=""
                   />
@@ -390,11 +399,16 @@ export default function LoginPage() {
                     }}
                     placeholder="Enter Email Address"
                     disabled={isLocked}
-                    className={`w-full h-12 md:h-14 lg:h-11 pl-10 md:pl-12 pr-3 border rounded-lg text-sm md:text-base lg:text-sm outline-none focus:ring-1 disabled:bg-gray-100 disabled:cursor-not-allowed ${
-                      emailError
-                        ? "border-red-400 focus:border-red-500 focus:ring-red-500"
-                        : "border-gray-300 focus:border-[#4F46E5] focus:ring-[#4F46E5]"
-                    }`}
+                    className={`w-full h-12 md:h-14 lg:h-12 pl-10 md:pl-12 pr-3 border rounded-lg text-sm md:text-base outline-none focus:ring-1 disabled:cursor-not-allowed transition-colors ${isDark
+                        ? `bg-[#050B1A] text-white placeholder:text-[#8D97A9] ${emailError
+                          ? "border-red-400 focus:border-red-500 focus:ring-red-500"
+                          : "border-[#1E3A6D] focus:border-[#4866F6] focus:ring-[#4866F6]"
+                        } disabled:bg-[#081126]`
+                        : `border-gray-300 focus:border-[#4F46E5] focus:ring-[#4F46E5] disabled:bg-gray-100 ${emailError
+                          ? "border-red-400 focus:border-red-500 focus:ring-red-500"
+                          : ""
+                        }`
+                      }`}
                   />
                 </div>
                 {emailError && (
@@ -405,12 +419,12 @@ export default function LoginPage() {
               </div>
 
               <div>
-                <label className="text-gray-700 text-sm md:text-base lg:text-sm mb-1.5 block mt-5 lg:mt-0">
+                <label className={`${isDark ? "text-white" : "text-gray-700"} text-sm md:text-base lg:text-sm mb-1.5 block mt-4 lg:mt-0`}>
                   Password
                 </label>
                 <div className="relative">
                   <img
-                    className="w-4 h-4 md:w-5 md:h-5 absolute left-3.5 top-1/2 -translate-y-1/2"
+                    className={`w-4 h-4 md:w-5 md:h-5 absolute left-3.5 top-1/2 -translate-y-1/2 ${isDark ? "opacity-75" : ""}`}
                     src={Password}
                     alt=""
                   />
@@ -423,24 +437,27 @@ export default function LoginPage() {
                     }}
                     placeholder="Enter your Password"
                     disabled={isLocked}
-                    className={`w-full h-12 md:h-14 lg:h-11 pl-10 md:pl-12 pr-10 md:pr-12 border rounded-lg text-sm md:text-base lg:text-sm outline-none focus:ring-1 disabled:bg-gray-100 disabled:cursor-not-allowed ${
-                      passwordError
-                        ? "border-red-400 focus:border-red-500 focus:ring-red-500"
-                        : "border-gray-300 focus:border-[#4F46E5] focus:ring-[#4F46E5]"
-                    }`}
+                    className={`w-full h-12 md:h-14 lg:h-12 pl-10 md:pl-12 pr-10 md:pr-12 border rounded-lg text-sm md:text-base outline-none focus:ring-1 disabled:cursor-not-allowed transition-colors ${isDark
+                        ? `bg-[#050B1A] text-white placeholder:text-[#8D97A9] ${passwordError
+                          ? "border-red-400 focus:border-red-500 focus:ring-red-500"
+                          : "border-[#1E3A6D] focus:border-[#4866F6] focus:ring-[#4866F6]"
+                        } disabled:bg-[#081126]`
+                        : `border-gray-300 focus:border-[#4F46E5] focus:ring-[#4F46E5] disabled:bg-gray-100 ${passwordError
+                          ? "border-red-400 focus:border-red-500 focus:ring-red-500"
+                          : ""
+                        }`
+                      }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={isLocked}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:cursor-not-allowed"
+                    className={`absolute right-3.5 top-1/2 -translate-y-1/2 ${isDark ? "text-[#8D97A9] hover:text-white" : "text-gray-400 hover:text-gray-600"} disabled:cursor-not-allowed cursor-pointer`}
                   >
                     {showPassword ? (
-                                            <Eye className="w-4 h-4 md:w-5 md:h-5" />
-
+                      <Eye className="w-4 h-4 md:w-5 md:h-5" />
                     ) : (
-                      <EyeOff className="w-4 h-4 md:w-5 md:h-5" />
-
+                      <EyeOff className="w-4 h-4 md:w-5 md:h-5 -scale-x-100" />
                     )}
                   </button>
                 </div>
@@ -456,9 +473,10 @@ export default function LoginPage() {
                   type="button"
                   onClick={() => navigate("/send-email")}
                   disabled={isLocked}
-                  className="text-[#4F46E5] text-sm md:text-base lg:mt-[-8px] lg:text-sm font-medium hover:underline disabled:text-gray-400 disabled:cursor-not-allowed cursor-pointer"
+                  className={`${isDark ? "text-[#4866F6] hover:underline" : "text-[#4F46E5] hover:underline"
+                    } text-sm md:text-base lg:text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed cursor-pointer`}
                 >
-                  Forgot Password?
+                  Forgot Password ?
                 </button>
               </div>
 
@@ -480,9 +498,10 @@ export default function LoginPage() {
               )}
 
               {attemptsLeft < 5 && attemptsLeft > 0 && !isLocked && (
-                <div className="flex items-center gap-2 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                  <AlertTriangle className="w-4 h-4 text-yellow-600 flex-shrink-0" />
-                  <p className="text-yellow-700 text-xs md:text-sm">
+                <div className={`flex items-center gap-2 ${isDark ? "bg-yellow-950/40 border-yellow-800 text-yellow-300" : "bg-yellow-50 border-yellow-200 text-yellow-700"
+                  } border rounded-lg p-3`}>
+                  <AlertTriangle className="w-4 h-4 text-yellow-500 flex-shrink-0" />
+                  <p className="text-xs md:text-sm">
                     {attemptsLeft} attempt{attemptsLeft > 1 ? "s" : ""}{" "}
                     remaining before account lockout
                   </p>
@@ -490,33 +509,33 @@ export default function LoginPage() {
               )}
 
               {isLocked && (
-                <div className="flex items-center gap-2 bg-orange-50 border border-orange-200 rounded-lg p-3">
+                <div className={`flex items-center gap-2 ${isDark ? "bg-orange-950/40 border-orange-800 text-orange-300" : "bg-orange-50 border-orange-200 text-gray-600"
+                  } border rounded-lg p-3`}>
                   <AlertTriangle className="w-4 h-4 text-orange-500 flex-shrink-0" />
-                  <p className="text-gray-600 text-xs md:text-sm">
+                  <p className="text-xs md:text-sm">
                     Account locked. Try again in {formatTime(lockoutTime)}
                   </p>
                 </div>
               )}
 
-             <button
-  type="submit"
-  disabled={isLocked}
-  className="w-full h-12 md:h-14 lg:h-11 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm cursor-pointer hover:bg-[#4338CA] transition disabled:bg-gray-300 disabled:cursor-not-allowed"
->
-  
+              <button
+                type="submit"
+                disabled={isLocked}
+                className="w-full h-12 md:h-14 lg:h-12 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base cursor-pointer hover:bg-[#3B59E0] transition disabled:bg-gray-300 disabled:cursor-not-allowed shadow-md"
+              >
                 Log In
               </button>
             </form>
 
-            <div className="flex items-center gap-3 my-5 md:my-6 lg:my-3">
-              <div className="flex-1 h-px bg-gray-300"></div>
-              <span className="text-gray-400 text-sm md:text-base lg:text-sm">
+            <div className="flex items-center gap-3 my-5 md:my-6 lg:my-4">
+              <div className={`flex-1 h-px ${isDark ? "bg-[#1E3A6D]" : "bg-gray-300"}`}></div>
+              <span className={`${isDark ? "text-[#586D93]" : "text-gray-400"} text-sm md:text-base lg:text-sm`}>
                 or
               </span>
-              <div className="flex-1 h-px bg-gray-300"></div>
+              <div className={`flex-1 h-px ${isDark ? "bg-[#1E3A6D]" : "bg-gray-300"}`}></div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 md:gap-4 lg:gap-3 mb-3">
+            <div className="grid grid-cols-2 gap-3 md:gap-4 mb-3">
               <div className="hidden">
                 <GoogleLogin
                   onSuccess={async (credentialResponse) => {
@@ -544,7 +563,7 @@ export default function LoginPage() {
                     googleBtn.click();
                   }
                 }}
-                className="h-12 md:h-14 lg:h-10 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm flex items-center justify-center gap-2 hover:bg-[#4338CA] transition disabled:bg-gray-400 disabled:cursor-not-allowed cursor-pointer"
+                className="h-12 md:h-14 lg:h-11 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base flex items-center justify-center gap-2 hover:bg-[#3B59E0] transition cursor-pointer shadow-sm active:scale-95"
               >
                 Google{" "}
                 <span>
@@ -559,13 +578,8 @@ export default function LoginPage() {
               <div className="relative">
                 <button
                   type="button"
-                  disabled={appleDisabled || isLocked || attemptsLeft === 0}
                   onClick={handleAppleClick}
-                  className={`w-full h-12 md:h-14 lg:h-10 rounded-full font-medium text-sm md:text-base lg:text-sm flex items-center justify-center gap-2 transition ${
-                    appleDisabled || isLocked || attemptsLeft === 0
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-[#4866F6] text-white hover:bg-[#4338CA]"
-                  }`}
+                  className="w-full h-12 md:h-14 lg:h-11 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base flex items-center justify-center gap-2 hover:bg-[#3B59E0] transition cursor-pointer shadow-sm active:scale-95"
                 >
                   Apple
                   <span className="flex items-center justify-center leading-none">
@@ -579,7 +593,8 @@ export default function LoginPage() {
 
                 {socialMsg === "apple" && (
                   <div className="absolute left-1/2 -translate-x-1/2 md:left-full md:ml-3 md:translate-x-0 top-full md:top-1/2 md:-translate-y-1/2 mt-2 md:mt-0 whitespace-nowrap z-10">
-                    <p className="text-[#4866F6] text-xs bg-blue-50 px-2 py-1 rounded border border-blue-200 shadow-md">
+                    <p className={`text-[#4866F6] text-xs ${isDark ? "bg-[#0B1530] border-[#1E3A6D]" : "bg-blue-50 border-blue-200"
+                      } px-2 py-1 rounded border shadow-md`}>
                       Available soon
                     </p>
                   </div>
@@ -587,22 +602,22 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <p className="text-gray-500 mt-3 text-sm md:text-base lg:text-sm text-center">
+            <p className={`${isDark ? "text-[#94A3B8]" : "text-gray-500"} mt-3 text-sm md:text-base lg:text-sm text-center`}>
               Don't have an account?{" "}
               <Link
                 to="/signup"
-                className="text-[#4F46E5] lg:mt-[10px] font-semibold underline"
+                className="text-[#4866F6] font-semibold underline hover:text-[#3B59E0]"
               >
                 Sign Up
               </Link>
             </p>
           </div>
 
-          <div className="hidden h-full min-h-0 flex-1 p-5 lg:flex lg:items-center lg:justify-center">
+          <div className="hidden h-full min-h-0 flex-1 lg:flex lg:items-center lg:justify-end xl:justify-end">
             <img
-              src={login_image}
+              src={isDark ? login_image_dark : login_image}
               alt="login visual"
-              className="h-full max-h-[min(100%,42rem)] w-full object-contain"
+              className="h-full max-h-[850px] 2xl:max-h-[920px] w-auto max-w-full object-contain rounded-[28px] lg:rounded-[36px]"
             />
           </div>
         </div>
