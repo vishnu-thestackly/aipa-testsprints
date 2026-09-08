@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ArrowLeft, CalendarDays, Search, ChevronDown } from "lucide-react";
+import { createTask } from "../../../api/authApi";
 
 const CreateNewTask = ({ onCancel, onSave }) => {
   const [title, setTitle] = useState("");
@@ -11,24 +12,87 @@ const CreateNewTask = ({ onCancel, onSave }) => {
   const [assignedTo, setAssignedTo] = useState("Self");
   const [priority, setPriority] = useState("High");
   const [reminder, setReminder] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!title.trim()) return;
-    if (onSave) {
-      onSave({
-        title,
-        description,
-        dueDate,
-        dueTimeHH,
-        dueTimeMM,
-        dueTimeAmpm,
-        assignedTo,
-        priority,
-        reminder,
-      });
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!title.trim()) return;
+
+  setLoading(true);
+  setError("");
+
+  try {
+    // Convert DD - MM - YYYY to YYYY-MM-DD
+    const dateParts = dueDate
+      .split("-")
+      .map((value) => value.trim());
+
+    if (dateParts.length !== 3) {
+      setError("Please enter a valid due date.");
+      setLoading(false);
+      return;
     }
-  };
+
+    const [day, month, year] = dateParts;
+
+    const formattedDueDate = `${year}-${month.padStart(
+      2,
+      "0"
+    )}-${day.padStart(2, "0")}`;
+
+    // Convert 12-hour time to 24-hour time
+    let hour = Number(dueTimeHH);
+
+    if (dueTimeAmpm === "PM" && hour !== 12) {
+      hour += 12;
+    }
+
+    if (dueTimeAmpm === "AM" && hour === 12) {
+      hour = 0;
+    }
+
+    const formattedDueTime = `${String(hour).padStart(
+      2,
+      "0"
+    )}:${dueTimeMM}`;
+
+    // Payload expected by backend
+    const payload = {
+      title: title.trim(),
+      description: description.trim(),
+      assigned_to_name: assignedTo,
+      priority: priority.toUpperCase(),
+      due_date: formattedDueDate,
+      due_time: formattedDueTime,
+      reminder_enabled: reminder,
+      reminder_minutes_before: reminder ? 30 : 0,
+    };
+
+    console.log("Create Task Payload:", payload);
+
+    // POST /api/v1/tasks
+    const response = await createTask(payload);
+
+    console.log("Task created successfully:", response);
+
+    // Send API response to parent
+    if (onSave) {
+      onSave(response);
+    }
+  } catch (error) {
+    console.error("Create task failed:", error);
+
+    setError(
+      error?.detail ||
+        error?.message ||
+        "Failed to create task"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="w-full flex-1 rounded-[25px] border border-[#DADADA] bg-white p-4 md:p-8 shadow-[0px_0px_4px_0px_#00000014] flex flex-col">

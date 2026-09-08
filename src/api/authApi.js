@@ -2045,3 +2045,101 @@ export const getAiIntelligence = async () => {
     );
   }
 };
+
+
+// ============= Task Dashboard ================
+
+export const getTaskDashboard = async (tab) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      `/api/v1/tasks/dashboard?tab=${tab}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch task dashboard"
+    );
+  }
+};
+
+
+
+// ======== create new task =======
+
+export const createTask = async (taskData) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/tasks",
+      taskData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to create task"
+    );
+  }
+};
+
+
+export const getTaskDetails = async (taskId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get(
+      `/api/v1/tasks/${taskId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw (
+      error.response?.data ||
+      "Failed to fetch task details"
+    );
+  }
+};
+
+
+
+export const updateTask = async (taskId, taskData) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.put(
+      `/api/v1/tasks/${taskId}`,
+      taskData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Update Task Error:", error.response?.data);
+    throw error.response?.data || "Failed to update task";
+  }
+};
