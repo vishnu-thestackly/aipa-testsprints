@@ -85,3 +85,21 @@ body::-webkit-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Fix browser autofill styling in dark mode */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #060C1F inset !important;
+  -webkit-text-fill-color: #8D97A9 !important;
+  caret-color: #8D97A9 !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+}

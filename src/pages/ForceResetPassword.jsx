@@ -156,11 +156,11 @@ export default function ForceResetPassword() {
                         {requirement.valid ? (
                           <Check
                             size={10}
-                            className="text-white"
+                            className="text-black"
                             strokeWidth={3}
                           />
                         ) : (
-                          <X size={10} className="text-white" strokeWidth={3} />
+                          <X size={10} className="text-black" strokeWidth={3} />
                         )}
                       </span>
                       {requirement.label}
