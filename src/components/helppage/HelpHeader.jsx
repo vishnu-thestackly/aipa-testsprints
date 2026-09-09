@@ -8,16 +8,19 @@ import Lang from "../../assets/images/Language.svg";
 import Notification from "../../assets/images/Notification.svg";
 import Mode from "../../assets/images/Darkmode.svg";
 
+import { useTheme } from "../../context/ThemeContext";
+
 const HelpHeader = () => {
+  const { isDark } = useTheme();
 
   const [activeBtn, setActiveBtn] =
-    useState("");
+   useState("");
 
-  const [showLang, setShowLang] =
-    useState(false);
+  const [showLang, setShowLang] = 
+   useState(false);
 
   const [selectedLang, setSelectedLang] =
-    useState("English");
+   useState("English");
 
   const wrapperRef = useRef(null);
 
@@ -44,10 +47,7 @@ const HelpHeader = () => {
       }
     };
 
-    document.addEventListener(
-      "mousedown",
-      handleOutsideClick
-    );
+    document.addEventListener("mousedown", handleOutsideClick);
 
     return () =>
       document.removeEventListener(
@@ -57,8 +57,7 @@ const HelpHeader = () => {
   }, []);
 
   // ICON BUTTON STYLE
-  const iconStyle = (name) =>
-    `
+  const iconStyle = (name) => `
     w-[2.5vw]
     h-[2.5vw]
 
@@ -80,13 +79,14 @@ const HelpHeader = () => {
     ${
       activeBtn === name
         ? "bg-[#4D5FFF]"
+        : isDark
+        ? "bg-[#181F2D] hover:bg-[#4D5FFF]"
         : "bg-[#ECE9FF] hover:bg-[#4D5FFF]"
     }
   `;
 
   // ICON IMAGE STYLE
-  const imgStyle = (name) =>
-    `
+  const imgStyle = (name) => `
     w-[1.1vw]
     min-w-[18px]
 
@@ -95,12 +95,15 @@ const HelpHeader = () => {
     ${
       activeBtn === name
         ? "brightness-0 invert"
+        : isDark
+        ? "brightness-0 invert opacity-90"
         : "group-hover:brightness-0 group-hover:invert"
     }
   `;
 
   return (
     <div
+      ref={wrapperRef}
       className={`
         w-full
         relative
@@ -108,22 +111,14 @@ const HelpHeader = () => {
         transition-all
         duration-300
 
-        ${
-          showLang
-            ? "pb-[72px]"
-            : "pb-0"
-        }
+        ${showLang ? "pb-[72px]" : "pb-0"}
       `}
-      ref={wrapperRef}
     >
-
-      {/* HEADER */}
+      {/* HEADER  */}
       <header
-        className="
+        className={`
           w-full
           min-h-[72px]
-
-          bg-[#F5F5F5]
 
           rounded-full
 
@@ -135,9 +130,17 @@ const HelpHeader = () => {
           gap-4
 
           shadow-md
-        "
-      >
 
+          transition-colors
+          duration-300
+
+          ${
+            isDark
+              ? "bg-[#050B1A] border border-[#1E3A6D]"
+              : "bg-[#F5F5F5]"
+          }
+        `}
+      >
         {/* LEFT */}
         <div className="hidden md:flex items-center gap-3">
 
@@ -145,9 +148,7 @@ const HelpHeader = () => {
           <img
             src={logo}
             alt="Logo"
-
             onClick={() => navigate("/")}
-
             className="
               w-[12vw]
               min-w-[120px]
@@ -158,8 +159,18 @@ const HelpHeader = () => {
             "
           />
 
-          <div className="w-[1px] h-[4vh] bg-[#D9D9D9]" />
+          <div
+            className={`
+              w-[1px]
+              h-[4vh]
 
+              ${
+                isDark
+                  ? "bg-[#1E3A6D]"
+                  : "bg-[#D9D9D9]"
+              }
+            `}
+          />
         </div>
 
         {/* RIGHT */}
@@ -170,6 +181,7 @@ const HelpHeader = () => {
 
             {/* LANGUAGE */}
             <button
+              type="button"
               className={iconStyle("lang")}
               onClick={() => {
                 if (showLang) {
@@ -190,6 +202,7 @@ const HelpHeader = () => {
 
             {/* NOTIFICATION */}
             <button
+              type="button"
               className={iconStyle("notify")}
               onClick={() => {
                 setActiveBtn("notify");
@@ -205,6 +218,7 @@ const HelpHeader = () => {
 
             {/* MODE */}
             <button
+              type="button"
               className={iconStyle("mode")}
               onClick={() => {
                 setActiveBtn("mode");
@@ -217,14 +231,14 @@ const HelpHeader = () => {
                 className={imgStyle("mode")}
               />
             </button>
-
           </div>
 
-          {/* AUTH BUTTONS */}
+          {/*  AUTH BUTTONS */}
           <div className="flex items-center gap-[0.8vw]">
 
             {/* LOGIN */}
             <button
+              type="button"
               onClick={() => navigate("/login")}
               className="
                 px-[2vw]
@@ -250,6 +264,7 @@ const HelpHeader = () => {
 
             {/* SIGN UP */}
             <button
+              type="button"
               onClick={() => navigate("/signup")}
               className="
                 px-[2vw]
@@ -274,7 +289,6 @@ const HelpHeader = () => {
             </button>
 
           </div>
-
         </div>
       </header>
 
@@ -297,19 +311,14 @@ const HelpHeader = () => {
           }
         `}
       >
-
-        {/* POSITION CONTROL */}
         <div className="mr-[35px]">
 
           {/* DROPDOWN CONTAINER */}
           <div
-            className="
+            className={`
               w-[360px]
 
-              bg-[#F5F5F5]
-
               border
-              border-[#E5E5E5]
 
               rounded-full
 
@@ -334,12 +343,20 @@ const HelpHeader = () => {
               select-none
 
               shadow-md
-            "
+
+              transition-colors
+              duration-300
+
+              ${
+                isDark
+                  ? "bg-[#050B1A] border-[#1E3A6D]"
+                  : "bg-[#F5F5F5] border-[#E5E5E5]"
+              }
+            `}
             style={{
               WebkitOverflowScrolling: "touch",
             }}
           >
-
             {/* SCROLL CONTENT */}
             <div
               className="
@@ -351,10 +368,10 @@ const HelpHeader = () => {
                 min-w-max
               "
             >
-
               {languages.map((item, index) => (
                 <button
                   key={index}
+                  type="button"
                   onClick={() => {
                     setSelectedLang(item);
                     setShowLang(false);
@@ -385,6 +402,8 @@ const HelpHeader = () => {
                     ${
                       selectedLang === item
                         ? "bg-[#4D5FFF] text-white shadow-sm"
+                        : isDark
+                        ? "bg-transparent text-[#CBD5E1] hover:bg-[#182A48]"
                         : "bg-transparent text-[#4D5FFF] hover:bg-[#EEF1FF]"
                     }
                   `}
@@ -392,7 +411,6 @@ const HelpHeader = () => {
                   {item}
                 </button>
               ))}
-
             </div>
 
           </div>

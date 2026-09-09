@@ -3,7 +3,6 @@
 import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
-
   const navigate = useNavigate();
 
   return (
@@ -13,11 +12,12 @@ const Footer = () => {
         pt-[20px]
         pb-[20px]
         shrink-0
+
+        bg-transparent
+        dark:bg-[#030712]
       "
     >
-
       <div className="w-full">
-
         <div
           className="
             grid
@@ -32,11 +32,11 @@ const Footer = () => {
             items-center
           "
         >
-
           {/* LEFT */}
           <p
             className="
               text-[#8D97A9]
+              dark:text-[#8D97A9]
 
               text-[16px]
               sm:text-[18px]
@@ -62,6 +62,7 @@ const Footer = () => {
               gap-3
 
               text-[#8D97A9]
+              dark:text-[#8D97A9]
 
               text-[16px]
               sm:text-[18px]
@@ -69,10 +70,6 @@ const Footer = () => {
               font-bold
             "
           >
-
-            {/* HELP */}
-            
-
             {/* FAQ */}
             <button
               onClick={() => navigate("/faq")}

@@ -6,11 +6,15 @@ import { useNavigate } from "react-router-dom";
 import Card from "../components/conversationpage/Card";
 import Navbar from "../components/common/Navbar";
 import { useState } from "react";
+import { useTheme } from "../context/ThemeContext";
 
 const FAQ = () => {
     const [openIndex, setOpenIndex] = useState([]);
     const [showLangSpace, setShowLangSpace] = useState(false);
-const navigate=useNavigate();
+
+    const { isDark } = useTheme();
+
+    const navigate = useNavigate();
 
     const toggle = (i) => {
         setOpenIndex((prev) =>
@@ -51,11 +55,19 @@ const navigate=useNavigate();
     return (
         <div className="relative w-full h-screen overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {/* BACKGROUND */}
-            <img
-                src={BackGrounImage}
-                className="fixed inset-0 w-full h-full object-cover -z-10"
-                alt=""
-            />
+            <div
+                className={`fixed inset-0 -z-10 transition-all duration-300 ${isDark
+                    ? "bg-[#020617]"
+                    : ""
+                    }`}
+            >
+                <img
+                    src={BackGrounImage}
+                    className={`w-full h-full object-cover ${isDark ? "opacity-20" : "opacity-100"
+                        }`}
+                    alt=""
+                />
+            </div>
 
             {/* MAIN */}
             <div
@@ -69,18 +81,26 @@ const navigate=useNavigate();
                 </div>
 
                 {/* CARD */}
-               <div className={`relative w-full mx-auto h-[95%] h-auto transition-all duration-300 ${showLangSpace ? "md:mt-[8vh] lg:mt-[8vh]" : "md:mt-0 lg:mt-0"}`}>
-                    
-                    <Card className="w-full h-full bg-[#FFFFFF] border border-[#DCDCDC] rounded-[clamp(18px,2.5vw,40px)] overflow-visible relative flex flex-col">
-
+                <div
+                    className={`relative w-full mx-auto h-[80vh] transition-all duration-300 ${showLangSpace
+                        ? "md:mt-[8vh] lg:mt-[8vh]"
+                        : "md:mt-0 lg:mt-0"
+                        }`}
+                >
+                    <Card
+                        className={`!w-full !h-full rounded-[clamp(18px,2.5vw,40px)] overflow-visible relative flex flex-col transition-all duration-300 ${isDark
+                            ? "!bg-[#0A1326] !border-[#263654]"
+                            : "!bg-white !border-[#ECECEC]"
+                            }`}
+                    >
                         {/* BACK BUTTON */}
                         <div className="relative h-[9vh] shrink-0">
                             <div className="absolute top-[2vh] left-[2vw] w-[clamp(40px,4vw,44px)] h-[clamp(40px,4vw,44px)] z-50">
-<div onClick={()=>navigate(-1)} className="w-full h-full bg-[#4866F6] rounded-full flex items-center justify-center cursor-pointer">                                    <img
-                                        className="w-[clamp(14px,1.2vw,18px)]"
-                                        src={Arrow}
-                                        alt=""
-                                    />
+                                <div onClick={() => navigate(-1)} className="w-full h-full bg-[#4866F6] rounded-full flex items-center justify-center cursor-pointer">                                    <img
+                                    className="w-[clamp(14px,1.2vw,18px)]"
+                                    src={Arrow}
+                                    alt=""
+                                />
                                 </div>
                             </div>
                         </div>
@@ -93,22 +113,34 @@ const navigate=useNavigate();
                                 {/* TITLE */}
                                 <div className="flex flex-col items-center gap-[2vh] shrink-0">
 
-                                    <h1 className="text-[clamp(32px,3vw,48px)] font-bold text-[#3D3D3D] text-center leading-tight">
+                                    <h1
+                                        className={`text-[clamp(32px,3vw,48px)] font-bold text-center leading-tight transition-colors duration-300 ${isDark ? "text-white" : "text-[#3D3D3D]"}`}
+                                    >
                                         Frequently Asked Questions (FAQ’s)
                                     </h1>
 
-                                    <p className="text-[clamp(15px,1.2vw,20px)] text-[#586D93] text-center leading-relaxed">
+                                    <p
+                                        className={`text-[clamp(15px,1.2vw,20px)] text-center leading-relaxed transition-colors duration-300 ${isDark ? "text-[#AAB7D0]" : "text-[#586D93]"
+                                            }`}
+                                    >
                                         Find quick answers to common questions
                                         about AI Personal Assistant
                                     </p>
 
                                     {/* SEARCH */}
-                                    <div className="w-full max-w-[420px] h-[5vh] min-h-[46px] flex items-center gap-[12px] px-[clamp(12px,1.5vw,20px)] border border-[#4866F6] rounded-full overflow-hidden">
-
+                                    <div
+                                        className={`w-full max-w-[420px] h-[5vh] min-h-[46px] flex items-center gap-[12px] px-[clamp(12px,1.5vw,20px)] rounded-full overflow-hidden transition-all duration-300 ${isDark
+                                            ? "bg-[#0A1326] border border-[#4866F6]"
+                                            : "bg-white border border-[#4866F6]"
+                                            }`}
+                                    >
                                         <input
                                             type="text"
                                             placeholder="Search your questions here"
-                                            className="flex-1 bg-transparent outline-none text-[clamp(14px,1vw,16px)] placeholder:text-[#3D3D3D] text-[#3D3D3D]"
+                                            className={`flex-1 bg-transparent outline-none text-[clamp(14px,1vw,16px)] ${isDark
+                                                ? "text-white placeholder:text-[#AAB7D0]"
+                                                : "text-[#3D3D3D] placeholder:text-[#3D3D3D]"
+                                                }`}
                                         />
 
                                         <img
@@ -125,22 +157,27 @@ const navigate=useNavigate();
                                     {faqData.map((faq, item) => (
                                         <div
                                             key={item}
-                                            className="w-full bg-white border border-[#ECECEC] rounded-[clamp(12px,1.5vw,24px)] p-[clamp(14px,1vw,22px)] shadow-sm"
-                                        >
+                                            className={`w-full rounded-[clamp(12px,1.5vw,24px)] p-[clamp(14px,1vw,22px)] shadow-sm transition-all duration-300 ${isDark
+                                                ? "bg-[#0A1326] border border-[#263654]"
+                                                : "bg-white border border-[#ECECEC]"
+                                                }`}>
                                             <button
                                                 onClick={() => toggle(item)}
                                                 className="w-full text-left"
                                             >
                                                 <div className="flex items-center justify-between gap-[16px]">
 
-                                                    <span className="font-[510] text-[clamp(16px,1.1vw,20px)] text-[#3D3D3D] leading-[150%]">
+                                                    <span
+                                                        className={`font-[510] text-[clamp(16px,1.1vw,20px)] leading-[150%] transition-colors duration-300 ${isDark ? "text-white" : "text-[#3D3D3D]"
+                                                            }`}
+                                                    >
                                                         {faq.question}
                                                     </span>
 
                                                     <img
                                                         className={`w-[clamp(18px,1.5vw,24px)] h-[clamp(18px,1.5vw,24px)] shrink-0 transition-transform duration-300 ${openIndex.includes(item)
-                                                                ? "rotate-180"
-                                                                : ""
+                                                            ? "rotate-180"
+                                                            : ""
                                                             }`}
                                                         src={Frame}
                                                         alt=""
@@ -148,7 +185,10 @@ const navigate=useNavigate();
                                                 </div>
 
                                                 {openIndex.includes(item) && (
-                                                    <div className="mt-[1.5vh] text-[clamp(15px,1vw,18px)] leading-[180%] text-[#586D93]">
+                                                    <div
+                                                        className={`mt-[1.5vh] text-[clamp(15px,1vw,18px)] leading-[180%] transition-colors duration-300 ${isDark ? "text-[#AAB7D0]" : "text-[#586D93]"
+                                                            }`}
+                                                    >
                                                         {faq.answer}
                                                     </div>
                                                 )}
@@ -164,31 +204,42 @@ const navigate=useNavigate();
                 {/* FOOTER DESKTOP */}
                 <div className="hidden sm:flex w-full items-center justify-between py-[2vh] shrink-0">
 
-                    <p className="font-[700] text-[clamp(12px,1vw,16px)] text-[#8D97A9]">
+                    <p className={`font-[700] text-[clamp(12px,1vw,16px)] ${isDark ? "text-[#FFFFFF]" : "text-[#8D97A9]"
+                        }`}>
                         © All Rights Reserved
                     </p>
 
                     <div className="flex items-center gap-[1vw]">
-<p onClick={()=>navigate("/help")} className="font-[700] text-[clamp(12px,1vw,16px)] text-[#8D97A9] cursor-pointer">Help</p>                            
-                        
+                        <p onClick={() => navigate("/help")} className={`font-[700] text-[clamp(12px,1vw,16px)]  cursor-pointer ${isDark ? "text-[#FFFFFF]" : "text-[#8D97A9]"
+                            }`}>Help</p>
+
                     </div>
                 </div>
 
                 {/* FOOTER MOBILE */}
                 <div className="flex sm:hidden w-full items-center justify-between py-[2vh] shrink-0">
 
-                    <p className="font-[700] text-[12px] text-[#8D97A9]">
+                    <p
+                        className={`font-[700] text-[clamp(12px,1vw,16px)] ${isDark ? "text-[#FFFFFF]" : "text-[#8D97A9]"
+                            }`}
+                    >
                         © All Rights Reserved
                     </p>
 
                     <div className="flex items-center gap-[8px]">
 
-<p onClick={()=>navigate("/help")} className="font-[700] text-[12px] text-[#8D97A9] cursor-pointer">Help</p>                            Help
-                        
+                        <p
+                            onClick={() => navigate("/help")}
+                            className={`font-[700] text-[clamp(12px,1vw,16px)] cursor-pointer ${isDark ? "text-[#FFFFFF]" : "text-[#8D97A9]"}
+                                `}
+                        >
+                            Help
+                        </p>
 
                         <div className="w-[10px] h-0 border border-[#8D97A9] rotate-90"></div>
 
-                        <p className="font-[700] text-[12px] text-[#8D97A9]">
+                        <p className={`font-[700] text-[clamp(12px,1vw,16px)] cursor-pointer ${isDark ? "text-[#FFFFFF]" : "text-[#8D97A9]"}
+                                `}>
                             FAQ
                         </p>
                     </div>

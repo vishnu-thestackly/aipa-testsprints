@@ -4,107 +4,102 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import mailIcon from "../../assets/images/Mail.png";
+import { useTheme } from "../../context/ThemeContext";
 
 const HelpLeftSection = () => {
-
   const navigate = useNavigate();
+  const { isDark } = useTheme();
 
   return (
     <div
       className="
         relative
-
         w-full
         h-full
-
         flex
         flex-col
-
         pt-2
         lg:pt-4
       "
     >
-
       {/* BACK BUTTON */}
-      
+
       <button
-  onClick={() => navigate("/")}
+        onClick={() => navigate("/")}
+        className="
+          absolute
+          top-0
+          left-0
 
-  className="
-    absolute
+          w-[30px]
+          h-[30px]
 
-    top-0
-    left-0
+          min-[360px]:w-[32px]
+          min-[360px]:h-[32px]
 
-    w-[30px]
-    h-[30px]
+          min-[375px]:w-[34px]
+          min-[375px]:h-[34px]
 
-    min-[360px]:w-[32px]
-    min-[360px]:h-[32px]
+          min-[425px]:w-[35px]
+          min-[425px]:h-[35px]
 
-    min-[375px]:w-[34px]
-    min-[375px]:h-[34px]
+          md:w-[40px]
+          md:h-[40px]
 
-    min-[425px]:w-[35px]
-    min-[425px]:h-[35px]
+          lg:w-[40px]
+          lg:h-[40px]
 
-    md:w-[40px]
-    md:h-[40px]
+          xl:w-[46px]
+          xl:h-[46px]
 
-    lg:w-[40px]
-    lg:h-[40px]
+          rounded-full
 
-    xl:w-[46px]
-    xl:h-[46px]
+          bg-[#4D5FFF]
 
-    rounded-full
+          flex
+          items-center
+          justify-center
 
-    bg-[#4D5FFF]
+          shrink-0
+          cursor-pointer
 
-    flex
-    items-center
-    justify-center
+          hover:bg-[#3248ff]
 
-    shrink-0
+          transition
+        "
+      >
+        <ArrowLeft
+          className="
+            w-[14px]
+            h-[14px]
 
-    cursor-pointer
+            min-[360px]:w-[15px]
+            min-[360px]:h-[15px]
 
-    hover:bg-[#3248ff]
+            min-[375px]:w-[16px]
+            min-[375px]:h-[16px]
 
-    transition
-  "
->
-  <ArrowLeft
-    className="
-      w-[14px]
-      h-[14px]
+            min-[425px]:w-[16px]
+            min-[425px]:h-[16px]
 
-      min-[360px]:w-[15px]
-      min-[360px]:h-[15px]
+            md:w-[18px]
+            md:h-[18px]
 
-      min-[375px]:w-[16px]
-      min-[375px]:h-[16px]
+            lg:w-[18px]
+            lg:h-[18px]
 
-      min-[425px]:w-[16px]
-      min-[425px]:h-[16px]
+            xl:w-[20px]
+            xl:h-[20px]
+          "
+          color="white"
+        />
+      </button>
 
-      md:w-[18px]
-      md:h-[18px]
-
-      lg:w-[18px]
-      lg:h-[18px]
-
-      xl:w-[20px]
-      xl:h-[20px]
-    "
-    color="white"
-  />
-</button>
       {/* CONTENT WRAPPER */}
+
       <div
         className="
-          w-full 
-
+          w-full
           flex
           flex-col
 
@@ -126,64 +121,84 @@ const HelpLeftSection = () => {
           lg:mt-10
         "
       >
-
         {/* TITLE */}
+
         <h1
-  className="
-    text-[#3A3A3A]
-    font-bold
+          className={`
+            font-bold
 
-    leading-[1.05]
+            leading-[1.05]
 
-    text-[1.3rem]
+            text-[1.3rem]
 
-    min-[360px]:text-[1.5rem]
+            min-[360px]:text-[1.5rem]
 
-    min-[375px]:text-[1.7rem]
+            min-[375px]:text-[1.7rem]
 
-    min-[425px]:text-[2rem]
+            min-[425px]:text-[2rem]
 
-    md:text-center
-    md:mt-6
+            md:text-center
+            md:mt-6
 
-    lg:text-left
+            lg:text-left
 
-    lg:text-[3rem]
+            lg:text-[3rem]
 
-    xl:text-[4rem]
+            xl:text-[4rem]
 
-    2xl:text-[4.5rem]
+            2xl:text-[4.5rem]
 
-    whitespace-nowrap
-  "
->
-  We’re here to help
-</h1>
+            whitespace-nowrap
+
+            transition-colors
+            duration-300
+
+            ${
+              isDark
+                ? "text-white"
+                : "text-[#3A3A3A]"
+            }
+          `}
+        >
+          We’re here to help
+        </h1>
 
         {/* DESCRIPTION */}
+
         <p
-  className="
-    mt-6
+          className={`
+            mt-6
 
-    max-w-[550px]
+            max-w-[550px]
 
-    text-[#5C74A4]
+            text-[14px]
 
-    text-[14px]
-    md:text-[15px]
-    lg:text-[16px]
+            md:text-[15px]
 
-    leading-[28px]
+            lg:text-[16px]
 
-    text-center
-    lg:text-left
-  "
->
-  Need support or have a question? We are here to help. Email, Call or
-  complete the form to learn how AI PA can solve your problem.
-</p>
+            leading-[28px]
+
+            text-center
+
+            lg:text-left
+
+            transition-colors
+            duration-300
+
+            ${
+              isDark
+                ? "text-[#8D97A9]"
+                : "text-[#5C74A4]"
+            }
+          `}
+        >
+          Need support or have a question? We are here to help. Email, Call
+          or complete the form to learn how AI PA can solve your problem.
+        </p>
 
         {/* EMAIL SECTION */}
+
         <div
           className="
             mt-10
@@ -196,8 +211,7 @@ const HelpLeftSection = () => {
             gap-4
 
             md:flex-row
-
-md:justify-center
+            md:justify-center
 
             lg:flex-row
             lg:items-center
@@ -205,8 +219,8 @@ md:justify-center
             lg:justify-start
           "
         >
+          {/* MAIL ICON */}
 
-          {/* ICON */}
           <div
             className="
               w-[36px]
@@ -248,15 +262,15 @@ md:justify-center
           </div>
 
           {/* EMAIL TEXT */}
+
           <div
-            className="
+            className={`
               flex
               flex-col
 
               gap-3
-              min-[425px]:gap-4
 
-              text-[#5C74A4]
+              min-[425px]:gap-4
 
               text-[0.82rem]
 
@@ -275,7 +289,16 @@ md:justify-center
               text-center
 
               lg:text-left
-            "
+
+              transition-colors
+              duration-300
+
+              ${
+                isDark
+                  ? "text-[#8D97A9]"
+                  : "text-[#5C74A4]"
+              }
+            `}
           >
             <span>
               SupportmailAIPA@gmail.com
@@ -285,11 +308,8 @@ md:justify-center
               mailsupportAIPA@gmail.com
             </span>
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 };

@@ -36,15 +36,16 @@ export default function SubscriptionPlans() {
 
       // Format API response
       const formattedPlans = plansResponse.map((plan) => ({
-  id: plan.name.toLowerCase(),
-  price: `$${Number(plan.price).toFixed(2)}`,
-  period: `/ ${plan.interval}`,
+  id: plan.plan_id,
   name: plan.name,
-  desc: "", // API doesn't return description
+  price: `₹${Number(plan.price).toFixed(2)}`,
+  period: `/ ${plan.interval}`,
+  desc: plan.description,
   features: (plan.features || []).map((feature) => ({
     text: feature,
     included: true,
   })),
+  isCurrentPlan: plan.is_current_plan,
 }));
 
       setPlans(formattedPlans);
@@ -137,73 +138,16 @@ const visibleCards =
 
           {/* Title & Subtitle */}
           <div
-            className="
-    w-full
-    flex
-    flex-col
-    items-center
-    justify-center
-
-    -mt-2
-    md:-mt-2
-    lg:-mt-3
-
-    mb-8
-    md:mb-8
-    lg:mb-10
-  "
-          >
+            className="w-full flex flex-col items-center justify-center -mt-2 md:-mt-2 lg:-mt-3    mb-8 md:mb-8 lg:mb-10">
             <div className="w-full flex flex-col items-center">
 
               <h1
-                className="
-        font-sans
-        font-bold
-        text-[#3D3D3D]
-        text-[18px]
-        sm:text-[24px]
-        md:text-[24px]
-        lg:text-[28px]
-        xl:text-[36px]
-        leading-[125%]
-        text-center
-        mx-auto
-        max-w-[290px]
-        sm:max-w-none
-        md:whitespace-nowrap
-        px-4
-      "
-              >
+                className="font-sans font-bold text-[#3D3D3D] text-[18px] sm:text-[24px]        md:text-[24px] lg:text-[28px] xl:text-[36px] leading-[125%] text-center      mx-auto max-w-[290px] sm:max-w-none md:whitespace-nowrap px-4">
                 Find the right plan to power your workflow.
               </h1>
 
               {/* Description */}
-              <p
-                className="
-    mt-4
-    text-center
-    font-sans
-    font-normal
-    text-[#586D93]
-
-    text-[13px]
-    sm:text-[14px]
-    md:text-[15px]
-    min-[1024px]:text-[18px]
-    xl:text-[22px]
-
-    leading-[1.6]
-    px-2
-
-    max-w-[280px]
-    min-[375px]:max-w-[320px]
-    min-[425px]:max-w-[360px]
-    sm:max-w-[430px]
-    md:max-w-[620px]
-    min-[1024px]:max-w-[780px]
-    xl:max-w-[880px]
-  "
-              >
+              <p className=" mt-4 text-center font-sans font-normal text-[#586D93] text-[13px]  sm:text-[14px] md:text-[15px] min-[1024px]:text-[18px] xl:text-[22px] leading-[1.6] px-2   max-w-[280px] min-[375px]:max-w-[320px] min-[425px]:max-w-[360px] sm:max-w-[430px] md:max-w-[620px] min-[1024px]:max-w-[780px] xl:max-w-[880px]" >
                 Find a plan that fits your workflow and unlock access to premium features,
                 faster performance, and enhanced productivity tools. Start with what you
                 need today and scale confidently as your projects.
@@ -317,25 +261,28 @@ const visibleCards =
                   </div>
 
                   {/* Action Button: Only render for the current plan */}
-                  {isCurrent && (
-                    <button
-                      disabled
-                      className="w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px]
-             h-10 lg:h-[48px]
-             min-h-[40px] lg:min-h-[48px]
-             rounded-full
-             font-medium
-             text-xs sm:text-sm lg:text-base
-             flex items-center justify-center
-             gap-1 md:gap-1.5
-             bg-[#CFCFCF] text-[#4A4A4A]
-             cursor-not-allowed
-             mt-auto mx-auto"
-                    >
-                      <span>Current Plan</span>
-                      <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </button>
-                  )}
+                  {/* Action Button */}
+{plan.isCurrentPlan ? (
+  <button
+    type="button"
+    disabled
+    className="w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px] h-10 lg:h-[48px] min-h-[40px]      lg:min-h-[48px] rounded-full font-medium text-xs sm:text-sm lg:text-base flex items-center   justify-center gap-1 md:gap-1.5 bg-[#CFCFCF] text-[#4A4A4A] cursor-not-allowed mt-auto    mx-auto">
+    <span>Current Plan</span>
+
+    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+  </button>
+) : (
+  <button
+    type="button"
+    onClick={() => handlePlanAction(plan)}
+    className="w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px] h-10 lg:h-[48px] min-h-[40px]
+      lg:min-h-[48px] rounded-full font-medium text-xs sm:text-sm lg:text-base flex items-center
+      justify-center gap-1 md:gap-1.5 bg-[#4866F6] hover:bg-[#3554ED] text-white    cursor-pointer transition-all duration-200 mt-auto mx-auto">
+    <span>Purchase Plan</span>
+
+    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+  </button>
+)}
                 </div>
               );
             })}

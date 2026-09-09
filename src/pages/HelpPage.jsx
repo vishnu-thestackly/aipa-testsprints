@@ -18,6 +18,8 @@ const HelpPage = () => {
         w-full
         overflow-x-hidden
         overflow-y-auto
+
+        dark:bg-[#030712]
       "
     >
       {/* BACKGROUND */}
@@ -29,6 +31,8 @@ const HelpPage = () => {
           bg-center
           bg-no-repeat
           -z-10
+
+          dark:hidden
         "
         style={{
           backgroundImage: `url(${bgImage})`,
@@ -50,9 +54,8 @@ const HelpPage = () => {
           lg:py-5
 
           flex
-          
-flex-col
-justify-center
+          flex-col
+          justify-center
         "
       >
         {/* HEADER */}
@@ -64,41 +67,45 @@ justify-center
         </div>
 
         {/* MAIN CARD */}
-      
-<div
-  className="
-    flex-1
+        <div
+          className="
+            flex-1
 
-    md:min-h-[980px]
-    lg:min-h-0
+            md:min-h-[980px]
+            lg:min-h-0
 
-    max-h-none
-    lg:max-h-[820px]
+            max-h-none
+            lg:max-h-[820px]
 
-    mt-4
+            mt-4
 
-    bg-[#F7F7F7]
+            /* WHITE THEME  */
+            bg-[#F7F7F7]
 
-    border
-    border-[#DCDCDC]
+            /* DARK THEME */
+            dark:bg-[#060D1B]
 
-    rounded-[32px]
+            border
+            border-[#DCDCDC]
+            dark:border-[#586D93]
 
-    flex
-    flex-col
-    lg:flex-row
+            rounded-[32px]
 
-    gap-8
+            flex
+            flex-col
+            lg:flex-row
 
-    p-5
+            gap-8
 
-    sm:p-7
+            p-5
 
-    lg:px-10
-    lg:py-8
-  "
->
-          {/* LEFT */}
+            sm:p-7
+
+            lg:px-10
+            lg:py-8
+          "
+        >
+          {/* LEFT SECTION */}
           <div
             className="
               flex-1
@@ -109,7 +116,7 @@ justify-center
             <HelpLeftSection />
           </div>
 
-          {/* RIGHT */}
+          {/* RIGHT SECTION */}
           <div
             className="
               w-full
@@ -126,9 +133,13 @@ justify-center
 
         {/* FOOTER */}
         <div className="pt-3 shrink-0">
+
           <HelpFooter />
+
         </div>
+
       </div>
+
     </div>
   );
 };
