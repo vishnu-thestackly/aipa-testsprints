@@ -51,7 +51,7 @@ const Navbar = ({ onLanguageClick }) => {
     const selected = isBtnActive(name);
     if (isDark) {
       const isHighlighted = name === "mode" || selected;
-      return `w-[clamp(32px,9vw,44px)] h-[clamp(32px,9vw,44px)] min-w-[32px] min-h-[32px] rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer group shrink-0 ${
+      return `w-[clamp(32px,9vw,48px)] h-[clamp(32px,9vw,48px)] min-w-[32px] min-h-[32px] rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer group shrink-0 ${
         isHighlighted
           ? "bg-[#4866F6] text-white shadow-[0_0_14px_rgba(72,102,246,0.6)] border-[1.5px] border-[#4866F6]"
           : "bg-[#060C1F] border-[1.5px] border-[#4866F6] hover:bg-[#4866F6] hover:border-[#4866F6] text-[#4866F6]"

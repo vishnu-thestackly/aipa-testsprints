@@ -251,33 +251,33 @@ export default function LoginPage() {
   };
 
   const SessionTimeoutPopup = () => (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black/40">
-      <div className={`rounded-xl p-5 md:p-6 w-full max-w-[380px] md:max-w-[450px] lg:w-[500px] lg:max-w-none lg:h-[270px] mx-4 lg:mx-0 text-center relative ${
-        isDark ? "bg-[#0B1530] text-white border border-[#1E3A6D]" : "bg-white"
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4 bg-black/60 backdrop-blur-[2px]">
+      <div className={`rounded-[24px] p-6 md:p-8 w-full max-w-[500px] text-center relative ${
+        isDark ? "bg-[#0B1530] text-white border border-[#1E3A6D] shadow-[0_20px_50px_rgba(0,0,0,0.8)]" : "bg-[#f7f7f9] shadow-xl"
       }`}>
         <button
           onClick={() => setShowSessionTimeout(false)}
-          className="absolute right-3 lg:right-4 top-3 lg:top-4 flex h-5 w-5 items-center justify-center rounded-full bg-[#f15055] text-black cursor-pointer"
+          className="absolute right-4 top-4 flex h-6 w-6 items-center justify-center rounded-full bg-[#f15055] text-black cursor-pointer hover:opacity-90 transition"
         >
-          <X size={12} strokeWidth={3} className="text-black" />
+          <X size={13} strokeWidth={3} className="text-black" />
         </button>
-        <div className="flex justify-center mb-3 md:mb-4">
+        <div className="flex justify-center mb-4">
           <img
-            className="w-10 h-10 md:w-12 md:h-12 mt-2"
+            className="w-16 h-16 mt-2"
             src={ClockCountdown}
             alt=""
           />
         </div>
-        <h3 className="text-xl md:text-2xl font-semibold mb-2 text-[#4866F6]">
+        <h3 className="text-2xl font-semibold mb-2 text-[#4866F6]">
           Session Timeout
         </h3>
-        <p className={`${isDark ? "text-[#94A3B8]" : "text-[#8D97A9]"} text-xs md:text-sm mb-4 md:mb-5 px-2 md:px-0`}>
+        <p className={`${isDark ? "text-[#8D97A9]" : "text-[#8D97A9]"} text-sm md:text-[15px] leading-relaxed mb-6 px-2 md:px-0`}>
           For security reasons, your session has timed out. Please Log in again
           to access your account.
         </p>
         <button
           onClick={() => setShowSessionTimeout(false)}
-          className="w-full md:w-[280px] lg:w-[300px] h-10 bg-[#4866F6] text-white rounded-3xl font-medium text-sm hover:bg-[#4338CA] transition cursor-pointer"
+          className="w-full md:w-[280px] lg:w-[300px] h-11 bg-[#4866F6] text-white rounded-full font-medium text-base hover:bg-[#4338CA] transition cursor-pointer"
         >
           Log In
         </button>
@@ -502,18 +502,20 @@ export default function LoginPage() {
               </div>
 
               {showCaptcha && (
-                <div className="flex justify-center scale-90 lg:mr-[170px] md:scale-100 origin-center">
+                <div className="flex justify-start">
                   <div className="recaptcha-wrapper">
                     <ReCAPTCHA
+                      key={isDark ? "dark" : "light"}
                       ref={recaptchaRef}
                       sitekey={RECAPTCHA_SITE_KEY}
+                      theme={isDark ? "dark" : "light"}
                       onChange={onCaptchaChange}
                     />
                   </div>
                 </div>
               )}
               {captchaError && (
-                <p className="text-red-500 text-xs md:text-sm text-center mt-1">
+                <p className="text-red-500 text-xs md:text-sm mt-1">
                   {captchaError}
                 </p>
               )}
@@ -521,11 +523,11 @@ export default function LoginPage() {
               {attemptsLeft < 5 && attemptsLeft > 0 && !isLocked && (
                 <div className={`flex items-start md:items-center gap-3 ${
                   isDark
-                    ? "bg-[#261C0C] border-[#BA6E08] text-[#DC8200]"
+                    ? "bg-[#261C0C] border-[#F59E0B] text-[#F59E0B]"
                     : "bg-yellow-50 border-yellow-200 text-yellow-700"
                 } border rounded-lg p-3.5`}>
                   <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 md:mt-0 ${
-                    isDark ? "text-[#DC8200]" : "text-yellow-600"
+                    isDark ? "text-[#F59E0B]" : "text-yellow-600"
                   }`} />
                   <p className="text-xs md:text-sm font-normal leading-snug">
                     {attemptsLeft} attempt{attemptsLeft > 1 ? "s" : ""}{" "}
