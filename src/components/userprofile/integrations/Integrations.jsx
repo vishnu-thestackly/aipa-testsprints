@@ -1,6 +1,6 @@
 import React from "react";
 import { ChevronLeft } from "lucide-react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 
 // App icons
 import GmailIcon from "../../../assets/images/Gmail.png";
@@ -12,6 +12,7 @@ import TrelloIcon from "../../../assets/images/Trello.png";
 
 const Integrations = ({ onBack }) => {
   const { languageOpen } = useOutletContext();
+  const navigate = useNavigate();
   const apps = [
     {
       name: "Gmail",
@@ -24,6 +25,7 @@ const Integrations = ({ onBack }) => {
       description: "Microsoft Exchange manages business email services.",
       icon: ExchangeIcon,
       connected: false,
+      route: "exchange",
     },
     {
       name: "Google Calendar",
@@ -36,6 +38,7 @@ const Integrations = ({ onBack }) => {
       description: "Automatically Import your Outlook Conversations.",
       icon: OutlookIcon,
       connected: true,
+      route: "outlook",
     },
     {
       name: "Jira",
@@ -53,31 +56,33 @@ const Integrations = ({ onBack }) => {
   ];
 
   return (
-    <div className={`h-full overflow-y-auto px-4 sm:px-6 lg:px-8 pt-4 lg:pt-6 pb-12 scrollbar-hide transition-all duration-300 ${languageOpen ? "mt-[60px] md:mt-[70px] lg:mt-[80px]" : "mt-0"}`}>
+    <div
+      className={`h-full overflow-y-auto px-4 sm:px-6 lg:px-8 pt-4 lg:pt-6 pb-12 scrollbar-hide transition-all duration-300 ${languageOpen ? "mt-[60px] md:mt-[70px] lg:mt-[80px]" : "mt-0"}`}
+    >
       <div className="w-full flex flex-col min-h-[calc(100vh-90px)]">
         {/* Main Container */}
         <div className="w-full flex-1 min-h-[650px] bg-white border border-[#DADADA] rounded-[25px] shadow-[0px_0px_4px_0px_#00000014] px-4 sm:px-6 py-5 sm:py-6 flex flex-col">
-        {/* Header */}
-        <div className="border-b border-[#DCDCDC] pb-3 flex items-center gap-2">
-          {onBack && (
-            <button 
-              onClick={onBack} 
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 text-[#586D93] cursor-pointer mr-1 border-none bg-transparent"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-          )}
-          <h1 className="text-[#303030] text-[18px] font-[510] leading-[21px] tracking-[0%] font-['SF_Pro'] whitespace-nowrap">
-            Connected Apps
-          </h1>
-        </div>
+          {/* Header */}
+          <div className="border-b border-[#DCDCDC] pb-3 flex items-center gap-2">
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 text-[#586D93] cursor-pointer mr-1 border-none bg-transparent"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+            )}
+            <h1 className="text-[#303030] text-[18px] font-[510] leading-[21px] tracking-[0%] font-['SF_Pro'] whitespace-nowrap">
+              Connected Apps
+            </h1>
+          </div>
 
-        {/* Apps List */}
-        <div className="mt-4 sm:mt-5 space-y-4">
-          {apps.map((app, index) => (
-            <div
-              key={index}
-              className="
+          {/* Apps List */}
+          <div className="mt-4 sm:mt-5 space-y-4">
+            {apps.map((app, index) => (
+              <div
+                key={index}
+                className="
                 w-full
                 min-h-[77px]
                 sm:min-h-[78px]
@@ -95,10 +100,10 @@ const Integrations = ({ onBack }) => {
                 flex
                 items-center
               "
-            >
-              {/* App Content */}
-              <div
-                className="
+              >
+                {/* App Content */}
+                <div
+                  className="
                   w-full
                   flex
                   flex-col
@@ -107,31 +112,31 @@ const Integrations = ({ onBack }) => {
                   gap-3
                   sm:gap-4
                 "
-              >
-                {/* Left Section */}
-                <div className="flex items-center min-w-0 flex-1">
-                  {/* Icon */}
-                  <img
-                    src={app.icon}
-                    alt={app.name}
-                    className="
+                >
+                  {/* Left Section */}
+                  <div className="flex items-center min-w-0 flex-1">
+                    {/* Icon */}
+                    <img
+                      src={app.icon}
+                      alt={app.name}
+                      className="
                       shrink-0
                       w-[56px]
                       h-[56px]
                       object-contain
                     "
-                  />
+                    />
 
-                  {/* Name + Description */}
-                  <div
-                    className="
+                    {/* Name + Description */}
+                    <div
+                      className="
                       ml-3
                       sm:ml-3
                       min-w-0
                     "
-                  >
-                    <h2
-                      className="
+                    >
+                      <h2
+                        className="
                         text-[#006CEC]
                         text-[16px]
                         sm:text-[17px]
@@ -140,12 +145,12 @@ const Integrations = ({ onBack }) => {
                         leading-[22px]
                         truncate
                       "
-                    >
-                      {app.name}
-                    </h2>
+                      >
+                        {app.name}
+                      </h2>
 
-                    <p
-                      className="
+                      <p
+                        className="
                         mt-[2px]
                         text-[#91A0B8]
                         text-[11px]
@@ -155,15 +160,15 @@ const Integrations = ({ onBack }) => {
                         font-normal
                         max-w-full
                       "
-                    >
-                      {app.description}
-                    </p>
+                      >
+                        {app.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                {/* Buttons */}
-                <div
-                  className="
+                  {/* Buttons */}
+                  <div
+                    className="
                     shrink-0
                     flex
                     items-center
@@ -177,11 +182,14 @@ const Integrations = ({ onBack }) => {
                     mt-3
                     sm:mt-0
                   "
-                >
-                  {/* View Button */}
-                  <button
-                    type="button"
-                    className="
+                  >
+                    {/* View Button */}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        app.route && navigate(`/user/integrations/${app.route}`)
+                      }
+                      className="
                       flex-1
                       sm:flex-none
                       h-[32px]
@@ -202,14 +210,14 @@ const Integrations = ({ onBack }) => {
                       duration-200
                       border-none
                     "
-                  >
-                    View
-                  </button>
+                    >
+                      View
+                    </button>
 
-                  {/* Connect / Connected */}
-                  <button
-                    type="button"
-                    className={`
+                    {/* Connect / Connected */}
+                    <button
+                      type="button"
+                      className={`
                       flex-1
                       sm:flex-none
                       h-[32px]
@@ -231,17 +239,17 @@ const Integrations = ({ onBack }) => {
                       duration-200
                       border-none
                     `}
-                  >
-                    {app.connected ? "Connected" : "Connect"}
-                  </button>
+                    >
+                      {app.connected ? "Connected" : "Connect"}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>
-  </div>
   );
 };
 

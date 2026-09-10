@@ -45,8 +45,9 @@ import AiUsageDashboard from "./components/userprofile/AiUsageDashboard";
 import NotificationsPage from "./components/userprofile/settings/NotificationsPage";
 import TasksDashboard from "./components/userprofile/tasks/TasksDashboard";
 import Integrations from "./components/userprofile/integrations/Integrations";
+import OutlookDetails from "./components/userprofile/integrations/details/OutlookDetails";
+import ExchangeDetails from "./components/userprofile/integrations/details/ExchangeDetails";
 // coment
-
 
 function App() {
   const [showChat, setShowChat] = useState(false);
@@ -84,72 +85,45 @@ function App() {
         {/* sprint3 */}
 
         <Route path="/user" element={<UserProfile />}>
+          <Route path="profile" element={<ProfileDashboard />} />
 
-  <Route
-    path="profile"
-    element={<ProfileDashboard />}
-  />
+          <Route
+            path="profile/editprofile"
+            element={<EditProfile onOpenChat={() => setShowChat(true)} />}
+          />
 
-  <Route
-    path="profile/editprofile"
-    element={<EditProfile onOpenChat={() => setShowChat(true)} />}
-  />
+          <Route path="profile/plans" element={<SubscriptionPlans />} />
 
-  <Route
-    path="profile/plans"
-    element={<SubscriptionPlans />}
-  />
+          <Route path="profile/details" element={<SubscriptionDetails />} />
 
-  <Route
-    path="profile/details"
-    element={<SubscriptionDetails />}
-  />
+          <Route path="profile/success" element={<PaymentSuccess />} />
 
-  <Route
-    path="profile/success"
-    element={<PaymentSuccess />}
-  />
+          <Route path="profile/cancel" element={<PaymentUnsuccessful />} />
 
-  <Route
-    path="profile/cancel"
-    element={<PaymentUnsuccessful />}
-  />
+          <Route path="profile/invoice" element={<InvoicePopup />} />
 
-  <Route
-    path="profile/invoice"
-    element={<InvoicePopup />}
-  />
+          <Route path="settings/preferences" element={<PreferenceSetting />} />
 
-  <Route
-    path="settings/preferences"
-    element={<PreferenceSetting />}
-  />
+          <Route path="settings/ai-intelligence" element={<AIIntelligence />} />
 
-  <Route
-    path="settings/ai-intelligence"
-    element={<AIIntelligence />}
-  />
- 
-  <Route path="ai-usage" element={<AiUsageDashboard/>}/>
-  <Route path="settings/security" element={<SidebarEmptyPage title="Security" />} />
-  <Route path="settings/notifications" element={<NotificationsPage />} />
-  <Route path="tasks" element={<TasksDashboard />} />
-  <Route path="integrations" element={<Integrations />} />
+          <Route path="ai-usage" element={<AiUsageDashboard />} />
+          <Route
+            path="settings/security"
+            element={<SidebarEmptyPage title="Security" />}
+          />
+          <Route
+            path="settings/notifications"
+            element={<NotificationsPage />}
+          />
+          <Route path="tasks" element={<TasksDashboard />} />
+          <Route path="integrations" element={<Integrations />} />
+          <Route path="integrations/outlook" element={<OutlookDetails />} />
+          <Route path="integrations/exchange" element={<ExchangeDetails />} />
 
+          <Route path="new-chat" element={<NewChat />} />
 
-  <Route
-    path="new-chat"
-    element={<NewChat />}
-  />
-
-  <Route
-    path="chat/:chatId"
-    element={<NewChatConversation />}
-  />
-
-</Route>
-
-
+          <Route path="chat/:chatId" element={<NewChatConversation />} />
+        </Route>
 
         {/* Onboarding */}
         <Route path="/personal-details" element={<PersonalDetails />} />
@@ -163,11 +137,8 @@ function App() {
                                           </ProtectedRoute>} /> */}
         <Route path="/dashboard" element={<Dashboard />} />
 
-        
         <Route path="/" element={<PersonalAssistant />} />
         <Route path="/paymentmethod" element={<PaymentMethod />} />
-
-        
       </Routes>
 
       {showChat && <PersonalAssistant onClose={() => setShowChat(false)} />}
