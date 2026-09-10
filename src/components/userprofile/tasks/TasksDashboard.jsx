@@ -36,12 +36,9 @@ export default function TasksDashboard() {
   const [activeTab, setActiveTab] = useState("upcoming");
 
   const [showCreateNewTask, setShowCreateNewTask] = useState(false);
-
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
 
   const [selectedTask, setSelectedTask] = useState(null);
-
-  const [isEditing, setIsEditing] = useState(false);
 
   const [tasks, setTasks] = useState([]);
 
@@ -58,18 +55,6 @@ export default function TasksDashboard() {
   const [loading, setLoading] = useState(false);
 
   const [error, setError] = useState("");
-
-  const [formData, setFormData] = useState({
-  title: "",
-  description: "",
-  dueDate: "",
-  dueTimeHH: "10",
-  dueTimeMM: "30",
-  dueTimeAmpm: "AM",
-  assignedTo: "Self",
-  priority: "medium",
-  reminder: true,
-});
 
   // If languageOpen is coming from your parent/layout context,
   // this will safely get it without causing an error.
@@ -141,30 +126,29 @@ export default function TasksDashboard() {
     }
   };
 
-
   const handleViewDetails = async (task) => {
-  try {
-    setTaskDetailsLoading(true);
-    setError("");
+    try {
+      setTaskDetailsLoading(true);
+      setError("");
 
-    const response = await getTaskDetails(task.id);
+      const response = await getTaskDetails(task.id);
 
-    console.log("Task Details:", response);
+      console.log("Task Details:", response);
 
-    // Keep the original card task for existing edit/delete actions
-    setSelectedTask(task);
+      // Keep the original card task for existing edit/delete actions
+      setSelectedTask(task);
 
-    // Store the API response for displaying details
-    setTaskDetails(response);
+      // Store the API response for displaying details
+      setTaskDetails(response);
 
-    // Open popup only after API response is received
-    setShowTaskDetails(true);
-  } catch (error) {
-    console.error("Failed to fetch task details:", error);
-  } finally {
-    setTaskDetailsLoading(false);
-  }
-};
+      // Open popup only after API response is received
+      setShowTaskDetails(true);
+    } catch (error) {
+      console.error("Failed to fetch task details:", error);
+    } finally {
+      setTaskDetailsLoading(false);
+    }
+  };
 
   // =========================================================
   // INITIAL FETCH / TAB CHANGE
@@ -257,7 +241,7 @@ export default function TasksDashboard() {
     // Fetch latest task data
     await fetchTasks(activeTab);
   } catch (error) {
-    console.error("Failed to update task:", error);
+    console.error("Error updating task:", error);
   }
 };
 
@@ -266,82 +250,68 @@ export default function TasksDashboard() {
   // =========================================================
 
   const handleOpenEdit = () => {
-  if (!selectedTask) return;
+    if (!selectedTask) return;
 
-  const [day, month, year] = selectedTask.dueDate.split(" - ");
+    setEditingTask({
+      id: selectedTask.id,
+      title: taskDetails?.title || selectedTask.title,
+      description: taskDetails?.description || selectedTask.description || "",
+      dueDate: taskDetails?.due_date || selectedTask.dueDate || "",
+      dueTime: taskDetails?.due_time || selectedTask.dueTime || "",
+      assignedTo: taskDetails?.assigned_to_name || selectedTask.assigned || "Self",
+      priority: taskDetails?.priority || selectedTask.priority || "High",
+      reminder: taskDetails?.reminder_enabled ?? true,
+    });
 
-  const parsedDate =
-    year && month && day ? `${year}-${month}-${day}` : "";
-
-  setFormData({
-    title: taskDetails?.title || selectedTask.title,
-    description:
-      taskDetails?.description || selectedTask.description || "",
-    dueDate: parsedDate,
-    dueTimeHH: selectedTask.dueTime?.substring(0, 2) || "10",
-    dueTimeMM: selectedTask.dueTime?.substring(3, 5) || "30",
-    dueTimeAmpm: selectedTask.dueTime?.slice(-2) || "AM",
-    assignedTo:
-      taskDetails?.assigned_to_name ||
-      selectedTask.assigned ||
-      "Self",
-    priority:
-      taskDetails?.priority?.toLowerCase() ||
-      selectedTask.priority ||
-      "medium",
-    reminder: taskDetails?.reminder_enabled ?? true,
-  });
-
-  setIsEditing(true);
-  setShowCreateModal(true);
-};
+    setShowTaskDetails(false);
+    setSelectedTask(null);
+    setShowCreateNewTask(true);
+  };
 
   // =========================================================
   // CREATE NEW TASK
   // =========================================================
 
-  const handleCreateTaskSave = (taskData) => {
-    const formattedTime = `${taskData.dueTimeHH}:${taskData.dueTimeMM} ${taskData.dueTimeAmpm}`;
+  const handleCreateTaskSave = async (taskData) => {
+    const formattedTime = taskData?.dueTimeHH
+      ? `${taskData.dueTimeHH}:${taskData.dueTimeMM} ${taskData.dueTimeAmpm}`
+      : taskData?.due_time || "10:30 AM";
 
     let formattedDate = "05 - 08 - 2026";
 
-    if (taskData.dueDate) {
-      if (taskData.dueDate.includes("-")) {
-        const parts = taskData.dueDate
+    if (taskData?.dueDate || taskData?.due_date) {
+      const rawDate = taskData.dueDate || taskData.due_date;
+      if (rawDate.includes("-")) {
+        const parts = rawDate
           .split("-")
           .map((p) => p.trim());
 
         if (parts[0].length === 4) {
-          // YYYY-MM-DD
+          // YYYY-MM-DD -> DD - MM - YYYY
           formattedDate = `${parts[2]} - ${parts[1]} - ${parts[0]}`;
         } else {
-          // DD-MM-YYYY
+          // DD-MM-YYYY -> DD - MM - YYYY
           formattedDate = `${parts[0]} - ${parts[1]} - ${parts[2]}`;
         }
       } else {
-        formattedDate = taskData.dueDate;
+        formattedDate = rawDate;
       }
     }
 
     const newTask = {
-      id: Date.now(),
-      title: taskData.title,
-      description: taskData.description,
-
-      assigned: taskData.assignedTo || "Self",
-
+      id: taskData?.task_id || taskData?.id || Date.now(),
+      title: taskData?.title || "",
+      description: taskData?.description || "",
+      assigned: taskData?.assignedTo || taskData?.assigned_to_name || "Self",
       status:
         activeTab === "completed"
           ? "completed"
           : activeTab === "upcoming"
           ? "upcoming"
           : "pending",
-
-      priority: taskData.priority.toLowerCase(),
-
+      priority: (taskData?.priority || "medium").toLowerCase(),
       dueDate: formattedDate,
       dueTime: formattedTime,
-
       buttonText:
         activeTab === "completed"
           ? "View Details"
@@ -351,8 +321,13 @@ export default function TasksDashboard() {
     };
 
     setTasks((prev) => [newTask, ...prev]);
-
     setShowCreateNewTask(false);
+
+    try {
+      await fetchTasks(activeTab);
+    } catch {
+      // fallback retained
+    }
   };
 
   // =========================================================
@@ -435,8 +410,16 @@ export default function TasksDashboard() {
       <div className="w-full flex flex-col min-h-[calc(100vh-90px)]">
         {showCreateNewTask ? (
           <CreateNewTask
-            onCancel={() => setShowCreateNewTask(false)}
-            onSave={handleCreateTaskSave}
+            taskData={editingTask}
+            isEditing={Boolean(editingTask)}
+            onCancel={() => {
+              setShowCreateNewTask(false);
+              setEditingTask(null);
+            }}
+            onSave={(taskData) => {
+              handleCreateTaskSave(taskData);
+              setEditingTask(null);
+            }}
           />
         ) : (
           <div className="w-full flex-1 rounded-[25px] border border-[#DADADA] bg-white p-4 md:p-6 lg:p-4 xl:p-8 shadow-[0px_0px_4px_0px_#00000014] flex flex-col">
@@ -474,7 +457,10 @@ export default function TasksDashboard() {
                   </button>
 
                   <button
-                    onClick={() => setShowCreateNewTask(true)}
+                    onClick={() => {
+                      setEditingTask(null);
+                      setShowCreateNewTask(true);
+                    }}
                     className="w-full sm:w-auto flex items-center justify-center gap-2 h-10 px-8 sm:min-w-[165px] rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white transition-all cursor-pointer font-semibold text-sm shadow-[0_4px_10px_rgba(72,102,246,0.25)] whitespace-nowrap"
                   >
                     <span>New Task</span>
@@ -764,7 +750,7 @@ export default function TasksDashboard() {
           TASK DETAILS MODAL
       ===================================================== */}
 
-      {selectedTask && (
+      {showTaskDetails && selectedTask && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-[620px] bg-white rounded-[25px] border border-[#DADADA] px-4 sm:px-8 py-5 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
             <div className="relative border-b border-[#E8E8E8] pb-4 mb-5 flex items-center justify-center w-full">
@@ -773,7 +759,10 @@ export default function TasksDashboard() {
               </h3>
 
               <button
-                onClick={() => setSelectedTask(null)}
+                onClick={() => {
+                  setShowTaskDetails(false);
+                  setSelectedTask(null);
+                }}
                 className="absolute right-0 top-0.5 w-6 h-6 rounded-full bg-[#F0343D] hover:bg-[#D92D36] flex items-center justify-center text-white transition-all cursor-pointer border-none"
               >
                 <X className="w-3.5 h-3.5" />
@@ -966,279 +955,6 @@ export default function TasksDashboard() {
                 </button>
               </div>
             )}
-          </div>
-        </div>
-      )}
-
-      {/* =====================================================
-          EDIT TASK MODAL
-      ===================================================== */}
-
-      {showCreateModal && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
-          <div className="w-full max-w-[420px] bg-white rounded-[25px] border border-[#DADADA] p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto scrollbar-hide">
-            <div className="flex items-center gap-2 mb-6">
-              <button
-                onClick={() => setShowCreateModal(false)}
-                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 text-[#586D93] cursor-pointer"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-
-              <h3 className="font-bold text-[18px] text-[#3D3D3D]">
-                {isEditing ? "Edit Task" : "Create New Task"}
-              </h3>
-            </div>
-
-            <form
-               onSubmit={(e) => {
-    e.preventDefault();
-    handleSaveTask();
-  }}
-              className="flex flex-col gap-4"
-            >
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#586D93]">
-                  Task Title
-                </label>
-
-                <input
-                  type="text"
-                  placeholder="Title"
-                  required
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      title: e.target.value,
-                    })
-                  }
-                  className="w-full h-11 px-4 rounded-xl border border-[#E3E3E3] text-[#3D3D3D] placeholder-gray-400 text-sm focus:border-[#4866F6] focus:outline-none transition-all"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#586D93]">
-                  Description
-                </label>
-
-                <textarea
-                  placeholder="Enter Description"
-                  rows={3}
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      description: e.target.value,
-                    })
-                  }
-                  className="w-full p-4 rounded-xl border border-[#E3E3E3] text-[#3D3D3D] placeholder-gray-400 text-sm focus:border-[#4866F6] focus:outline-none transition-all resize-none"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#586D93]">
-                  Due Date
-                </label>
-
-                <input
-                  type="date"
-                  required
-                  value={formData.dueDate}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      dueDate: e.target.value,
-                    })
-                  }
-                  className="w-full h-11 px-4 rounded-xl border border-[#E3E3E3] text-[#3D3D3D] text-sm focus:border-[#4866F6] focus:outline-none transition-all"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#586D93]">
-                  Due Time
-                </label>
-
-                <div className="flex gap-2">
-                  <select
-                    value={formData.dueTimeHH}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        dueTimeHH: e.target.value,
-                      })
-                    }
-                    className="flex-1 h-11 px-3 rounded-xl border border-[#E3E3E3] text-sm text-[#3D3D3D] bg-white focus:border-[#4866F6] focus:outline-none transition-all"
-                  >
-                    {Array.from(
-                      { length: 12 },
-                      (_, i) =>
-                        String(i + 1).padStart(2, "0")
-                    ).map((hr) => (
-                      <option key={hr} value={hr}>
-                        {hr}
-                      </option>
-                    ))}
-                  </select>
-
-                  <span className="self-center font-bold text-gray-400">
-                    :
-                  </span>
-
-                  <select
-                    value={formData.dueTimeMM}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        dueTimeMM: e.target.value,
-                      })
-                    }
-                    className="flex-1 h-11 px-3 rounded-xl border border-[#E3E3E3] text-sm text-[#3D3D3D] bg-white focus:border-[#4866F6] focus:outline-none transition-all"
-                  >
-                    {["00", "15", "30", "45"].map((min) => (
-                      <option key={min} value={min}>
-                        {min}
-                      </option>
-                    ))}
-                  </select>
-
-                  <select
-                    value={formData.dueTimeAmpm}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        dueTimeAmpm: e.target.value,
-                      })
-                    }
-                    className="w-20 h-11 px-3 rounded-xl border border-[#E3E3E3] text-sm text-[#3D3D3D] bg-white focus:border-[#4866F6] focus:outline-none transition-all"
-                  >
-                    <option value="AM">AM</option>
-                    <option value="PM">PM</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#586D93]">
-                  Assign To
-                </label>
-
-                <select
-                  value={formData.assignedTo}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      assignedTo: e.target.value,
-                    })
-                  }
-                  className="w-full h-11 px-4 rounded-xl border border-[#E3E3E3] text-sm text-[#3D3D3D] bg-white focus:border-[#4866F6] focus:outline-none transition-all"
-                >
-                  <option value="Self">Self</option>
-                  <option value="Team Leader">Team Leader</option>
-                  <option value="TL">TL</option>
-                  <option value="Manager">Manager</option>
-                </select>
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-[#586D93]">
-                  Priority
-                </label>
-
-                <div className="flex items-center gap-6 mt-1">
-                  <label className="flex items-center gap-2 text-sm text-[#3D3D3D] cursor-pointer">
-                    <input
-                      type="radio"
-                      name="priority"
-                      value="high"
-                      checked={formData.priority === "high"}
-                      onChange={() =>
-                        setFormData({
-                          ...formData,
-                          priority: "high",
-                        })
-                      }
-                      className="w-4 h-4 text-[#FB0000] border-gray-300 focus:ring-[#4866F6]"
-                    />
-                    <span>High</span>
-                  </label>
-
-                  <label className="flex items-center gap-2 text-sm text-[#3D3D3D] cursor-pointer">
-                    <input
-                      type="radio"
-                      name="priority"
-                      value="medium"
-                      checked={formData.priority === "medium"}
-                      onChange={() =>
-                        setFormData({
-                          ...formData,
-                          priority: "medium",
-                        })
-                      }
-                      className="w-4 h-4 text-[#4866F6] border-gray-300 focus:ring-[#4866F6]"
-                    />
-                    <span>Medium</span>
-                  </label>
-
-                  <label className="flex items-center gap-2 text-sm text-[#3D3D3D] cursor-pointer">
-                    <input
-                      type="radio"
-                      name="priority"
-                      value="low"
-                      checked={formData.priority === "low"}
-                      onChange={() =>
-                        setFormData({
-                          ...formData,
-                          priority: "low",
-                        })
-                      }
-                      className="w-4 h-4 text-[#4866F6] border-gray-300 focus:ring-[#4866F6]"
-                    />
-                    <span>Low</span>
-                  </label>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2.5 mt-2">
-                <input
-                  type="checkbox"
-                  id="reminder"
-                  checked={formData.reminder}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      reminder: e.target.checked,
-                    })
-                  }
-                  className="w-4 h-4 text-[#4866F6] border-gray-300 rounded focus:ring-[#4866F6]"
-                />
-
-                <label
-                  htmlFor="reminder"
-                  className="text-xs font-semibold text-[#586D93] cursor-pointer"
-                >
-                  Notify 30 mins before due time
-                </label>
-              </div>
-
-              <div className="flex items-center gap-4 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateModal(false)}
-                  className="flex-1 h-11 rounded-xl border border-[#E3E3E3] text-[#586D93] hover:bg-gray-50 text-sm font-semibold transition-all cursor-pointer"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="submit"
-                  className="flex-1 h-11 rounded-xl bg-[#4866F6] hover:bg-[#3554ED] text-white text-sm font-semibold transition-all cursor-pointer shadow-[0_4px_10px_rgba(72,102,246,0.25)]"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}
