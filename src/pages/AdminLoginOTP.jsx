@@ -1,29 +1,43 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import LoginButton from "../components/admin/LoginButton";
+
 import logo from "../assets/images/logoimage.svg";
-import LogoDark from "../assets/images/Logoimg.svg";
 import login_image from "../assets/images/login_image.png";
 import login_image_dark from "../assets/images/login_image_dark.png";
-import { useTheme } from "../context/ThemeContext";
+import LogoDark from "../assets/images/Logoimg.svg";
 
 // API
+import { useLocation, useNavigate } from "react-router-dom";
 import { verifyAdminLoginOTP, resendOtp } from "../api/authApi";
 
+// Theme
+import { useTheme } from "../context/ThemeContext";
+
 export default function AdminLoginOTP() {
-  const { isDark } = useTheme();
   const [otpSlots, setOtpSlots] = useState(Array(6).fill(""));
   const [remainingSeconds, setRemainingSeconds] = useState(90);
   const [otpError, setOtpError] = useState("");
 
   const inputRefs = useRef([]);
 
+  // Theme
+  const { isDark } = useTheme();
+
   // Navigation
   const location = useLocation();
   const navigate = useNavigate();
 
   // Get email from login page
-  const email = location.state?.email || "dummymail@gmail.com";
+  const email = location.state?.email;
   const type = location.state?.type;
+
+  // this code prevent direct otp page when refresh the epage
+  useEffect(() => {
+    if (!email) {
+      navigate("/admin", { replace: true });
+    }
+  }, [email, navigate]);
 
   useEffect(() => {
     if (remainingSeconds === 0) {
@@ -70,14 +84,13 @@ export default function AdminLoginOTP() {
     }
   };
 
-  const formattedTime = `${String(Math.floor(remainingSeconds / 60)).padStart(2, "0")}:${String(remainingSeconds % 60).padStart(2, "0")}s`;
+  const formattedTime = `${String(remainingSeconds).padStart(2, "0")}s`;
 
   const handleOtpChange = (index, value) => {
     const digitOnly = value.replace(/\D/g, "").slice(-1);
     const updated = [...otpSlots];
     updated[index] = digitOnly;
     setOtpSlots(updated);
-    if (otpError) setOtpError("");
 
     if (digitOnly && index < otpSlots.length - 1) {
       inputRefs.current[index + 1]?.focus();
@@ -85,10 +98,18 @@ export default function AdminLoginOTP() {
   };
 
   const handleOtpKeyDown = (index, event) => {
-    if (event.key === "Backspace" && !otpSlots[index] && index > 0) {
+    if (
+      event.key === "Backspace" &&
+      !otpSlots[index] &&
+      index > 0
+    ) {
       inputRefs.current[index - 1]?.focus();
     }
-    if (event.key === "Enter" && otpSlots.join("").length === 6) {
+
+    if (
+      event.key === "Enter" &&
+      otpSlots.join("").length === 6
+    ) {
       handleVerifyOtp();
     }
   };
@@ -100,6 +121,7 @@ export default function AdminLoginOTP() {
     // Validation
     if (enteredOtp.length !== 6) {
       setOtpError("Please enter valid 6 digit OTP");
+
       return;
     }
 
@@ -109,17 +131,20 @@ export default function AdminLoginOTP() {
         email,
         otp: enteredOtp,
       });
-      console.log("OTP Verified:", response);
-      // Added token storage in localstorage
 
+      console.log("OTP Verified:", response);
+
+      // Added token storage in localstorage
       localStorage.setItem(
         "token",
-        response?.access_token || response?.data?.access_token
+        response?.access_token ||
+          response?.data?.access_token,
       );
 
       localStorage.setItem(
         "refreshToken",
-        response?.refresh_token || response?.data?.refresh_token
+        response?.refresh_token ||
+          response?.data?.refresh_token,
       );
 
       // Navigate after success
@@ -136,46 +161,77 @@ export default function AdminLoginOTP() {
     }
   };
 
-  const getSlotStyle = (slot) => {
-    if (otpError) {
-      return isDark
-        ? "border-red-500 text-red-400 bg-[#060C1F] focus:border-red-500"
-        : "border-red-500 text-red-500 bg-white focus:border-red-500";
-    }
-    if (slot) {
-      return isDark
-        ? "border-green-500 text-green-400 bg-[#060C1F] focus:border-green-500"
-        : "border-[#33b469] text-gray-800 bg-white focus:border-[#33b469]";
-    }
-    return isDark
-      ? "border-[#1E3A6D] text-[#8D97A9] bg-[#060C1F] focus:border-[#4866F6]"
-      : "border-[#cfcfcf] text-[#8D97A9] bg-white focus:border-[#33b469]";
-  };
-
   return (
     <div
-      className={`min-h-screen w-full flex items-start lg:items-center justify-center p-0 lg:p-4 transition-colors duration-200 ${
-        isDark ? "bg-[#060C1F]" : "bg-white lg:bg-[#F6F7FA]"
-      }`}
+      className={`
+        flex
+        min-h-screen
+        w-full
+        flex-col
+        items-center
+        overflow-x-hidden
+        px-5
+        py-8
+        sm:px-6
+        md:fixed
+        md:inset-0
+        md:z-0
+        md:h-dvh
+        md:min-h-0
+        md:justify-center
+        md:overflow-hidden
+        md:py-0
+        lg:relative
+        lg:inset-auto
+        lg:h-screen
+        lg:min-h-screen
+        ${
+          isDark
+            ? "bg-[#010718]"
+            : "bg-[#f5f7fa]"
+        }
+      `}
     >
-      <div className="w-full max-w-6xl lg:w-[1080px] xl:w-[1160px] bg-transparent min-h-screen lg:min-h-[640px] lg:h-[640px] xl:h-[680px] flex flex-col lg:flex-row items-center lg:items-center justify-start lg:justify-center gap-0 lg:gap-16 xl:gap-20">
-        <div className="w-full lg:w-1/2 max-w-md md:max-w-lg flex flex-col justify-start lg:justify-center px-6 md:px-8 pt-12 pb-8 lg:px-0 lg:pt-0 lg:pb-0 shrink-0">
-          <div className="flex items-center justify-center gap-2 mb-6 lg:mb-6">
+      <div
+        className={`
+          flex
+          w-full
+          max-w-6xl
+          flex-1
+          flex-col
+          items-center
+          md:flex-none
+          lg:h-full
+          lg:flex-1
+          lg:flex-row
+          lg:items-center
+          lg:justify-center
+          lg:gap-18
+          lg:overflow-hidden
+          lg:rounded-2xl
+          ${
+            isDark
+              ? "bg-[#010718]"
+              : "bg-[#f5f7fa]"
+          }
+        `}
+      >
+        <div className="mx-auto flex w-full max-w-[420px] flex-col lg:max-w-none lg:flex-1 lg:px-6 lg:py-6">
+
+          <div className="mb-20 mt-10 flex justify-center md:mb-20 md:mt-0 lg:mb-6">
             <img
               src={isDark ? LogoDark : logo}
               alt="Personal Assistant"
-              onClick={() => navigate("/")}
-              className="h-9 md:h-10 lg:h-11 w-auto lg:w-[171px] object-contain cursor-pointer transition-transform duration-300 hover:scale-105"
+              className="w-45 max-w-full transition-transform duration-300 hover:scale-105 sm:w-52"
             />
           </div>
 
-          <h2 className="mb-1 text-center text-2xl md:text-3xl lg:text-2xl font-semibold text-[#4866F6]">
+          <h2 className="mb-1 text-left text-[23px] font-semibold text-[#4866F6] md:text-center">
             OTP Verification
           </h2>
-          <p className="mb-6 text-center text-sm md:text-base font-normal leading-tight text-[#8D97A9] sm:mb-8">
-            We sent a verification code to your
-            <br />
-            {email}
+
+          <p className="mb-6 text-left text-[16px] font-normal leading-tight text-[#8d97a9] sm:mb-8 md:text-center">
+            We sent a verification code to your {email}
           </p>
 
           <div className="mb-6 flex w-full flex-wrap items-center justify-center gap-2 sm:mb-8 sm:gap-3">
@@ -190,11 +246,41 @@ export default function AdminLoginOTP() {
                 maxLength={1}
                 value={slot}
                 placeholder="_"
-                onChange={(event) => handleOtpChange(index, event.target.value)}
-                onKeyDown={(event) => handleOtpKeyDown(index, event)}
-                className={`h-[48px] w-[48px] shrink-0 rounded-lg border-2 text-center text-[18px] font-medium outline-none placeholder:text-[#8D97A9] caret-transparent transition-colors duration-150 ${getSlotStyle(
-                  slot
-                )}`}
+                onChange={(event) =>
+                  handleOtpChange(
+                    index,
+                    event.target.value
+                  )
+                }
+                onKeyDown={(event) =>
+                  handleOtpKeyDown(
+                    index,
+                    event
+                  )
+                }
+                className={`
+                  h-[48px]
+                  w-[48px]
+                  shrink-0
+                  rounded-lg
+                  border-2
+                  text-center
+                  text-[18px]
+                  font-medium
+                  outline-none
+                  focus:border-[#33b469]
+                  placeholder:text-[#8D97A9]
+                  caret-transparent
+                  sm:h-[48px]
+                  sm:w-[48px]
+                  sm:rounded-lg
+                  sm:text-[18px]
+                  ${
+                    isDark
+                      ? "border-[#39445F] bg-[#050B1A] text-white caret-white"
+                      : "border-[#cfcfcf] bg-white text-[#8D97A9] caret-transparent"
+                  }
+                `}
                 aria-label={`OTP digit ${index + 1}`}
               />
             ))}
@@ -202,36 +288,42 @@ export default function AdminLoginOTP() {
 
           {/* OTP ERROR */}
           {otpError && (
-            <p className="mb-4 text-center text-sm text-red-500">{otpError}</p>
+            <p className="mb-4 text-center text-sm text-red-500">
+              {otpError}
+            </p>
           )}
 
           {/* VERIFY BUTTON */}
-          <button
-            type="button"
+          <LoginButton
             onClick={handleVerifyOtp}
-            className="w-full h-11 md:h-14 lg:h-11 bg-[#4866F6] text-white rounded-full font-medium text-sm md:text-base lg:text-sm hover:bg-[#4338CA] transition cursor-pointer mb-6 sm:mb-8"
+            className="mb-6 font-medium sm:mb-8"
           >
             Verify
-          </button>
+          </LoginButton>
 
-          <div className="text-center space-y-2">
-            <p className="text-sm md:text-base text-[#8D97A9]">
+          <div className="text-center">
+            <p className="mb-2 text-[16px] text-[#8d97a9]">
               Remaining time:{" "}
-              <span className="font-semibold text-[#4866F6]">
+              <span className="font-medium text-[#4866f6]">
                 {formattedTime}
               </span>
             </p>
-            <p className="text-sm md:text-base text-[#8D97A9]">
+
+            <p className="text-[16px] text-[#8d97a9]">
               Didn&apos;t got the code?{" "}
               <Link
                 to="#"
                 onClick={handleResend}
                 aria-disabled={remainingSeconds > 0}
-                className={`font-semibold underline ${
-                  remainingSeconds > 0
-                    ? "pointer-events-none text-[#8D97A9]"
-                    : "text-[#4866F6] hover:text-[#4338CA]"
-                }`}
+                className={`
+                  font-medium
+                  underline
+                  ${
+                    remainingSeconds > 0
+                      ? "pointer-events-none text-[#8d97a9]"
+                      : "text-[#4866f6]"
+                  }
+                `}
               >
                 Resend
               </Link>
@@ -239,11 +331,15 @@ export default function AdminLoginOTP() {
           </div>
         </div>
 
-        <div className="hidden h-full min-h-0 flex-1 lg:flex lg:items-center lg:justify-center">
+        <div className="hidden h-full min-h-0 flex-1 p-5 lg:flex lg:items-center lg:justify-center">
           <img
-            src={isDark ? login_image_dark : login_image}
+            src={
+              isDark
+                ? login_image_dark
+                : login_image
+            }
             alt="login visual"
-            className="h-full max-h-[580px] lg:max-h-[620px] xl:max-h-[660px] w-full max-w-[480px] xl:max-w-[540px] object-contain"
+            className="h-full max-h-[min(100%,42rem)] w-full object-contain"
           />
         </div>
       </div>
