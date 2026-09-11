@@ -328,21 +328,31 @@ export default function SignUpPage() {
 
           <div className="grid grid-cols-2 gap-3 md:gap-4 lg:gap-3 mb-3">
             <div className="hidden">
-              <GoogleLogin
+             <GoogleLogin
                 onSuccess={async (credentialResponse) => {
-                  try {
-                    const response = await googleLogin({
-                      id_token: credentialResponse.credential,
-                    });
+  try {
+    const response = await googleLogin({
+      id_token: credentialResponse.credential,
+    });
 
-                    console.log("Google Auth Success:", response);
-                    navigate("/conversation");
-                  } catch (error) {
-                    console.log("Google Auth Error:", error);
-                  }
-                }}
-                onError={() => console.log("Google Login Failed")}
+    localStorage.setItem("token", response.access_token);
+    localStorage.setItem("refreshToken", response.refresh_token);
+
+    if (response?.user_id) {
+      localStorage.setItem("userId", String(response.user_id));
+    }
+
+    if (response?.role) {
+      localStorage.setItem("role", response.role);
+    }
+
+    navigate("/user/new-chat");
+  } catch (error) {
+    console.log("Google Auth Error:", error);
+  }
+}}
               />
+ 
             </div>
 
             <button

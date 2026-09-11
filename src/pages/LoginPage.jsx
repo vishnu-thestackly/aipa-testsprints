@@ -568,21 +568,50 @@ export default function LoginPage() {
 
             <div className="grid grid-cols-2 gap-3 md:gap-4 lg:gap-3 mb-3">
               <div className="hidden">
-                <GoogleLogin
-                  onSuccess={async (credentialResponse) => {
-                    try {
-                      const response = await googleLogin({
-                        id_token: credentialResponse.credential,
-                      });
+               <GoogleLogin
+  onSuccess={async (credentialResponse) => {
+    try {
+      const response = await googleLogin({
+        id_token: credentialResponse.credential,
+      });
 
-                      console.log("Google Auth Success:", response);
-                      navigate("/conversation");
-                    } catch (error) {
-                      console.log("Google Auth Error:", error);
-                    }
-                  }}
-                  onError={() => console.log("Google Login Failed")}
-                />
+      console.log("Google Auth Success:", response);
+
+      // Save backend access token
+      if (response?.access_token) {
+        localStorage.setItem("token", response.access_token);
+      }
+
+      // Save backend refresh token
+      if (response?.refresh_token) {
+        localStorage.setItem("refreshToken", response.refresh_token);
+      }
+
+      // Optional: save user information
+      if (response?.user_id) {
+        localStorage.setItem("userId", String(response.user_id));
+      }
+
+      if (response?.role) {
+        localStorage.setItem("role", response.role);
+      }
+
+      console.log("Access token saved:", !!localStorage.getItem("token"));
+      console.log(
+        "Refresh token saved:",
+        !!localStorage.getItem("refreshToken")
+      );
+
+      navigate("/user/new-chat");
+    } catch (error) {
+      console.log("Google Auth Error:", error);
+    }
+  }}
+  onError={() => {
+    console.log("Google Login Failed");
+  }}
+/>
+ 
               </div>
               <button
                 type="button"
