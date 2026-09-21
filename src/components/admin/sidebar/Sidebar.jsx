@@ -10,9 +10,7 @@ export default function Sidebar({
   openMenus,
   setOpenMenus,
   onLogout,
-}) 
-
-{
+}) {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1024) {
@@ -81,4 +79,3 @@ export default function Sidebar({
   );
 }
 
- 

@@ -13,6 +13,26 @@ import insightsIcon from "../../../assets/images/insights.svg";
 import overviewIcon from "../../../assets/images/overview.svg";
 import intentIcon from "../../../assets/images/intent.svg";
 
+// New SVG asset imports for Analytics & Performance sub-menus
+import taskAnalyticsIcon from "../../../assets/images/task analytics.svg";
+import errorIcon from "../../../assets/images/error.svg";
+import metricsIcon from "../../../assets/images/metrics.svg";
+import usageTrendIcon from "../../../assets/images/usage.svg";
+import optimisationIcon from "../../../assets/images/optimisation.svg";
+import engagementIcon from "../../../assets/images/engagement.svg";
+
+// SVG asset imports for Security & Compliance
+import security1Icon from "../../../assets/images/security1.svg";
+import security2Icon from "../../../assets/images/security2.svg";
+import security3Icon from "../../../assets/images/security3.svg";
+import sessionIcon from "../../../assets/images/session.svg";
+import encryptionIcon from "../../../assets/images/encryption.svg";
+import privacyIcon from "../../../assets/images/privacy.svg";
+import deletionIcon from "../../../assets/images/deletion.svg";
+import apiSecurityIcon from "../../../assets/images/api.svg";
+import securityAuditIcon from "../../../assets/images/audit.svg";
+import auditlogsIcon from "../../../assets/images/auditlogs.svg";
+
 const DashboardIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
     <path d="M17.5603 7.93899L10.0603 0.438992C9.77905 0.1579 9.39766 0 9.00001 0C8.60236 0 8.22097 0.1579 7.9397 0.438992L0.439697 7.93899C0.299732 8.07792 0.188783 8.24328 0.1133 8.42547C0.0378174 8.60766 -0.00069249 8.80304 9.42514e-06 9.00024V18.0002C9.42514e-06 18.1992 0.0790272 18.3899 0.219679 18.5306C0.360332 18.6712 0.551097 18.7502 0.750009 18.7502H6.75001C6.94892 18.7502 7.13969 18.6712 7.28034 18.5306C7.42099 18.3899 7.50001 18.1992 7.50001 18.0002V12.7502H10.5V18.0002C10.5 18.1992 10.579 18.3899 10.7197 18.5306C10.8603 18.6712 11.0511 18.7502 11.25 18.7502H17.25C17.4489 18.7502 17.6397 18.6712 17.7803 18.5306C17.921 18.3899 18 18.1992 18 18.0002V9.00024C18.0007 8.80304 17.9622 8.60766 17.8867 8.42547C17.8112 8.24328 17.7003 8.07792 17.5603 7.93899ZM16.5 17.2502H12V12.0002C12 11.8013 11.921 11.6106 11.7803 11.4699C11.6397 11.3293 11.4489 11.2502 11.25 11.2502H6.75001C6.5511 11.2502 6.36033 11.3293 6.21968 11.4699C6.07903 11.6106 6.00001 11.8013 6.00001 12.0002V17.2502H1.50001V9.00024L9.00001 1.50024L16.5 9.00024V17.2502Z" />
@@ -63,9 +83,11 @@ const AiIcon = ({ className = "" }) => {
     />
   );
 };
+
 const SemanticMemoryIcon = ({ className }) => (
   <img src={semanticmemory} alt="Semantic memory" className={className} />
 );
+
 const BehaviorLearningIcon = ({ className }) => (
   <img src={behaviourlearning} alt="Behavior Learning" className={className} />
 );
@@ -129,23 +151,20 @@ const ChevronDownIcon = ({ className }) => (
   </svg>
 );
 
-const AuditLogsIcon = ({ className }) => (
-  <svg
-    className={className}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-    <polyline points="14 2 14 8 20 8" />
-    <line x1="16" y1="13" x2="8" y2="13" />
-    <line x1="16" y1="17" x2="8" y2="17" />
-    <line x1="10" y1="9" x2="8" y2="9" />
-  </svg>
-);
+const AuditLogsIcon = ({ className = "" }) => {
+  const isActive = !className.includes("#586D93");
+  return (
+    <img
+      src={auditlogsIcon}
+      alt="Audit Logs"
+      className={`${className} ${
+        isActive
+          ? "brightness-0 invert"
+          : "group-hover:brightness-0 group-hover:invert"
+      }`}
+    />
+  );
+};
 
 const AnalyticsIcon = ({ className = "" }) => (
   <svg
@@ -290,6 +309,84 @@ const IntentAnalysisIcon = ({ className = "" }) => (
   </svg>
 );
 
+// 4. Task completion Analytics Icon using task analytics.svg
+const TaskCompletionAnalyticsIcon = ({ className = "" }) => (
+  <img src={taskAnalyticsIcon} alt="Task completion Analytics" className={className} />
+);
+
+// 5. Error & Fallback Analytics Icon using error.svg
+const ErrorFallbackAnalyticsIcon = ({ className = "" }) => (
+  <img src={errorIcon} alt="Error & Fallback Analytics" className={className} />
+);
+
+// 6. AI Performance Metrics Icon using metrics.svg
+const AiPerformanceMetricsIcon = ({ className = "" }) => (
+  <img src={metricsIcon} alt="AI Performance Metrics" className={className} />
+);
+
+// 7. Usage Trend Analytics Icon using usage.svg
+const UsageTrendAnalyticsIcon = ({ className = "" }) => (
+  <img src={usageTrendIcon} alt="Usage Trend Analytics" className={className} />
+);
+
+// 8. Optimization Recommendations Icon using optimisation.svg
+const OptimizationRecommendationsIcon = ({ className = "" }) => (
+  <img src={optimisationIcon} alt="Optimization Recommendations" className={className} />
+);
+
+// 9. User Engagement Insights Icon using engagement.svg
+const UserEngagementInsightsIcon = ({ className = "" }) => (
+  <img src={engagementIcon} alt="User Engagement Insights" className={className} />
+);
+
+// Security & Compliance Icons
+const SecurityComplianceIcon = ({ className = "" }) => {
+  const isActive = !className.includes("#586D93");
+  return (
+    <img
+      src={security1Icon}
+      alt="Security & Compliance"
+      className={`${className} ${
+        isActive
+          ? "brightness-0 invert"
+          : "group-hover:brightness-0 group-hover:invert"
+      }`}
+    />
+  );
+};
+
+const SecurityDashboardIcon = ({ className = "" }) => (
+  <img src={security2Icon} alt="Security Dashboard" className={className} />
+);
+
+const SecurityTestingIcon = ({ className = "" }) => (
+  <img src={security3Icon} alt="Security Testing & Vulnerabilities" className={className} />
+);
+
+const SessionAuthenticationIcon = ({ className = "" }) => (
+  <img src={sessionIcon} alt="Session & Authentication" className={className} />
+);
+
+const DataProtectionEncryptionIcon = ({ className = "" }) => (
+  <img src={encryptionIcon} alt="Data Protection & Encrption" className={className} />
+);
+
+const PrivacyConsentIcon = ({ className = "" }) => (
+  <img src={privacyIcon} alt="Privacy & Consent" className={className} />
+);
+
+const DataDeletionRequestIcon = ({ className = "" }) => (
+  <img src={deletionIcon} alt="Data Deletion Request" className={className} />
+);
+
+const ApiSecurityIcon = ({ className = "" }) => (
+  <img src={apiSecurityIcon} alt="API Security" className={className} />
+);
+
+const SecurityAuditLogsIcon = ({ className = "" }) => (
+  <img src={securityAuditIcon} alt="Security Audit Logs" className={className} />
+);
+
 export const sidebarMenuItems = [
   {
     key: "dashboard",
@@ -303,7 +400,7 @@ export const sidebarMenuItems = [
   },
   {
     key: "track",
-    label: "Track API integration",
+    label: "Track API Integration",
     Icon: TrackIcon,
   },
   {
@@ -320,6 +417,12 @@ export const sidebarMenuItems = [
       "performance_insights",
       "performance_overview",
       "intent_analysis",
+      "task_completion_analytics",
+      "error_fallback_analytics",
+      "ai_performance_metrics",
+      "usage_trend_analytics",
+      "optimization_recommendations",
+      "user_engagement_insights",
     ],
     children: [
       {
@@ -337,6 +440,94 @@ export const sidebarMenuItems = [
         label: "Intent Analysis",
         Icon: IntentAnalysisIcon,
       },
+      {
+        key: "task_completion_analytics",
+        label: "Task completion Analytics",
+        Icon: TaskCompletionAnalyticsIcon,
+      },
+      {
+        key: "error_fallback_analytics",
+        label: "Error & Fallback Analytics",
+        Icon: ErrorFallbackAnalyticsIcon,
+      },
+      {
+        key: "ai_performance_metrics",
+        label: "AI Performance Metrics",
+        Icon: AiPerformanceMetricsIcon,
+      },
+      {
+        key: "usage_trend_analytics",
+        label: "Usage Trend Analytics",
+        Icon: UsageTrendAnalyticsIcon,
+      },
+      {
+        key: "optimization_recommendations",
+        label: "Optimization Recommendations",
+        Icon: OptimizationRecommendationsIcon,
+      },
+      {
+        key: "user_engagement_insights",
+        label: "User Engagement Insights",
+        Icon: UserEngagementInsightsIcon,
+      },
+    ],
+  },
+  {
+    key: "security_compliance",
+    label: "Security & Compliance",
+    Icon: SecurityComplianceIcon,
+    toggleKey: "security_compliance",
+    activeKeys: [
+      "security_dashboard",
+      "security_testing_vulnerabilities",
+      "session_authentication",
+      "data_protection_encryption",
+      "privacy_consent",
+      "data_deletion_request",
+      "api_security",
+      "security_audit_logs",
+    ],
+    children: [
+      {
+        key: "security_dashboard",
+        label: "Security Dashboard",
+        Icon: SecurityDashboardIcon,
+      },
+      {
+        key: "security_testing_vulnerabilities",
+        label: "Security Testing & Vulnerabilities",
+        Icon: SecurityTestingIcon,
+      },
+      {
+        key: "session_authentication",
+        label: "Session & Authentication",
+        Icon: SessionAuthenticationIcon,
+      },
+      {
+        key: "data_protection_encryption",
+        label: "Data Protection & Encrption",
+        Icon: DataProtectionEncryptionIcon,
+      },
+      {
+        key: "privacy_consent",
+        label: "Privacy & Consent",
+        Icon: PrivacyConsentIcon,
+      },
+      {
+        key: "data_deletion_request",
+        label: "Data Deletion Request",
+        Icon: DataDeletionRequestIcon,
+      },
+      {
+        key: "api_security",
+        label: "API Security",
+        Icon: ApiSecurityIcon,
+      },
+      {
+        key: "security_audit_logs",
+        label: "Security Audit Logs",
+        Icon: SecurityAuditLogsIcon,
+      },
     ],
   },
   {
@@ -348,17 +539,7 @@ export const sidebarMenuItems = [
     key: "usage",
     label: "Usage Dashboard",
     Icon: UsageIcon,
-    toggleKey: "usage",
-    activeKeys: ["aimonitoring"],
-    children: [
-      {
-        key: "aimonitoring",
-        label: "AI Monitoring",
-        Icon: UsageIcon, // or create a separate AI icon
-      },
-    ],
   },
-
   {
     key: "ai",
     label: "AI",
@@ -378,7 +559,6 @@ export const sidebarMenuItems = [
       },
     ],
   },
-
   {
     key: "configuration",
     label: "Configuration",

@@ -116,7 +116,7 @@ export default function Dashboard() {
           {activeItem === "configuration" && <Configurations />}
 
           {/* Usage Dashboard - AI Monitoring */}
-          {activeItem === "aimonitoring" && <AiMonitoring />}
+          {(activeItem === "usage" || activeItem === "aimonitoring") && <AiMonitoring />}
 
           {/* AI - Semantic Memory */}
           {activeItem === "semanticmemory" && <SemanticMemory />}

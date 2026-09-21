@@ -16,9 +16,8 @@ export default function TabletSidebar({
 }) {
   return (
     <div
-      className={`fixed top-0 left-0 h-screen w-[285px] bg-white z-50 shadow-lg transition-all duration-300 lg:hidden overflow-y-auto no-scrollbar ${
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      }`}
+      className={`fixed top-0 left-0 h-screen w-[285px] bg-white z-50 shadow-lg transition-all duration-300 lg:hidden overflow-y-auto no-scrollbar ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
     >
       <div className="px-[14px] py-[23px] flex flex-col">
         <div className="flex justify-between items-center">
@@ -34,10 +33,10 @@ export default function TabletSidebar({
               className="flex items-center ml-[10px] cursor-pointer"
             >
               <img
-  src={logo}
-  alt="Logo"
-  className="h-[42px] w-auto min-[360px]:h-[46px] min-[390px]:h-[38px] object-contain"
-/>
+                src={logo}
+                alt="Logo"
+                className="h-[42px] w-auto min-[360px]:h-[46px] min-[390px]:h-[38px] object-contain"
+              />
             </div>
             <div
               onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -52,8 +51,8 @@ export default function TabletSidebar({
         {/* Horizontal Line */}
         <div className="hidden md:block lg:hidden w-full border-t border-[#CFCFCF] mt-[18px] mb-[12px]"></div>
 
-<div className="flex-1 flex flex-col justify-center mt-2">
-            {sidebarMenuItems.map((item) => {
+        <div className="flex-1 flex flex-col justify-center mt-2">
+          {sidebarMenuItems.map((item) => {
             const hasChildren = item.children && item.children.length > 0;
             const isActive = activeItem === item.key;
             const isChildActive = hasChildren && item.activeKeys?.includes(activeItem);
@@ -70,35 +69,31 @@ export default function TabletSidebar({
                       setSidebarOpen(false);
                     }
                   }}
-                  className={`w-full h-[42px] flex items-center justify-between px-[12px] rounded-lg mt-2 cursor-pointer transition-all duration-300 ${
-                    isActive || isChildActive ? "bg-[#4866F6]" : "hover:bg-[#4866F6]"
-                  }`}
+                  className={`w-full h-[42px] flex items-center justify-between px-[12px] rounded-lg mt-2 cursor-pointer transition-all duration-300 ${isActive || isChildActive ? "bg-[#4866F6]" : "hover:bg-[#4866F6]"
+                    }`}
                 >
                   <div className="flex items-center gap-[12px]">
                     <item.Icon
-                      className={`w-[20px] h-[20px] ${
-                        isActive || isChildActive ? "text-white" : "text-[#586D93]"
-                      }`}
+                      className={`w-[20px] h-[20px] ${isActive || isChildActive ? "text-white" : "text-[#586D93]"
+                        }`}
                     />
                     <p
-                      className={`block text-[14px] ${
-                        isActive || isChildActive ? "text-white" : "text-[#586D93]"
-                      }`}
+                      className={`block text-[14px] ${isActive || isChildActive ? "text-white" : "text-[#586D93]"
+                        }`}
                     >
                       {item.label}
                     </p>
                   </div>
                   {hasChildren && (
                     <ChevronIcon
-                      className={`block text-[14px] transition-all duration-300 ${
-                        isMenuOpen ? "rotate-180" : ""
-                      } ${isActive || isChildActive ? "text-white" : "text-[#586D93]"}`}
+                      className={`block text-[14px] transition-all duration-300 ${isMenuOpen ? "rotate-180" : ""
+                        } ${isActive || isChildActive ? "text-white" : "text-[#586D93]"}`}
                     />
                   )}
                 </div>
 
                 {hasChildren && isMenuOpen && (
-                  <div className="ml-[32px] mt-[6px] flex flex-col gap-[2px]">
+                  <div className="ml-[32px] mt-[6px] flex flex-col gap-[3px]">
                     {item.children.map((child) => (
                       <div
                         key={child.key}
@@ -106,18 +101,16 @@ export default function TabletSidebar({
                           setActiveItem(child.key);
                           setSidebarOpen(false);
                         }}
-                        className={`flex items-center gap-[10px] cursor-pointer px-3 py-2 rounded-lg group transition-all duration-300 ${
-                          activeItem === child.key ? "bg-[#4866F6]" : "hover:bg-[#4866F6]"
-                        }`}
+                        className={`flex items-center gap-[10px] min-h-[38px] cursor-pointer px-3 py-2 rounded-lg group transition-all duration-300 ${activeItem === child.key ? "bg-[#4866F6]" : "hover:bg-[#4866F6]"
+                          }`}
                       >
                         <child.Icon
-                          className={`w-[18px] h-[18px] ${
-                            activeItem === child.key ? "text-white" : "text-[#586D93] group-hover:text-white"
-                          }`}
+                          className={`w-[18px] h-[18px] shrink-0 ${activeItem === child.key ? "brightness-0 invert text-white" : "text-[#586D93] group-hover:text-white"
+                            }`}
                         />
                         <p
-className={`text-[13px] leading-[18px] ${                            activeItem === child.key ? "text-white" : "text-[#586D93] group-hover:text-white"
-                          }`}
+                          className={`text-[13px] leading-snug ${activeItem === child.key ? "text-white" : "text-[#586D93] group-hover:text-white"
+                            }`}
                         >
                           {child.label}
                         </p>
@@ -145,4 +138,3 @@ className={`text-[13px] leading-[18px] ${                            activeItem 
   );
 }
 
- 
