@@ -18,6 +18,10 @@ import AiMonitoring from "../components/admin/AiMonitoring";
 import AdminProfile from "../components/admin/adminprofile/AdminProfile";
 import BehaviorLearning from "../components/admin/ai/BehaviorLearning/BehaviorLearning";
 import SemanticMemory from "../components/admin/ai/SemanticMemory/SemanticMemory";
+import PerformanceInsights from "../components/admin/AnalyticsAndPerformance/PerformanceInsights";
+import PerformanceOverview from "../components/admin/AnalyticsAndPerformance/PerformanceOverview";
+import IntentAnalysis from "../components/admin/AnalyticsAndPerformance/IntentAnalysis";
+import AuditLogs from "../components/admin/AnalyticsAndPerformance/AuditLogs";
 
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
@@ -159,6 +163,16 @@ export default function Dashboard() {
             <EditSubscription setActiveItem={setActiveItem} />
           )}
           {activeItem === "profile" && <AdminProfile />}
+
+          {/* Analytics & Performance */}
+          {(activeItem === "performance_insights" || activeItem === "analytics_performance") && (
+            <PerformanceInsights />
+          )}
+          {activeItem === "performance_overview" && <PerformanceOverview />}
+          {activeItem === "intent_analysis" && <IntentAnalysis />}
+
+          {/* Audit Logs */}
+          {activeItem === "audit_logs" && <AuditLogs />}
         </div>
       </div>
       <SessionTimeout

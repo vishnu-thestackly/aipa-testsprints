@@ -499,6 +499,33 @@ export default function Navbar({
   const navigate = useNavigate();
 
 
+  const getPageTitle = (key) => {
+    const titles = {
+      dashboard: "Dashboard",
+      manage: "Manage Users & Roles",
+      track: "Track API Integration",
+      audit_logs: "Audit Logs",
+      analytics_performance: "Analytics & Performance",
+      performance_insights: "Performance Insights",
+      performance_overview: "Performance Overview",
+      intent_analysis: "Intent Analysis",
+      communication: "Communication",
+      usage: "Usage Dashboard",
+      aimonitoring: "AI Monitoring",
+      semanticmemory: "Semantic Memory",
+      behaviorlearning: "Behavior Learning",
+      configuration: "Configuration",
+      subscription: "Manage Subscription",
+      transaction: "Transaction Monitoring",
+      subscriptionplan: "Subscription Plan",
+      refund: "Refund & Dispute",
+      payment: "Payment Report",
+      tracking: "Subscription Tracking",
+      profile: "Profile",
+    };
+    return titles[key] || "Dashboard";
+  };
+
   const [showLanguages, setShowLanguages] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("English");
   const languageRef = useRef(null);
@@ -561,11 +588,7 @@ return (
 <img src={profile} alt="" className="w-[45px] h-[45px] min-[360px]:w-[48px] min-[360px]:h-[48px] min-[390px]:w-[52px] min-[390px]:h-[52px]" />
 </div>
 
-<div className="flex justify-between items-center mt-[25px]">
-
-<h2 className="text-[#586D93] text-[20px] font-medium">
-Dashboard
-</h2>
+<div className="flex justify-end items-center mt-[25px]">
 
 <div className="flex gap-[8px] items-center">
 
@@ -745,15 +768,7 @@ ASSISTANT
 
 {/* RIGHT */}
 
-<div className="relative flex items-center justify-between flex-1 min-w-0 ml-3 overflow-visible z-10">
-
-<div className="px-2 md:px-3 lg:px-10 min-w-0">
-
-<h2 className="hidden md:block font-medium md:text-[16px] min-[900px]:text-[18px] lg:text-[25px] text-[#586D93] whitespace-nowrap lg:ml-[-30px]">
-Dashboard
-</h2>
-
-</div>
+<div className="relative flex items-center justify-end flex-1 min-w-0 ml-3 overflow-visible z-10">
 
 <div className="flex items-center gap-4 md:gap-2 lg:gap-7 shrink-0 ml-auto">
 

@@ -8,6 +8,10 @@ import adminprofile from "../../../assets/images/adminprofile.svg";
 import aiicon from "../../../assets/images/ai.svg";
 import semanticmemory from "../../../assets/images/semantic_memory.svg";
 import behaviourlearning from "../../../assets/images/behaviour_learning.svg";
+import analyticsIcon from "../../../assets/images/analytics.svg";
+import insightsIcon from "../../../assets/images/insights.svg";
+import overviewIcon from "../../../assets/images/overview.svg";
+import intentIcon from "../../../assets/images/intent.svg";
 
 const DashboardIcon = ({ className }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -125,6 +129,167 @@ const ChevronDownIcon = ({ className }) => (
   </svg>
 );
 
+const AuditLogsIcon = ({ className }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="16" y1="13" x2="8" y2="13" />
+    <line x1="16" y1="17" x2="8" y2="17" />
+    <line x1="10" y1="9" x2="8" y2="9" />
+  </svg>
+);
+
+const AnalyticsIcon = ({ className = "" }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M2 22H22"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M9.75 4V22H14.25V4C14.25 2.9 13.8 2 12.45 2H11.55C10.2 2 9.75 2.9 9.75 4Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M7 10C7 8.9 6.6 8 5.4 8H4.6C3.4 8 3 8.9 3 10V22H7V13.99"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M17 15V22H21V15C21 13.9 20.6 13 19.4 13H18.6C17.4 13 17 13.9 17 15Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const PerformanceInsightsIcon = ({ className = "" }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M18.32 12.7504H15C12.51 12.7504 11.25 11.3404 11.25 8.55045V5.68045C11.25 4.66045 11.37 3.20045 12.43 2.40045C13.32 1.74045 14.6 1.69045 16.49 2.24045C18.97 2.96045 21.04 5.03045 21.76 7.51045C22.31 9.39045 22.26 10.6804 21.6 11.5604C20.8 12.6304 19.34 12.7504 18.32 12.7504ZM14.28 3.36045C13.87 3.36045 13.55 3.44045 13.34 3.60045C12.95 3.89045 12.76 4.57045 12.76 5.68045V8.56045C12.76 10.8004 13.62 11.2604 15.01 11.2604H18.33C19.43 11.2604 20.11 11.0704 20.41 10.6804C20.76 10.2204 20.73 9.30045 20.34 7.95045C19.76 5.98045 18.06 4.27045 16.09 3.70045C15.35 3.47045 14.75 3.36045 14.28 3.36045Z" />
+    <path d="M11.0704 22.7503C10.5404 22.7503 10.0004 22.7103 9.46037 22.6203C5.37037 21.9603 2.04037 18.6403 1.38037 14.5503C0.530373 9.29032 3.92037 4.33032 9.11037 3.27032C9.52037 3.19032 9.91037 3.45032 10.0004 3.85032C10.0804 4.26032 9.82037 4.65032 9.42037 4.74032C5.03037 5.64032 2.15037 9.84032 2.88037 14.3103C3.44037 17.7703 6.25037 20.5803 9.71037 21.1403C14.2004 21.8603 18.3904 18.9703 19.2804 14.5603C19.3604 14.1503 19.7604 13.8903 20.1604 13.9703C20.5704 14.0503 20.8304 14.4503 20.7504 14.8503C19.8004 19.5203 15.7204 22.7503 11.0704 22.7503Z" />
+  </svg>
+);
+
+const PerformanceOverviewIcon = ({ className = "" }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M5.90219 17H18.0922C19.9922 17 20.9922 16 20.9922 14.1V2H2.99219V14.1C3.00219 16 4.00219 17 5.90219 17Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M2 2H22"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M8 22L12 20V17"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M16 22L12 20"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M7.5 11L10.65 8.37C10.9 8.16 11.23 8.22 11.4 8.5L12.6 10.5C12.77 10.78 13.1 10.83 13.35 10.63L16.5 8"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const IntentAnalysisIcon = ({ className = "" }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M17.9688 22H21.9988"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M2 2V19C2 20.66 3.34 22 5 22H13.98"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M19.9922 8.17999L21.0022 7"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5 16.9992L9.59 11.6392C10.35 10.7592 11.7 10.6992 12.52 11.5292L13.47 12.4792C14.29 13.2992 15.64 13.2492 16.4 12.3692L17.55 11.0192"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export const sidebarMenuItems = [
   {
     key: "dashboard",
@@ -140,6 +305,39 @@ export const sidebarMenuItems = [
     key: "track",
     label: "Track API integration",
     Icon: TrackIcon,
+  },
+  {
+    key: "audit_logs",
+    label: "Audit Logs",
+    Icon: AuditLogsIcon,
+  },
+  {
+    key: "analytics_performance",
+    label: "Analytics & Performance",
+    Icon: AnalyticsIcon,
+    toggleKey: "analytics_performance",
+    activeKeys: [
+      "performance_insights",
+      "performance_overview",
+      "intent_analysis",
+    ],
+    children: [
+      {
+        key: "performance_insights",
+        label: "Performance Insights",
+        Icon: PerformanceInsightsIcon,
+      },
+      {
+        key: "performance_overview",
+        label: "Performance Overview",
+        Icon: PerformanceOverviewIcon,
+      },
+      {
+        key: "intent_analysis",
+        label: "Intent Analysis",
+        Icon: IntentAnalysisIcon,
+      },
+    ],
   },
   {
     key: "communication",

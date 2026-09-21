@@ -274,15 +274,15 @@ export default function TasksDashboard() {
 
           dueDate: date
             ? `${String(date.getDate()).padStart(2, "0")} - ${String(
-                date.getMonth() + 1
-              ).padStart(2, "0")} - ${date.getFullYear()}`
+              date.getMonth() + 1
+            ).padStart(2, "0")} - ${date.getFullYear()}`
             : "",
 
           dueTime: date
             ? date.toLocaleTimeString("en-US", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
+              hour: "2-digit",
+              minute: "2-digit",
+            })
             : "",
 
           buttonText:
@@ -350,29 +350,30 @@ export default function TasksDashboard() {
       setTaskDetails(null);
       setSelectedTask(null);
 
-      // Show success message
-      setSuccessMessage("Task completed successfully");
-      setShowSuccess(false);
+    // Show success toast
+    setSuccessMessage("Task completed successfully");
+    setShowSuccess(false);
 
       setTimeout(() => {
         setShowSuccess(true);
       }, 10);
 
-      // Hide success message
-      setTimeout(() => {
-        setShowSuccess(false);
+    // Hide after 5 seconds
+    setTimeout(() => {
+      setShowSuccess(false);
 
         setTimeout(() => {
           setSuccessMessage("");
         }, 200);
       }, 2000);
 
-      // Refresh current task list
-      await fetchTasks(activeTab);
-    } catch (error) {
-      console.error("Error completing task:", error);
-    }
-  };
+    // Refresh current task list
+    await fetchTasks(activeTab);
+
+  } catch (error) {
+    console.error("Error completing task:", error);
+  }
+};
 
   // =========================================================
   // TAB CHANGE
@@ -418,10 +419,10 @@ export default function TasksDashboard() {
         prevTasks.filter((task) => task.id !== taskId)
       );
 
-      // Close task details popup
-      setShowTaskDetails(false);
-      setTaskDetails(null);
-      setSelectedTask(null);
+    // Close task details popup
+    setShowTaskDetails(false);
+    setTaskDetails(null);
+    setSelectedTask(null);
 
       // Show delete message
       setSuccessMessage("Task deleted successfully");
@@ -431,25 +432,19 @@ export default function TasksDashboard() {
         setShowSuccess(true);
       }, 10);
 
-      // Hide success message
-      setTimeout(() => {
-        setShowSuccess(false);
+    // Hide after 5 seconds
+    setTimeout(() => {
+      setShowSuccess(false);
 
         setTimeout(() => {
           setSuccessMessage("");
         }, 200);
       }, 5000);
 
-      // Refresh current task list
-      await fetchTasks(activeTab);
-    } catch (error) {
-      console.error("Error deleting task:", error);
-    }
-  };
-
-  // =========================================================
-  // TOGGLE TASK STATUS - LOCAL UI
-  // =========================================================
+  } catch (error) {
+    console.error("Error deleting task:", error);
+  }
+};
 
   const toggleTaskStatus = (task) => {
     const nextStatus =
@@ -464,9 +459,7 @@ export default function TasksDashboard() {
               ...t,
               status: nextStatus,
               buttonText:
-                nextStatus === "completed"
-                  ? "View Details"
-                  : "Not Started",
+                nextStatus === "completed" ? "View Details" : "Not Started",
             }
           : t
       )
@@ -483,9 +476,7 @@ export default function TasksDashboard() {
   return (
     <div
       className={`h-full overflow-y-auto px-4 sm:px-6 lg:px-4 xl:px-8 pt-4 lg:pt-6 pb-12 scrollbar-hide transition-all duration-300 ${
-        languageOpen
-          ? "mt-[60px] md:mt-[70px] lg:mt-[80px]"
-          : "mt-0"
+        languageOpen ? "mt-[60px] md:mt-[70px] lg:mt-[80px]" : "mt-0"
       }`}
     >
       {/* =====================================================
@@ -511,9 +502,8 @@ export default function TasksDashboard() {
               setShowCreateNewTask(false);
               setEditingTask(null);
             }}
-            onSave={(taskData) => {
+            onSave={() => {
               const wasEditing = Boolean(editingTask);
-
               setShowCreateNewTask(false);
               setEditingTask(null);
 
@@ -562,22 +552,20 @@ export default function TasksDashboard() {
 
                 <button
                   onClick={() => setMainTab("tasks")}
-                  className={`flex-1 text-center py-2.5 px-4 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                    mainTab === "tasks"
+                  className={`flex-1 text-center py-2.5 px-4 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${mainTab === "tasks"
                       ? "bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)]"
                       : "text-[#586D93] hover:text-[#4866F6]"
-                  }`}
+                    }`}
                 >
                   Tasks
                 </button>
 
                 <button
                   onClick={() => setMainTab("reminders")}
-                  className={`flex-1 text-center py-2.5 px-4 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                    mainTab === "reminders"
+                  className={`flex-1 text-center py-2.5 px-4 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${mainTab === "reminders"
                       ? "bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)]"
                       : "text-[#586D93] hover:text-[#4866F6]"
-                  }`}
+                    }`}
                 >
                   Reminders
                 </button>
@@ -621,7 +609,7 @@ export default function TasksDashboard() {
                     {/* Add Reminder */}
 
                     <button
-                      onClick={() => {}}
+                      onClick={() => { }}
                       className="w-full sm:w-auto flex items-center justify-center gap-1.5 h-10 px-6 rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white transition-all cursor-pointer font-semibold text-sm shadow-[0_4px_10px_rgba(72,102,246,0.25)] whitespace-nowrap"
                     >
                       <span>Add Reminder</span>
@@ -640,27 +628,23 @@ export default function TasksDashboard() {
                   <div className="bg-white border border-[#E8E8E8] p-1 rounded-full inline-flex sm:flex w-auto sm:w-full min-w-max sm:min-w-0 shadow-[0px_2px_4px_rgba(0,0,0,0.02)]">
 
                     <button
-                      onClick={() =>
-                        setReminderSubTab("ai-suggested")
-                      }
+                      onClick={() => setReminderSubTab("ai-suggested")}
                       className={`text-center py-2.5 px-6 sm:px-4 sm:flex-1 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap min-w-[210px] sm:min-w-0 ${
                         reminderSubTab === "ai-suggested"
                           ? "bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)]"
                           : "text-[#586D93] hover:text-[#4866F6]"
-                      }`}
+                        }`}
                     >
                       AI Suggested Reminders
                     </button>
 
                     <button
-                      onClick={() =>
-                        setReminderSubTab("reminders")
-                      }
+                      onClick={() => setReminderSubTab("reminders")}
                       className={`text-center py-2.5 px-6 sm:px-4 sm:flex-1 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap min-w-[140px] sm:min-w-0 ${
                         reminderSubTab === "reminders"
                           ? "bg-[#4866F6] text-white shadow-[0_2px_8px_rgba(72,102,246,0.3)]"
                           : "text-[#586D93] hover:text-[#4866F6]"
-                      }`}
+                        }`}
                     >
                       Reminders
                     </button>
@@ -692,31 +676,22 @@ export default function TasksDashboard() {
                             "high"
                           ).toLowerCase();
 
-                        return (
-                          <div
-                            key={reminder.id}
-                            onClick={() =>
-                              setSelectedReminderId(
-                                reminder.id
-                              )
-                            }
-                            className={`rounded-[20px] bg-white p-3.5 sm:p-4 md:p-5 flex flex-col justify-between transition-all cursor-pointer min-h-[260px] ${
-                              isSelected
-                                ? "border-2 border-[#4866F6] shadow-[0px_4px_16px_rgba(72,102,246,0.12)]"
-                                : "border border-[#E8E8E8] shadow-[0px_2px_6px_rgba(0,0,0,0.03)] hover:border-[#4866F688]"
-                            }`}
-                          >
-                            <div>
-
-                              {/* Title */}
-
-                              <h4 className="font-semibold text-[clamp(14.5px,4.2vw,17.5px)] text-[#222B45] whitespace-nowrap overflow-hidden text-ellipsis mb-3">
-                                {reminder.number
-                                  ? `${reminder.number} `
-                                  : `${index + 1}. `}
-
-                                {reminder.title}
-                              </h4>
+                      return (
+                        <div
+                          key={reminder.id}
+                          onClick={() => setSelectedReminderId(reminder.id)}
+                          className={`rounded-[20px] bg-white p-3.5 sm:p-4 md:p-5 flex flex-col justify-between transition-all cursor-pointer min-h-[260px] ${
+                            isSelected
+                              ? "border-2 border-[#4866F6] shadow-[0px_4px_16px_rgba(72,102,246,0.12)]"
+                              : "border border-[#E8E8E8] shadow-[0px_2px_6px_rgba(0,0,0,0.03)] hover:border-[#4866F688]"
+                          }`}
+                        >
+                          <div>
+                            {/* Card Title - Fluid responsive single line across all mobile sizes */}
+                            <h4 className="font-semibold text-[clamp(14.5px,4.2vw,17.5px)] text-[#222B45] whitespace-nowrap overflow-hidden text-ellipsis mb-3">
+                              {reminder.number ? `${reminder.number} ` : `${index + 1}. `}
+                              {reminder.title}
+                            </h4>
 
                               {/* Badges */}
 
@@ -943,14 +918,14 @@ export default function TasksDashboard() {
                           <div className="flex items-center gap-2">
 
                             <button
-                              onClick={() => {}}
+                              onClick={() => { }}
                               className="flex-1 h-[40px] px-3 rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white text-xs font-semibold flex items-center justify-center transition-all cursor-pointer"
                             >
                               Snooze
                             </button>
 
                             <button
-                              onClick={() => {}}
+                              onClick={() => { }}
                               className="flex-1 h-[40px] px-3 rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white text-xs font-semibold flex items-center justify-center transition-all cursor-pointer"
                             >
                               View
@@ -1019,7 +994,7 @@ export default function TasksDashboard() {
                         <div className="flex flex-col gap-3 mt-auto">
 
                           <button
-                            onClick={() => {}}
+                            onClick={() => { }}
                             className="w-full h-[40px] rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white text-xs font-semibold transition-all cursor-pointer flex items-center justify-center shadow-[0_2px_6px_rgba(72,102,246,0.2)] gap-1.5"
                           >
                             <span>Send Email</span>
@@ -1077,14 +1052,14 @@ export default function TasksDashboard() {
                           <div className="flex items-center gap-2">
 
                             <button
-                              onClick={() => {}}
+                              onClick={() => { }}
                               className="flex-1 h-[40px] px-3 rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white text-xs font-semibold flex items-center justify-center transition-all cursor-pointer"
                             >
                               Open
                             </button>
 
                             <button
-                              onClick={() => {}}
+                              onClick={() => { }}
                               className="flex-1 h-[40px] px-3 rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white text-xs font-semibold flex items-center justify-center transition-all cursor-pointer"
                             >
                               Reschedule
@@ -1155,14 +1130,12 @@ export default function TasksDashboard() {
                   {/* Upcoming */}
 
                   <div
-                    onClick={() =>
-                      handleTabChange("upcoming")
-                    }
+                    onClick={() => handleTabChange("upcoming")}
                     className={`flex items-center gap-4 p-4 rounded-[18px] border transition-all cursor-pointer ${
                       activeTab === "upcoming"
                         ? "border-[#4866F6] bg-[#4866F604] shadow-[0px_4px_12px_rgba(72,102,246,0.08)]"
                         : "border-[#E3E3E3] bg-white hover:border-[#4866F6aa]"
-                    }`}
+                      }`}
                   >
                     <div className="w-[60px] h-[60px] rounded-full flex-shrink-0 flex items-center justify-center bg-[#E4E8FE]">
 
@@ -1190,14 +1163,12 @@ export default function TasksDashboard() {
                   {/* Pending */}
 
                   <div
-                    onClick={() =>
-                      handleTabChange("pending")
-                    }
+                    onClick={() => handleTabChange("pending")}
                     className={`flex items-center gap-4 p-4 rounded-[18px] border transition-all cursor-pointer ${
                       activeTab === "pending"
                         ? "border-[#4866F6] bg-[#4866F604] shadow-[0px_4px_12px_rgba(72,102,246,0.08)]"
                         : "border-[#E3E3E3] bg-white hover:border-[#4866F6aa]"
-                    }`}
+                      }`}
                   >
                     <div className="w-[60px] h-[60px] rounded-full flex-shrink-0 flex items-center justify-center bg-[#E4E8FE]">
 
@@ -1225,14 +1196,12 @@ export default function TasksDashboard() {
                   {/* Completed */}
 
                   <div
-                    onClick={() =>
-                      handleTabChange("completed")
-                    }
+                    onClick={() => handleTabChange("completed")}
                     className={`flex items-center gap-4 p-4 rounded-[18px] border transition-all cursor-pointer md:col-span-1 lg:col-span-1 ${
                       activeTab === "completed"
                         ? "border-[#4866F6] bg-[#4866F604] shadow-[0px_4px_12px_rgba(72,102,246,0.08)]"
                         : "border-[#E3E3E3] bg-white hover:border-[#4866F6aa]"
-                    }`}
+                      }`}
                   >
                     <div className="w-[60px] h-[60px] rounded-full flex-shrink-0 flex items-center justify-center bg-[#E4E8FE]">
 
@@ -1300,11 +1269,10 @@ export default function TasksDashboard() {
 
                             <span
                               className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                                task.status ===
-                                "completed"
+                                task.status === "completed"
                                   ? "bg-[#52C41A18] text-[#52C41A]"
                                   : "bg-[#EFF3FE] text-[#4866F6]"
-                              }`}
+                                }`}
                             >
                               {task.status}
                             </span>
@@ -1346,10 +1314,10 @@ export default function TasksDashboard() {
         )}
       </div>
 
-      {/* =====================================================
-          SUCCESS MESSAGE
-      ===================================================== */}
-
+      {/* ========================================================= */}
+      {/* POPUPS & MODALS                                           */}
+      {/* ========================================================= */}
+      {/* SUCCESS MESSAGE */}
       {successMessage && (
         <div
           className={`fixed bottom-[25vh] right-6 z-[10000]
@@ -1358,8 +1326,7 @@ export default function TasksDashboard() {
             text-sm font-medium
             transition-all duration-200 ease-out
             ${
-              successMessage ===
-              "Task deleted successfully"
+              successMessage === "Task deleted successfully"
                 ? "bg-red-50 border border-red-200 text-red-600"
                 : "bg-green-50 border border-green-200 text-green-600"
             }
@@ -1371,123 +1338,65 @@ export default function TasksDashboard() {
           `}
         >
           <Check className="w-4 h-4" />
-
           <span>{successMessage}</span>
         </div>
       )}
 
-      {/* =====================================================
-          TASK DETAILS POPUP
-      ===================================================== */}
-
+      {/* TASK DETAILS POPUP */}
       {showTaskDetails && selectedTask && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-
           <div className="w-full max-w-lg bg-white rounded-[24px] shadow-2xl border border-[#DADADA] overflow-hidden p-6 flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-150">
-
-            {/* Header */}
-
             <div className="flex items-center justify-between border-b border-[#E8E8E8] pb-3">
-
-              <h3 className="text-lg font-bold text-[#3D3D3D]">
-                Task Details
-              </h3>
-
+              <h3 className="text-lg font-bold text-[#3D3D3D]">Task Details</h3>
               <button
-                onClick={() => {
-                  setShowTaskDetails(false);
-                  setTaskDetails(null);
-                  setSelectedTask(null);
-                }}
+                onClick={() => setShowTaskDetails(false)}
                 className="w-7 h-7 rounded-full flex items-center justify-center text-[#8898AA] hover:text-[#3D3D3D] hover:bg-gray-100"
               >
                 <X className="w-4 h-4" />
               </button>
-
             </div>
-
-            {/* Task Information */}
-
             <div>
-
               <h4 className="text-base font-bold text-[#222B45]">
                 {selectedTask.title}
               </h4>
-
               <p className="text-xs text-[#586D93] mt-1">
-                {selectedTask.description ||
-                  "No description provided"}
+                {selectedTask.description || "No description provided"}
               </p>
-
             </div>
-
-            {/* Status and Priority */}
-
             <div className="flex items-center gap-3">
-
               <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#EFF3FE] text-[#4866F6]">
                 {selectedTask.status}
               </span>
-
               <span className="px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF1F0] text-[#FF4D4F]">
                 {selectedTask.priority}
               </span>
-
             </div>
-
-            {/* Delete / Toggle */}
-
             <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E8E8E8]">
-
               <button
-                onClick={() =>
-                  handleDeleteTask(selectedTask.id)
-                }
+                onClick={() => handleDeleteTask(selectedTask.id)}
                 className="px-4 py-2 rounded-full border border-[#FF4D4F] text-[#FF4D4F] text-xs font-semibold hover:bg-[#FFF5F5]"
               >
                 Delete
               </button>
-
-              <button
-                onClick={() =>
-                  toggleTaskStatus(selectedTask)
-                }
-                className="px-5 py-2 rounded-full bg-[#4866F6] text-white text-xs font-semibold hover:bg-[#3554ED]"
-              >
-                {selectedTask.status === "completed"
-                  ? "Mark Pending"
-                  : "Mark Completed"}
-              </button>
-
-            </div>
-
-            {/* API Mark Completed */}
-
-            {selectedTask.status !== "completed" && (
-              <div className="w-full sm:flex sm:justify-end">
-
+              {selectedTask.status !== "completed" ? (
                 <button
-                  onClick={() =>
-                    handleCompleteTask(
-                      taskDetails?.task_id ||
-                        selectedTask.id
-                    )
-                  }
-                  disabled={taskDetailsLoading}
-                  className="w-full sm:w-auto px-8 py-2.5 bg-[#4866F6] hover:bg-[#3554ED] disabled:opacity-60 text-white rounded-full text-sm font-semibold transition-all cursor-pointer border-none shadow-[0_4px_10px_rgba(72,102,246,0.25)] flex items-center justify-center whitespace-nowrap"
+                  onClick={() => handleCompleteTask(selectedTask.id)}
+                  className="px-5 py-2 rounded-full bg-[#4866F6] text-white text-xs font-semibold hover:bg-[#3554ED]"
                 >
-                  {taskDetailsLoading
-                    ? "Loading..."
-                    : "Mark as Completed"}
+                  Mark Completed
                 </button>
-
-              </div>
-            )}
-
+              ) : (
+                <button
+                  onClick={() => toggleTaskStatus(selectedTask)}
+                  className="px-5 py-2 rounded-full bg-[#4866F6] text-white text-xs font-semibold hover:bg-[#3554ED]"
+                >
+                  Mark Pending
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }
