@@ -47,6 +47,7 @@ import TasksDashboard from "./components/userprofile/tasks/TasksDashboard";
 import Integrations from "./components/userprofile/integrations/Integrations";
 import OutlookDetails from "./components/userprofile/integrations/details/OutlookDetails";
 import ExchangeDetails from "./components/userprofile/integrations/details/ExchangeDetails";
+
 // coment
 
 function App() {
@@ -117,6 +118,7 @@ function App() {
           />
           <Route path="tasks" element={<TasksDashboard />} />
           <Route path="integrations" element={<Integrations />} />
+          
           <Route path="integrations/outlook" element={<OutlookDetails />} />
           <Route path="integrations/exchange" element={<ExchangeDetails />} />
 

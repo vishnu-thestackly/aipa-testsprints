@@ -21,11 +21,12 @@ import PendingIcon from "../../../assets/images/taskdetails.png";
 import EditWhiteIcon from "../../../assets/images/editwhite.png";
 import DeleteIcon from "../../../assets/images/delete.png";
 import CreateNewTask from "./CreateNewTask";
-
 import {
   getTaskDashboard,
   getTaskDetails,
   updateTask,
+  deleteTask,
+  completeTask,
 } from "../../../api/authApi";
 
 export default function TasksDashboard() {
@@ -55,6 +56,8 @@ export default function TasksDashboard() {
   const [loading, setLoading] = useState(false);
 
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // If languageOpen is coming from your parent/layout context,
   // this will safely get it without causing an error.
@@ -157,6 +160,40 @@ export default function TasksDashboard() {
   useEffect(() => {
     fetchTasks(activeTab);
   }, [activeTab]);
+
+  const handleCompleteTask = async (taskId) => {
+  try {
+    await completeTask(taskId);
+
+    // Close task details popup
+    setShowTaskDetails(false);
+    setTaskDetails(null);
+    setSelectedTask(null);
+
+    // Show success toast
+    setSuccessMessage("Task completed successfully");
+    setShowSuccess(false);
+
+    setTimeout(() => {
+      setShowSuccess(true);
+    }, 10);
+
+    // Hide after 5 seconds
+    setTimeout(() => {
+      setShowSuccess(false);
+
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 200);
+    }, 2000);
+
+    // Refresh current task list
+    await fetchTasks(activeTab);
+
+  } catch (error) {
+    console.error("Error completing task:", error);
+  }
+};
 
   // =========================================================
   // TAB CHANGE
@@ -334,10 +371,41 @@ export default function TasksDashboard() {
   // DELETE TASK
   // =========================================================
 
-  const handleDeleteTask = (id) => {
-    setTasks((prev) => prev.filter((t) => t.id !== id));
+  const handleDeleteTask = async (taskId) => {
+  try {
+    await deleteTask(taskId);
+
+    // Remove task from list
+    setTasks((prevTasks) =>
+      prevTasks.filter((task) => task.id !== taskId)
+    );
+
+    // Close task details popup
+    setShowTaskDetails(false);
+    setTaskDetails(null);
     setSelectedTask(null);
-  };
+
+    // Show delete message
+    setSuccessMessage("Task deleted successfully");
+    setShowSuccess(false);
+
+    setTimeout(() => {
+      setShowSuccess(true);
+    }, 10);
+
+    // Hide after 5 seconds
+    setTimeout(() => {
+      setShowSuccess(false);
+
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 200);
+    }, 5000);
+
+  } catch (error) {
+    console.error("Error deleting task:", error);
+  }
+};
 
   // =========================================================
   // TOGGLE TASK STATUS
@@ -417,9 +485,32 @@ export default function TasksDashboard() {
               setEditingTask(null);
             }}
             onSave={(taskData) => {
-              handleCreateTaskSave(taskData);
-              setEditingTask(null);
-            }}
+  const wasEditing = Boolean(editingTask);
+
+  handleCreateTaskSave(taskData);
+
+  setSuccessMessage(
+    wasEditing
+      ? "Task updated successfully"
+      : "Task created successfully"
+  );
+
+  setShowSuccess(false);
+
+  setTimeout(() => {
+    setShowSuccess(true);
+  }, 10);
+
+  setTimeout(() => {
+    setShowSuccess(false);
+
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 200);
+  }, 2000);
+
+  setEditingTask(null);
+}}
           />
         ) : (
           <div className="w-full flex-1 rounded-[25px] border border-[#DADADA] bg-white p-4 md:p-6 lg:p-4 xl:p-8 shadow-[0px_0px_4px_0px_#00000014] flex flex-col">
@@ -749,6 +840,30 @@ export default function TasksDashboard() {
       {/* =====================================================
           TASK DETAILS MODAL
       ===================================================== */}
+      {/* SUCCESS MESSAGE */}
+{successMessage && (
+  <div
+    className={`fixed bottom-[25vh] right-6 z-[10000]
+      flex items-center gap-2
+      px-5 py-3 rounded-xl shadow-lg
+      text-sm font-medium
+      transition-all duration-200 ease-out
+      ${
+        successMessage === "Task deleted successfully"
+          ? "bg-red-50 border border-red-200 text-red-600"
+          : "bg-green-50 border border-green-200 text-green-600"
+      }
+      ${
+        showSuccess
+          ? "translate-y-0 opacity-100"
+          : "translate-y-10 opacity-0"
+      }
+    `}
+  >
+    <Check className="w-4 h-4" />
+    <span>{successMessage}</span>
+  </div>
+)}
 
       {showTaskDetails && selectedTask && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
@@ -948,7 +1063,7 @@ export default function TasksDashboard() {
             {selectedTask.status !== "completed" && (
               <div className="w-full sm:flex sm:justify-end">
                 <button
-                  onClick={() => toggleTaskStatus(selectedTask)}
+                  onClick={() => handleCompleteTask(taskDetails.task_id)}
                   className="w-full sm:w-auto px-8 py-2.5 bg-[#4866F6] hover:bg-[#3554ED] text-white rounded-full text-sm font-semibold transition-all cursor-pointer border-none shadow-[0_4px_10px_rgba(72,102,246,0.25)] flex items-center justify-center whitespace-nowrap"
                 >
                   Mark as Completed

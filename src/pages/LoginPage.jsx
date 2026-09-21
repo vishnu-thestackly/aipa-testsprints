@@ -572,6 +572,7 @@ export default function LoginPage() {
   onSuccess={async (credentialResponse) => {
     try {
       const response = await googleLogin({
+        
         id_token: credentialResponse.credential,
       });
 

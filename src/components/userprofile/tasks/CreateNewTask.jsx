@@ -78,24 +78,28 @@ const CreateNewTask = ({ onCancel, onSave, taskData = null, isEditing = false })
   const hiddenDateInputRef = useRef(null);
 
   const handleTitleChange = (e) => {
-    const val = e.target.value;
-    setTitle(val);
-    if (val.length > 100) {
-      setTitleError("Task title cannot exceed 100 characters");
-    } else {
-      setTitleError("");
-    }
-  };
+  const val = e.target.value;
+
+  if (val.length > 100) {
+    setTitleError("Task title cannot exceed 100 characters");
+    return;
+  }
+
+  setTitle(val);
+  setTitleError("");
+};
 
   const handleDescriptionChange = (e) => {
-    const val = e.target.value;
-    setDescription(val);
-    if (val.length > 200) {
-      setDescriptionError("Description cannot exceed 200 characters");
-    } else {
-      setDescriptionError("");
-    }
-  };
+  const val = e.target.value;
+
+  if (val.length > 200) {
+    setDescriptionError("Description cannot exceed 200 characters");
+    return;
+  }
+
+  setDescription(val);
+  setDescriptionError("");
+};
 
   const handleNativeDatePick = (e) => {
     const raw = e.target.value; // YYYY-MM-DD
@@ -104,6 +108,42 @@ const CreateNewTask = ({ onCancel, onSave, taskData = null, isEditing = false })
       setDueDate(`${d} - ${m} - ${y}`);
     }
   };
+
+
+  const isValidDateFormat = (value) => {
+  return /^\d{2} - \d{2} - \d{4}$/.test(value);
+};
+
+const isValidCalendarDate = (value) => {
+  if (!isValidDateFormat(value)) return false;
+
+  const [day, month, year] = value.split(" - ").map(Number);
+
+  const date = new Date(year, month - 1, day);
+
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  );
+};
+
+const getSelectedDateTime = () => {
+  const [day, month, year] = dueDate.split(" - ").map(Number);
+
+  let hour = Number(dueTimeHH);
+  const minute = Number(dueTimeMM);
+
+  if (dueTimeAmpm === "PM" && hour !== 12) {
+    hour += 12;
+  }
+
+  if (dueTimeAmpm === "AM" && hour === 12) {
+    hour = 0;
+  }
+
+  return new Date(year, month - 1, day, hour, minute, 0, 0);
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -125,6 +165,27 @@ const CreateNewTask = ({ onCancel, onSave, taskData = null, isEditing = false })
 
     setLoading(true);
     setError("");
+
+    if (!isValidDateFormat(dueDate)) {
+  setError("Please enter the date in DD - MM - YYYY format.");
+  setLoading(false);
+  return;
+}
+
+if (!isValidCalendarDate(dueDate)) {
+  setError("Please enter a valid date.");
+  setLoading(false);
+  return;
+}
+
+const selectedDateTime = getSelectedDateTime();
+const now = new Date();
+
+if (selectedDateTime <= now) {
+  setError("Past date and time are not allowed. Please select a future time.");
+  setLoading(false);
+  return;
+}
 
     try {
       let formattedDueDate = "";
@@ -211,6 +272,16 @@ const CreateNewTask = ({ onCancel, onSave, taskData = null, isEditing = false })
       setLoading(false);
     }
   };
+
+  const getTodayForDateInput = () => {
+  const today = new Date();
+
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+};
 
   return (
     <div className="w-full flex-1 rounded-[24px] border border-[#E5E7EB] bg-white p-5 sm:p-8 shadow-[0px_1px_4px_rgba(0,0,0,0.05)] flex flex-col">
@@ -339,7 +410,22 @@ const CreateNewTask = ({ onCancel, onSave, taskData = null, isEditing = false })
                       required
                       placeholder="DD - MM - YYYY"
                       value={dueDate}
-                      onChange={(e) => setDueDate(e.target.value)}
+                      maxLength={14}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                      
+                        // Allow only numbers and " - "
+                        if (!/^[0-9 -]*$/.test(value)) {
+                          return;
+                        }
+                      
+                        // Maximum length of DD - MM - YYYY
+                        if (value.length > 14) {
+                          return;
+                        }
+                      
+                        setDueDate(value);
+                      }}
                       className="w-full h-[42px] px-3.5 pr-10 rounded-lg border border-[#D9DDE5] bg-white text-[13px] sm:text-[14px] text-[#3D3D3D] placeholder:text-[#9AA6BA] outline-none focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6] transition-all"
                     />
                     <button
@@ -353,6 +439,7 @@ const CreateNewTask = ({ onCancel, onSave, taskData = null, isEditing = false })
                     <input
                       type="date"
                       ref={hiddenDateInputRef}
+                      min={getTodayForDateInput()}
                       onChange={handleNativeDatePick}
                       className="sr-only"
                       tabIndex={-1}

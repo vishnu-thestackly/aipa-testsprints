@@ -175,6 +175,21 @@ export const googleLogin = async (tokenData) => {
   }
 };
 
+// ================= GOOGLE SAVE TOKEN PLAYGROUND =================
+
+export const saveGoogleToken = async (payload) => {
+  try {
+    const response = await API.post(
+      "/api/v1/integrations/test/save-google-token",
+      payload
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to save Google token";
+  }
+};
+
 // ================= RESEND OTP API =================
 
 export const resendOtp = async (emailData) => {
@@ -2127,7 +2142,7 @@ export const updateTask = async (taskId, taskData) => {
   try {
     const token = localStorage.getItem("token");
 
-    const response = await API.put(
+    const response = await API.patch(
       `/api/v1/tasks/${taskId}`,
       taskData,
       {
@@ -2143,3 +2158,109 @@ export const updateTask = async (taskId, taskData) => {
     throw error.response?.data || "Failed to update task";
   }
 };
+
+
+
+// ================= DELETE TASK ===============
+
+export const deleteTask = async (taskId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.delete(
+      `/api/v1/tasks/${taskId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Delete Task Error:", error.response?.data);
+    throw error.response?.data || "Failed to delete task";
+  }
+};
+
+
+
+// =========== MARK AS COMPLETED =============
+export const completeTask = async (taskId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      `/api/v1/tasks/${taskId}/complete`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Complete Task Error:", error.response?.data);
+    throw error.response?.data || "Failed to complete task";
+  }
+};
+
+
+// ============== NOTIFICATIONS ==============
+
+export const getNotifications = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.get("/api/v1/notifications/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Get Notifications Error:",
+      error.response?.data
+    );
+
+    throw error.response?.data || "Failed to fetch notifications";
+  }
+};
+
+
+
+// ================= exchange integration ==================
+
+
+
+export const exchangeGoogleIntegrationCode = async (
+  code,
+  appName
+) => {
+  try {
+    const response = await API.post(
+      "/api/v1/integrations/google/exchange",
+      {
+        code: code,
+        app_name: appName,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Google Integration Exchange Error:",
+      error.response?.data || error.message
+    );
+
+    throw (
+      error.response?.data ||
+      "Failed to connect Google integration"
+    );
+  }
+};
+
