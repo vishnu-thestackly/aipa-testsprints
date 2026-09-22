@@ -1,7 +1,7 @@
 import React from "react";
 import { X } from "lucide-react";
 import LoginButton from "./LoginButton";
-import clockCountdown from "../../assets/images/clockCountdown.svg"
+import clockCountdown from "../../assets/images/ClockCountdown.svg"
 import { useTheme } from "../../context/ThemeContext";
 
 export default function SessionTimeout({ open, onClose, onLogin }) {
