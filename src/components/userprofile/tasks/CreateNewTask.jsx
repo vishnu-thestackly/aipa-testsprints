@@ -58,6 +58,7 @@ const CreateNewTask = ({ onCancel, onSave, taskData = null, isEditing = false })
   const [dueTimeMM, setDueTimeMM] = useState(taskData ? parsedTime.mm : "MM");
   const [dueTimeAmpm, setDueTimeAmpm] = useState(taskData ? parsedTime.ampm : "AM");
   const [description, setDescription] = useState(taskData?.description || "");
+  const [platform, setPlatform] = useState(taskData?.platform || "");
   const [assignedTo, setAssignedTo] = useState(
     taskData?.assignedTo || taskData?.assigned_to_name || taskData?.assigned || ""
   );
@@ -229,6 +230,7 @@ if (selectedDateTime <= now) {
       const payload = {
         title: title.trim(),
         description: description.trim(),
+        platform: platform.trim(),
         assigned_to_name: assignedTo.trim() || "Self",
         priority: priority.toUpperCase(),
         due_date: formattedDueDate,
@@ -239,21 +241,20 @@ if (selectedDateTime <= now) {
 
       console.log(isEditing ? "Update Task Payload:" : "Create Task Payload:", payload);
 
-      let response;
+      let response = null;
       if (isEditing && taskData?.id) {
         response = await updateTask(taskData.id, payload);
-        console.log("Task updated successfully:", response);
       } else {
         response = await createTask(payload);
-        console.log("Task created successfully:", response);
       }
 
       if (onSave) {
         onSave({
           ...payload,
-          ...response,
-          id: taskData?.id,
-          task_id: taskData?.id,
+          ...(response || {}),
+          id: response?.id || response?.task_id || taskData?.id,
+          task_id: response?.id || response?.task_id || taskData?.id,
+          platform: platform.trim(),
           dueTimeHH: dueTimeHH === "HH" ? "10" : dueTimeHH,
           dueTimeMM: dueTimeMM === "MM" ? "30" : dueTimeMM,
           dueTimeAmpm,
@@ -364,7 +365,7 @@ if (selectedDateTime <= now) {
                 </div>
 
                 {/* Description */}
-                <div className="flex flex-col flex-1">
+                <div className="flex flex-col">
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="block text-[#3D3D3D] text-[14px] font-medium">
                       Description
@@ -383,7 +384,7 @@ if (selectedDateTime <= now) {
                     placeholder="Enter Description"
                     value={description}
                     onChange={handleDescriptionChange}
-                    className={`w-full h-[128px] sm:h-[130px] p-3.5 rounded-lg border ${
+                    className={`w-full h-[120px] sm:h-[125px] p-3.5 rounded-lg border ${
                       descriptionError
                         ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500"
                         : "border-[#D9DDE5] focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6]"
@@ -394,6 +395,34 @@ if (selectedDateTime <= now) {
                       {descriptionError}
                     </p>
                   )}
+                </div>
+
+                {/* Platform */}
+                <div>
+                  <label className="block text-[#3D3D3D] text-[14px] font-medium mb-1.5">
+                    Platform
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={platform}
+                      onChange={(e) => setPlatform(e.target.value)}
+                      className="w-full h-[42px] px-3.5 pr-10 rounded-lg border border-[#D9DDE5] bg-white text-[13px] sm:text-[14px] text-[#3D3D3D] outline-none focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6] appearance-none cursor-pointer"
+                    >
+                      <option value="" disabled className="text-[#9AA6BA]">
+                        Select Platform
+                      </option>
+                      <option value="Jira">Jira</option>
+                      <option value="Trello">Trello</option>
+                      <option value="Outlook">Outlook</option>
+                      <option value="Google Calendar">Google Calendar</option>
+                      <option value="Slack">Slack</option>
+                      <option value="Teams">Teams</option>
+                    </select>
+                    <ChevronDown
+                      size={16}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#8D9BB0] pointer-events-none"
+                    />
+                  </div>
                 </div>
               </div>
 

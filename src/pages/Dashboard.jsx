@@ -77,6 +77,7 @@ export default function Dashboard() {
         setSidebarOpen={setSidebarOpen}
         openMenus={openMenus}
         setOpenMenus={setOpenMenus}
+        onLogout={handleLogout}
       />
 
       {/* Main Layout */}

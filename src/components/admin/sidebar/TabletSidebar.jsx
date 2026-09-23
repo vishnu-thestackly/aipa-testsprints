@@ -124,17 +124,24 @@ export default function TabletSidebar({
         </div>
 
         {/* Logout Button */}
-        <div className="w-full flex mt-3 justify-center">
-          <button
-            className="w-full h-[44px] flex items-center justify-center gap-[10px] rounded-[10px] border border-[#FB0000] bg-[#FF000033] font-medium text-[18px] text-[#FF0000] cursor-pointer"
-            onClick={onLogout}
-          >
-            <span>Logout</span>
-            <img src={SignOut} alt="logout" className="w-[18px] h-[18px]" />
-          </button>
-        </div>
+        {/* Logout Button */}
+<div className="w-full flex mt-3 justify-center">
+  <button
+    type="button"
+    onClick={onLogout}
+    className="w-full h-[44px] flex items-center justify-center gap-[10px] rounded-[10px] border border-[#FB0000] bg-[#FF000033] font-medium text-[18px] text-[#FF0000] cursor-pointer"
+  >
+    <span>Logout</span>
+    <img
+      src={SignOut}
+      alt="logout"
+      className="w-[18px] h-[18px]"
+    />
+  </button>
+</div>
       </div>
     </div>
   );
 }
 
+ 
