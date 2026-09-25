@@ -23,6 +23,9 @@ import PerformanceOverview from "../components/admin/AnalyticsAndPerformance/Per
 import IntentAnalysis from "../components/admin/AnalyticsAndPerformance/IntentAnalysis";
 import AuditLogs from "../components/admin/AnalyticsAndPerformance/AuditLogs";
 import TrackApiIntegration from "../components/admin/TrackApi/TrackApiIntegration";
+import UsageTrendAnalytics from "../components/admin/AnalyticsAndPerformance/UsageTrendAnalytics";
+import OptimizationRecommendations from "../components/admin/AnalyticsAndPerformance/OptimizationRecommendations";
+import UserEngagementInsights from "../components/admin/AnalyticsAndPerformance/UserEngagementInsights";
 
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
@@ -176,6 +179,13 @@ export default function Dashboard() {
             activeItem === "analytics_performance") && <PerformanceInsights />}
           {activeItem === "performance_overview" && <PerformanceOverview />}
           {activeItem === "intent_analysis" && <IntentAnalysis />}
+          {activeItem === "usage_trend_analytics" && <UsageTrendAnalytics />}
+          {activeItem === "optimization_recommendations" && (
+            <OptimizationRecommendations />
+          )}
+          {activeItem === "user_engagement_insights" && (
+            <UserEngagementInsights />
+          )}
 
           {/* Audit Logs */}
           {activeItem === "audit_logs" && <AuditLogs />}
