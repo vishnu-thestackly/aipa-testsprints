@@ -7,9 +7,25 @@ export default function TaskSummary({
 }) {
   if (!data) return null;
 
+  const formatDate = (date) => {
+    if (!date) return "-";
+
+    const parsedDate = new Date(date);
+
+    if (isNaN(parsedDate.getTime())) {
+      return date;
+    }
+
+    const day = String(parsedDate.getDate()).padStart(2, "0");
+    const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+    const year = parsedDate.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  };
+
   const rows = [
     { label: "Action", value: data.action },
-    { label: "Date", value: data.date },
+    { label: "Date", value: formatDate(data.date) },
     { label: "Participants", value: data.participants },
     { label: "Apps", value: data.apps },
     { label: "Location", value: data.location || "-" },
@@ -51,8 +67,12 @@ export default function TaskSummary({
               key={button.id}
               type="button"
               onClick={() =>
-  onAction(button.value, data.task_id, data.application)
-}
+                onAction(
+                  button.value,
+                  data.task_id,
+                  data.application
+                )
+              }
               className={`flex-1 rounded-lg border py-2 text-sm font-medium transition-all duration-200 ${
                 button.kind === "confirm"
                   ? "border-[#4866F6] bg-[#4866F6] text-white"

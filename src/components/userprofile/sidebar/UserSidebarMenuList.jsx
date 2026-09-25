@@ -28,8 +28,15 @@ export default function UserSidebarMenuList({
 }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const isNewChatRoute = location.pathname === "/user/new-chat";
-  const isChatHistoryRoute = location.pathname.startsWith("/user/chat/"); 
+  const isNewChatRoute =
+    location.pathname === "/user/new-chat";
+  
+  const isConversationRoute =
+    location.pathname.startsWith("/user/chat/");
+  
+  const fromNewChat =
+    location.state?.fromNewChat === true;
+
   const isTablet = variant === "tablet";
   const isMobile = variant === "mobile";
 
@@ -75,15 +82,16 @@ export default function UserSidebarMenuList({
     <div className={`flex flex-col ${isTablet ? "items-center gap-3" : "gap-1"}`}>
       {userSidebarMenuItems.map((item) => {
         const hasChildren = item.children && item.children.length > 0;
-        const isActive = isNewChatRoute
-          ? item.key === "newchat"
-          : isChatHistoryRoute
-            ? false
-            : activeItem === item.key;
+        const isActive =
+          isNewChatRoute
+            ? item.key === "newchat"
+            : isConversationRoute
+              ? fromNewChat && item.key === "newchat"
+              : activeItem === item.key;
               
         const isChildActive =
           !isNewChatRoute &&
-          !isChatHistoryRoute &&
+          !isConversationRoute &&
           hasChildren &&
           item.activeKeys?.includes(activeItem);
 

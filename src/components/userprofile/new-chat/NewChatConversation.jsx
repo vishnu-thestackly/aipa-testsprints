@@ -37,7 +37,6 @@ export default function NewChatConversation({ languageOpen }) {
   Number(chatId) || 0
 );
 
-const fromChatHistory = location.state?.fromChatHistory === true;
   
   const {
     input,
@@ -105,8 +104,21 @@ const sendMessageToBackend = async (message) => {
     });
 
     if (response.conversation_id) {
-      setConversationId(response.conversation_id);
-    }
+  setConversationId(response.conversation_id);
+
+  // Mark this conversation as started from New Chat
+  if (!conversationId) {
+    navigate(
+      `/user/chat/${response.conversation_id}`,
+      {
+        replace: true,
+        state: {
+          fromNewChat: true,
+        },
+      }
+    );
+  }
+}
 
     const botMessage = {
   id: `bot-${Date.now()}`,

@@ -239,21 +239,20 @@ export default function SidebarChatHistory() {
   const listRef = useRef(null);
 
   useEffect(() => {
-    const fetchConversations = async () => {
-      try {
-        const response = await getChatConversations();
+  const fetchConversations = async () => {
+    try {
+      const response = await getChatConversations();
 
-        console.log("API Response:", response);
-        console.log("Is Array:", Array.isArray(response));
+      console.log("Chat History API Response:", response);
 
-        setConversations(response);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      setConversations(response);
+    } catch (error) {
+      console.error("Failed to fetch chat history:", error);
+    }
+  };
 
-    fetchConversations();
-  }, []);
+  fetchConversations();
+}, [location.pathname]);
 
   useLayoutEffect(() => {
     const updateListHeight = () => {
