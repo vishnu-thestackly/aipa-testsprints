@@ -22,6 +22,7 @@ import PerformanceInsights from "../components/admin/AnalyticsAndPerformance/Per
 import PerformanceOverview from "../components/admin/AnalyticsAndPerformance/PerformanceOverview";
 import IntentAnalysis from "../components/admin/AnalyticsAndPerformance/IntentAnalysis";
 import AuditLogs from "../components/admin/AnalyticsAndPerformance/AuditLogs";
+import TrackApiIntegration from "../components/admin/TrackApi/TrackApiIntegration";
 
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
@@ -113,11 +114,16 @@ export default function Dashboard() {
               />
             ))}
 
+          {/* Track API Integration */}
+          {activeItem === "track" && <TrackApiIntegration />}
+
           {/*Configuration */}
           {activeItem === "configuration" && <Configurations />}
 
           {/* Usage Dashboard - AI Monitoring */}
-          {(activeItem === "usage" || activeItem === "aimonitoring") && <AiMonitoring />}
+          {(activeItem === "usage" || activeItem === "aimonitoring") && (
+            <AiMonitoring />
+          )}
 
           {/* AI - Semantic Memory */}
           {activeItem === "semanticmemory" && <SemanticMemory />}
@@ -166,9 +172,8 @@ export default function Dashboard() {
           {activeItem === "profile" && <AdminProfile />}
 
           {/* Analytics & Performance */}
-          {(activeItem === "performance_insights" || activeItem === "analytics_performance") && (
-            <PerformanceInsights />
-          )}
+          {(activeItem === "performance_insights" ||
+            activeItem === "analytics_performance") && <PerformanceInsights />}
           {activeItem === "performance_overview" && <PerformanceOverview />}
           {activeItem === "intent_analysis" && <IntentAnalysis />}
 
