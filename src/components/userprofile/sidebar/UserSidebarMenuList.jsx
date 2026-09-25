@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { userSidebarMenuItems, ChevronIcon } from "./UserSidebarMenuConfig";
 import SidebarChatHistory from "./SidebarChatHistory";
 
@@ -27,6 +27,9 @@ export default function UserSidebarMenuList({
   showChatHistory = false,
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isNewChatRoute = location.pathname === "/user/new-chat";
+  const isChatHistoryRoute = location.pathname.startsWith("/user/chat/"); 
   const isTablet = variant === "tablet";
   const isMobile = variant === "mobile";
 
@@ -72,9 +75,20 @@ export default function UserSidebarMenuList({
     <div className={`flex flex-col ${isTablet ? "items-center gap-3" : "gap-1"}`}>
       {userSidebarMenuItems.map((item) => {
         const hasChildren = item.children && item.children.length > 0;
-        const isActive = activeItem === item.key;
-        const isChildActive = hasChildren && item.activeKeys?.includes(activeItem);
+        const isActive = isNewChatRoute
+          ? item.key === "newchat"
+          : isChatHistoryRoute
+            ? false
+            : activeItem === item.key;
+              
+        const isChildActive =
+          !isNewChatRoute &&
+          !isChatHistoryRoute &&
+          hasChildren &&
+          item.activeKeys?.includes(activeItem);
+
         const isMenuOpen = openMenus?.[item.toggleKey];
+
         const isItemActive = isActive || isChildActive;
 
         return (

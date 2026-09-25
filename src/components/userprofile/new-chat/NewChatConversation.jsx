@@ -36,6 +36,8 @@ export default function NewChatConversation({ languageOpen }) {
   const [conversationId, setConversationId] = useState(
   Number(chatId) || 0
 );
+
+const fromChatHistory = location.state?.fromChatHistory === true;
   
   const {
     input,
