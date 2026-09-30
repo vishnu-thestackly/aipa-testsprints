@@ -5,7 +5,7 @@
 // -----------------------------------------------------------------------------
 // IMPORTS
 // -----------------------------------------------------------------------------
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../../assets/images/Logo.svg";
 import FileUpload from "../../../assets/images/FileUpload.png";
@@ -21,6 +21,7 @@ import { sendChatMessage } from "../../../api/authApi";
 // -----------------------------------------------------------------------------
 // CONSTANTS
 // -----------------------------------------------------------------------------
+
 const QUICK_ACTIONS = [
   {
     type: "email",
@@ -52,14 +53,26 @@ const QUICK_ACTIONS = [
   },
 ];
 
+const MAX_MESSAGE_LENGTH = 2000;
+const MAX_INPUT_HEIGHT = 160;
+
 // -----------------------------------------------------------------------------
-// NewChat — static start screen with greeting, composer, and quick actions
+// NewChat
 // -----------------------------------------------------------------------------
+
 export default function NewChat({ languageOpen }) {
   const navigate = useNavigate();
+
+  const inputRef = useRef(null);
+
   const [input, setInput] = useState("");
+  const [error, setError] = useState("");
   const [actionCards, setActionCards] = useState([]);
   const [isDesktop, setIsDesktop] = useState(false);
+
+  // ---------------------------------------------------------------------------
+  // Responsive handling
+  // ---------------------------------------------------------------------------
 
   useEffect(() => {
     const handleResize = () => {
@@ -67,10 +80,23 @@ export default function NewChat({ languageOpen }) {
     };
 
     handleResize();
+
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // ---------------------------------------------------------------------------
+  // Keep textarea height updated whenever input changes
+  // ---------------------------------------------------------------------------
+
+  useEffect(() => {
+    adjustInputHeight();
+  }, [input]);
+
+  // ---------------------------------------------------------------------------
+  // Keep maximum quick action cards based on screen size
+  // ---------------------------------------------------------------------------
 
   useEffect(() => {
     if (isDesktop) {
@@ -78,9 +104,108 @@ export default function NewChat({ languageOpen }) {
     }
   }, [isDesktop]);
 
+  // ---------------------------------------------------------------------------
+  // Dynamically adjust textarea height
+  // ---------------------------------------------------------------------------
+
+  const adjustInputHeight = () => {
+    const textarea = inputRef.current;
+
+    if (!textarea) return;
+
+    // Reset height first so textarea can shrink when text is deleted
+    textarea.style.height = "auto";
+
+    const scrollHeight = textarea.scrollHeight;
+
+    if (scrollHeight <= MAX_INPUT_HEIGHT) {
+      textarea.style.height = `${scrollHeight}px`;
+      textarea.style.overflowY = "hidden";
+    } else {
+      textarea.style.height = `${MAX_INPUT_HEIGHT}px`;
+      textarea.style.overflowY = "auto";
+    }
+  };
+
+  // ---------------------------------------------------------------------------
+  // Handle input changes
+  // ---------------------------------------------------------------------------
+
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+
+    setInput(value);
+
+    if (value.length > MAX_MESSAGE_LENGTH) {
+      setError(`Maximum ${MAX_MESSAGE_LENGTH} characters allowed.`);
+    } else {
+      setError("");
+    }
+  };
+
+  // ---------------------------------------------------------------------------
+  // Start conversation
+  // ---------------------------------------------------------------------------
+
+  const handleStartConversation = async () => {
+    const message = input.trim();
+
+    // Block messages above 1000 characters
+    if (input.length > MAX_MESSAGE_LENGTH) {
+      setError("Maximum 1000 characters allowed.");
+      return;
+    }
+
+    // Don't send empty messages
+    if (!message) {
+      return;
+    }
+
+    setError("");
+
+    try {
+      const response = await sendChatMessage({
+        conversation_id: 0,
+        message,
+      });
+
+      navigate(`/user/chat/${response.conversation_id}`, {
+        state: {
+          firstMessage: message,
+          aiReply: response.reply,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to start conversation:", error);
+    }
+  };
+
+  // ---------------------------------------------------------------------------
+  // Keyboard handling
+  // ---------------------------------------------------------------------------
+
+  const handleKeyDown = (event) => {
+    // Enter = Send
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      handleStartConversation();
+      return;
+    }
+
+    // Shift + Enter = New line
+    if (event.key === "Enter" && event.shiftKey) {
+      return;
+    }
+  };
+
+  // ---------------------------------------------------------------------------
+  // Quick action click
+  // ---------------------------------------------------------------------------
+
   const handleQuickActionClick = (action) => {
     setActionCards((prevCards) => {
       const maxCards = isDesktop ? 3 : 4;
+
       const cardsWithoutDuplicate = prevCards.filter(
         (card) => card.type !== action.type,
       );
@@ -89,28 +214,16 @@ export default function NewChat({ languageOpen }) {
     });
   };
 
-  const handleStartConversation = async () => {
-  const message = input.trim();
+  // ---------------------------------------------------------------------------
+  // Send button state
+  // ---------------------------------------------------------------------------
 
-  if (!message) return;
+  const isSendDisabled =
+    input.length > MAX_MESSAGE_LENGTH || !input.trim();
 
-  try {
-    const response = await sendChatMessage({
-      conversation_id: 0,
-      message,
-    });
-
-    navigate(`/user/chat/${response.conversation_id}`, {
-      state: {
-        firstMessage: message,
-        aiReply: response.reply,
-      },
-    });
-
-  } catch (error) {
-    console.error("Failed to start conversation:", error);
-  }
-};
+  // ---------------------------------------------------------------------------
+  // JSX
+  // ---------------------------------------------------------------------------
 
   return (
     <div
@@ -121,12 +234,20 @@ export default function NewChat({ languageOpen }) {
       {/* Main card */}
       <div className="relative flex min-h-[calc(100vh-150px)] flex-col rounded-[18px] md:rounded-[25px] border border-[#DADADA] bg-white md:p-6 pb-20 md:pb-20 shadow-[0px_0px_4px_0px_#00000014]">
         <div className="flex flex-1 flex-col items-center px-5 pt-[clamp(42px,8vh,90px)]">
+
           {/* Upgrade badge */}
           <div className="flex h-7 items-center gap-1 rounded-full bg-[#F3F3F3] px-4 max-[400px]:py-5 text-[12px] sm:text-[13px] text-black">
-            <img src={Sparkle} alt="" className="h-3.5 w-3.5" />
+            <img
+              src={Sparkle}
+              alt=""
+              className="h-3.5 w-3.5"
+            />
+
             <span>
-              <span className="font-semibold text-[#4866F6]">Upgrade</span> free
-              plan to Basic or premium access
+              <span className="font-semibold text-[#4866F6]">
+                Upgrade
+              </span>{" "}
+              free plan to Basic or premium access
             </span>
           </div>
 
@@ -142,64 +263,116 @@ export default function NewChat({ languageOpen }) {
             <h1 className="text-[22px] font-semibold leading-tight text-[#2D2D2D] sm:text-[26px]">
               Good Morning, Santosh
             </h1>
+
             <p className="mt-1 text-[22px] font-semibold leading-tight text-[#2D2D2D] sm:text-[26px]">
               How can I{" "}
-              <span className="text-[#4866F6]">Assist You Today?</span>
+              <span className="text-[#4866F6]">
+                Assist You Today?
+              </span>
             </p>
           </div>
 
           {/* Message composer */}
           <div className="mt-12 w-full max-w-[780px]">
-            <div className="flex items-center gap-2">
+
+            {/* Validation Error */}
+            {error && (
+              <div className="mb-2 text-sm text-red-500">
+                {error}
+              </div>
+            )}
+
+            <div className="flex items-end gap-2">
+
               {/* File upload button */}
               <button
                 type="button"
                 className="flex h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer"
                 aria-label="Upload file"
               >
-                <img src={FileUpload} alt="" className="h-6 w-6" />
+                <img
+                  src={FileUpload}
+                  alt=""
+                  className="h-6 w-6"
+                />
               </button>
 
               {/* Input box */}
-              <div className="flex h-13 min-w-0 flex-1 items-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] px-3">
-                <input
+              <div
+                className={`flex min-h-13 min-w-0 flex-1 items-end rounded-lg border px-3 py-2 ${
+                  error
+                    ? "border-red-500 bg-red-50"
+                    : "border-[#4866F6] bg-[#EEF2FF]"
+                }`}
+              >
+                <textarea
+                  ref={inputRef}
                   value={input}
-                  onChange={(event) => setInput(event.target.value)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      handleStartConversation();
-                    }
-                  }}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  rows={1}
                   placeholder="Type your message here...."
-                  className="min-w-0 flex-1 bg-transparent text-[12px] sm:text-[14px] text-[#2D2D2D] outline-none placeholder:text-[#2D2D2D]"
+                  className="min-h-[29px] min-w-0 flex-1 resize-none overflow-x-hidden scrollbar-hide bg-transparent text-[12px] sm:text-[14px] leading-6 text-[#2D2D2D] outline-none placeholder:text-[#2D2D2D]"
                 />
+
+                {/* Mobile audio */}
                 <button
                   type="button"
-                  className="flex md:hidden shrink-0 items-center justify-center cursor-pointer ml-2"
+                  className="ml-2 flex shrink-0 items-center justify-center cursor-pointer md:hidden"
                   aria-label="Record audio"
                 >
-                  <img src={Audio} alt="" className="h-6.5 w-6.5" />
+                  <img
+                    src={Audio}
+                    alt=""
+                    className="h-6.5 w-6.5"
+                  />
                 </button>
               </div>
 
               {/* Audio button — tablet & desktop only */}
               <button
                 type="button"
-                className="hidden md:flex h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer"
+                className="hidden h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer md:flex"
                 aria-label="Record audio"
               >
-                <img src={Audio} alt="" className="h-6.5 w-6.5" />
+                <img
+                  src={Audio}
+                  alt=""
+                  className="h-6.5 w-6.5"
+                />
               </button>
 
               {/* Send button */}
               <button
                 type="button"
                 onClick={handleStartConversation}
-                className="flex h-13 w-13 shrink-0 items-center justify-center rounded-lg bg-[#4866F6] cursor-pointer"
+                disabled={isSendDisabled}
+                className={`flex h-13 w-13 shrink-0 items-center justify-center rounded-lg transition ${
+                  isSendDisabled
+                    ? "cursor-not-allowed bg-gray-300"
+                    : "cursor-pointer bg-[#4866F6]"
+                }`}
                 aria-label="Send message"
               >
-                <img src={EnterFrame} alt="" className="h-6 w-6" />
+                <img
+                  src={EnterFrame}
+                  alt=""
+                  className="h-6 w-6"
+                />
               </button>
+            </div>
+
+            {/* Character counter */}
+            <div className="mt-1 flex justify-end">
+              <span
+                className={`text-xs ${
+                  input.length > MAX_MESSAGE_LENGTH
+                    ? "text-red-500"
+                    : "text-gray-500"
+                }`}
+              >
+                {input.length}/{MAX_MESSAGE_LENGTH}
+              </span>
             </div>
 
             {/* Quick actions */}
@@ -216,7 +389,10 @@ export default function NewChat({ languageOpen }) {
                     alt=""
                     className="h-3.5 w-3.5 shrink-0"
                   />
-                  <span className="truncate">{action.label}</span>
+
+                  <span className="truncate">
+                    {action.label}
+                  </span>
                 </button>
               ))}
             </div>
@@ -232,7 +408,11 @@ export default function NewChat({ languageOpen }) {
                       key={action.type}
                       className="rounded-[10px] bg-[#F4F4F4] px-4 py-5"
                     >
-                      <img src={action.icon} alt="" className="h-6 w-6" />
+                      <img
+                        src={action.icon}
+                        alt=""
+                        className="h-6 w-6"
+                      />
 
                       <h3 className="mt-3 text-[15px] font-semibold text-[#2D2D2D]">
                         {action.cardTitle}

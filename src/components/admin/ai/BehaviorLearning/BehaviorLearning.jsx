@@ -44,8 +44,7 @@ export default function BehaviorLearning() {
             <div className="overflow-x-auto scrollbar-hide">
               <div className="flex min-w-max xl:grid xl:grid-cols-3 xl:min-w-0 gap-2">
                 {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
+                  <button                    key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`h-[44px] min-w-[200px] xl:min-w-0 px-6 xl:px-0 whitespace-nowrap rounded-full text-[14px] font-medium transition-all duration-200 xl:w-full flex-shrink-0 cursor-pointer
                       ${

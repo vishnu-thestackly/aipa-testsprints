@@ -28,6 +28,7 @@ const Integrations = ({ onBack }) => {
       appName: "gmail",
       description: "Automatically Import your Gmail Conversations.",
       icon: GmailIcon,
+      route: "gmail",
     },
     {
       name: "Exchange",
@@ -41,6 +42,7 @@ const Integrations = ({ onBack }) => {
       appName: "google_calendar",
       description: "Automatically Import your Calendar events.",
       icon: CalendarIcon,
+      route: "googleCalendar",
     },
     {
       name: "Outlook",

@@ -1,313 +1,751 @@
-import { ArrowLeft, Check, Sparkles, X } from "lucide-react";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  getSubscriptionDetails,
-  getUserSubscriptionPlans,
-} from "../../../api/authApi";
+// import { ArrowLeft, Check, Sparkles, X } from "lucide-react";
+// import { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import {
+//   getSubscriptionDetails,
+//   getUserSubscriptionPlans,
+// } from "../../../api/authApi";
 
-export default function SubscriptionPlans() {
+// export default function SubscriptionPlans() {
+//   const navigate = useNavigate();
+//   const [currentPlan, setCurrentPlan] = useState("free");
+//   const [centerIndex, setCenterIndex] = useState(0);
+//   const [featurePages, setFeaturePages] = useState({});
+//   const [plans, setPlans] = useState([]);
+  
+
+  
+//   useEffect(() => {
+//   const fetchSubscriptionData = async () => {
+//     try {
+//       // Get current user's subscription
+//       const subscription = await getSubscriptionDetails();
+
+//       const currentPlanName =
+//         subscription?.my_plan?.plan_name || "";
+
+//       // Get all available plans
+//       const plansResponse = await getUserSubscriptionPlans(currentPlanName);
+
+//       console.log("Current Plan:", currentPlanName);
+//       console.log("Plans Response:", plansResponse);
+
+//       // Format API response
+//       const formattedPlans = plansResponse.map((plan) => ({
+//   id: plan.plan_id,
+//   name: plan.name,
+//   price: `₹${Number(plan.price).toFixed(2)}`,
+//   period: `/ ${plan.interval}`,
+//   desc: plan.description,
+//   features: (plan.features || []).map((feature) => ({
+//     text: feature,
+//     included: true,
+//   })),
+//   isCurrentPlan: plan.is_current_plan,
+// }));
+
+//       setPlans(formattedPlans);
+
+//       // Save current plan
+//       setCurrentPlan(currentPlanName.toLowerCase());
+
+//       // Find current plan index dynamically
+//       const index = formattedPlans.findIndex(
+//         (plan) =>
+//           plan.name.toLowerCase() === currentPlanName.toLowerCase()
+//       );
+
+//       setCenterIndex(index >= 0 ? index : 0);
+
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+
+//   fetchSubscriptionData();
+// }, []);
+
+  
+
+//   const handleNextFeatures = (planId) => {
+//     setFeaturePages((prev) => ({
+//       ...prev,
+//       [planId]: (prev[planId] || 0) + 1,
+//     }));
+//   };
+
+//   const handlePrevFeatures = (planId) => {
+//     setFeaturePages((prev) => ({
+//       ...prev,
+//       [planId]: Math.max(0, (prev[planId] || 0) - 1),
+//     }));
+//   };
+
+//   const handlePlanAction = (planId) => {
+//     if (planId === currentPlan) return;
+//     navigate("/user/profile/details");
+//   };
+
+//   const handlePrev = () => {
+//     setCenterIndex((prev) =>
+//   plans.length ? (prev - 1 + plans.length) % plans.length : 0
+// );
+//   };
+
+//   const handleNext = () => {
+//     setCenterIndex((prev) =>
+//   plans.length ? (prev + 1) % plans.length : 0
+// );
+//   };
+
+//   const isUpgraded = currentPlan !== "free";
+
+//   // Carousel order centered on centerIndex is used always
+//  const totalPlans = plans.length;
+
+// const visibleCards =
+//   totalPlans > 0
+//     ? [
+//         plans[(centerIndex - 1 + totalPlans) % totalPlans],
+//         plans[centerIndex],
+//         plans[(centerIndex + 1) % totalPlans],
+//       ]
+//     : [];
+
+//   return (
+//     <div className="h-full overflow-y-auto px-1.5 sm:px-4 lg:px-6 pt-4 lg:pt-4 pb-10 scrollbar-hide">
+//       <div className="w-full flex flex-col gap-5">
+//         <div className="w-full rounded-[18px] md:rounded-[25px] border border-[#DADADA] bg-white p-[12px] sm:p-5 md:p-6 lg:p-7 shadow-[0px_0px_4px_0px_#00000014]">
+//           {/* Header Navigation */}
+//           <div className="flex items-center gap-2 mb-9 md:mb-12 pb-4 md:pb-5 border-b border-[#D9D9D9]">
+//             <div
+//               onClick={() => navigate("/user/profile")}
+//               className="w-6 h-6 sm:w-7 sm:h-7 bg-[#4866F6] rounded-full flex items-center justify-center cursor-pointer"
+//             >
+//               <ArrowLeft
+//                 className="w-3 h-3 sm:w-4 sm:h-4 text-white"
+//                 strokeWidth={2.5}
+//               />
+//             </div>
+//             <span className="font-['SF_Pro'] text-sm sm:text-base md:text-lg lg:text-[20px] xl:text-3xl text-[#3D3D3D]">
+//               Subscription Plans
+//             </span>
+//           </div>
+
+//           {/* Title & Subtitle */}
+//           <div
+//             className="w-full flex flex-col items-center justify-center -mt-2 md:-mt-2 lg:-mt-3    mb-8 md:mb-8 lg:mb-10">
+//             <div className="w-full flex flex-col items-center">
+
+//               <h1
+//                 className="font-sans font-bold text-[#3D3D3D] text-[18px] sm:text-[24px]        md:text-[24px] lg:text-[28px] xl:text-[36px] leading-[125%] text-center      mx-auto max-w-[290px] sm:max-w-none md:whitespace-nowrap px-4">
+//                 Find the right plan to power your workflow.
+//               </h1>
+
+//               {/* Description */}
+//               <p className=" mt-4 text-center font-sans font-normal text-[#586D93] text-[13px]  sm:text-[14px] md:text-[15px] min-[1024px]:text-[18px] xl:text-[22px] leading-[1.6] px-2   max-w-[280px] min-[375px]:max-w-[320px] min-[425px]:max-w-[360px] sm:max-w-[430px] md:max-w-[620px] min-[1024px]:max-w-[780px] xl:max-w-[880px]" >
+//                 Find a plan that fits your workflow and unlock access to premium features,
+//                 faster performance, and enhanced productivity tools. Start with what you
+//                 need today and scale confidently as your projects.
+//               </p>
+
+//             </div>
+//           </div>
+//           {/* Plans Grid */}
+//           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-2 md:gap-4 lg:gap-6 items-start px-1 sm:px-2 md:px-3">
+//             {visibleCards.map((plan, posIdx) => {
+//               const isCurrent = plan.id === currentPlan;
+//               const isHighlighted = posIdx === 1;
+//               const pageIndex = featurePages[plan.id] || 0;
+//               const startIndex = pageIndex * 5;
+//               const displayedFeatures = plan.features.slice(startIndex, startIndex + 5);
+
+//               return (
+//                 <div
+//                   key={plan.id}
+//                   className={`rounded-2xl p-4 sm:p-5 lg:p-6 transition-all duration-300 flex flex-col min-w-0 bg-white lg:h-[460px] xl:h-[510px] ${isHighlighted
+//                     ? "border-2 border-[#4866F6] shadow-xl md:scale-105 z-10 my-2"
+//                     : isCurrent
+//                       ? "border-2 border-[#4866F6] shadow-sm md:scale-95 opacity-90"
+//                       : "border border-gray-200 shadow-sm md:scale-95 opacity-90"
+//                     }`}
+//                 >
+//                   {/* Price */}
+//                   <div className="mb-3 sm:mb-4 flex items-baseline flex-nowrap whitespace-nowrap">
+//                     <span className={`shrink-0 font-bold text-[#4866F6] ${isHighlighted
+//                         ? "text-xl sm:text-xl md:text-2xl lg:text-[22px] xl:text-[36px]"
+//                         : "text-xl sm:text-xl md:text-2xl lg:text-[20px] xl:text-[32px]"
+//                       }`}>
+//                       {plan.price}
+//                     </span>
+
+//                     <span className={`ml-1 shrink-0 text-[#586D93] text-xs sm:text-sm ${isHighlighted ? "lg:text-xs xl:text-[20px]" : "lg:text-xs xl:text-[19px]"
+//                       }`}>
+//                       {plan.period}
+//                     </span>
+//                   </div>
+
+//                   {/* Plan Name */}
+//                   <h3 className={`font-semibold text-[#000000] mb-1 whitespace-nowrap ${isHighlighted
+//                       ? "text-lg sm:text-lg md:text-xl lg:text-[18px] xl:text-3xl"
+//                       : "text-lg sm:text-lg md:text-xl lg:text-[16px] xl:text-[28px]"
+//                     }`}>
+//                     {plan.name}
+//                   </h3>
+//                   <p className={`text-[#586D93] mb-4 lg:mb-6 border-b border-gray-100 pb-4 leading-relaxed ${isHighlighted
+//                       ? "text-[14px] sm:text-[10px] md:text-[11px] lg:text-[11px] xl:text-[20px]"
+//                       : "text-[14px] sm:text-[10px] md:text-[11px] lg:text-[11px] xl:text-[19px]"
+//                     }`}>
+//                     {plan.desc}
+//                   </p>
+
+//                   {/* Features List */}
+//                   <div className="flex-1 flex flex-col mb-1 lg:mb-2">
+//                     <ul className="space-y-2.5 sm:space-y-3 h-[140px] sm:h-[150px] lg:h-[160px] xl:h-[185px]">
+//                       {displayedFeatures.map((feature, idx) => (
+//                         <li
+//                           key={idx}
+//                           className="flex items-center gap-2.5 md:gap-2 flex-nowrap"
+//                         >
+//                           <div
+//                             className={`w-5 h-5 md:w-4 md:h-4 lg:w-5 lg:h-5 rounded-full flex items-center justify-center flex-shrink-0 ${feature.included ? "bg-[#4866F6]" : "bg-[#D9D9D9]"
+//                               }`}
+//                           >
+//                             {feature.included ? (
+//                               <Check
+//                                 className="w-3 h-3 md:w-2.5 md:h-2.5 lg:w-3 lg:h-3 text-white"
+//                                 strokeWidth={2.5}
+//                               />
+//                             ) : (
+//                               <X
+//                                 className="w-3 h-3 md:w-2.5 md:h-2.5 lg:w-3 lg:h-3 text-white"
+//                                 strokeWidth={2.5}
+//                               />
+//                             )}
+//                           </div>
+
+//                           <span
+//                             className={`whitespace-nowrap ${feature.included ? "text-[#586D93]" : "text-gray-400"} ${isHighlighted
+//                                 ? "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[20px]"
+//                                 : "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[19px]"
+//                               }`}
+//                           >
+//                             {feature.text}
+//                           </span>
+//                         </li>
+//                       ))}
+//                     </ul>
+
+//                     {plan.features.length > 5 && (
+//                       <button
+//                         type="button"
+//                         onClick={() => {
+//                           if (pageIndex === 0) {
+//                             handleNextFeatures(plan.id);
+//                           } else {
+//                             handlePrevFeatures(plan.id);
+//                           }
+//                         }}
+//                         className={`text-[#4866F6] font-medium underline cursor-pointer mt-3 lg:mt-4 text-left w-fit hover:opacity-80 transition-opacity ${isHighlighted
+//                             ? "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[20px]"
+//                             : "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[19px]"
+//                           }`}
+//                       >
+//                         {pageIndex === 0 ? "...View More" : "View Less"}
+//                       </button>
+//                     )}
+//                   </div>
+
+//                   {/* Action Button: Only render for the current plan */}
+//                   {/* Action Button */}
+// {plan.isCurrentPlan ? (
+//   <button
+//     type="button"
+//     disabled
+//     className="w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px] h-10 lg:h-[48px] min-h-[40px]      lg:min-h-[48px] rounded-full font-medium text-xs sm:text-sm lg:text-base flex items-center   justify-center gap-1 md:gap-1.5 bg-[#CFCFCF] text-[#4A4A4A] cursor-not-allowed mt-auto    mx-auto">
+//     <span>Current Plan</span>
+
+//     <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+//   </button>
+// ) : (
+//   <button
+//     type="button"
+//     onClick={() => handlePlanAction(plan)}
+//     className="w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px] h-10 lg:h-[48px] min-h-[40px]
+//       lg:min-h-[48px] rounded-full font-medium text-xs sm:text-sm lg:text-base flex items-center
+//       justify-center gap-1 md:gap-1.5 bg-[#4866F6] hover:bg-[#3554ED] text-white    cursor-pointer transition-all duration-200 mt-auto mx-auto">
+//     <span>Purchase Plan</span>
+
+//     <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+//   </button>
+// )}
+//                 </div>
+//               );
+//             })}
+//           </div>
+
+//           {/* Navigation Arrows - Displayed Always */}
+//           <div className="flex justify-center items-center gap-3 mt-8 md:mt-10">
+//             <button
+//               onClick={handlePrev}
+//               className="w-10 h-10 rounded-full bg-[#4866F6] text-white flex items-center justify-center cursor-pointer hover:bg-[#3554ED] transition-all shadow-md active:scale-95"
+//               aria-label="Previous plan"
+//             >
+//               <ArrowLeft className="w-5 h-5" strokeWidth={2.5} />
+//             </button>
+
+//             <button
+//               onClick={handleNext}
+//               className="w-10 h-10 rounded-full bg-[#4866F6] text-white flex items-center justify-center cursor-pointer hover:bg-[#3554ED] transition-all shadow-md active:scale-95"
+//               aria-label="Next plan"
+//             >
+//               <ArrowLeft className="w-5 h-5 rotate-180" strokeWidth={2.5} />
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+import { ArrowLeft, Check, Sparkles, X } from "lucide-react"; 
+import { useState, useEffect } from "react"; 
+import { useNavigate } from "react-router-dom"; 
+import { 
+  getSubscriptionDetails, 
+  getUserSubscriptionPlans, 
+} from "../../../api/authApi"; 
+import { useTheme } from "../../../context/ThemeContext"; 
+
+export default function SubscriptionPlans() { 
+  const { isDark } = useTheme();
   const navigate = useNavigate();
-  const [currentPlan, setCurrentPlan] = useState("free");
-  const [centerIndex, setCenterIndex] = useState(0);
-  const [featurePages, setFeaturePages] = useState({});
+   const [currentPlan, setCurrentPlan] = useState("free");
+   const [centerIndex, setCenterIndex] = useState(0);
+   const [featurePages, setFeaturePages] = useState({});
 
-  
+   const [plans, setPlans] = useState([]);
 
+    useEffect(() => {
+   const fetchSubscriptionData = async () => {
+     try {
+       // Get current user's subscription
+       const subscription = await getSubscriptionDetails();
 
-  const [plans, setPlans] = useState([]);
-  
+       const currentPlanName =
+         subscription?.my_plan?.plan_name || "";
 
-  
-  useEffect(() => {
-  const fetchSubscriptionData = async () => {
-    try {
-      // Get current user's subscription
-      const subscription = await getSubscriptionDetails();
+       // Get all available plans
+       const plansResponse = await getUserSubscriptionPlans(currentPlanName);
 
-      const currentPlanName =
-        subscription?.my_plan?.plan_name || "";
+       console.log("Current Plan:", currentPlanName);
+       console.log("Plans Response:", plansResponse);
 
-      // Get all available plans
-      const plansResponse = await getUserSubscriptionPlans(currentPlanName);
-
-      console.log("Current Plan:", currentPlanName);
-      console.log("Plans Response:", plansResponse);
-
-      // Format API response
-      const formattedPlans = plansResponse.map((plan) => ({
-  id: plan.plan_id,
-  name: plan.name,
-  price: `₹${Number(plan.price).toFixed(2)}`,
-  period: `/ ${plan.interval}`,
-  desc: plan.description,
-  features: (plan.features || []).map((feature) => ({
-    text: feature,
-    included: true,
-  })),
-  isCurrentPlan: plan.is_current_plan,
+       // Format API response
+       const formattedPlans = plansResponse.map((plan) => ({
+   id: plan.plan_id,
+   name: plan.name,
+   price: `₹${Number(plan.price).toFixed(2)}`,
+   period: `/ ${plan.interval}`,
+   desc: plan.description,
+   features: (plan.features || []).map((feature) => ({
+     text: feature,
+     included: true,
+   })),
+   isCurrentPlan: plan.is_current_plan,
 }));
 
-      setPlans(formattedPlans);
+       setPlans(formattedPlans);
 
-      // Save current plan
-      setCurrentPlan(currentPlanName.toLowerCase());
+       // Save current plan
+       setCurrentPlan(currentPlanName.toLowerCase());
 
-      // Find current plan index dynamically
-      const index = formattedPlans.findIndex(
-        (plan) =>
-          plan.name.toLowerCase() === currentPlanName.toLowerCase()
-      );
+       // Find current plan index dynamically
+       const index = formattedPlans.findIndex(
+         (plan) =>
+           plan.name.toLowerCase() === currentPlanName.toLowerCase()
+       );
 
-      setCenterIndex(index >= 0 ? index : 0);
+       setCenterIndex(index >= 0 ? index : 0);
 
-    } catch (err) {
-      console.error(err);
-    }
-  };
+     } catch (err) {
+       console.error(err);
+     }
+   };
 
-  fetchSubscriptionData();
+   fetchSubscriptionData();
 }, []);
 
-  
 
-  const handleNextFeatures = (planId) => {
-    setFeaturePages((prev) => ({
-      ...prev,
-      [planId]: (prev[planId] || 0) + 1,
-    }));
-  };
 
-  const handlePrevFeatures = (planId) => {
-    setFeaturePages((prev) => ({
-      ...prev,
-      [planId]: Math.max(0, (prev[planId] || 0) - 1),
-    }));
-  };
+   const handleNextFeatures = (planId) => {
+     setFeaturePages((prev) => ({
+       ...prev,
+       [planId]: (prev[planId] || 0) + 1,
+     }));
+   };
 
-  const handlePlanAction = (planId) => {
-    if (planId === currentPlan) return;
-    navigate("/user/profile/details");
-  };
+   const handlePrevFeatures = (planId) => {
+     setFeaturePages((prev) => ({
+       ...prev,
+       [planId]: Math.max(0, (prev[planId] || 0) - 1),
+     }));
+   };
 
-  const handlePrev = () => {
-    setCenterIndex((prev) =>
-  plans.length ? (prev - 1 + plans.length) % plans.length : 0
+   const handlePlanAction = (planId) => {
+     if (planId === currentPlan) return;
+     navigate("/user/profile/details");
+   };
+
+   const handlePrev = () => {
+     setCenterIndex((prev) =>
+   plans.length ? (prev - 1 + plans.length) % plans.length : 0
 );
-  };
+   };
 
-  const handleNext = () => {
-    setCenterIndex((prev) =>
-  plans.length ? (prev + 1) % plans.length : 0
+   const handleNext = () => {
+     setCenterIndex((prev) =>
+   plans.length ? (prev + 1) % plans.length : 0
 );
-  };
+   };
 
-  const isUpgraded = currentPlan !== "free";
+   const isUpgraded = currentPlan !== "free";
 
-  // Carousel order centered on centerIndex is used always
- const totalPlans = plans.length;
+   // Carousel order centered on centerIndex is used always
+  const totalPlans = plans.length;
 
 const visibleCards =
-  totalPlans > 0
-    ? [
-        plans[(centerIndex - 1 + totalPlans) % totalPlans],
-        plans[centerIndex],
-        plans[(centerIndex + 1) % totalPlans],
-      ]
-    : [];
+   totalPlans > 0
+     ? [
+         plans[(centerIndex - 1 + totalPlans) % totalPlans],
+         plans[centerIndex],
+         plans[(centerIndex + 1) % totalPlans],
+       ]
+     : [];
 
-  return (
-    <div className="h-full overflow-y-auto px-1.5 sm:px-4 lg:px-6 pt-4 lg:pt-4 pb-10 scrollbar-hide">
-      <div className="w-full flex flex-col gap-5">
-        <div className="w-full rounded-[18px] md:rounded-[25px] border border-[#DADADA] bg-white p-[12px] sm:p-5 md:p-6 lg:p-7 shadow-[0px_0px_4px_0px_#00000014]">
-          {/* Header Navigation */}
-          <div className="flex items-center gap-2 mb-9 md:mb-12 pb-4 md:pb-5 border-b border-[#D9D9D9]">
-            <div
-              onClick={() => navigate("/user/profile")}
-              className="w-6 h-6 sm:w-7 sm:h-7 bg-[#4866F6] rounded-full flex items-center justify-center cursor-pointer"
-            >
-              <ArrowLeft
-                className="w-3 h-3 sm:w-4 sm:h-4 text-white"
-                strokeWidth={2.5}
-              />
-            </div>
-            <span className="font-['SF_Pro'] text-sm sm:text-base md:text-lg lg:text-[20px] xl:text-3xl text-[#3D3D3D]">
-              Subscription Plans
-            </span>
-          </div>
+  return ( 
+    <div 
+      className={`h-full overflow-y-auto px-1.5 sm:px-4 lg:px-6 pt-4 lg:pt-4 pb-10 scrollbar-hide transition-colors duration-300 ${ 
+        isDark 
+          ? "bg-[#010718]" 
+          : "bg-white" 
+      }`} 
+    > 
+      <div className="w-full flex flex-col gap-5"> 
+        <div 
+          className={`w-full rounded-[18px] md:rounded-[25px] border p-[12px] sm:p-5 md:p-6 lg:p-7 shadow-[0px_0px_4px_0px_#00000014] transition-colors duration-300 ${ 
+            isDark ? "bg-[#060D1B] " 
+              : "bg-white border-[#DADADA]" 
+          }`} 
+        > 
+          {/* Header Navigation */} 
+          <div 
+            className={`flex items-center gap-2 mb-9 md:mb-12 pb-4 md:pb-5 border-b transition-colors duration-300 ${ 
+              isDark 
+                ? "border-[#586D93]" 
+                : "border-[#D9D9D9]" 
+            }`} 
+          > 
+            <div 
+              onClick={() => 
+                navigate("/user/profile") 
+              } 
+              className="w-6 h-6 sm:w-7 sm:h-7 bg-[#4866F6] rounded-full flex items-center justify-center cursor-pointer" 
+            > 
+              <ArrowLeft 
+                className="w-3 h-3 sm:w-4 sm:h-4 text-white" 
+                strokeWidth={2.5} 
+              /> 
+            </div> 
 
-          {/* Title & Subtitle */}
-          <div
-            className="w-full flex flex-col items-center justify-center -mt-2 md:-mt-2 lg:-mt-3    mb-8 md:mb-8 lg:mb-10">
-            <div className="w-full flex flex-col items-center">
+            <span 
+              className={`font-['SF_Pro'] text-sm sm:text-base md:text-lg lg:text-[20px] xl:text-3xl transition-colors duration-300 ${ 
+                isDark 
+                  ? "text-white" 
+                  : "text-[#3D3D3D]" 
+              }`} 
+            > 
+              Subscription Plans 
+            </span> 
+          </div> 
 
-              <h1
-                className="font-sans font-bold text-[#3D3D3D] text-[18px] sm:text-[24px]        md:text-[24px] lg:text-[28px] xl:text-[36px] leading-[125%] text-center      mx-auto max-w-[290px] sm:max-w-none md:whitespace-nowrap px-4">
-                Find the right plan to power your workflow.
-              </h1>
+          {/* Title & Subtitle */} 
+          <div className="w-full flex flex-col items-center justify-center -mt-2 md:-mt-2 lg:-mt-3 mb-8 md:mb-8 lg:mb-10"> 
+            <div className="w-full flex flex-col items-center"> 
+              <h1 
+                className={`font-sans font-bold text-[18px] sm:text-[24px] md:text-[24px] lg:text-[28px] xl:text-[36px] leading-[125%] text-center mx-auto max-w-[290px] sm:max-w-none md:whitespace-nowrap px-4 transition-colors duration-300 ${ 
+                  isDark 
+                    ? "text-white" 
+                    : "text-[#3D3D3D]" 
+                }`} 
+              > 
+                Find the right plan to power your  workflow. 
+              </h1> 
 
-              {/* Description */}
-              <p className=" mt-4 text-center font-sans font-normal text-[#586D93] text-[13px]  sm:text-[14px] md:text-[15px] min-[1024px]:text-[18px] xl:text-[22px] leading-[1.6] px-2   max-w-[280px] min-[375px]:max-w-[320px] min-[425px]:max-w-[360px] sm:max-w-[430px] md:max-w-[620px] min-[1024px]:max-w-[780px] xl:max-w-[880px]" >
-                Find a plan that fits your workflow and unlock access to premium features,
-                faster performance, and enhanced productivity tools. Start with what you
-                need today and scale confidently as your projects.
-              </p>
+              <p 
+                className={`mt-4 text-center font-sans font-normal text-[13px] sm:text-[14px] md:text-[15px] min-[1024px]:text-[18px] xl:text-[22px] leading-[1.6] px-2 max-w-[280px] min-[375px]:max-w-[320px] min-[425px]:max-w-[360px] sm:max-w-[430px] md:max-w-[620px] min-[1024px]:max-w-[780px] xl:max-w-[880px] transition-colors duration-300 ${ 
+                  isDark 
+                    ? "text-[#FFFFFFCC]" 
+                    : "text-[#586D93]" 
+                }`} 
+              > 
+                Find a plan that fits your workflow and  unlock access to premium features, 
+                faster performance, and enhanced  productivity tools. Start with what you 
+                need today and scale confidently as your  projects. 
+              </p> 
+            </div> 
+          </div> 
 
-            </div>
-          </div>
-          {/* Plans Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-2 md:gap-4 lg:gap-6 items-start px-1 sm:px-2 md:px-3">
-            {visibleCards.map((plan, posIdx) => {
-              const isCurrent = plan.id === currentPlan;
-              const isHighlighted = posIdx === 1;
-              const pageIndex = featurePages[plan.id] || 0;
-              const startIndex = pageIndex * 5;
-              const displayedFeatures = plan.features.slice(startIndex, startIndex + 5);
+          {/* Plans Grid */} 
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-2 md:gap-4 lg:gap-6 items-start px-1 sm:px-2 md:px-3"> 
+            {visibleCards.map((plan, posIdx) => { 
+             const isCurrent = plan.id === currentPlan;
+             const isHighlighted =  posIdx === 1; 
+             const pageIndex =  featurePages[plan.id] || 0; 
+             const startIndex =  pageIndex * 5; 
+             const displayedFeatures =   plan.features.slice(  startIndex,  startIndex + 5  ); 
 
-              return (
-                <div
-                  key={plan.id}
-                  className={`rounded-2xl p-4 sm:p-5 lg:p-6 transition-all duration-300 flex flex-col min-w-0 bg-white lg:h-[460px] xl:h-[510px] ${isHighlighted
-                    ? "border-2 border-[#4866F6] shadow-xl md:scale-105 z-10 my-2"
-                    : isCurrent
-                      ? "border-2 border-[#4866F6] shadow-sm md:scale-95 opacity-90"
-                      : "border border-gray-200 shadow-sm md:scale-95 opacity-90"
-                    }`}
-                >
-                  {/* Price */}
-                  <div className="mb-3 sm:mb-4 flex items-baseline flex-nowrap whitespace-nowrap">
-                    <span className={`shrink-0 font-bold text-[#4866F6] ${isHighlighted
-                        ? "text-xl sm:text-xl md:text-2xl lg:text-[22px] xl:text-[36px]"
-                        : "text-xl sm:text-xl md:text-2xl lg:text-[20px] xl:text-[32px]"
-                      }`}>
-                      {plan.price}
-                    </span>
+              return ( 
+                <div 
+                  key={plan.id} 
+                  className={`rounded-2xl p-4 sm:p-5 lg:p-6 transition-all duration-300 flex flex-col min-w-0 lg:h-[460px] xl:h-[510px] ${ 
+                    isDark 
+                      ? "bg-[#060D1B]" 
+                      : "bg-white" 
+                  } ${ 
+                    isHighlighted 
+                      ? isDark 
+                        ? "border-2 border-[#4866F6] shadow-[0_0_20px_rgba(72,102,246,0.18)] md:scale-105 z-10 my-2" 
+                        : "border-2 border-[#4866F6] shadow-xl md:scale-105 z-10 my-2" 
+                      : isCurrent 
+                      ? "border-2 border-[#4866F6] shadow-sm md:scale-95 opacity-90" 
+                      : isDark 
+                      ? "border border-[#263D5C] shadow-sm md:scale-95 opacity-90" 
+                      : "border border-gray-200 shadow-sm md:scale-95 opacity-90" 
+                  }`} 
+                > 
+                  {/* Price */} 
+                  <div className="mb-3 sm:mb-4 flex items-baseline flex-nowrap whitespace-nowrap"> 
+                    <span 
+                      className={`shrink-0 font-bold text-[#4866F6] ${ 
+                        isHighlighted 
+                          ? "text-xl sm:text-xl md:text-2xl lg:text-[22px] xl:text-[36px]" 
+                          : "text-xl sm:text-xl md:text-2xl lg:text-[20px] xl:text-[32px]" 
+                      }`} 
+                    > 
+                      {plan.price} 
+                    </span> 
 
-                    <span className={`ml-1 shrink-0 text-[#586D93] text-xs sm:text-sm ${isHighlighted ? "lg:text-xs xl:text-[20px]" : "lg:text-xs xl:text-[19px]"
-                      }`}>
-                      {plan.period}
-                    </span>
-                  </div>
+                    <span 
+                      className={`ml-1 shrink-0 text-xs sm:text-sm ${ 
+                        isDark 
+                          ? "text-white" 
+                          : "text-[#586D93]" 
+                      } ${ 
+                        isHighlighted 
+                          ? "lg:text-xs xl:text-[20px]" 
+                          : "lg:text-xs xl:text-[19px]" 
+                      }`} 
+                    > 
+                      {plan.period} 
+                    </span> 
+                  </div> 
 
-                  {/* Plan Name */}
-                  <h3 className={`font-semibold text-[#000000] mb-1 whitespace-nowrap ${isHighlighted
-                      ? "text-lg sm:text-lg md:text-xl lg:text-[18px] xl:text-3xl"
-                      : "text-lg sm:text-lg md:text-xl lg:text-[16px] xl:text-[28px]"
-                    }`}>
-                    {plan.name}
-                  </h3>
-                  <p className={`text-[#586D93] mb-4 lg:mb-6 border-b border-gray-100 pb-4 leading-relaxed ${isHighlighted
-                      ? "text-[14px] sm:text-[10px] md:text-[11px] lg:text-[11px] xl:text-[20px]"
-                      : "text-[14px] sm:text-[10px] md:text-[11px] lg:text-[11px] xl:text-[19px]"
-                    }`}>
-                    {plan.desc}
-                  </p>
+                  {/* Plan Name */} 
+                  <h3 
+                    className={`font-semibold mb-1 whitespace-nowrap ${ 
+                      isDark 
+                        ? "text-white" 
+                        : "text-[#000000]" 
+                    } ${ 
+                      isHighlighted 
+                        ? "text-lg sm:text-lg md:text-xl lg:text-[18px] xl:text-3xl" 
+                        : "text-lg sm:text-lg md:text-xl lg:text-[16px] xl:text-[28px]" 
+                    }`} 
+                  > 
+                    {plan.name} 
+                  </h3> 
 
-                  {/* Features List */}
-                  <div className="flex-1 flex flex-col mb-1 lg:mb-2">
-                    <ul className="space-y-2.5 sm:space-y-3 h-[140px] sm:h-[150px] lg:h-[160px] xl:h-[185px]">
-                      {displayedFeatures.map((feature, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-center gap-2.5 md:gap-2 flex-nowrap"
-                        >
-                          <div
-                            className={`w-5 h-5 md:w-4 md:h-4 lg:w-5 lg:h-5 rounded-full flex items-center justify-center flex-shrink-0 ${feature.included ? "bg-[#4866F6]" : "bg-[#D9D9D9]"
-                              }`}
-                          >
-                            {feature.included ? (
-                              <Check
-                                className="w-3 h-3 md:w-2.5 md:h-2.5 lg:w-3 lg:h-3 text-white"
-                                strokeWidth={2.5}
-                              />
-                            ) : (
-                              <X
-                                className="w-3 h-3 md:w-2.5 md:h-2.5 lg:w-3 lg:h-3 text-white"
-                                strokeWidth={2.5}
-                              />
-                            )}
-                          </div>
+                  {/* Description */} 
+                  <p 
+                    className={`mb-4 lg:mb-6 border-b pb-4 leading-relaxed ${ 
+                      isDark 
+                        ? "text-[#FFFFFF] border-[#586D93]" 
+                        : "text-[#586D93] border-gray-100" 
+                    } ${ 
+                      isHighlighted 
+                        ? "text-[14px] sm:text-[10px] md:text-[11px] lg:text-[11px] xl:text-[20px]" 
+                        : "text-[14px] sm:text-[10px] md:text-[11px] lg:text-[11px] xl:text-[19px]" 
+                    }`} 
+                  > 
+                    {plan.desc} 
+                  </p> 
 
-                          <span
-                            className={`whitespace-nowrap ${feature.included ? "text-[#586D93]" : "text-gray-400"} ${isHighlighted
-                                ? "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[20px]"
-                                : "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[19px]"
-                              }`}
-                          >
-                            {feature.text}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
+                  {/* Features List */} 
+                  <div className="flex-1 flex flex-col mb-1 lg:mb-2"> 
+                    <ul className="space-y-2.5 sm:space-y-3 h-[140px] sm:h-[150px] lg:h-[160px] xl:h-[185px]"> 
+                      {displayedFeatures.map( 
+                        (feature, idx) => ( 
+                          <li 
+                            key={idx} 
+                            className="flex items-center gap-2.5 md:gap-2 flex-nowrap" 
+                          > 
+                            <div 
+                              className={`w-5 h-5 md:w-4 md:h-4 lg:w-5 lg:h-5 rounded-full flex items-center justify-center flex-shrink-0 ${ 
+                                feature.included 
+                                  ? "bg-[#4866F6]" 
+                                  : isDark 
+                                  ? "bg-[#34445E]" 
+                                  : "bg-[#D9D9D9]" 
+                              }`} 
+                            > 
+                              {feature.included ? ( 
+                                <Check 
+                                 className={`w-3 h-3 md:w-2.5 md:h-2.5 lg:w-3 lg:h-3 ${isDark ? "text-black" : "text-white"}`} 
+                                  strokeWidth={2.5} 
+                                /> 
+                              ) : ( 
+                                <X 
+                                   className={`w-3 h-3 md:w-2.5 md:h-2.5 lg:w-3 lg:h-3 ${isDark ? "text-black" : "text-white"}`}
+                                  strokeWidth={2.5} 
+                                /> 
+                              )} 
+                            </div> 
 
-                    {plan.features.length > 5 && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (pageIndex === 0) {
-                            handleNextFeatures(plan.id);
-                          } else {
-                            handlePrevFeatures(plan.id);
-                          }
-                        }}
-                        className={`text-[#4866F6] font-medium underline cursor-pointer mt-3 lg:mt-4 text-left w-fit hover:opacity-80 transition-opacity ${isHighlighted
-                            ? "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[20px]"
-                            : "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[19px]"
-                          }`}
-                      >
-                        {pageIndex === 0 ? "...View More" : "View Less"}
-                      </button>
-                    )}
-                  </div>
+                            <span 
+                              className={`whitespace-nowrap ${ 
+                                feature.included 
+                                  ? isDark 
+                                    ? "text-[#FFFFFF]" 
+                                    : "text-[#586D93]" 
+                                  : isDark 
+                                  ? "text-[#596B87]" 
+                                  : "text-gray-400" 
+                              } ${ 
+                                isHighlighted 
+                                  ? "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[20px]" 
+                                  : "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[19px]" 
+                              }`} 
+                            > 
+                              {feature.text} 
+                            </span> 
+                          </li> 
+                        ) 
+                      )} 
+                    </ul> 
 
-                  {/* Action Button: Only render for the current plan */}
-                  {/* Action Button */}
-{plan.isCurrentPlan ? (
-  <button
-    type="button"
-    disabled
-    className="w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px] h-10 lg:h-[48px] min-h-[40px]      lg:min-h-[48px] rounded-full font-medium text-xs sm:text-sm lg:text-base flex items-center   justify-center gap-1 md:gap-1.5 bg-[#CFCFCF] text-[#4A4A4A] cursor-not-allowed mt-auto    mx-auto">
-    <span>Current Plan</span>
+                    {/* View More */} 
+                    {plan.features.length > 5 && ( 
+                      <button 
+                        type="button" 
+                        onClick={() => { 
+                          if (pageIndex === 0) { 
+                            handleNextFeatures( 
+                              plan.id 
+                            ); 
+                          } else { 
+                            handlePrevFeatures( 
+                              plan.id 
+                            ); 
+                          } 
+                        }} 
+                        className={`text-[#4866F6] font-medium underline cursor-pointer mt-3 lg:mt-4 text-left w-fit hover:opacity-80 transition-opacity ${ 
+                          isHighlighted 
+                            ? "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[20px]" 
+                            : "text-xs sm:text-xs md:text-[11px] lg:text-[11px] xl:text-[19px]" 
+                        }`} 
+                      > 
+                        {pageIndex === 0 
+                          ? "...View More" 
+                          : "View Less"} 
+                      </button> 
+                    )} 
+                  </div> 
+                   {/* Action Button: Only render for the current plan */}
+                  {/* Action Button */} 
+                  {isCurrent || 
+                  plan.isCurrentPlan ? ( 
+                    <button 
+                      type="button" 
+                      disabled 
+                      className={`w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px] h-10 lg:h-[48px] min-h-[40px] lg:min-h-[48px] rounded-full font-medium text-xs sm:text-sm lg:text-base flex items-center justify-center gap-1 md:gap-1.5 cursor-not-allowed mt-auto mx-auto ${ 
+                        isDark 
+                          ? "bg-[#1B2940] text-[#AAB6C8]" 
+                          : "bg-[#CFCFCF] text-[#4A4A4A]" 
+                      }`} 
+                    > 
+                      <span> 
+                        Current Plan 
+                      </span> 
 
-    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-  </button>
-) : (
-  <button
-    type="button"
-    onClick={() => handlePlanAction(plan)}
-    className="w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px] h-10 lg:h-[48px] min-h-[40px]
-      lg:min-h-[48px] rounded-full font-medium text-xs sm:text-sm lg:text-base flex items-center
-      justify-center gap-1 md:gap-1.5 bg-[#4866F6] hover:bg-[#3554ED] text-white    cursor-pointer transition-all duration-200 mt-auto mx-auto">
-    <span>Purchase Plan</span>
+                      <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> 
+                    </button> 
+                  ) : ( 
+                    <button 
+                      type="button" 
+                      onClick={() => 
+                        handlePlanAction(plan) 
+                      } 
+                      className="w-full max-w-[140px] sm:max-w-[160px] md:max-w-[180px] h-10 lg:h-[48px] min-h-[40px] lg:min-h-[48px] rounded-full font-medium text-xs sm:text-sm lg:text-base flex items-center justify-center gap-1 md:gap-1.5 bg-[#4866F6] hover:bg-[#3554ED] text-white cursor-pointer transition-all duration-200 mt-auto mx-auto" 
+                    > 
+                      <span> 
+                        Purchase Plan 
+                      </span> 
 
-    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-  </button>
-)}
-                </div>
-              );
-            })}
-          </div>
+                      <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> 
+                    </button> 
+                  )} 
+                </div> 
+              ); 
+            })} 
+          </div> 
 
-          {/* Navigation Arrows - Displayed Always */}
-          <div className="flex justify-center items-center gap-3 mt-8 md:mt-10">
-            <button
-              onClick={handlePrev}
-              className="w-10 h-10 rounded-full bg-[#4866F6] text-white flex items-center justify-center cursor-pointer hover:bg-[#3554ED] transition-all shadow-md active:scale-95"
-              aria-label="Previous plan"
-            >
-              <ArrowLeft className="w-5 h-5" strokeWidth={2.5} />
-            </button>
+          {/* Navigation Arrows - Displayed Always */} 
+          <div className="flex justify-center items-center gap-3 mt-8 md:mt-10"> 
+            <button 
+              onClick={handlePrev} 
+              className={`w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 active:scale-95 ${ 
+                isDark 
+                  ? "bg-transparent border-2 border-[#405A80] text-[#405A80] hover:border-[#4866F6] hover:text-[#4866F6]" 
+                  : "bg-[#4866F6] text-white hover:bg-[#3554ED]" 
+              }`} 
+              aria-label="Previous plan" 
+            > 
+              <ArrowLeft 
+                className="w-5 h-5" 
+                strokeWidth={1.8} 
+              /> 
+            </button> 
 
-            <button
-              onClick={handleNext}
-              className="w-10 h-10 rounded-full bg-[#4866F6] text-white flex items-center justify-center cursor-pointer hover:bg-[#3554ED] transition-all shadow-md active:scale-95"
-              aria-label="Next plan"
-            >
-              <ArrowLeft className="w-5 h-5 rotate-180" strokeWidth={2.5} />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+            <button 
+              onClick={handleNext} 
+              className={`w-11 h-11 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 active:scale-95 ${ 
+                isDark 
+                  ? "bg-transparent border-2 border-[#405A80] text-[#405A80] hover:border-[#4866F6] hover:text-[#4866F6]" 
+                  : "bg-[#4866F6] text-white hover:bg-[#3554ED]" 
+              }`} 
+              aria-label="Next plan" 
+            > 
+              <ArrowLeft 
+                className="w-5 h-5 rotate-180" 
+                strokeWidth={1.8} 
+              /> 
+            </button> 
+          </div> 
+        </div> 
+      </div> 
+    </div> 
+  ); 
+}      
+
+
+
+
+
+
+
+
+
+ 

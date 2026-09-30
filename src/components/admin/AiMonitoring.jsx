@@ -23,6 +23,7 @@ export default function AIMonitoring() {
   const [entityData, setEntityData] = useState(null);
   const [validationData, setValidationData] = useState(null);
   const [fallbackData, setFallbackData] = useState(null);
+  const today = new Date().toISOString().split("T")[0];
 
   const tabs = [
     {
@@ -117,14 +118,22 @@ const dateRef = useRef(null);
 
       case "fallback":
         response = await getFallbackError(selectedDate);
-        setFallbackData(response);
+
+        console.log("Fallback API response:", response);
+
+        setFallbackData(response || {});
         break;
 
       default:
         break;
     }
   } catch (err) {
-    console.error(err);
+    console.error("AI Monitoring API Error:", err);
+
+    // Prevent white screen
+    if (activeTab === "fallback") {
+      setFallbackData({});
+    }
   } finally {
     setLoading(false);
   }
@@ -162,7 +171,7 @@ useEffect(() => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`h-[44px] min-w-[200px] xl:min-w-0 px-6 xl:px-0 whitespace-nowrap rounded-full text-[14px] font-medium transition-all duration-200 xl:w-full flex-shrink-0 cursor-pointer
+            className={`h-[44px] min-w-[200px] xl:min-w-0 px-6 xl:px-0 whitespace-nowrap rounded-full text-[14px] font-medium transition-all duration-200 xl:w-full flex-shrink-0 cursor-pointer 
   ${
     activeTab === tab.id
       ? "bg-[#4866F6] text-white"
@@ -180,58 +189,119 @@ useEffect(() => {
 </div>
 
 {activeTab === "intent" && (
-        <div className="mx-4 md:mx-5 lg:mx-7 mb-6 rounded-[20px] border border-[#E2E2E2] bg-white p-5">
+        <div className="mx-4 md:mx-5 lg:mx-7 mb-6 rounded-[20px] border border-[#E2E2E2] bg-white p-5 ">
 
   {/* Header */}
   {/* Header */}
-<div className="flex flex-col md:flex-row md:items-center md:justify-between min-[1024px]:flex-row min-[1024px]:items-center min-[1024px]:justify-between gap-4">
-<h3 className="text-[18px] min-[1024px]:max-[1279px]:text-[16px] font-medium text-[#3D3D3D] whitespace-nowrap flex-shrink-0">
+<div className="flex flex-col md:flex-row md:items-center md:justify-between min-[1024px]:flex-row min-[1024px]:items-center min-[1024px]:justify-between gap-4 ">
+<h3 className="text-[18px] min-[1024px]:max-[1279px]:text-[16px] font-medium text-[#3D3D3D] whitespace-nowrap flex-shrink-0 ">
       {tabs.find((x) => x.id === activeTab)?.label} KPI's
   </h3>
 
   <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-2 lg:gap-3">
 
-<div className="relative w-full md:w-[150px] min-[1024px]:max-[1279px]:!w-[170px] lg:w-[215px] h-[46px] border border-[#D9D9D9] rounded-[10px] bg-white">  
-       <input
-          ref={dateRef}
-          type="date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        />
+<div
+  ref={dateRef}
+  tabIndex={0}
+  role="button"
+  aria-label="Select Date"
+  onClick={() => {
+    document.getElementById("monitoring-date-input")?.showPicker?.();
+  }}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      document.getElementById("monitoring-date-input")?.showPicker?.();
+    }
+  }}
+  className="relative w-full md:w-[150px] min-[1024px]:max-[1279px]:!w-[170px] lg:w-[215px] h-[46px] border border-[#D9D9D9] rounded-[10px] bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4866F6]"
+>
+  {/* Real date input */}
+  <input
+    id="monitoring-date-input"
+    type="date"
+    value={selectedDate}
+    max={today}
+    onChange={(e) => setSelectedDate(e.target.value)}
+    tabIndex={-1}
+    className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+  />
 
-        <div className="w-full h-full flex items-center px-4 text-[#586D93] text-[14px]">
-          {selectedDate || "Select Date"}
-        </div>
+  {/* Visible value */}
+  <div className="w-full h-full flex items-center px-4 text-[#586D93] text-[14px] pointer-events-none">
+    {selectedDate || "Select Date"}
+  </div>
 
-      <svg
-        onClick={() => dateRef.current?.showPicker?.()}
-        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g clipPath="url(#clip0_1751_4096)">
-          <path d="M8 2V5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M16 2V5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M3.5 9.08984H20.5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M11.9951 13.6992H12.0041" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8.29395 13.6992H8.30293" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8.29395 16.6992H8.30293" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </g>
-        <defs>
-          <clipPath id="clip0_1751_4096">
-            <rect width="24" height="24" fill="white"/>
-          </clipPath>
-        </defs>
-      </svg>
+  {/* Calendar icon */}
+  <svg
+    className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clipPath="url(#clip0_1751_4096)">
+      <path
+        d="M8 2V5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16 2V5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.5 9.08984H20.5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11.9951 13.6992H12.0041"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.29395 13.6992H8.30293"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.29395 16.6992H8.30293"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
 
-    </div>
+    <defs>
+      <clipPath id="clip0_1751_4096">
+        <rect width="24" height="24" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+</div>
 
-<button onClick={fetchMonitoringData} className="w-full md:w-[110px] min-[1024px]:max-[1279px]:!w-[120px] lg:w-[140px] h-[44px] rounded-full bg-[#4866F6] text-white flex items-center justify-center gap-1 flex-shrink-0 cursor-pointer">       Refresh
+<button onClick={fetchMonitoringData} className="w-full md:w-[110px] min-[1024px]:max-[1279px]:!w-[120px] lg:w-[140px] h-[44px] rounded-full bg-[#4866F6] text-white flex items-center justify-center gap-1 flex-shrink-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4866F6] focus:ring-offset-1">       Refresh
       <RefreshCw size={18} 
       className={loading ? "animate-spin" : ""} />
     </button>
@@ -327,7 +397,7 @@ useEffect(() => {
       <div>
         <div className="flex justify-between mb-2">
           <span>Schedule Meeting</span>
-          <span className="text-[#586D93]">Users: Users: {intentData?.features_usage?.schedule_meeting?.users ?? 0}</span>
+          <span className="text-[#586D93]">Users: {intentData?.features_usage?.schedule_meeting?.users ?? 0}</span>
         </div>
         {progressBar(intentData?.features_usage?.schedule_meeting?.percent ?? 0)}
       </div>
@@ -400,50 +470,110 @@ useEffect(() => {
 
   <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-2 lg:gap-3">
 
-    <div className="relative w-full md:w-[150px] min-[1024px]:max-[1279px]:!w-[150px] lg:w-[215px] h-[46px] border border-[#D9D9D9] rounded-[10px] bg-white">
+    <div
+  ref={dateRef}
+  tabIndex={0}
+  role="button"
+  aria-label="Select Date"
+  onClick={() => {
+    document.getElementById("monitoring-date-input")?.showPicker?.();
+  }}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      document.getElementById("monitoring-date-input")?.showPicker?.();
+    }
+  }}
+  className="relative w-full md:w-[150px] min-[1024px]:max-[1279px]:!w-[170px] lg:w-[215px] h-[46px] border border-[#D9D9D9] rounded-[10px] bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4866F6]"
+>
+  {/* Real date input */}
+  <input
+    id="monitoring-date-input"
+    type="date"
+    value={selectedDate}
+    max={today}
+    onChange={(e) => setSelectedDate(e.target.value)}
+    tabIndex={-1}
+    className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+  />
 
-      <input
-        ref={dateRef}
-        type="date"
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(e.target.value)}
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+  {/* Visible value */}
+  <div className="w-full h-full flex items-center px-4 text-[#586D93] text-[14px] pointer-events-none">
+    {selectedDate || "Select Date"}
+  </div>
+
+  {/* Calendar icon */}
+  <svg
+    className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clipPath="url(#clip0_1751_4096)">
+      <path
+        d="M8 2V5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
+      <path
+        d="M16 2V5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.5 9.08984H20.5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11.9951 13.6992H12.0041"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.29395 13.6992H8.30293"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.29395 16.6992H8.30293"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
 
-      <div className="w-full h-full flex items-center px-4 text-[#586D93] text-[14px]">
-        {selectedDate || "Select Date"}
-      </div>
+    <defs>
+      <clipPath id="clip0_1751_4096">
+        <rect width="24" height="24" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+</div>
 
-      <svg
-        onClick={() => dateRef.current?.showPicker?.()}
-        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g clipPath="url(#clip0_1751_4096)">
-          <path d="M8 2V5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M16 2V5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M3.5 9.08984H20.5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M11.9951 13.6992H12.0041" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8.29395 13.6992H8.30293" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8.29395 16.6992H8.30293" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </g>
-        <defs>
-          <clipPath id="clip0_1751_4096">
-            <rect width="24" height="24" fill="white"/>
-          </clipPath>
-        </defs>
-      </svg>
-
-    </div>
-
-    <button className="w-full md:w-[110px] min-[1024px]:max-[1279px]:!w-[100px] lg:w-[140px] h-[44px] rounded-full bg-[#4866F6] text-white flex items-center justify-center gap-1 flex-shrink-0">
-      Refresh
-      <RefreshCw size={18} />
+<button onClick={fetchMonitoringData} className="w-full md:w-[110px] min-[1024px]:max-[1279px]:!w-[120px] lg:w-[140px] h-[44px] rounded-full bg-[#4866F6] text-white flex items-center justify-center gap-1 flex-shrink-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4866F6] focus:ring-offset-1">       Refresh
+      <RefreshCw size={18} 
+      className={loading ? "animate-spin" : ""} />
     </button>
 
   </div>
@@ -588,50 +718,110 @@ useEffect(() => {
 
   <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-2 lg:gap-2 flex-shrink-0">
 
-    <div className="relative w-full md:w-[150px] lg:w-[170px] xl:w-[215px] h-[46px] border border-[#D9D9D9] rounded-[10px] bg-white">
+    <div
+  ref={dateRef}
+  tabIndex={0}
+  role="button"
+  aria-label="Select Date"
+  onClick={() => {
+    document.getElementById("monitoring-date-input")?.showPicker?.();
+  }}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      document.getElementById("monitoring-date-input")?.showPicker?.();
+    }
+  }}
+  className="relative w-full md:w-[150px] min-[1024px]:max-[1279px]:!w-[170px] lg:w-[215px] h-[46px] border border-[#D9D9D9] rounded-[10px] bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4866F6]"
+>
+  {/* Real date input */}
+  <input
+    id="monitoring-date-input"
+    type="date"
+    value={selectedDate}
+    max={today}
+    onChange={(e) => setSelectedDate(e.target.value)}
+    tabIndex={-1}
+    className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+  />
 
-      <input
-        ref={dateRef}
-        type="date"
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(e.target.value)}
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+  {/* Visible value */}
+  <div className="w-full h-full flex items-center px-4 text-[#586D93] text-[14px] pointer-events-none">
+    {selectedDate || "Select Date"}
+  </div>
+
+  {/* Calendar icon */}
+  <svg
+    className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clipPath="url(#clip0_1751_4096)">
+      <path
+        d="M8 2V5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
+      <path
+        d="M16 2V5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.5 9.08984H20.5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11.9951 13.6992H12.0041"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.29395 13.6992H8.30293"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.29395 16.6992H8.30293"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
 
-      <div className="w-full h-full flex items-center px-4 text-[#586D93] text-[14px]">
-        {selectedDate || "Select Date"}
-      </div>
+    <defs>
+      <clipPath id="clip0_1751_4096">
+        <rect width="24" height="24" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+</div>
 
-      <svg
-        onClick={() => dateRef.current?.showPicker?.()}
-        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g clipPath="url(#clip0_1751_4096)">
-          <path d="M8 2V5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M16 2V5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M3.5 9.08984H20.5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M11.9951 13.6992H12.0041" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8.29395 13.6992H8.30293" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8.29395 16.6992H8.30293" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </g>
-        <defs>
-          <clipPath id="clip0_1751_4096">
-            <rect width="24" height="24" fill="white"/>
-          </clipPath>
-        </defs>
-      </svg>
-
-    </div>
-
-    <button className="w-full md:w-[110px] min-[1024px]:max-[1279px]:!w-[110px] lg:w-[140px] h-[44px] rounded-full bg-[#4866F6] text-white flex items-center justify-center gap-1 flex-shrink-0">
-      Refresh
-      <RefreshCw size={18} />
+<button onClick={fetchMonitoringData} className="w-full md:w-[110px] min-[1024px]:max-[1279px]:!w-[120px] lg:w-[140px] h-[44px] rounded-full bg-[#4866F6] text-white flex items-center justify-center gap-1 flex-shrink-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4866F6] focus:ring-offset-1">       Refresh
+      <RefreshCw size={18} 
+      className={loading ? "animate-spin" : ""} />
     </button>
 
   </div>
@@ -803,49 +993,110 @@ useEffect(() => {
 
   <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-2 lg:gap-2 flex-shrink-0">
 
-    <div className="relative w-full md:w-[150px] lg:w-[170px] xl:w-[215px] h-[46px] border border-[#D9D9D9] rounded-[10px] bg-white">
+    <div
+  ref={dateRef}
+  tabIndex={0}
+  role="button"
+  aria-label="Select Date"
+  onClick={() => {
+    document.getElementById("monitoring-date-input")?.showPicker?.();
+  }}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      document.getElementById("monitoring-date-input")?.showPicker?.();
+    }
+  }}
+  className="relative w-full md:w-[150px] min-[1024px]:max-[1279px]:!w-[170px] lg:w-[215px] h-[46px] border border-[#D9D9D9] rounded-[10px] bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4866F6]"
+>
+  {/* Real date input */}
+  <input
+    id="monitoring-date-input"
+    type="date"
+    value={selectedDate}
+    max={today}
+    onChange={(e) => setSelectedDate(e.target.value)}
+    tabIndex={-1}
+    className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+  />
 
-      <input
-        ref={dateRef}
-        type="date"
-        value={selectedDate}
-        onChange={(e) => setSelectedDate(e.target.value)}
-        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+  {/* Visible value */}
+  <div className="w-full h-full flex items-center px-4 text-[#586D93] text-[14px] pointer-events-none">
+    {selectedDate || "Select Date"}
+  </div>
+
+  {/* Calendar icon */}
+  <svg
+    className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clipPath="url(#clip0_1751_4096)">
+      <path
+        d="M8 2V5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
+      <path
+        d="M16 2V5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.5 9.08984H20.5"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z"
+        stroke="#586D93"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11.9951 13.6992H12.0041"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.29395 13.6992H8.30293"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.29395 16.6992H8.30293"
+        stroke="#586D93"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
 
-      <div className="w-full h-full flex items-center px-4 text-[#586D93] text-[14px]">
-        {selectedDate || "Select Date"}
-      </div>
+    <defs>
+      <clipPath id="clip0_1751_4096">
+        <rect width="24" height="24" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+</div>
 
-      <svg
-        onClick={() => dateRef.current?.showPicker?.()}
-        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g clipPath="url(#clip0_1751_4096)">
-          <path d="M8 2V5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M16 2V5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M3.5 9.08984H20.5" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M21 8.5V17C21 20 19.5 22 16 22H8C4.5 22 3 20 3 17V8.5C3 5.5 4.5 3.5 8 3.5H16C19.5 3.5 21 5.5 21 8.5Z" stroke="#586D93" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M11.9951 13.6992H12.0041" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8.29395 13.6992H8.30293" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M8.29395 16.6992H8.30293" stroke="#586D93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </g>
-        <defs>
-          <clipPath id="clip0_1751_4096">
-            <rect width="24" height="24" fill="white"/>
-          </clipPath>
-        </defs>
-      </svg>
-
-    </div>
-    <button className="w-full md:w-[110px] min-[1024px]:max-[1279px]:!w-[120px] lg:w-[140px] h-[44px] rounded-full bg-[#4866F6] text-white flex items-center justify-center gap-1 flex-shrink-0">
-      Refresh
-      <RefreshCw size={18} />
+<button onClick={fetchMonitoringData} className="w-full md:w-[110px] min-[1024px]:max-[1279px]:!w-[120px] lg:w-[140px] h-[44px] rounded-full bg-[#4866F6] text-white flex items-center justify-center gap-1 flex-shrink-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#4866F6] focus:ring-offset-1">       Refresh
+      <RefreshCw size={18} 
+      className={loading ? "animate-spin" : ""} />
     </button>
 
   </div>
@@ -961,9 +1212,11 @@ useEffect(() => {
       <div>
         <div className="flex justify-between mb-2">
           <span>Unsupported Requests</span>
-          <span className="text-[#586D93]">150</span>
+          <span className="text-[#586D93]">{fallbackData?.fallback_error_data?.unsupported_requests_count ?? 0}</span>
         </div>
-        {progressBar(14)}
+        {progressBar(
+  fallbackData?.fallback_error_data?.unsupported_requests_rate_percent ?? 0
+)}
       </div>
 
     </div>
@@ -999,7 +1252,7 @@ useEffect(() => {
           />
         </svg>
 
-        <span>{item}</span>
+        <span>{item.text}</span>
       </li>
     ))
   ) : (

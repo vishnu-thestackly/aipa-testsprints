@@ -47,6 +47,8 @@ import TasksDashboard from "./components/userprofile/tasks/TasksDashboard";
 import Integrations from "./components/userprofile/integrations/Integrations";
 import OutlookDetails from "./components/userprofile/integrations/details/OutlookDetails";
 import ExchangeDetails from "./components/userprofile/integrations/details/ExchangeDetails";
+import GmailDetails from "./components/userprofile/integrations/details/GmailDetails";
+import CalendarDetails from "./components/userprofile/integrations/details/CalendarDetails";
 
 // coment
 
@@ -121,6 +123,8 @@ function App() {
           
           <Route path="integrations/outlook" element={<OutlookDetails />} />
           <Route path="integrations/exchange" element={<ExchangeDetails />} />
+          <Route path="integrations/gmail" element={<GmailDetails />} />
+          <Route path="integrations/googleCalendar" element={<CalendarDetails />} />
 
           <Route path="new-chat" element={<NewChat />} />
 

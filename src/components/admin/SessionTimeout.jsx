@@ -1,7 +1,7 @@
 import React from "react";
 import { X } from "lucide-react";
 import LoginButton from "./LoginButton";
-import clockCountdown from "../../assets/images/ClockCountdown.svg"
+import clockCountdown from "../../assets/images/clockCountdown.svg"
 import { useTheme } from "../../context/ThemeContext";
 
 export default function SessionTimeout({ open, onClose, onLogin }) {
@@ -14,18 +14,10 @@ export default function SessionTimeout({ open, onClose, onLogin }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 px-4 backdrop-blur-[1px]">
       <div
-        className={`
-          relative
-          w-full
-          max-w-[650px]
-          rounded-2xl
-          px-8
-          pb-8
-          pt-10
-          shadow-[0_14px_40px_rgba(19,34,94,0.2)]
+        className={` relative w-full max-w-[650px] rounded-2xl px-8 pb-8 pt-10 shadow-[0_14px_40px_rgba(19,34,94,0.2)]
           ${
             isDark
-              ? "bg-[#050B1A] border border-[#39445F]"
+              ? "bg-[#060D1B] border border-[#39445F]"
               : "bg-[#f7f7f9]"
           }
         `}
@@ -36,7 +28,7 @@ export default function SessionTimeout({ open, onClose, onLogin }) {
           className="absolute right-4 top-4 flex h-5 w-5 items-center justify-center rounded-full bg-[#f15055] text-[12px] leading-none text-white"
           aria-label="Close session timeout modal"
         >
-          <X size={12} strokeWidth={3}  />
+          <X size={12} strokeWidth={3} className={`${isDark ? " text-black" : "text-white"}`} />
         </button>
 
         <div className="mx-auto mb-4 flex w-fit items-center justify-center">
@@ -52,14 +44,7 @@ export default function SessionTimeout({ open, onClose, onLogin }) {
         </h3>
 
         <p
-          className={`
-            mx-auto
-            mb-6
-            max-w-[430px]
-            text-center
-            text-[16px]
-            font-normal
-            leading-6
+          className={` mx-auto mb-6 max-w-[430px] text-center text-[16px] font-normal leading-6
             ${
               isDark
                 ? "text-[#8D97A9]"
@@ -71,7 +56,7 @@ export default function SessionTimeout({ open, onClose, onLogin }) {
           to access your account.
         </p>
 
-        <div className="mx-auto mb-3 w-full max-w-[380px]  hover:bg-[#3B59E0]">
+        <div className="mx-auto mb-3 w-full max-w-[380px] ">
           <LoginButton onClick={onLogin}>Log In</LoginButton>
         </div>
       </div>

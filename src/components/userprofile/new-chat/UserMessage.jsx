@@ -8,7 +8,12 @@ export default function UserMessage({ message, onEdit }) {
     <div className="flex justify-end">
       <div className="flex w-full min-w-0 items-end justify-end gap-3">
         <div className="flex w-fit max-w-[70%] md:max-w-[80%] lg:max-w-[70%] min-w-0 flex-col items-end">
-          <div className="max-w-full min-w-[80px] whitespace-pre-wrap wrap-anywhere rounded-[16px] rounded-br-none rounded-tr-[30px] bg-[#4866F6] px-5 py-4 text-[14px] text-white">
+          
+          {/* User Message */}
+          <div
+            className="max-h-100 max-w-full min-w-[80px] overflow-y-auto overflow-x-hidden scrollbar-hide whitespace-pre-wrap wrap-anywhere rounded-[16px] rounded-br-none rounded-tr-[30px] bg-[#4866F6] px-5 py-4 text-[14px] text-white"
+            
+          >
             {message.text}
           </div>
 
