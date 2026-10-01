@@ -368,7 +368,7 @@ const SessionAuthenticationIcon = ({ className = "" }) => (
 );
 
 const DataProtectionEncryptionIcon = ({ className = "" }) => (
-  <img src={encryptionIcon} alt="Data Protection & Encrption" className={className} />
+  <img src={encryptionIcon} alt="Data Protection & Encryption" className={className} />
 );
 
 const PrivacyConsentIcon = ({ className = "" }) => (
@@ -505,7 +505,7 @@ export const sidebarMenuItems = [
       },
       {
         key: "data_protection_encryption",
-        label: "Data Protection & Encrption",
+        label: "Data Protection & Encryption",
         Icon: DataProtectionEncryptionIcon,
       },
       {

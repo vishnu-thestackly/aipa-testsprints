@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import ProfileNavbar from "../components/common/ProfileNavbar";
 import OnboardingStepper from "../components/preference/OnboardingStepper";
-import { saveNotificationSettings,skipOnboarding } from "../api/authApi";
+import { saveNotificationSettings, skipOnboarding } from "../api/authApi";
 import BackGroundImage from "../assets/images/bghome.png";
 import Downarrow from "../assets/images/Downarrow.png";
 import EmailAlertIcon from "../assets/images/email_alert.svg";
 import ReminderIcon from "../assets/images/reminder.svg";
 import { useNavigate } from "react-router-dom";
 import { useOnboarding } from "../context/OnboardingContext";
+import { useTheme } from "../context/ThemeContext";
 
 const notificationOptions = [
   {
@@ -27,6 +28,7 @@ const notificationOptions = [
 ];
 
 const NotificationSetup = () => {
+  const { isDark } = useTheme();
   const [loading, setLoading] = useState(false);
   const [skipLoading, setSkipLoading] = useState(false);
   const [showLanguage, setShowLanguage] = useState(false);
@@ -93,25 +95,34 @@ const NotificationSetup = () => {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-y-auto overflow-x-hidden p-[20px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-      <img
-        src={BackGroundImage}
-        alt="background"
-        className="fixed inset-0 w-full h-full object-cover -z-10"
-      />
+    <div className={`relative min-h-screen w-full overflow-y-auto overflow-x-hidden p-[20px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${isDark ? "bg-[#030712]" : ""}`}>
+      {/* BACKGROUND IMAGE */}
+      {isDark ? (
+        <div className="fixed inset-0 bg-[#030712] -z-10" />
+      ) : (
+        <img
+          src={BackGroundImage}
+          alt="background"
+          className="fixed inset-0 w-full h-full object-cover -z-10"
+        />
+      )}
 
       <div className="relative z-10">
         <div className="w-full mb-[20px]">
           <ProfileNavbar onLanguageClick={setShowLanguage} />
         </div>
 
-        <div className="w-full bg-white rounded-[40px] min-h-[85vh] border border-[#E7E7E7] shadow-sm px-[clamp(20px,4vw,60px)] py-[clamp(25px,4vw,45px)] transition-all duration-300">
+        <div className={`w-full rounded-[40px] min-h-[85vh] shadow-sm px-[clamp(20px,4vw,60px)] py-[clamp(25px,4vw,45px)] transition-all duration-300 ${
+          isDark
+            ? "bg-[#060C1F]"
+            : "bg-white border border-[#E7E7E7]"
+        }`}>
           <div className="relative flex flex-col items-center justify-center mt-15 md:mt-[40px] lg:mt-0">
-            <p className="text-[#4866F6] text-[clamp(18px,2vw,30px)] font-sfpro">
+            <p className={`text-[clamp(18px,2vw,30px)] font-sfpro ${isDark ? "text-white" : "text-[#4866F6]"}`}>
               Welcome to your
             </p>
 
-            <h1 className="text-[#4866F6] text-[clamp(32px,4vw,60px)] font-bold font-sfpro text-center leading-tight">
+            <h1 className={`text-[clamp(32px,4vw,60px)] font-bold font-sfpro text-center leading-tight ${isDark ? "text-white" : "text-[#4866F6]"}`}>
               AI Personal Assistant
             </h1>
 
@@ -135,10 +146,18 @@ const NotificationSetup = () => {
             {notificationOptions.map((option) => (
               <div
                 key={option.id}
-                className="bg-white border border-slate-100 shadow-[0_0_2px_1px_rgba(61,61,61,0.15)] rounded-[16px] p-5"
+                className={`rounded-[16px] p-5 transition-all duration-300 ${
+                  isDark
+                    ? "bg-[#060C1F] border border-[#586D93] shadow-none"
+                    : "bg-white border border-slate-100 shadow-[0_0_2px_1px_rgba(61,61,61,0.15)]"
+                }`}
               >
                 <div className="flex justify-between items-start">
-                  <div className="border border-slate-100 shadow-[0_0_2px_1px_rgba(61,61,61,0.15)] rounded-[12px] p-3 w-14 h-14 flex items-center justify-center">
+                  <div className={`rounded-[12px] p-3 w-14 h-14 flex items-center justify-center transition-all duration-300 ${
+                    isDark
+                      ? "bg-[#131E3D] shadow-none"
+                      : "border border-slate-100 shadow-[0_0_2px_1px_rgba(61,61,61,0.15)]"
+                  }`}>
                     <img
                       src={option.icon}
                       alt={option.title}
@@ -156,9 +175,15 @@ const NotificationSetup = () => {
                       className="sr-only peer"
                     />
 
-                    <div className="w-[52px] h-[30px] bg-[#D9D9D9] rounded-full peer-checked:bg-[#4866F6] transition-all duration-300" />
+                    <div className={`w-[52px] h-[30px] rounded-full transition-all duration-300 ${
+                      isDark
+                        ? "bg-[#131E3D] border border-[#586D93] peer-checked:bg-[#4866F6] peer-checked:border-[#4866F6]"
+                        : "bg-[#D9D9D9] peer-checked:bg-[#4866F6]"
+                    }`} />
 
-                    <div className="absolute left-[4px] top-[4px] w-[22px] h-[22px] bg-white rounded-full transition-all duration-300 peer-checked:translate-x-[22px]" />
+                    <div className={`absolute left-[4px] top-[4px] w-[22px] h-[22px] rounded-full transition-all duration-300 peer-checked:translate-x-[22px] ${
+                      isDark ? "bg-[#586D93] peer-checked:bg-[#060C1F]" : "bg-white"
+                    }`} />
                   </label>
                 </div>
 
@@ -166,7 +191,9 @@ const NotificationSetup = () => {
                   {option.title}
                 </h3>
 
-                <p className="text-[#7A7A7A] lg:w-3/4 md:w-3/4 text-[16px] mt-2 leading-snug font-sfpro">
+                <p className={`lg:w-3/4 md:w-3/4 text-[16px] mt-2 leading-snug font-sfpro ${
+                  isDark ? "text-[#8D97A9]" : "text-[#7A7A7A]"
+                }`}>
                   {option.description}
                 </p>
               </div>
@@ -177,18 +204,22 @@ const NotificationSetup = () => {
             <button
               type="button"
               onClick={handleBack}
-              className="bg-white border border-[#4866F6] text-[#4866F6] md:px-20 md:py-3 px-10 py-2 rounded-full transition-all duration-300 text-[16px] font-medium hover:bg-[#5b76f7] hover:text-white cursor-pointer"
+              className={`md:px-20 md:py-3 px-10 py-2 rounded-full transition-all duration-300 text-[16px] font-medium cursor-pointer ${
+                isDark
+                  ? "bg-transparent border border-[#4866F6] text-[#4866F6] hover:bg-[#131E3D]"
+                  : "bg-white border border-[#4866F6] text-[#4866F6] hover:bg-[#5b76f7] hover:text-white"
+              }`}
             >
               Back
             </button>
 
             <button
-                  type="button"
-                  onClick={handleContinue}
-                  disabled={loading}
-                  className="bg-[#4866F6] hover:bg-[#3d5cf4] transition-all duration-300 text-white md:px-16 md:py-3 px-7 py-2 rounded-full text-[16px] font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? "Saving..." : "Continue"}
+              type="button"
+              onClick={handleContinue}
+              disabled={loading}
+              className="bg-[#4866F6] hover:bg-[#3d5cf4] transition-all duration-300 text-white md:px-16 md:py-3 px-7 py-2 rounded-full text-[16px] font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Saving..." : "Continue"}
             </button>
           </div>
         </div>

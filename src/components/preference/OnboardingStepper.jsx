@@ -1,6 +1,9 @@
 import React from "react";
+import { useTheme } from "../../context/ThemeContext";
 
 const OnboardingStepper = ({ currentStep, steps }) => {
+  const { isDark } = useTheme();
+
   // Fills connector line based on progress:
   // passed step -> full, current step -> half, upcoming -> empty.
   const getLineProgress = (stepNumber) => {
@@ -14,19 +17,27 @@ const OnboardingStepper = ({ currentStep, steps }) => {
     `w-[35px] h-[35px] md:w-[50px] md:h-[50px] lg:w-[52px] lg:h-[52px] rounded-full flex items-center justify-center text-[14px] md:text-[16px] lg:text-[18px] transition-all duration-500 shrink-0 ${
       currentStep >= stepNumber
         ? "bg-[#4866F6] text-white"
+        : isDark
+        ? "bg-[#131E3D] text-[#586D93]"
         : "bg-[#EFF0F6] text-[#586D93]"
     }`;
 
   // Base label styling used across breakpoints.
   const labelClass = (stepNumber) =>
     `mt-2 md:mt-3 text-[14px] md:text-[14px] lg:text-[16px] font-medium font-sfpro text-center leading-tight w-full max-w-[88px] lg:max-w-full lg:whitespace-nowrap ${
-      currentStep >= stepNumber ? "text-[#4866F6]" : "text-[#3D3D3D]"
+      currentStep >= stepNumber
+        ? "text-[#4866F6]"
+        : isDark
+        ? "text-[#586D93]"
+        : "text-[#3D3D3D]"
     }`;
 
   // Horizontal connector between adjacent steps.
   const Connector = ({ afterStep, className = "" }) => (
     <div
-      className={`w-full h-[8px] md:h-[10px] bg-[#EFF0F6] rounded-full overflow-hidden self-start mt-[12px] md:mt-[21px] lg:mt-[22px] ${className}`}
+      className={`w-full h-[8px] md:h-[10px] ${
+        isDark ? "bg-[#131E3D]" : "bg-[#EFF0F6]"
+      } rounded-full overflow-hidden self-start mt-[12px] md:mt-[21px] lg:mt-[22px] ${className}`}
     >
       <div
         className={`h-full bg-[#4866F6] transition-all duration-500 ${getLineProgress(afterStep)}`}

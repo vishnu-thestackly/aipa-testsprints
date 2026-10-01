@@ -19,6 +19,7 @@ import JiraIcon from "../assets/images/jira.svg";
 import TrelloIcon from "../assets/images/trello.svg";
 import { useNavigate } from "react-router-dom";
 import { useOnboarding } from "../context/OnboardingContext";
+import { useTheme } from "../context/ThemeContext";
 
 const integrationIcons = {
   gmail: GmailIcon,
@@ -31,6 +32,7 @@ const integrationIcons = {
 
 
 const ConnectIntegrations = () => {
+  const { isDark } = useTheme();
   const [showLanguage, setShowLanguage] = useState(false);
   const [skipLoading, setSkipLoading] = useState(false);
   const [currentStep] = useState(3);
@@ -139,25 +141,34 @@ const handleIntegrationClick = async (integration) => {
 console.log("Integrations:", integrations);
 console.log("Length:", integrations.length);
   return (
-    <div className="relative min-h-screen w-full overflow-y-auto overflow-x-hidden p-[20px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-      <img
-        src={BackGroundImage}
-        alt="background"
-        className="fixed inset-0 w-full h-full object-cover -z-10"
-      />
+    <div className={`relative min-h-screen w-full overflow-y-auto overflow-x-hidden p-[20px] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${isDark ? "bg-[#030712]" : ""}`}>
+      {/* BACKGROUND IMAGE */}
+      {isDark ? (
+        <div className="fixed inset-0 bg-[#030712] -z-10" />
+      ) : (
+        <img
+          src={BackGroundImage}
+          alt="background"
+          className="fixed inset-0 w-full h-full object-cover -z-10"
+        />
+      )}
 
       <div className="relative z-10">
         <div className="w-full mb-[20px]">
           <ProfileNavbar onLanguageClick={setShowLanguage} />
         </div>
 
-        <div className="w-full bg-white rounded-[40px] min-h-[85vh] border border-[#E7E7E7] shadow-sm px-[clamp(20px,4vw,60px)] py-[clamp(25px,4vw,45px)] transition-all duration-300">
+        <div className={`w-full rounded-[40px] min-h-[85vh] shadow-sm px-[clamp(20px,4vw,60px)] py-[clamp(25px,4vw,45px)] transition-all duration-300 ${
+          isDark
+            ? "bg-[#060C1F]"
+            : "bg-white border border-[#E7E7E7]"
+        }`}>
           <div className="relative flex flex-col items-center justify-center mt-15 md:mt-[40px] lg:mt-0">
-            <p className="text-[#4866F6] text-[clamp(18px,2vw,30px)] font-sfpro">
+            <p className={`text-[clamp(18px,2vw,30px)] font-sfpro ${isDark ? "text-white" : "text-[#4866F6]"}`}>
               Welcome to your
             </p>
 
-            <h1 className="text-[#4866F6] text-[clamp(32px,4vw,60px)] font-bold font-sfpro text-center leading-tight">
+            <h1 className={`text-[clamp(32px,4vw,60px)] font-bold font-sfpro text-center leading-tight ${isDark ? "text-white" : "text-[#4866F6]"}`}>
               AI Personal Assistant
             </h1>
 
@@ -184,10 +195,18 @@ console.log("Length:", integrations.length);
               return (
                 <div
                   key={integration.app_name}
-                  className="bg-white border border-slate-100 rounded-[24px] p-6 shadow-[0_0_2px_1px_rgba(61,61,61,0.15)]"
+                  className={`rounded-[24px] p-6 transition-all duration-300 ${
+                    isDark
+                      ? "bg-[#060C1F] border border-[#586D93] shadow-none"
+                      : "bg-white border border-slate-100 shadow-[0_0_2px_1px_rgba(61,61,61,0.15)]"
+                  }`}
                 >
                   <div className="flex justify-between items-start">
-                    <div className="bg-white border border-slate-100 rounded-[12px] p-3 w-14 h-14 flex items-center justify-center shadow-[0_0_2px_1px_rgba(61,61,61,0.15)]">
+                    <div className={`rounded-[12px] p-3 w-14 h-14 flex items-center justify-center transition-all duration-300 ${
+                      isDark
+                        ? "bg-[#131E3D] border border-[#586D93] shadow-none"
+                        : "bg-white border border-slate-100 shadow-[0_0_2px_1px_rgba(61,61,61,0.15)]"
+                    }`}>
                         <img
                             src={integrationIcons[integration.app_name] || GmailIcon}
                             alt={integration.display_name}
@@ -199,7 +218,9 @@ console.log("Length:", integrations.length);
                      onClick={() => handleIntegrationClick(integration)}
                       className={`text-[16px] px-5 py-1.5 rounded-full font-medium transition-all duration-300 cursor-pointer ${
                         isConnected
-                          ? "bg-white border border-[#4866F6] text-[#4866F6]"
+                          ? isDark
+                            ? "bg-transparent border border-[#4866F6] text-[#4866F6]"
+                            : "bg-white border border-[#4866F6] text-[#4866F6]"
                           : "bg-[#4866F6] text-white hover:bg-[#3d5cf9]"
                       }`}
                     >
@@ -211,7 +232,7 @@ console.log("Length:", integrations.length);
                     {integration.display_name}
                   </h3>
 
-                  <p className="text-[#7A7A7A] lg:w-3/4 md:w-full text-[16px] mt-2 leading-snug font-sfpro">
+                  <p className={`lg:w-3/4 md:w-full text-[16px] mt-2 leading-snug font-sfpro ${isDark ? "text-[#8D97A9]" : "text-[#7A7A7A]"}`}>
                     {integration.description}
                   </p>
                 </div>
@@ -223,7 +244,11 @@ console.log("Length:", integrations.length);
             <button
               type="button"
               onClick={handleBack}
-              className="bg-white border border-[#4866F6] text-[#4866F6] md:px-20 md:py-3 px-10 py-2 rounded-full transition-all duration-300 text-[16px] font-medium hover:bg-[#5b76f7] hover:text-white cursor-pointer"
+              className={`md:px-20 md:py-3 px-10 py-2 rounded-full transition-all duration-300 text-[16px] font-medium cursor-pointer ${
+                isDark
+                  ? "bg-transparent border border-[#4866F6] text-[#4866F6] hover:bg-[#131E3D]"
+                  : "bg-white border border-[#4866F6] text-[#4866F6] hover:bg-[#5b76f7] hover:text-white"
+              }`}
             >
               Back
             </button>

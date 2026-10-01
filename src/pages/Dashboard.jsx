@@ -22,18 +22,30 @@ import PerformanceInsights from "../components/admin/AnalyticsAndPerformance/Per
 import PerformanceOverview from "../components/admin/AnalyticsAndPerformance/PerformanceOverview";
 import IntentAnalysis from "../components/admin/AnalyticsAndPerformance/IntentAnalysis";
 import AuditLogs from "../components/admin/AnalyticsAndPerformance/AuditLogs";
+
 import TrackApiIntegration from "../components/admin/TrackApi/TrackApiIntegration";
 import UsageTrendAnalytics from "../components/admin/AnalyticsAndPerformance/UsageTrendAnalytics";
 import OptimizationRecommendations from "../components/admin/AnalyticsAndPerformance/OptimizationRecommendations";
 import UserEngagementInsights from "../components/admin/AnalyticsAndPerformance/UserEngagementInsights";
 
+import DataProtectionEncryption from "../components/admin/Security/DataProtectionEncryption";
+import PrivacyConsent from "../components/admin/Security/PrivacyConsent";
+import DataDeletionRequest from "../components/admin/Security/DataDeletionRequest";
+
+
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
 
-export default function Dashboard() {
+export default function Dashboard({ defaultItem }) {
   const [activeItem, setActiveItem] = useState(() => {
-    return sessionStorage.getItem("adminActiveItem") || "dashboard";
+    return defaultItem || sessionStorage.getItem("adminActiveItem") || "privacy_consent";
   });
+
+  useEffect(() => {
+    if (defaultItem) {
+      setActiveItem(defaultItem);
+    }
+  }, [defaultItem]);
 
   useEffect(() => {
     sessionStorage.setItem("adminActiveItem", activeItem);
@@ -69,7 +81,7 @@ export default function Dashboard() {
     navigate("/admin", { replace: true });
   };
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [openMenus, setOpenMenus] = useState({});
+  const [openMenus, setOpenMenus] = useState({ security_compliance: true });
 
   return (
     <div className="h-screen flex  flex-col">
@@ -189,6 +201,23 @@ export default function Dashboard() {
 
           {/* Audit Logs */}
           {activeItem === "audit_logs" && <AuditLogs />}
+
+          {/* Security & Compliance - Data Protection & Encryption */}
+          {activeItem === "data_protection_encryption" && (
+            <DataProtectionEncryption
+              onNavigateAudit={() => setActiveItem("audit_logs")}
+            />
+          )}
+
+          {/* Security & Compliance - Privacy & Consent */}
+          {activeItem === "privacy_consent" && (
+            <PrivacyConsent />
+          )}
+
+          {/* Security & Compliance - Data Deletion Request */}
+          {activeItem === "data_deletion_request" && (
+            <DataDeletionRequest />
+          )}
         </div>
       </div>
       <SessionTimeout

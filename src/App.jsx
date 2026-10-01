@@ -50,7 +50,7 @@ import ExchangeDetails from "./components/userprofile/integrations/details/Excha
 import GmailDetails from "./components/userprofile/integrations/details/GmailDetails";
 import CalendarDetails from "./components/userprofile/integrations/details/CalendarDetails";
 
-// coment
+import DataProtectionPreview from "./pages/DataProtectionPreview";
 
 function App() {
   const [showChat, setShowChat] = useState(false);
@@ -59,6 +59,9 @@ function App() {
       <Routes>
         {/* HOME */}
         <Route path="/" element={<HomePage />} />
+        <Route path="/preview" element={<DataProtectionPreview />} />
+        <Route path="/showcase" element={<DataProtectionPreview />} />
+        <Route path="/data-protection-showcase" element={<DataProtectionPreview />} />
 
         {/* CONVERSATION */}
         <Route path="/conversation" element={<Conversation />} />
@@ -142,6 +145,15 @@ function App() {
                                               <Dashboard />
                                           </ProtectedRoute>} /> */}
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/privacy-consent" element={<Dashboard defaultItem="privacy_consent" />} />
+        <Route path="/privacy" element={<Dashboard defaultItem="privacy_consent" />} />
+        <Route path="/security/privacy-consent" element={<Dashboard defaultItem="privacy_consent" />} />
+        <Route path="/privacy-preview" element={<DataProtectionPreview />} />
+        <Route path="/data-protection" element={<Dashboard defaultItem="data_protection_encryption" />} />
+        <Route path="/security/data-protection" element={<Dashboard defaultItem="data_protection_encryption" />} />
+        <Route path="/data-deletion" element={<Dashboard defaultItem="data_deletion_request" />} />
+        <Route path="/data-deletion-requests" element={<Dashboard defaultItem="data_deletion_request" />} />
+        <Route path="/security/data-deletion" element={<Dashboard defaultItem="data_deletion_request" />} />
 
         <Route path="/" element={<PersonalAssistant />} />
         <Route path="/paymentmethod" element={<PaymentMethod />} />

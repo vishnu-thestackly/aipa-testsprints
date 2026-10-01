@@ -6,6 +6,11 @@
   --font-sans: "Inter", sans-serif;
 }
 
+* {
+  font-variant-ligatures: none;
+  font-feature-settings: "calt" 0, "liga" 0;
+}
+
 /* hidden the scroll bar imp */
 
 .scrollbar-hide::-webkit-scrollbar {

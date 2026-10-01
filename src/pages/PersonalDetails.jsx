@@ -9,9 +9,11 @@ import Flag from "../assets/images/Flag.svg";
 import UploadImage from "../assets/images/UploadImage.svg";
 import { useNavigate } from "react-router-dom";
 import { useOnboarding } from "../context/OnboardingContext";
+import { useTheme } from "../context/ThemeContext";
 import { savePersonalDetails, uploadAvatar,skipOnboarding,  getCountryCodes, } from "../api/authApi";
 
 const PersonalDetails = () => {
+  const { isDark } = useTheme();
   const countryDropdownRef = useRef(null);
   const [showLanguage, setShowLanguage] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
@@ -168,18 +170,24 @@ try {
   const fullNameInputClass = `w-full h-[54px] rounded-[10px] px-4 outline-none transition-colors ${
     fullNameError
       ? "border border-red-500 focus:border-red-500"
-      : "border border-[#D9D9D9] focus:border-[#4866F6]"
+      : isDark
+      ? "bg-[#060C1F] border border-[#586D93] text-white placeholder-[#586D93] focus:border-[#4866F6]"
+      : "bg-white border border-[#D9D9D9] text-[#4A4A4A] focus:border-[#4866F6]"
   }`;
 
-  const mobileInputClass = `w-full h-[54px] rounded-[10px] pl-20 pr-4 outline-none transition-colors ${
+  const mobileInputClass = `flex-1 min-w-0 h-[54px] rounded-[8px] px-3 sm:px-4 outline-none transition-colors ${
     mobileError
-      ? "border border-red-500 focus:border-red-500"
-      : "border border-[#D9D9D9] focus:border-[#4866F6]"
+      ? "border border-red-500"
+      : isDark
+      ? "bg-[#060C1F] border border-[#586D93] text-white placeholder-[#586D93] focus:border-[#4866F6]"
+      : "bg-white border border-[#D9D9D9] text-[#4A4A4A] focus:border-[#4866F6]"
   }`;
 
   const uploadBoxClass = `w-full border-2 border-dashed rounded-[18px] py-[20px] flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${
     imageError
       ? "border-red-500 hover:border-red-500"
+      : isDark
+      ? "border-[#586D93] hover:border-[#4866F6] bg-transparent"
       : "border-[#C8D3FF] hover:border-[#4D6BFE]"
   }`;
 
@@ -212,13 +220,17 @@ const selectedCountry = countries.find(
 );
 
   return (
-    <div className="relative min-h-screen w-full overflow-y-auto overflow-x-hidden p-[20px] scrollbar-none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+    <div className={`relative min-h-screen w-full overflow-y-auto overflow-x-hidden p-[20px] scrollbar-none [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${isDark ? "bg-[#030712]" : ""}`}>
       {/* BACKGROUND IMAGE */}
-      <img
-        src={BackGroundImage}
-        alt="background"
-        className="absolute inset-0 w-full h-full object-cover -z-10"
-      />
+      {isDark ? (
+        <div className="fixed inset-0 bg-[#030712] -z-10" />
+      ) : (
+        <img
+          src={BackGroundImage}
+          alt="background"
+          className="fixed inset-0 w-full h-full object-cover -z-10"
+        />
+      )}
 
       {/* MAIN WRAPPER */}
       <div className="relative z-10">
@@ -229,25 +241,26 @@ const selectedCountry = countries.find(
 
         {/* CARD SECTION */}
         <div
-          className={`w-full bg-white rounded-[40px] min-h-[85vh] border border-[#E7E7E7] shadow-sm px-[clamp(20px,4vw,60px)] py-[clamp(25px,4vw,45px)] transition-all duration-300`}
+          className={`w-full rounded-[40px] min-h-[85vh] shadow-sm px-[clamp(20px,4vw,60px)] py-[clamp(25px,4vw,45px)] transition-all duration-300 ${
+            isDark
+              ? "bg-[#060C1F]"
+              : "bg-white border border-[#E7E7E7]"
+          }`}
         >
           {/* HEADER */}
           <div className="relative flex flex-col items-center justify-center mt-15 md:mt-[40px] lg:mt-0">
-            <p className="text-[#4866F6] text-[clamp(18px,2vw,30px)] font-sfpro ">
+            <p className={`text-[clamp(18px,2vw,30px)] font-sfpro ${isDark ? "text-white" : "text-[#4866F6]"}`}>
               Welcome to your
             </p>
 
-            <h1 className="text-[#4866F6] text-[clamp(32px,4vw,60px)] font-bold font-sfpro text-center leading-tight">
+            <h1 className={`text-[clamp(32px,4vw,60px)] font-bold font-sfpro text-center leading-tight ${isDark ? "text-white" : "text-[#4866F6]"}`}>
               AI Personal Assistant
             </h1>
-
-            
           </div>
 
           <OnboardingStepper currentStep={currentStep} steps={steps} />
 
           {/* IMAGE UPLOAD */}
-
           <div className="w-full flex justify-center mt-[70px]">
             <div className="w-full max-w-[860px]">
               {/* HIDDEN INPUT */}
@@ -279,16 +292,16 @@ const selectedCountry = countries.find(
                   <img
                     src={UploadImage}
                     alt="upload"
-                    className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 mb-4"
+                    className={`w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 mb-4 ${isDark ? "brightness-0 invert opacity-80" : ""}`}
                   />
                 )}
 
-                <p className="text-[#A0A0A0] text-[15px]">
+                <p className={`text-[15px] ${isDark ? "text-[#8D97A9]" : "text-[#A0A0A0]"}`}>
                   Drop your image here or{" "}
                   <span className="text-[#4866F6] font-semibold">Browse</span>
                 </p>
 
-                <p className="text-[#B5B5B5] text-[12px] mt-2">
+                <p className={`text-[12px] mt-2 ${isDark ? "text-[#586D93]" : "text-[#B5B5B5]"}`}>
                   Supports: JPG, JPEG & PNG
                 </p>
               </label>
@@ -303,7 +316,7 @@ const selectedCountry = countries.find(
           <div className="w-full flex flex-col md:flex-row lg:flex-row justify-center gap-6 mt-[45px]">
             {/* FULL NAME */}
             <div className="w-full max-w-[420px]">
-              <label className="block mb-2 text-[15px] font-medium text-[#4A4A4A]">
+              <label className={`block mb-2 text-[15px] font-medium ${isDark ? "text-white" : "text-[#4A4A4A]"}`}>
                 Full Name*
               </label>
 
@@ -323,68 +336,97 @@ const selectedCountry = countries.find(
 
             {/* MOBILE */}
             <div className="w-full max-w-[420px]">
-              <label className="block mb-2 text-[15px] font-medium text-[#4A4A4A]">
+              <label className={`block mb-2 text-[15px] font-medium ${isDark ? "text-white" : "text-[#4A4A4A]"}`}>
                 Mobile Number*
               </label>
 
               <div className="flex gap-2 sm:gap-3">
                 {/* Country Code */}
                 <div ref={countryDropdownRef} className="relative w-[110px] sm:w-[130px] md:w-[160px] flex-shrink-0">
-  <button
-    type="button"
-    onClick={() => setShowCountryDropdown((prev) => !prev)}
-    className="w-full h-[54px] border border-[#D9D9D9] rounded-[8px] flex items-center justify-between px-2 sm:px-3 bg-white"
-  >
-    <div className="flex items-center gap-2 overflow-hidden">
-      {selectedCountry?.flag && (
-        <img
-          src={selectedCountry.flag}
-          alt=""
-          className="w-5 h-4 object-cover flex-shrink-0"
-        />
-      )}
+                  <button
+                    type="button"
+                    onClick={() => setShowCountryDropdown((prev) => !prev)}
+                    className={`w-full h-[54px] rounded-[10px] flex items-center justify-between px-3 sm:px-4 ${
+                      isDark
+                        ? "bg-[#060C1F] border border-[#586D93]"
+                        : "bg-white border border-[#D9D9D9]"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 overflow-hidden">
+                      <img
+                        src={selectedCountry?.flag || Flag}
+                        alt="flag"
+                        className="w-6 h-4 object-cover rounded-[2px] flex-shrink-0"
+                      />
 
-      <span className="text-sm text-[#8D97A9] truncate">
-        {data.countryCode}
-      </span>
-    </div>
+                      <span className={`text-[15px] truncate ${isDark ? "text-white" : "text-[#4A4A4A]"}`}>
+                        {data.countryCode || "+91"}
+                      </span>
+                    </div>
 
-    <ChevronDown
-  size={25}
-  className={`text-[#8D97A9] transition-transform duration-200 ${
-    showCountryDropdown ? "rotate-180" : ""
-  }`}
-/>
-  </button>
+                    <ChevronDown
+                      size={18}
+                      className={`text-[#8D97A9] transition-transform duration-200 shrink-0 ${
+                        showCountryDropdown ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
 
-  {showCountryDropdown && (
-    <div className="absolute left-0 top-[60px] w-full text-[#8D97A9] bg-white border border-[#D9D9D9] rounded-lg shadow-xl z-[9999] max-h-[150px] overflow-y-auto scrollbar-none scrollbar-hide">
-      {countries.map((country) => (
-        <div
-          key={country.code}
-          onClick={() => {
-            updateOnboarding({
-              countryCode: country.dial_code,
-            });
+                  {showCountryDropdown && (
+                    <div className={`absolute left-0 top-[60px] w-full text-[#8D97A9] ${
+                      isDark
+                        ? "bg-[#060C1F] border border-[#586D93]"
+                        : "bg-white border border-[#D9D9D9]"
+                    } rounded-lg shadow-xl z-[9999] max-h-[150px] overflow-y-auto scrollbar-none scrollbar-hide`}>
+                      {countries.length > 0 ? (
+                        countries.map((country) => (
+                          <div
+                            key={country.code}
+                            onClick={() => {
+                              updateOnboarding({
+                                countryCode: country.dial_code,
+                              });
 
-            setShowCountryDropdown(false);
-          }}
-          className="flex items-center gap-2 px-3 py-3 cursor-pointer  hover:bg-gray-100"
-        >
-          <img
-            src={country.flag}
-            alt={country.name}
-            className="w-5 h-4 object-cover flex-shrink-0"
-          />
+                              setShowCountryDropdown(false);
+                            }}
+                            className={`flex items-center gap-2 px-3 py-3 cursor-pointer ${
+                              isDark ? "hover:bg-[#131E3D] text-white" : "hover:bg-gray-100"
+                            }`}
+                          >
+                            <img
+                              src={country.flag || Flag}
+                              alt={country.name}
+                              className="w-5 h-4 object-cover rounded-[2px] flex-shrink-0"
+                            />
 
-          <span className="text-sm">
-            {country.dial_code}
-          </span>
-        </div>
-      ))}
-    </div>
-  )}
-</div>
+                            <span className="text-sm">
+                              {country.dial_code}
+                            </span>
+                          </div>
+                        ))
+                      ) : (
+                        <div
+                          onClick={() => {
+                            updateOnboarding({
+                              countryCode: "+91",
+                            });
+                            setShowCountryDropdown(false);
+                          }}
+                          className={`flex items-center gap-2 px-3 py-3 cursor-pointer ${
+                            isDark ? "hover:bg-[#131E3D] text-white" : "hover:bg-gray-100"
+                          }`}
+                        >
+                          <img
+                            src={Flag}
+                            alt="India"
+                            className="w-5 h-4 object-cover rounded-[2px] flex-shrink-0"
+                          />
+                          <span className="text-sm">+91</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
 
                 {/* Mobile Input */}
                 <input
@@ -394,10 +436,7 @@ const selectedCountry = countries.find(
                   onChange={handleChange}
                   maxLength={10}
                   placeholder="Enter mobile number"
-                  className={`flex-1 min-w-0 h-[54px] rounded-[8px] px-3 sm:px-4 outline-none transition-colors ${mobileError
-                    ? "border border-red-500"
-                    : "border border-[#D9D9D9] focus:border-[#4866F6]"
-                    }`}
+                  className={mobileInputClass}
                 />
               </div>
 
@@ -410,12 +449,12 @@ const selectedCountry = countries.find(
           {/* BUTTON */}
           <div className="w-full flex justify-center mt-[40px] md:mt-[65px] gap-4 md:gap-10">
             <button
-                  type="button"
-                  onClick={handleContinue}
-                  disabled={loading}
-                  className="bg-[#4866F6] hover:bg-[#3d5cf4] transition-all duration-300 text-white md:px-16 md:py-3 px-7 py-2 rounded-full text-[16px] font-medium cursor-pointer disabled:opacity-50"
-                >
-                  {loading ? "Saving..." : "save & Continue"}
+              type="button"
+              onClick={handleContinue}
+              disabled={loading}
+              className="bg-[#4866F6] hover:bg-[#3d5cf4] transition-all duration-300 text-white md:px-16 md:py-3 px-7 py-2 rounded-full text-[16px] font-medium cursor-pointer disabled:opacity-50"
+            >
+              {loading ? "Saving..." : "Save & Continue"}
             </button>
           </div>
         </div>
