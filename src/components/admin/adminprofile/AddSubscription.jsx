@@ -117,31 +117,43 @@
 //         }
 
 
-//         const newPlan = {
-//             name: planName,
-//             description: planDescription,
-//             amount,
-//             currency,
-//             period: timePeriod,
-//             status,
-//             discount,
-//             features: features
-//                 .filter((item) => item.text.trim() && item.active)
-//                 .map((item) => item.text),
+//         // const newPlan = {
+//         //     name: planName,
+//         //     description: planDescription,
+//         //     amount,
+//         //     currency,
+//         //     period: timePeriod,
+//         //     status,
+//         //     discount,
+//         //     features: features
+//         //         .filter((item) => item.text.trim() && item.active)
+//         //         .map((item) => item.text),
 
-//         };
+//         // };
 
 
-//         addPlan(newPlan);
-//         setPlanName("");
-//         setPlanDescription("");
-//         setAmount("");
-//         setDiscount("");
+//         // addPlan(newPlan);
+//         // setPlanName("");
+//         // setPlanDescription("");
+//         // setAmount("");
+//         // setDiscount("");
 
-//         setCurrency("Select Currency");
-//         setTimePeriod("Select Time Period");
-//         setStatus("Select Status");
+//         // setCurrency("Select Currency");
+//         // setTimePeriod("Select Time Period");
+//         // setStatus("Select Status");
 
+// const newPlan = {
+//   name: planName,
+//   description: planDescription,
+//   amount,
+//   currency,
+//   period: timePeriod,
+//   status,
+//   discount,
+//   features: features.filter((item) => item.text.trim()),
+// };
+
+// addPlan(newPlan);
 
 //         setFeatures([
 //             { text: "", active: false },
@@ -152,7 +164,7 @@
 //         ]);
 
 
-//         setActiveItem("subscriptionplan");
+//        setActiveItem("subscriptionplan");
 
 //     };
 
@@ -165,7 +177,7 @@
 
 //                     {/* Arrow & Name */}
 //                     <div className="flex items-center gap-2 text-sm md:text-base font-medium text-gray-800">
-//                         <div className="bg-[#4866F6] w-8 h-8 rounded-full flex items-center justify-center">
+//                         <div className="bg-[#4866F6] w-8 h-8 rounded-full flex items-center justify-center cursor-pointer">
 //                             <img onClick={() => setActiveItem("subscriptionplan")} src={Arrow} alt="Arrow" className="w-4 h-3" />
 //                         </div>
 
@@ -491,7 +503,7 @@
 //                                                     alert("You can add a maximum of 10 features.");
 //                                                 }
 //                                             }}
-//                                             className="w-8 h-8 bg-[#4866F6] text-white rounded-lg hover:bg-[#3D54C9]"
+//                                             className="w-8 h-8 bg-[#4866F6] text-white rounded-lg hover:bg-[#3D54C9] cursor-pointer"
 //                                         >
 //                                             +
 //                                         </button>
@@ -504,14 +516,14 @@
 //                     <div className="flex justify-center items-center gap-4 mt-8">
 //                         <button
 //                             onClick={() => setActiveItem("subscriptionplan")}
-//                             className="w-1/2 sm:w-40 border border-[#4866F6] bg-white text-[#4866F6] py-3 rounded-[25px] transition-colors duration-300"
+//                             className="w-1/2 sm:w-40 border border-[#4866F6] bg-white text-[#4866F6] py-3 rounded-[25px] transition-colors duration-300 cursor-pointer"
 //                         >
 //                             Cancel
 //                         </button>
 
 //                         <button
 //                             onClick={handleSave}
-//                             className="w-1/2 sm:w-40 bg-[#4866F6] text-white py-3 rounded-[25px] transition-colors duration-300 hover:bg-[#3D54C9]"
+//                             className="w-1/2 sm:w-40 bg-[#4866F6] text-white py-3 rounded-[25px] transition-colors duration-300 hover:bg-[#3D54C9] cursor-pointer"
 //                         >
 //                             Save
 //                         </button>
@@ -527,14 +539,17 @@
  
 
 
+
+
 import React from 'react'
 import { useState, useEffect, useRef } from "react";
 import Arrow from "../../../assets/images/Arrow.png"
 import DropDown from "../../../assets/images/DropDown.svg"
 import { useSubscription } from '../../../context/SubscriptionContext';
+import { useTheme } from  "../../../context/ThemeContext"
 
 const AddSubscription = ({ setActiveItem }) => {
-
+    const { isDark } = useTheme();
     const { addPlan } = useSubscription();
 
     const [currencyOpen, setCurrencyOpen] = useState(false);
@@ -572,12 +587,11 @@ const AddSubscription = ({ setActiveItem }) => {
     ]);
 
     // styles
-    const label_Style = "font-sf-pro text-[#3D3D3D] text-[18px] font-normal leading-[100%] tracking-[0em]";
+    const label_Style = `font-sf-pro  text-[18px] font-normal leading-[100%] tracking-[0em] ${isDark ? "text-[#FFFFFF]" : "text-[#3D3D3D]"} `;
     // const input_Style = "w-full py-3 px-4 border border-[#D9D9D9] text-[#8D97A9] rounded-[10px] px-4 outline-none focus:border-[#4866F6] mt-2";
-    const input_Style =
-        "w-full py-3 px-4 border border-[#D9D9D9] text-[#8D97A9] rounded-[10px] outline-none focus:border-[#4866F6] mt-2";
-    const button_Style = "w-full mt-2 py-3 px-4 border border-[#D9D9D9] rounded-[10px] flex items-center justify-between";
-    const dropDown_Style = "absolute z-50 w-full mt-1 bg-white rounded-[10px] shadow-md text-[#585D93]";
+    const input_Style = ` w-full py-3 px-4 border  focus:border-[#4866F6]  rounded-[10px] outline-none  mt-2 ${isDark ? "border-[#586D93]  text-[#8D97A9] placeholder:text-[#8D97A9] " : " border-[#D9D9D9] text-[#8D97A9] placeholder:text-[#8D97A9] "} `;
+    const button_Style = `w-full mt-2 py-3 px-4 border rounded-[10px] flex items-center justify-between ${isDark ? " border-[#586D93] " : " border-[#D9D9D9]"}`;
+    const dropDown_Style = `absolute z-50 w-full mt-1  rounded-[10px]  shadow-md ${isDark ? "bg-[#060D1B] border border-[#586D93] text-[#8D97A9] " : "bg-white text-[#585D93] "}`;
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -698,8 +712,8 @@ addPlan(newPlan);
     };
 
     return (
-        <div className='h-full overflow-y-auto overflow-x-visible px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide'>
-            <div className='w-full flex  flex-col gap-4 md:gap-5 bg-white rounded-[20px] md:rounded-[25px] border-b border-gray-200 shadow-[0px_1px_4px_0px_#00000040] '>
+            <div className={`h-full overflow-y-auto overflow-x-visible px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide ${ isDark ? "bg-[#010718]" : "bg-[#f5f6f8]" }`}>
+            <div className={`w-full flex  flex-col gap-4 md:gap-5  rounded-[20px] md:rounded-[25px] border-b  shadow-[0px_1px_4px_0px_#00000040] ${ isDark ? "bg-[#060D1B] border-[#060D1B] " : "bg-[#FFFFFF] border-gray-200"} `}>
 
                 {/* subscription plan */}
                 <div className='w-full flex flex-col gap-4 md:gap-5 p-4 md:p-5 lg:p-7 '>
@@ -710,11 +724,11 @@ addPlan(newPlan);
                             <img onClick={() => setActiveItem("subscriptionplan")} src={Arrow} alt="Arrow" className="w-4 h-3" />
                         </div>
 
-                        <span className="text-[#3D3D3D]">Add Subscription Plan</span>
+                        <span className={` ${isDark ? "text-[#FFFFFF]" : "text-[#3D3D3D]"}`}>Add Subscription Plan</span>
                     </div>
 
                     { /* Horizontal Line */}
-                    <div className="w-full border-t border-gray-300"></div>
+                    <div className={`w-full border-t  ${isDark ? "border-[#586D93]" : "border-gray-300"} `}></div>
 
                     {/* Form Fields */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 md:mt-5">
@@ -836,7 +850,7 @@ addPlan(newPlan);
                                                 setCurrency(item);
                                                 setCurrencyOpen(false);
                                             }}
-                                            className="px-4 py-3 cursor-pointer hover:bg-gray-100"
+                                            className={`px-4 py-3 cursor-pointer ${ isDark ? "hover:bg-[#171F31] " : "hover:bg-gray-100 "}`}
                                         >
                                             {item}
                                         </div>
@@ -871,8 +885,8 @@ addPlan(newPlan);
                                                 setTimePeriod(item);
                                                 setTimeOpen(false);
                                             }}
-                                            className="px-4 py-3 cursor-pointer hover:bg-gray-100"
-                                        >
+                                            className={`px-4 py-3 cursor-pointer ${ isDark ? "hover:bg-[#171F31] " : "hover:bg-gray-100 "}`}
+                                            >
                                             {item}
                                         </div>
                                     ))}
@@ -905,7 +919,7 @@ addPlan(newPlan);
                                                 setStatus(item);
                                                 setStatusOpen(false);
                                             }}
-                                            className="px-4 py-3 cursor-pointer hover:bg-gray-100"
+                                             className={`px-4 py-3 cursor-pointer ${ isDark ? "hover:bg-[#171F31] " : "hover:bg-gray-100 "}`}
                                         >
                                             {item}
                                         </div>
@@ -972,8 +986,11 @@ addPlan(newPlan);
                                                 handleFeatureChange(index, e.target.value)
                                             }
                                             placeholder="Enter Features"
-                                            className={`w-full py-3 px-4 pr-12 border border-[#D9D9D9] rounded-[10px] outline-none focus:border-[#4866F6] placeholder:text-[#8D97A9] ${feature.active ? "text-black" : "text-[#8D97A9]"
-                                                }`}
+                                        className={`w-full py-3 px-4 pr-12 border rounded-[10px] outline-none focus:border-[#4866F6] placeholder:text-[#8D97A9] ${
+                                        isDark
+                                        ? "border-[#586D93] text-[#8D97A9]"
+                                        : "border-[#D9D9D9] text-[#8D97A9]"
+                                        }`}
                                         />
 
                                         {feature.text && (
@@ -993,7 +1010,7 @@ addPlan(newPlan);
                                 {/* Toggle */}
                                 <div className="flex items-center justify-between mt-5">
                                     <div className="flex items-center gap-3">
-                                        <span className={`text-sm ${feature.active ? "text-[#586D93]" : "text-black"}`}>
+                                        <span className={`text-sm ${feature.active ? isDark ? "text-[#586D93]" :"text-[#586D93]" : isDark ? "text-[#586D93]" : "text-black" } `}>
                                             Inactive
                                         </span>
 
@@ -1009,12 +1026,12 @@ addPlan(newPlan);
                                                 className="sr-only peer"
                                             />
 
-                                            <div className="w-11 h-6 bg-[#D9D9D9] rounded-full peer-checked:bg-[#4866F6] transition-colors duration-300"></div>
+                                           <div className={`w-11 h-6 rounded-full transition-colors duration-300 ${ isDark ? "bg-[#34445E] peer-checked:bg-[#4866F6]"  : "bg-[#D9D9D9] peer-checked:bg-[#4866F6]" }`}></div>
 
-                                            <div className="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></div>
+                                            <div className="absolute left-0.5 top-0.5 w-5 h-5 bg-white dark:bg-black rounded-full transition-transform duration-300 peer-checked:translate-x-5"></div>
                                         </label>
 
-                                        <span className={`text-sm ${feature.active ? "text-black" : "text-[#586D93]"}`}>
+                                        <span className={`text-sm ${feature.active ? isDark ? "text-[#586D93]" : "text-black" :  "text-[#586D93]"}`}>
                                             Active
                                         </span>
                                     </div>
@@ -1045,7 +1062,7 @@ addPlan(newPlan);
                     <div className="flex justify-center items-center gap-4 mt-8">
                         <button
                             onClick={() => setActiveItem("subscriptionplan")}
-                            className="w-1/2 sm:w-40 border border-[#4866F6] bg-white text-[#4866F6] py-3 rounded-[25px] transition-colors duration-300 cursor-pointer"
+                           className={`w-1/2 sm:w-40 border border-[#4866F6] py-3 rounded-[25px] transition-colors duration-300 cursor-pointer ${ isDark ? "bg-[#060D1B] text-[#4866F6]" : "bg-white text-[#4866F6]"}`}
                         >
                             Cancel
                         </button>
@@ -1065,4 +1082,8 @@ addPlan(newPlan);
 }
 
 export default AddSubscription;
+
+
+
+
  
