@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import profileImg from "../../assets/images/profile.png";
+import profileImg from "../../assets/images/DefaultProfile.png";
 import blueBg from "../../assets/images/blue-image.png";
 import editIcon from "../../assets/images/edit.svg";
 import nameIcon from "../../assets/images/name.svg";
@@ -219,7 +219,7 @@ const hasTransaction = profile?.has_transaction;
                     : profileImg
                 }
                 alt="Profile"
-                className="w-[80px] h-[80px] rounded-full border-[5px] border-white mt-[-40px]"
+                className="w-[80px] h-[80px] rounded-full object-cover border-[5px] border-white mt-[-40px]"
               />
 
             </div>

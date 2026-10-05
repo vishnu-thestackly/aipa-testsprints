@@ -202,17 +202,39 @@ export default function NewChat({ languageOpen }) {
   // Quick action click
   // ---------------------------------------------------------------------------
 
-  const handleQuickActionClick = (action) => {
-    setActionCards((prevCards) => {
-      const maxCards = isDesktop ? 3 : 4;
-
-      const cardsWithoutDuplicate = prevCards.filter(
-        (card) => card.type !== action.type,
-      );
-
-      return [action, ...cardsWithoutDuplicate].slice(0, maxCards);
-    });
+  const handleQuickActionClick = async (action) => {
+  const quickActionMessages = {
+    email: "Draft Email",
+    task: "Create Task",
+    meeting: "Schedule Meeting",
+    reminder: "Create Reminder",
   };
+
+  const message = quickActionMessages[action.type];
+
+  if (!message) return;
+
+  // Replace whatever is currently in the input
+  setInput(message);
+  setError("");
+
+  try {
+    const response = await sendChatMessage({
+      conversation_id: 0,
+      message,
+    });
+
+    navigate(`/user/chat/${response.conversation_id}`, {
+      state: {
+        firstMessage: message,
+        aiReply: response.reply,
+      },
+    });
+  } catch (error) {
+    console.error("Failed to start conversation:", error);
+    setError("Failed to send your message. Please try again.");
+  }
+};
 
   // ---------------------------------------------------------------------------
   // Send button state
@@ -273,6 +295,7 @@ export default function NewChat({ languageOpen }) {
           </div>
 
           {/* Message composer */}
+          
           <div className="mt-12 w-full max-w-[780px]">
 
             {/* Validation Error */}
@@ -282,85 +305,73 @@ export default function NewChat({ languageOpen }) {
               </div>
             )}
 
-            <div className="flex items-end gap-2">
+            <div className="flex items-end gap-1.5 sm:gap-2">
 
-              {/* File upload button */}
-              <button
-                type="button"
-                className="flex h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer"
-                aria-label="Upload file"
-              >
-                <img
-                  src={FileUpload}
-                  alt=""
-                  className="h-6 w-6"
-                />
-              </button>
+            {/* File upload button */}
+            <button
+              type="button"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer sm:h-13 sm:w-13"
+              aria-label="Upload file"
+            >
+              <img
+                src={FileUpload}
+                alt=""
+                className="h-5 w-5 sm:h-6 sm:w-6"
+              />
+            </button>
 
-              {/* Input box */}
-              <div
-                className={`flex min-h-13 min-w-0 flex-1 items-end rounded-lg border px-3 py-2 ${
-                  error
-                    ? "border-red-500 bg-red-50"
-                    : "border-[#4866F6] bg-[#EEF2FF]"
-                }`}
-              >
-                <textarea
-                  ref={inputRef}
-                  value={input}
-                  onChange={handleInputChange}
-                  onKeyDown={handleKeyDown}
-                  rows={1}
-                  placeholder="Type your message here...."
-                  className="min-h-[29px] min-w-0 flex-1 resize-none overflow-x-hidden scrollbar-hide bg-transparent text-[12px] sm:text-[14px] leading-6 text-[#2D2D2D] outline-none placeholder:text-[#2D2D2D]"
-                />
-
-                {/* Mobile audio */}
-                <button
-                  type="button"
-                  className="ml-2 flex shrink-0 items-center justify-center cursor-pointer md:hidden"
-                  aria-label="Record audio"
-                >
-                  <img
-                    src={Audio}
-                    alt=""
-                    className="h-6.5 w-6.5"
-                  />
-                </button>
-              </div>
-
-              {/* Audio button — tablet & desktop only */}
-              <button
-                type="button"
-                className="hidden h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer md:flex"
-                aria-label="Record audio"
-              >
-                <img
-                  src={Audio}
-                  alt=""
-                  className="h-6.5 w-6.5"
-                />
-              </button>
-
-              {/* Send button */}
-              <button
-                type="button"
-                onClick={handleStartConversation}
-                disabled={isSendDisabled}
-                className={`flex h-13 w-13 shrink-0 items-center justify-center rounded-lg transition ${
-                  isSendDisabled
-                    ? "cursor-not-allowed bg-gray-300"
-                    : "cursor-pointer bg-[#4866F6]"
-                }`}
-                aria-label="Send message"
-              >
-                <img
-                  src={EnterFrame}
-                  alt=""
-                  className="h-6 w-6"
-                />
-              </button>
+            {/* Input box */}
+            <div
+              className={`flex min-h-10 min-w-0 flex-1 items-end rounded-lg border px-2.5 py-1.5 sm:min-h-13 sm:px-3 sm:py-2 ${
+                error
+                  ? "border-red-500 bg-red-50"
+                  : "border-[#4866F6] bg-[#EEF2FF]"
+              }`}
+            >
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                rows={1}
+                placeholder="Type your message here...."
+                className="min-h-[26px] min-w-0 flex-1 resize-none overflow-x-hidden scrollbar-hide bg-transparent text-[11px] leading-5 text-[#2D2D2D] outline-none placeholder:text-[#2D2D2D] sm:min-h-[29px] sm:text-[14px] sm:leading-6"
+              />
             </div>
+
+            {/* Mic button */}
+            <button
+              type="button"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer sm:h-13 sm:w-13"
+              aria-label="Record audio"
+            >
+              <img
+                src={Audio}
+                alt=""
+                className="h-5 w-5 sm:h-6.5 sm:w-6.5"
+              />
+            </button>
+
+            {/* Send button */}
+            <button
+              type="button"
+              onClick={handleStartConversation}
+              disabled={isSendDisabled}
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition sm:h-13 sm:w-13 ${
+                isSendDisabled
+                  ? "cursor-not-allowed bg-gray-300"
+                  : "cursor-pointer bg-[#4866F6]"
+              }`}
+              aria-label="Send message"
+            >
+              <img
+                src={EnterFrame}
+                alt=""
+                className="h-5 w-5 sm:h-6 sm:w-6"
+              />
+            </button>
+
+          </div>
 
             {/* Character counter */}
             <div className="mt-1 flex justify-end">

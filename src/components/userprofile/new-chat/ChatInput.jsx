@@ -19,7 +19,10 @@ export default function ChatInput({
 
   const [error, setError] = useState("");
 
+  // ---------------------------------------------------------------------------
   // Dynamically increase textarea height
+  // ---------------------------------------------------------------------------
+
   const adjustInputHeight = () => {
     const textarea = inputRef.current;
 
@@ -38,10 +41,17 @@ export default function ChatInput({
     }
   };
 
+  // ---------------------------------------------------------------------------
   // Adjust height whenever input changes
+  // ---------------------------------------------------------------------------
+
   useEffect(() => {
     adjustInputHeight();
   }, [input]);
+
+  // ---------------------------------------------------------------------------
+  // Handle input change
+  // ---------------------------------------------------------------------------
 
   const handleInputChange = (e) => {
     const value = e.target.value;
@@ -54,6 +64,10 @@ export default function ChatInput({
       setError("");
     }
   };
+
+  // ---------------------------------------------------------------------------
+  // Handle send
+  // ---------------------------------------------------------------------------
 
   const handleSend = () => {
     if (input.length > MAX_MESSAGE_LENGTH) {
@@ -68,6 +82,10 @@ export default function ChatInput({
     setError("");
     onSend();
   };
+
+  // ---------------------------------------------------------------------------
+  // Keyboard handling
+  // ---------------------------------------------------------------------------
 
   const handleKeyDown = (e) => {
     // Enter sends the message
@@ -92,7 +110,7 @@ export default function ChatInput({
     input.length > MAX_MESSAGE_LENGTH || !input.trim();
 
   return (
-    <div className="shrink-0 px-2 sm:px-4 md:px-6 lg:px-8">
+    <div className="shrink-0 px-1.5 sm:px-4 md:px-6 lg:px-8">
 
       {/* Validation Error */}
       {error && (
@@ -101,19 +119,34 @@ export default function ChatInput({
         </div>
       )}
 
-      <div className="flex items-end gap-2">
+      {/* ----------------------------------------------------------------- */}
+      {/* Message Composer                                                 */}
+      {/* ----------------------------------------------------------------- */}
 
-        {/* Upload */}
+      <div className="flex items-end gap-1.5 sm:gap-2">
+
+        {/* --------------------------------------------------------------- */}
+        {/* Upload Button                                                   */}
+        {/* --------------------------------------------------------------- */}
+
         <button
           type="button"
-          className="flex h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer sm:h-13 sm:w-13"
+          aria-label="Upload file"
         >
-          <img src={FileUpload} alt="" className="h-6 w-6" />
+          <img
+            src={FileUpload}
+            alt=""
+            className="h-5 w-5 sm:h-6 sm:w-6"
+          />
         </button>
 
-        {/* Input Container */}
+        {/* --------------------------------------------------------------- */}
+        {/* Input Container                                                 */}
+        {/* --------------------------------------------------------------- */}
+
         <div
-          className={`flex min-h-13 min-w-0 flex-1 items-end rounded-lg border px-3 py-2 ${
+          className={`flex min-h-10 min-w-0 flex-1 items-end rounded-lg border px-2.5 py-1.5 sm:min-h-13 sm:px-3 sm:py-2 ${
             error
               ? "border-red-500 bg-red-50"
               : "border-[#4866F6] bg-[#EEF2FF]"
@@ -130,42 +163,53 @@ export default function ChatInput({
                 ? "Edit your message here...."
                 : "Type your message here...."
             }
-            className="min-h-[29px] min-w-0 flex-1 resize-none overflow-x-hidden scrollbar-hide bg-transparent text-[12px] sm:text-[14px] leading-6 text-[#2D2D2D] outline-none placeholder:text-[#2D2D2D]"
+            className="min-h-[26px] min-w-0 flex-1 resize-none overflow-x-hidden scrollbar-hide bg-transparent text-[11px] leading-5 text-[#2D2D2D] outline-none placeholder:text-[#2D2D2D] sm:min-h-[29px] sm:text-[14px] sm:leading-6"
           />
-
-          {/* Mobile Audio */}
-          <button
-            type="button"
-            className="ml-2 flex shrink-0 items-center justify-center md:hidden cursor-pointer"
-          >
-            <img src={Audio} alt="" className="h-6.5 w-6.5" />
-          </button>
         </div>
 
-        {/* Desktop Audio */}
+        {/* --------------------------------------------------------------- */}
+        {/* Mic Button                                                       */}
+        {/* --------------------------------------------------------------- */}
+
         <button
           type="button"
-          className="hidden h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer md:flex"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer sm:h-13 sm:w-13"
+          aria-label="Record audio"
         >
-          <img src={Audio} alt="" className="h-6.5 w-6.5" />
+          <img
+            src={Audio}
+            alt=""
+            className="h-5 w-5 sm:h-6 sm:w-6"
+          />
         </button>
 
-        {/* Send */}
+        {/* --------------------------------------------------------------- */}
+        {/* Send Button                                                      */}
+        {/* --------------------------------------------------------------- */}
+
         <button
           type="button"
           onClick={handleSend}
           disabled={isSendDisabled}
-          className={`flex h-13 w-13 shrink-0 items-center justify-center rounded-lg transition ${
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition sm:h-13 sm:w-13 ${
             isSendDisabled
               ? "cursor-not-allowed bg-gray-300"
               : "cursor-pointer bg-[#4866F6]"
           }`}
+          aria-label="Send message"
         >
-          <img src={EnterFrame} alt="" className="h-5 w-5" />
+          <img
+            src={EnterFrame}
+            alt=""
+            className="h-5 w-5 sm:h-6 sm:w-6"
+          />
         </button>
       </div>
 
-      {/* Character Counter */}
+      {/* ----------------------------------------------------------------- */}
+      {/* Character Counter                                                 */}
+      {/* ----------------------------------------------------------------- */}
+
       <div className="mt-1 flex justify-end">
         <span
           className={`text-xs ${
