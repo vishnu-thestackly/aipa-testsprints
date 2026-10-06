@@ -1644,6 +1644,29 @@ export const getSubscriptionPlans = async () => {
 };
 
 
+// ================= ADD SUBSCRIPTION PLAN =================
+
+export const addSubscriptionPlan = async (planData) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.post(
+      "/api/v1/admin-management/subscriptions/plans",
+      planData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Failed to add subscription plan";
+  }
+};
+
+
 
 // ================= UPDATE SUBSCRIPTION PLAN =================
 
@@ -1668,6 +1691,29 @@ export const updateSubscriptionPlan = async (planId, payload) => {
   }
 };
 
+
+
+// ================= DELETE SUBSCRIPTION PLAN =================
+
+export const deleteSubscriptionPlan = async (planId) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await API.delete(
+      `/api/v1/admin-management/subscriptions/plans/${planId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Delete Subscription Plan Error:", error.response?.data);
+    throw error;
+  }
+};
 
 
 // ================= GET CHAT CONVERSATIONS =================
@@ -2263,4 +2309,6 @@ export const exchangeGoogleIntegrationCode = async (
     );
   }
 };
+
+
 

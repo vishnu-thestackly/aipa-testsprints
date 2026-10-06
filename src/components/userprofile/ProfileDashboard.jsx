@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import profileImg from "../../assets/images/DefaultProfile.png";
+import profileImg from "../../assets/images/Defaultprofile.png";
 import blueBg from "../../assets/images/blue-image.png";
 import editIcon from "../../assets/images/edit.svg";
 import nameIcon from "../../assets/images/name.svg";

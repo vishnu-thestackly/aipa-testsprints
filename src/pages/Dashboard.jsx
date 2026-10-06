@@ -64,6 +64,9 @@ export default function Dashboard({ defaultItem }) {
 
   const navigate = useNavigate();
   const [showSessionTimeout, setShowSessionTimeout] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [successType, setSuccessType] = useState("success");
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSessionTimeout = useCallback(() => {
     setShowSessionTimeout(true);
@@ -82,6 +85,25 @@ export default function Dashboard({ defaultItem }) {
   };
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openMenus, setOpenMenus] = useState({ security_compliance: true });
+  
+// color toast
+  const handleSuccessMessage = (message, type = "success") => {
+  setSuccessMessage(message);
+  setSuccessType(type);
+  setShowSuccess(false);
+
+  setTimeout(() => {
+    setShowSuccess(true);
+  }, 10);
+
+  setTimeout(() => {
+    setShowSuccess(false);
+
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 200);
+  }, 2000);
+};
 
   return (
     <div className="h-screen flex  flex-col">
@@ -173,17 +195,32 @@ export default function Dashboard({ defaultItem }) {
             />
           )}
 
-          {activeItem === "subscriptionplan" && (
-            <SubscriptionPlan setActiveItem={setActiveItem} />
-          )}
+         {activeItem === "subscriptionplan" && (
+  <SubscriptionPlan
+    setActiveItem={setActiveItem}
+    onPlanDeleted={() =>
+      handleSuccessMessage("Plan deleted successfully")
+    }
+  />
+)}
 
-          {activeItem === "addSubscription" && (
-            <AddSubscription setActiveItem={setActiveItem} />
-          )}
+{activeItem === "addSubscription" && (
+  <AddSubscription
+    setActiveItem={setActiveItem}
+    onPlanAdded={() =>
+      handleSuccessMessage("New plan added successfully")
+    }
+  />
+)}
 
-          {activeItem === "editSubscription" && (
-            <EditSubscription setActiveItem={setActiveItem} />
-          )}
+{activeItem === "editSubscription" && (
+  <EditSubscription
+    setActiveItem={setActiveItem}
+    onPlanUpdated={() =>
+      handleSuccessMessage("Plan updated successfully")
+    }
+  />
+)}
           {activeItem === "profile" && <AdminProfile />}
 
           {/* Analytics & Performance */}
@@ -220,6 +257,18 @@ export default function Dashboard({ defaultItem }) {
           )}
         </div>
       </div>
+
+      {showSuccess && (
+  <div
+    className={`fixed top-5 right-5 z-[9999] text-white px-5 py-3 rounded-lg shadow-lg ${
+      successType === "delete"
+        ? "bg-red-500"
+        : "bg-green-500"
+    }`}
+  >
+    {successMessage}
+  </div>
+)}
       <SessionTimeout
         open={showSessionTimeout}
         onClose={handleLogout}
