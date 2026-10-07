@@ -27,19 +27,19 @@ export default function UserProfile() {
     const menuKey =
       path.includes("/new-chat") ? "newchat" :
         path.includes("/ai-usage") ? "aiUsage" :
-          path.includes("/tasks") ? "tasks" :
+          path.includes("/tasks") || path.includes("/reminder") ? "tasks" :
             path.includes("/integrations") ? "integrations" :
                     path.includes("/settings/preferences") ? "preferenceSetting" :
                       path.includes("/settings/ai-intelligence") ? "aiIntelligence" :
                         path.includes("/settings/security") ? "security" :
-                          path.includes("/settings/notifications") ? "notifications" :
+                          path.includes("/settings/notifications") || path.includes("/settings/notification-settings") || path.includes("/notification") ? "notifications" :
                             "profileDashboard";
 
     setActiveItem(menuKey);
     if (path.includes("/settings/preferences")) setProfilePage("preferenceSetting");
     if (path.includes("/settings/ai-intelligence")) setProfilePage("aiIntelligence");
     if (path.includes("/settings/security")) setProfilePage("security");
-    if (path.includes("/settings/notifications")) setProfilePage("notifications");
+    if (path.includes("/settings/notifications") || path.includes("/settings/notification-settings") || path.includes("/notification")) setProfilePage("notifications");
     if (path.endsWith("/profile")) setProfilePage("dashboard");
   }, [location.pathname]);
 

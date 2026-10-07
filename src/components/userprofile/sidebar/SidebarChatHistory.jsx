@@ -394,7 +394,9 @@ export default function SidebarChatHistory() {
           Chat History
         </span>
          <button
-          className={`transition-colors duration-200 focus:outline-none cursor-pointer ${
+          type="button"
+          aria-label="Search chat history"
+          className={`transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] rounded-md cursor-pointer ${
             isDark
               ? "text-[#586D93] hover:text-[#4866F6]"
               : "text-[#586D93] hover:text-[#4866F6]"
@@ -432,7 +434,8 @@ export default function SidebarChatHistory() {
             location.pathname === `/user/chat/${chat.conversation_id}`;
 
           return (
-            <div
+            <button
+              type="button"
               key={chat.conversation_id}
               onClick={() =>
                 navigate(`/user/chat/${chat.conversation_id}`, {
@@ -445,15 +448,17 @@ export default function SidebarChatHistory() {
                 height: CHAT_ITEM_HEIGHT,
                 minHeight: CHAT_ITEM_HEIGHT,
               }}
-              className={`w-full flex items-center text-left text-[14px] leading-none cursor-pointer rounded-lg px-[10px] transition-all duration-200 hover:bg-[#4866F6] hover:text-[#ffffff] truncate shrink-0 ${
-                 isDark
-                   ? "text-[#A8B3C7]"
+              className={`w-full flex items-center text-left text-[14px] leading-none cursor-pointer rounded-lg px-[10px] transition-all duration-200 hover:bg-[#4866F6] hover:text-[#ffffff] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] truncate shrink-0 ${
+                isActive
+                  ? "bg-[#4866F6] text-white"
+                  : isDark
+                  ? "text-[#A8B3C7]"
                   : "text-[#586D93]"
-             }`}  
-             title={chat.title}
+              }`}
+              title={chat.title}
             >
-              {chat.title}
-            </div>
+              <span className="truncate">{chat.title}</span>
+            </button>
           );
         })}
       </div>

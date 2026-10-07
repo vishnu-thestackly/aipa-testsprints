@@ -136,7 +136,8 @@ export default function Sidebar({
 
         <div className="w-full flex justify-center mt-auto">
           <button
-            className="flex mt-8 w-[50px] h-[44px] rounded-[10px] border border-[#FB0000] bg-[#FF000033] items-center justify-center cursor-pointer hover:bg-[#FF000044] transition-all"
+            type="button"
+            className="flex mt-8 w-[50px] h-[44px] rounded-[10px] border border-[#FB0000] bg-[#FF000033] items-center justify-center cursor-pointer hover:bg-[#FF000044] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FB0000] focus-visible:ring-offset-2"
             onClick={onLogout}
           >
             <img
@@ -172,7 +173,9 @@ export default function Sidebar({
           </div>
 
           <div className="w-full flex mt-6 justify-center">
-            <button className="flex w-[292px] h-[44px] items-center justify-center gap-[10px] rounded-[10px] border border-[#FB0000] bg-[#FF000033] font-medium text-[18px] text-[#FF0000] cursor-pointer hover:bg-[#FF000044] transition-all "
+            <button
+              type="button"
+              className="flex w-[292px] h-[44px] items-center justify-center gap-[10px] rounded-[10px] border border-[#FB0000] bg-[#FF000033] font-medium text-[18px] text-[#FF0000] cursor-pointer hover:bg-[#FF000044] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FB0000] focus-visible:ring-offset-2"
               onClick={onLogout}
             >
               <span>Logout</span>

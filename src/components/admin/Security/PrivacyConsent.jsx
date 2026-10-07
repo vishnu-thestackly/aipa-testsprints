@@ -167,7 +167,7 @@ export default function PrivacyConsent() {
             <button
               type="button"
               onClick={() => setActiveTab("privacy_gdpr")}
-              className={`min-w-full shrink-0 snap-center py-2.5 px-4 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer text-center whitespace-nowrap ${
+              className={`min-w-full shrink-0 snap-center py-2.5 px-4 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer text-center whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                 activeTab === "privacy_gdpr"
                   ? "bg-[#4866F6] text-white shadow-sm shadow-[#4866F6]/25"
                   : "text-[#586D93] hover:text-[#1E293B]"
@@ -178,7 +178,7 @@ export default function PrivacyConsent() {
             <button
               type="button"
               onClick={() => setActiveTab("ai_memory")}
-              className={`min-w-full shrink-0 snap-center py-2.5 px-4 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer text-center whitespace-nowrap ${
+              className={`min-w-full shrink-0 snap-center py-2.5 px-4 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer text-center whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                 activeTab === "ai_memory"
                   ? "bg-[#4866F6] text-white shadow-sm shadow-[#4866F6]/25"
                   : "text-[#586D93] hover:text-[#1E293B]"
@@ -195,7 +195,7 @@ export default function PrivacyConsent() {
             <button
               type="button"
               onClick={() => setActiveTab("privacy_gdpr")}
-              className={`flex-1 py-1.5 sm:py-2 px-3 sm:px-6 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer text-center whitespace-nowrap ${
+              className={`flex-1 py-1.5 sm:py-2 px-3 sm:px-6 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer text-center whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                 activeTab === "privacy_gdpr"
                   ? "bg-[#4866F6] text-white shadow-sm shadow-[#4866F6]/25"
                   : "text-[#586D93] hover:text-[#1E293B] hover:bg-slate-50"
@@ -206,7 +206,7 @@ export default function PrivacyConsent() {
             <button
               type="button"
               onClick={() => setActiveTab("ai_memory")}
-              className={`flex-1 py-1.5 sm:py-2 px-3 sm:px-6 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer text-center whitespace-nowrap ${
+              className={`flex-1 py-1.5 sm:py-2 px-3 sm:px-6 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer text-center whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                 activeTab === "ai_memory"
                   ? "bg-[#4866F6] text-white shadow-sm shadow-[#4866F6]/25"
                   : "text-[#586D93] hover:text-[#1E293B] hover:bg-slate-50"
@@ -445,7 +445,7 @@ export default function PrivacyConsent() {
                 <button
                   type="button"
                   onClick={() => toggleSetting("user_opt_in", "User Opt-In Required")}
-                  className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center ${
+                  className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                     memorySettings.user_opt_in
                       ? "bg-[#4866F6] text-white hover:bg-[#3855E5]"
                       : "bg-slate-200 text-slate-600 hover:bg-slate-300"
@@ -471,7 +471,7 @@ export default function PrivacyConsent() {
                   <button
                     type="button"
                     onClick={() => toggleSetting("user_preference", "User Preference")}
-                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center ${
+                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                       memorySettings.user_preference
                         ? "bg-[#4866F6] text-white hover:bg-[#3855E5]"
                         : "bg-slate-200 text-slate-600 hover:bg-slate-300"
@@ -489,7 +489,7 @@ export default function PrivacyConsent() {
                   <button
                     type="button"
                     onClick={() => toggleSetting("meeting", "Meeting")}
-                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center ${
+                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                       memorySettings.meeting
                         ? "bg-[#4866F6] text-white hover:bg-[#3855E5]"
                         : "bg-slate-200 text-slate-600 hover:bg-slate-300"
@@ -507,7 +507,7 @@ export default function PrivacyConsent() {
                   <button
                     type="button"
                     onClick={() => toggleSetting("communication", "Communication")}
-                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center ${
+                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                       memorySettings.communication
                         ? "bg-[#4866F6] text-white hover:bg-[#3855E5]"
                         : "bg-slate-200 text-slate-600 hover:bg-slate-300"
@@ -525,7 +525,7 @@ export default function PrivacyConsent() {
                   <button
                     type="button"
                     onClick={() => toggleSetting("task", "Task")}
-                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center ${
+                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                       memorySettings.task
                         ? "bg-[#4866F6] text-white hover:bg-[#3855E5]"
                         : "bg-slate-200 text-slate-600 hover:bg-slate-300"
@@ -552,7 +552,7 @@ export default function PrivacyConsent() {
                   <button
                     type="button"
                     onClick={() => toggleSetting("opt_in_before_storage", "Opt-in Required Before memory storage")}
-                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center ${
+                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                       memorySettings.opt_in_before_storage
                         ? "bg-[#4866F6] text-white hover:bg-[#3855E5]"
                         : "bg-slate-200 text-slate-600 hover:bg-slate-300"
@@ -570,7 +570,7 @@ export default function PrivacyConsent() {
                   <button
                     type="button"
                     onClick={() => toggleSetting("consent_recorded", "Consent recorded before storage")}
-                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center ${
+                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                       memorySettings.consent_recorded
                         ? "bg-[#4866F6] text-white hover:bg-[#3855E5]"
                         : "bg-slate-200 text-slate-600 hover:bg-slate-300"
@@ -588,7 +588,7 @@ export default function PrivacyConsent() {
                   <button
                     type="button"
                     onClick={() => toggleSetting("withdrawal_support", "Withdrawal Support")}
-                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center ${
+                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                       memorySettings.withdrawal_support
                         ? "bg-[#4866F6] text-white hover:bg-[#3855E5]"
                         : "bg-slate-200 text-slate-600 hover:bg-slate-300"
@@ -606,7 +606,7 @@ export default function PrivacyConsent() {
                   <button
                     type="button"
                     onClick={() => toggleSetting("memory_deletion", "memory Deletion Supported")}
-                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center ${
+                    className={`w-[88px] sm:w-[96px] h-[32px] sm:h-[34px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                       memorySettings.memory_deletion
                         ? "bg-[#4866F6] text-white hover:bg-[#3855E5]"
                         : "bg-slate-200 text-slate-600 hover:bg-slate-300"
@@ -623,7 +623,7 @@ export default function PrivacyConsent() {
               <button
                 type="button"
                 onClick={handleRunValidation}
-                className="w-full sm:w-auto h-[40px] px-7 bg-[#4866F6] hover:bg-[#3855E5] text-white text-xs sm:text-sm font-medium rounded-full cursor-pointer shadow-sm active:scale-95 transition-all text-center flex items-center justify-center"
+                className="w-full sm:w-auto h-[40px] px-7 bg-[#4866F6] hover:bg-[#3855E5] text-white text-xs sm:text-sm font-medium rounded-full cursor-pointer shadow-sm active:scale-95 transition-all text-center flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
               >
                 Run Consent Validation
               </button>
@@ -644,8 +644,10 @@ export default function PrivacyConsent() {
                 </h3>
               </div>
               <button
+                type="button"
+                aria-label="Close modal"
                 onClick={() => setShowValidationModal(false)}
-                className="text-gray-400 hover:text-gray-600 p-1 cursor-pointer"
+                className="text-gray-400 hover:text-gray-600 p-1 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] rounded-md"
               >
                 <XCircle className="w-5 h-5" />
               </button>
@@ -700,8 +702,9 @@ export default function PrivacyConsent() {
 
             <div className="flex justify-end pt-3 border-t border-gray-100">
               <button
+                type="button"
                 onClick={() => setShowValidationModal(false)}
-                className="px-4 py-2 bg-[#4866F6] text-white text-xs font-medium rounded-lg hover:bg-[#3855E5] transition-all cursor-pointer"
+                className="px-4 py-2 bg-[#4866F6] text-white text-xs font-medium rounded-lg hover:bg-[#3855E5] transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
               >
                 Close
               </button>

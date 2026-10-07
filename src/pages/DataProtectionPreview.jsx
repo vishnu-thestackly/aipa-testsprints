@@ -14,8 +14,9 @@ export default function DataProtectionPreview() {
       <header className="min-h-[60px] bg-[#1E293B] border-b border-slate-700/80 px-3 sm:px-6 py-2 sm:py-0 flex flex-wrap items-center justify-between gap-3 z-50 shrink-0">
         <div className="flex items-center gap-3">
           <button
+            type="button"
             onClick={() => navigate("/dashboard")}
-            className="flex items-center gap-1.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Dashboard</span>
@@ -26,7 +27,7 @@ export default function DataProtectionPreview() {
             <button
               type="button"
               onClick={() => setActiveModule("privacy_consent")}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                 activeModule === "privacy_consent"
                   ? "bg-[#4866F6] text-white shadow-sm"
                   : "text-slate-400 hover:text-slate-200"
@@ -38,7 +39,7 @@ export default function DataProtectionPreview() {
             <button
               type="button"
               onClick={() => setActiveModule("data_deletion_request")}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                 activeModule === "data_deletion_request"
                   ? "bg-[#4866F6] text-white shadow-sm"
                   : "text-slate-400 hover:text-slate-200"
@@ -50,7 +51,7 @@ export default function DataProtectionPreview() {
             <button
               type="button"
               onClick={() => setActiveModule("data_protection_encryption")}
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                 activeModule === "data_protection_encryption"
                   ? "bg-[#4866F6] text-white shadow-sm"
                   : "text-slate-400 hover:text-slate-200"
@@ -67,7 +68,7 @@ export default function DataProtectionPreview() {
           <button
             type="button"
             onClick={() => setViewMode("laptop")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
               viewMode === "laptop"
                 ? "bg-[#4866F6] text-white shadow-md shadow-blue-500/25"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
@@ -80,7 +81,7 @@ export default function DataProtectionPreview() {
           <button
             type="button"
             onClick={() => setViewMode("tablet")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
               viewMode === "tablet"
                 ? "bg-[#4866F6] text-white shadow-md shadow-blue-500/25"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
@@ -93,7 +94,7 @@ export default function DataProtectionPreview() {
           <button
             type="button"
             onClick={() => setViewMode("mobile")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
               viewMode === "mobile"
                 ? "bg-[#4866F6] text-white shadow-md shadow-blue-500/25"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
@@ -106,7 +107,7 @@ export default function DataProtectionPreview() {
           <button
             type="button"
             onClick={() => setViewMode("responsive")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
               viewMode === "responsive"
                 ? "bg-[#4866F6] text-white shadow-md shadow-blue-500/25"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"

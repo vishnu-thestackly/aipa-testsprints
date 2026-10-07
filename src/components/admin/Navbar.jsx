@@ -87,9 +87,11 @@ export default function Navbar({
 
         <div className="flex justify-between items-center">
 
-          <div
+          <button
+            type="button"
+            aria-label="Open sidebar"
             onClick={() => setSidebarOpen(true)}
-            className={`w-[38px] h-[38px] min-[360px]:w-[40px] min-[360px]:h-[40px] min-[390px]:w-[42px] min-[390px]:h-[42px] rounded-full flex justify-center items-center cursor-pointer transition-all duration-300 
+            className={`w-[38px] h-[38px] min-[360px]:w-[40px] min-[360px]:h-[40px] min-[390px]:w-[42px] min-[390px]:h-[42px] rounded-full flex justify-center items-center cursor-pointer transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]
               ${isDark
                 ? "bg-white text-black"
                 : "bg-[#F3F3F3] text-[#586D93]"
@@ -97,17 +99,19 @@ export default function Navbar({
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" >
               <path d="M3 6H21M3 12H21M3 18H21" />
             </svg>
-          </div>
+          </button>
 
-          <div className="flex items-center gap-[8px]">
-
+          <button
+            type="button"
+            onClick={() => navigate("/dashboard")}
+            className="flex items-center gap-[8px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] rounded-lg"
+          >
             <img
               src={logo}
               alt=""
               className="w-[38px] h-[32px] min-[360px]:w-[40px] min-[360px]:h-[34px] min-[390px]:w-[44px] min-[390px]:h-[38px]" />
 
             <div>
-
               <h2 className={`font-bold text-[18px] min-[360px]:text-[19px] min-[390px]:text-[20px] leading-[16px] 
               ${isDark ? "text-[#FFFFFF]" : "text-[#4866F6]"}`} >
                 Personal
@@ -117,10 +121,8 @@ export default function Navbar({
                 ${isDark ? "text-[#FFFFFF]" : "text-[#4866F6]"}`} >
                 ASSISTANT
               </p>
-
             </div>
-
-          </div>
+          </button>
 
           <img
             src={profile}
@@ -139,12 +141,14 @@ export default function Navbar({
 
               <div className="relative" ref={languageRef}>
 
-  <div
+  <button
+    type="button"
+    aria-label="Change language"
     onClick={() => {
       handleLanguageToggle();
       onLanguageClick?.(!showLanguages);
     }}
-    className={`w-[35px] h-[35px] min-[360px]:w-[38px] min-[360px]:h-[38px] min-[390px]:w-[40px] min-[390px]:h-[40px] rounded-full flex justify-center items-center cursor-pointer transition-all duration-300
+    className={`w-[35px] h-[35px] min-[360px]:w-[38px] min-[360px]:h-[38px] min-[390px]:w-[40px] min-[390px]:h-[40px] rounded-full flex justify-center items-center cursor-pointer transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]
       ${isDark
         ? "bg-white text-black"
         : "bg-[#4866F626] text-[#4866F6]"
@@ -153,7 +157,7 @@ export default function Navbar({
     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
       <path d="M13.5 3.75V5.25H11.1C10.6058 7.37035 9.59593 9.33596 8.16 10.9725C9.24497 12.0793 10.5543 12.9412 12 13.5L11.4675 14.88C9.8444 14.228 8.37362 13.2475 7.1475 12C5.89872 13.2306 4.42769 14.213 2.8125 14.895L2.25 13.5C3.68742 12.8915 4.99958 12.0218 6.12 10.935C5.10624 9.69875 4.3421 8.27746 3.87 6.75H5.445C5.82704 7.8886 6.4086 8.95013 7.1625 9.885C8.31901 8.55344 9.13944 6.96402 9.555 5.25H1.5V3.75H6.75V1.5H8.25V3.75H13.5ZM22.5 21.75H20.8874L19.6874 18.75H14.55L13.35 21.75H11.7375L16.2374 10.5H18L22.5 21.75ZM17.115 12.33L15.15 17.25H19.0874L17.115 12.33Z" />
     </svg>
-  </div>
+  </button>
 
   {showLanguages && (
     <div
@@ -193,8 +197,10 @@ export default function Navbar({
 
               {/* Notification */}
 
-              <div
-                className={`w-[35px] h-[35px] min-[360px]:w-[38px] min-[360px]:h-[38px] min-[390px]:w-[40px] min-[390px]:h-[40px] rounded-full flex justify-center items-center transition-all duration-300 ${isDark
+              <button
+                type="button"
+                aria-label="Notifications"
+                className={`w-[35px] h-[35px] min-[360px]:w-[38px] min-[360px]:h-[38px] min-[390px]:w-[40px] min-[390px]:h-[40px] rounded-full flex justify-center items-center transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${isDark
                       ? "bg-white text-black"
                       : "bg-[#4866F626] text-[#4866F6]"
                     }`}>
@@ -210,13 +216,15 @@ export default function Navbar({
                     strokeWidth="1.5"
                   />
                 </svg>
-              </div>
+              </button>
 
               {/* Settings / Theme */}
 
-              <div
+              <button
+                type="button"
+                aria-label="Toggle theme"
                 onClick={toggleTheme}
-                className={`w-[35px] h-[35px] min-[360px]:w-[38px] min-[360px]:h-[38px] min-[390px]:w-[40px] min-[390px]:h-[40px] rounded-full flex justify-center items-center cursor-pointer transition-all duration-300 ${isDark
+                className={`w-[35px] h-[35px] min-[360px]:w-[38px] min-[360px]:h-[38px] min-[390px]:w-[40px] min-[390px]:h-[40px] rounded-full flex justify-center items-center cursor-pointer transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${isDark
                   ? "bg-white text-black hover:bg-black hover:text-white"
                   : "bg-[#4866F626] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"
                   }`}>
@@ -226,7 +234,7 @@ export default function Navbar({
                     fill="currentColor"
                   />
                 </svg>
-              </div>
+              </button>
 
             </div>
           </div>
@@ -252,8 +260,11 @@ export default function Navbar({
 
           {/* MOBILE MENU */}
 
-          <div
-            className={`flex md:hidden w-[40px] h-[40px] rounded-full justify-center items-center mr-4 cursor-pointer ${isDark
+          <button
+            type="button"
+            aria-label="Open menu"
+            onClick={() => setSidebarOpen(true)}
+            className={`flex md:hidden w-[40px] h-[40px] rounded-full justify-center items-center mr-4 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${isDark
               ? "bg-white text-black"
               : "bg-[#F3F3F3] text-[#586D93]"
               }`}>
@@ -262,11 +273,14 @@ export default function Navbar({
               <path d="M3 6H21M3 12H21M3 18H21" />
             </svg>
 
-          </div>
+          </button>
 
           {/* LOGO */}
 
-          <div className="flex justify-center items-center gap-2 md:gap-4 lg:gap-5 ml-0 md:ml-1 lg:ml-1 transition-transform duration-300 hover:scale-105 cursor-pointer">
+          <button
+            type="button"
+            onClick={() => navigate("/dashboard")}
+            className="flex justify-center items-center gap-2 md:gap-4 lg:gap-5 ml-0 md:ml-1 lg:ml-1 transition-transform duration-300 hover:scale-105 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] rounded-lg p-1 text-left">
 
             <img
               src={logo}
@@ -292,7 +306,7 @@ export default function Navbar({
 
             </div>
 
-          </div>
+          </button>
 
           {/* LEFT LINE + ICON */}
 
@@ -304,9 +318,11 @@ export default function Navbar({
 
             <div className={`w-[60px] border-t rotate-90 ml-[20px] ${isDark ? "border-[#4866F6]" : "border-[#CFCFCF]"}`} ></div>
 
-            <div
+            <button
+              type="button"
+              aria-label="Toggle sidebar"
               onClick={() => setSidebarOpen(true)}
-              className={`ml-[5px] w-[40px] h-[40px] rounded-[20px] flex justify-center items-center cursor-pointer transition-all duration-300 ${isDark
+              className={`ml-[5px] w-[40px] h-[40px] rounded-[20px] flex justify-center items-center cursor-pointer transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${isDark
                 ? "bg-white text-black hover:bg-black hover:text-white"
                 : "bg-[#4866F626] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"
                 }`} >
@@ -315,7 +331,7 @@ export default function Navbar({
                 <path d="M17.5 2.5H2.5C2.16848 2.5 1.85054 2.6317 1.61612 2.86612C1.3817 3.10054 1.25 3.41848 1.25 3.75V16.25C1.25 16.5815 1.3817 16.8995 1.61612 17.1339C1.85054 17.3683 2.16848 17.5 2.5 17.5H17.5C17.8315 17.5 18.1495 17.3683 18.3839 17.1339 18.75 16.5815 18.75 16.25V3.75C18.75 3.41848 18.6183 3.10054 18.3839 2.86612C18.1495 2.6317 17.8315 2.5 17.5 2.5ZM2.5 3.75H6.25V16.25H2.5V3.75ZM17.5 16.25H7.5V3.75H17.5V16.25Z" />
               </svg>
 
-            </div>
+            </button>
 
           </div>
 

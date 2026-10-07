@@ -49,6 +49,8 @@ import OutlookDetails from "./components/userprofile/integrations/details/Outloo
 import ExchangeDetails from "./components/userprofile/integrations/details/ExchangeDetails";
 import GmailDetails from "./components/userprofile/integrations/details/GmailDetails";
 import CalendarDetails from "./components/userprofile/integrations/details/CalendarDetails";
+import CreateReminder from "./components/userprofile/CreateReminder";
+import NotificationSettings from "./components/userprofile/NotificationSettings";
 
 import DataProtectionPreview from "./pages/DataProtectionPreview";
 
@@ -121,7 +123,15 @@ function App() {
             path="settings/notifications"
             element={<NotificationsPage />}
           />
+          <Route
+            path="settings/notification-settings"
+            element={<NotificationSettings />}
+          />
+          <Route path="notification" element={<NotificationSettings />} />
           <Route path="tasks" element={<TasksDashboard />} />
+          <Route path="tasks/reminder" element={<CreateReminder />} />
+          <Route path="tasks/create-reminder" element={<CreateReminder />} />
+          <Route path="reminder" element={<CreateReminder />} />
           <Route path="integrations" element={<Integrations />} />
           
           <Route path="integrations/outlook" element={<OutlookDetails />} />
@@ -133,6 +143,11 @@ function App() {
 
           <Route path="chat/:chatId" element={<NewChatConversation />} />
         </Route>
+
+        <Route path="/reminder" element={<CreateReminder />} />
+        <Route path="/create-reminder" element={<CreateReminder />} />
+        <Route path="/notification" element={<NotificationSettings />} />
+        <Route path="/notification-settings" element={<NotificationSettings />} />
 
         {/* Onboarding */}
         <Route path="/personal-details" element={<PersonalDetails />} />
@@ -154,6 +169,13 @@ function App() {
         <Route path="/data-deletion" element={<Dashboard defaultItem="data_deletion_request" />} />
         <Route path="/data-deletion-requests" element={<Dashboard defaultItem="data_deletion_request" />} />
         <Route path="/security/data-deletion" element={<Dashboard defaultItem="data_deletion_request" />} />
+        <Route path="/api-security" element={<Dashboard defaultItem="api_security" />} />
+        <Route path="/api-protection" element={<Dashboard defaultItem="api_security" />} />
+        <Route path="/security/api-security" element={<Dashboard defaultItem="api_security" />} />
+        <Route path="/security/api-protection" element={<Dashboard defaultItem="api_security" />} />
+        <Route path="/security-audit-logs" element={<Dashboard defaultItem="security_audit_logs" />} />
+        <Route path="/security/audit-logs" element={<Dashboard defaultItem="security_audit_logs" />} />
+        <Route path="/security/security-audit-logs" element={<Dashboard defaultItem="security_audit_logs" />} />
 
         <Route path="/" element={<PersonalAssistant />} />
         <Route path="/paymentmethod" element={<PaymentMethod />} />

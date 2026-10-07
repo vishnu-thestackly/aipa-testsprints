@@ -26,6 +26,7 @@ import arrowRightIcon from "../../../assets/images/ArrowRight.png";
 import profileIcon from "../../../assets/images/profile1.png";
 
 import CreateNewTask from "./CreateNewTask";
+import CreateReminder from "../CreateReminder";
 
 import {
   getTaskDashboard,
@@ -494,6 +495,8 @@ export default function TasksDashboard() {
   // =========================================================
   const [showCreateNewTask, setShowCreateNewTask] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [showCreateReminder, setShowCreateReminder] = useState(false);
+  const [editingReminder, setEditingReminder] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
 
   const [dummyTasksState, setDummyTasksState] = useState(DUMMY_TASKS_BY_TAB);
@@ -879,7 +882,51 @@ export default function TasksDashboard() {
       )}
 
       <div className="w-full flex flex-col min-h-[calc(100vh-90px)]">
-        {showCreateNewTask ? (
+        {showCreateReminder ? (
+          <CreateReminder
+            initialData={editingReminder}
+            isEditing={Boolean(editingReminder)}
+            onCancel={() => {
+              setShowCreateReminder(false);
+              setEditingReminder(null);
+            }}
+            onSave={(savedReminder) => {
+              const wasEditing = Boolean(editingReminder);
+              setShowCreateReminder(false);
+              setEditingReminder(null);
+              showToast(
+                wasEditing
+                  ? "Reminder updated successfully"
+                  : "Reminder created successfully"
+              );
+              if (savedReminder) {
+                if (wasEditing && savedReminder.id) {
+                  setRemindersList((prev) =>
+                    prev.map((r) =>
+                      r.id === savedReminder.id ? { ...r, ...savedReminder } : r
+                    )
+                  );
+                } else {
+                  const newReminderObj = {
+                    id: savedReminder.id || Date.now(),
+                    number: `${remindersList.length + 1}.`,
+                    title: savedReminder.title,
+                    priority: savedReminder.priority || "High",
+                    status: "Upcoming",
+                    date: savedReminder.date || "Today",
+                    time: `${savedReminder.hour || "10"} : ${
+                      savedReminder.minute || "00"
+                    } ${savedReminder.ampm || "AM"}`,
+                    repeat: savedReminder.repeat || "Daily",
+                    inApp: savedReminder.inApp,
+                    emailNotification: savedReminder.emailNotification,
+                  };
+                  setRemindersList((prev) => [newReminderObj, ...prev]);
+                }
+              }
+            }}
+          />
+        ) : showCreateNewTask ? (
           <CreateNewTask
             taskData={editingTask}
             isEditing={Boolean(editingTask)}
@@ -1015,14 +1062,15 @@ export default function TasksDashboard() {
                       <Search className="w-3.5 h-3.5 text-[#8898AA] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>
 
-                    {/* Add Reminder */}
+                    {/* New Reminder */}
                     <button
                       onClick={() => {
-                        showToast("Add reminder form coming soon");
+                        setEditingReminder(null);
+                        setShowCreateReminder(true);
                       }}
-                      className="w-full sm:w-auto flex items-center justify-center gap-1.5 h-8.5 sm:h-9 md:h-9 lg:h-9.5 xl:h-10 px-3.5 sm:px-4 md:px-5 rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white transition-all cursor-pointer font-semibold text-xs md:text-xs lg:text-xs xl:text-sm shadow-[0_4px_10px_rgba(72,102,246,0.25)] whitespace-nowrap"
+                      className="w-full sm:w-auto flex items-center justify-center gap-1.5 h-8.5 sm:h-9 md:h-9 lg:h-9.5 xl:h-10 px-3.5 sm:px-4 md:px-5 rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white transition-all cursor-pointer font-semibold text-xs md:text-xs lg:text-xs xl:text-sm shadow-[0_4px_10px_rgba(72,102,246,0.25)] whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] focus-visible:ring-offset-2"
                     >
-                      <span>Add Reminder</span>
+                      <span>New Reminder</span>
                       <Plus className="w-3.5 h-3.5 md:w-4 md:h-4" />
                     </button>
                   </div>
@@ -1145,9 +1193,10 @@ export default function TasksDashboard() {
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  showToast("Edit reminder");
+                                  setEditingReminder(reminder);
+                                  setShowCreateReminder(true);
                                 }}
-                                className="flex-1 h-[32px] sm:h-[34px] md:h-[36px] px-3 rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white text-[11px] sm:text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                                className="flex-1 h-[32px] sm:h-[34px] md:h-[36px] px-3 rounded-full bg-[#4866F6] hover:bg-[#3554ED] text-white text-[11px] sm:text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
                               >
                                 <span>Edit</span>
                                 <img

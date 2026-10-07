@@ -209,7 +209,9 @@ export default function SidebarMenuList({
               }
               className={
                 isTablet
-                  ? `w-[50px] h-[50px] flex items-center justify-center rounded-[14px] mt-3 cursor-pointer transition-all duration-200 focus:outline-none group ${
+                  ? `w-[50px] h-[50px] flex items-center justify-center rounded-[14px] mt-3 cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] focus-visible:ring-offset-2 ${
+                      isDark ? "focus-visible:ring-offset-[#060D1B]" : "focus-visible:ring-offset-white"
+                    } group ${
                       isItemActive
                         ? "bg-[#4866F6] text-white"
                         : "text-[#586D93] hover:bg-[#4866F6] hover:text-white"
@@ -218,7 +220,9 @@ export default function SidebarMenuList({
                       isMobile
                         ? "h-[42px] px-3 mt-2"
                         : "h-[44px] px-[10px] mt-3"
-                    } flex items-center justify-between rounded-lg cursor-pointer transition-all duration-200 focus:outline-none group ${
+                    } flex items-center justify-between rounded-lg cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] focus-visible:ring-offset-2 ${
+                      isDark ? "focus-visible:ring-offset-[#060D1B]" : "focus-visible:ring-offset-white"
+                    } group ${
                       isItemActive
                         ? "bg-[#4866F6] text-white"
                         : "text-[#586D93] hover:bg-[#4866F6] hover:text-white"
@@ -295,14 +299,18 @@ export default function SidebarMenuList({
                       }}
                       className={
                         isMobile
-                          ? `w-auto min-h-[40px] flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer transition-all duration-200 group text-left ${
+                          ? `w-auto min-h-[40px] flex items-center gap-3 rounded-lg px-3 py-2 cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] focus-visible:ring-offset-1 ${
+                              isDark ? "focus-visible:ring-offset-[#060D1B]" : "focus-visible:ring-offset-white"
+                            } group text-left ${
                               isChildSelected
                                 ? "bg-[#4866F6]"
                                 : isDark
                                 ? "hover:bg-[#29334A]"
                                 : "hover:bg-[#EEF3FF]"
                             }`
-                          : `w-[270px] min-h-[42px] flex items-center gap-3 rounded-lg px-3 py-2.5 cursor-pointer transition-all duration-200 group text-left ${
+                          : `w-[270px] min-h-[42px] flex items-center gap-3 rounded-lg px-3 py-2.5 cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] focus-visible:ring-offset-1 ${
+                              isDark ? "focus-visible:ring-offset-[#060D1B]" : "focus-visible:ring-offset-white"
+                            } group text-left ${
                               isChildSelected
                                 ? "bg-[#4866F6]"
                                 : isDark

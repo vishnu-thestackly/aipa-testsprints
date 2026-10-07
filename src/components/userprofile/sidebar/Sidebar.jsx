@@ -170,7 +170,7 @@ export default function Sidebar({
           <button
             type="button"
             onClick={handleLogout}
-            className={`w-[50px] lg:w-[220px] xl:w-[315px] h-[44px] flex items-center justify-center gap-[10px] rounded-[10px] border border-[#FB0000] bg-[#FF000033] text-[#FF0000] cursor-pointer hover:bg-[#FF000044] ${
+            className={`w-[50px] lg:w-[220px] xl:w-[315px] h-[44px] flex items-center justify-center gap-[10px] rounded-[10px] border border-[#FB0000] bg-[#FF000033] text-[#FF0000] cursor-pointer hover:bg-[#FF000044] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FB0000] focus-visible:ring-offset-2 ${
               isDark ? "bg-[#FF00001A]" : ""
             }`}
           >

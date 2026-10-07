@@ -154,8 +154,9 @@ export default function TabletSidebar({
 
             {/* Close button — visible on mobile only */}
             <button
+              type="button"
               onClick={() => setSidebarOpen(false)}
-              className={`md:hidden w-[42px] h-[42px] flex items-center justify-center rounded-full text-[30px] leading-none cursor-pointer ${
+              className={`md:hidden w-[42px] h-[42px] flex items-center justify-center rounded-full text-[30px] leading-none cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                 isDark
                   ? "bg-[#25282D] text-[#586D93]"
                   : "bg-[#F5F7FA] text-[#586D93]"
@@ -165,22 +166,23 @@ export default function TabletSidebar({
             </button>
 
             {/* Logo */}
-            <div
+            <button
+              type="button"
               onClick={() => navigate("/")}
-              className="flex items-center ml-[10px] cursor-pointer"
+              className="flex items-center ml-[10px] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] rounded-md"
             >
               <img
-
                  src={isDark ? LogoDark : logo}
                 alt="Logo"
                 className="h-[42px] w-auto min-[360px]:h-[46px] min-[390px]:h-[38px] object-contain"
               />
-            </div>
+            </button>
 
             {/* Panel collapse toggle — visible on tablet only */}
-            <div
+            <button
+              type="button"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={`hidden md:flex lg:hidden absolute top-[22px] right-[20px] w-[40px] h-[40px] rounded-[20px] justify-center items-center cursor-pointer transition-all duration-300 ${
+              className={`hidden md:flex lg:hidden absolute top-[22px] right-[20px] w-[40px] h-[40px] rounded-[20px] justify-center items-center cursor-pointer transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                 isDark
                   ? "bg-[#4866F633] text-[#6F89FF] hover:bg-[#4866F6] hover:text-white"
                   : "bg-[#4866F626] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"
@@ -189,7 +191,7 @@ export default function TabletSidebar({
                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M17.5 2.5H2.5C2.16848 2.5 1.85054 2.6317 1.61612 2.86612C1.3817 3.10054 1.25 3.41848 1.25 3.75V16.25C1.25 16.5815 1.3817 16.8995 1.61612 17.1339C1.85054 17.3683 2.16848 17.5 2.5 17.5H17.5C17.8315 17.5 18.1495 17.3683 18.3839 17.1339C18.6183 16.8995 18.75 16.5815 18.75 16.25V3.75C18.75 3.41848 18.6183 3.10054 18.3839 2.86612C18.1495 2.6317 17.8315 2.5 17.5 2.5ZM2.5 3.75H6.25V16.25H2.5V3.75ZM17.5 16.25H7.5V3.75H17.5V16.25Z" />
               </svg>
-            </div>
+            </button>
           </div>
         </div>
 
@@ -219,7 +221,8 @@ export default function TabletSidebar({
         {/* Logout Button */}
         <div className="w-full flex mt-3 justify-center pt-4">
           <button
-            className={`w-[220px] max-w-full h-[44px] flex items-center justify-center gap-[10px] rounded-[10px] border font-medium text-[16px] text-[#FF0000] cursor-pointer transition-all ${
+            type="button"
+            className={`w-[220px] max-w-full h-[44px] flex items-center justify-center gap-[10px] rounded-[10px] border font-medium text-[16px] text-[#FF0000] cursor-pointer transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FB0000] focus-visible:ring-offset-2 ${
               isDark
                 ? "border-[#FB0000] bg-[#FF000026] hover:bg-[#FF000033]"
                 : "border-[#FB0000] bg-[#FF000033] hover:bg-[#FF000044]"

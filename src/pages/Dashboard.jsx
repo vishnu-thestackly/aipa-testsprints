@@ -34,6 +34,8 @@ import SecurityTestingVulnerabilities from "../components/admin/Security/Securit
 import DataProtectionEncryption from "../components/admin/Security/DataProtectionEncryption";
 import PrivacyConsent from "../components/admin/Security/PrivacyConsent";
 import DataDeletionRequest from "../components/admin/Security/DataDeletionRequest";
+import ApiSecurity from "../components/admin/Security/ApiSecurity";
+import SecurityAuditLogs from "../components/admin/Security/SecurityAuditLogs";
 
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
@@ -255,7 +257,7 @@ export default function Dashboard({ defaultItem }) {
           {/* Security & Compliance - Data Protection & Encryption */}
           {activeItem === "data_protection_encryption" && (
             <DataProtectionEncryption
-              onNavigateAudit={() => setActiveItem("audit_logs")}
+              onNavigateAudit={() => setActiveItem("security_audit_logs")}
             />
           )}
 
@@ -263,15 +265,30 @@ export default function Dashboard({ defaultItem }) {
           {activeItem === "privacy_consent" && <PrivacyConsent />}
 
           {/* Security & Compliance - Data Deletion Request */}
+
           {activeItem === "data_deletion_request" && <DataDeletionRequest />}
+
+          {activeItem === "data_deletion_request" && (
+            <DataDeletionRequest />
+          )}
+
+          {/* Security & Compliance - API Security */}
+          {activeItem === "api_security" && (
+            <ApiSecurity />
+          )}
+
+          {/* Security & Compliance - Security Audit Logs */}
+          {activeItem === "security_audit_logs" && (
+            <SecurityAuditLogs />
+          )}
+
         </div>
       </div>
 
       {showSuccess && (
         <div
-          className={`fixed top-5 right-5 z-[9999] text-white px-5 py-3 rounded-lg shadow-lg ${
-            successType === "delete" ? "bg-red-500" : "bg-green-500"
-          }`}
+          className={`fixed top-5 right-5 z-[9999] text-white px-5 py-3 rounded-lg shadow-lg ${successType === "delete" ? "bg-red-500" : "bg-green-500"
+            }`}
         >
           {successMessage}
         </div>

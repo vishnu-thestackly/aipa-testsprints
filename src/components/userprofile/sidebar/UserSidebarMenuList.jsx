@@ -319,7 +319,9 @@ export default function UserSidebarMenuList({
               }
               className={
                 isTablet
-                  ? `w-[50px] h-[50px] flex items-center justify-center rounded-[14px] mt-3 cursor-pointer transition-all duration-200 focus:outline-none group ${
+                  ? `w-[50px] h-[50px] flex items-center justify-center rounded-[14px] mt-3 cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] focus-visible:ring-offset-2 ${
+                      isDark ? "focus-visible:ring-offset-[#060D1B]" : "focus-visible:ring-offset-white"
+                    } group ${
                       isItemActive
                         ? "bg-[#4866F6] text-white"
                         : isDark
@@ -330,7 +332,9 @@ export default function UserSidebarMenuList({
                       isMobile
                         ? "h-[42px] px-3 mt-2"
                         : "h-[44px] px-[10px] mt-2"
-                    } flex items-center justify-between rounded-lg cursor-pointer transition-all duration-200 focus:outline-none group ${
+                    } flex items-center justify-between rounded-lg cursor-pointer transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] focus-visible:ring-offset-2 ${
+                      isDark ? "focus-visible:ring-offset-[#060D1B]" : "focus-visible:ring-offset-white"
+                    } group ${
                       isItemActive
                         ? "bg-[#4866F6] text-white"
                         : isDark
@@ -415,7 +419,9 @@ export default function UserSidebarMenuList({
                         onClick={() =>
                           handleChildClick(item, child)
                         }
-                        className={`w-full flex items-center gap-[10px] cursor-pointer px-3 py-2 rounded-lg group transition-all duration-200 text-left ${
+                        className={`w-full flex items-center gap-[10px] cursor-pointer px-3 py-2 rounded-lg group transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] focus-visible:ring-offset-1 ${
+                          isDark ? "focus-visible:ring-offset-[#060D1B]" : "focus-visible:ring-offset-white"
+                        } text-left ${
                           isChildItemActive
                             ? "bg-[#4866F6]"
                             : isDark

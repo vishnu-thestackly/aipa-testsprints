@@ -148,7 +148,7 @@ export default function DataProtectionEncryption({ onNavigateAudit }) {
                   <button
                     type="button"
                     onClick={() => toggleRestItem(item.id)}
-                    className={`min-w-[84px] sm:min-w-[92px] h-[32px] sm:h-[34px] px-3.5 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 cursor-pointer shadow-sm flex items-center justify-center ${
+                    className={`min-w-[84px] sm:min-w-[92px] h-[32px] sm:h-[34px] px-3.5 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 cursor-pointer shadow-sm flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                       item.enabled
                         ? "bg-[#4866F6] text-white hover:bg-[#3855E0] active:scale-95"
                         : "bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -260,7 +260,7 @@ export default function DataProtectionEncryption({ onNavigateAudit }) {
                   <button
                     type="button"
                     onClick={() => toggleVectorItem(item.id)}
-                    className={`min-w-[84px] sm:min-w-[92px] h-[32px] sm:h-[34px] px-3.5 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 cursor-pointer shadow-sm flex items-center justify-center ${
+                    className={`min-w-[84px] sm:min-w-[92px] h-[32px] sm:h-[34px] px-3.5 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-all duration-200 cursor-pointer shadow-sm flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] ${
                       item.enabled
                         ? "bg-[#4866F6] text-white hover:bg-[#3855E0] active:scale-95"
                         : "bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -280,14 +280,14 @@ export default function DataProtectionEncryption({ onNavigateAudit }) {
           <button
             type="button"
             onClick={handleRunValidation}
-            className="w-full h-[44px] rounded-full bg-[#4866F6] hover:bg-[#3855E0] active:scale-[0.98] text-white font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-center"
+            className="w-full h-[44px] rounded-full bg-[#4866F6] hover:bg-[#3855E0] active:scale-[0.98] text-white font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
           >
             Run Security Validation
           </button>
           <button
             type="button"
             onClick={() => onNavigateAudit?.()}
-            className="w-full h-[44px] rounded-full bg-[#4866F6] hover:bg-[#3855E0] active:scale-[0.98] text-white font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-center"
+            className="w-full h-[44px] rounded-full bg-[#4866F6] hover:bg-[#3855E0] active:scale-[0.98] text-white font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
           >
             View Audit Log
           </button>
@@ -298,14 +298,14 @@ export default function DataProtectionEncryption({ onNavigateAudit }) {
           <button
             type="button"
             onClick={handleRunValidation}
-            className="h-[40px] px-6 rounded-full bg-[#4866F6] hover:bg-[#3855E0] active:scale-95 text-white font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-center"
+            className="h-[40px] px-6 rounded-full bg-[#4866F6] hover:bg-[#3855E0] active:scale-95 text-white font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
           >
             Run Security Validation
           </button>
           <button
             type="button"
             onClick={() => onNavigateAudit?.()}
-            className="h-[40px] px-6 rounded-full bg-[#4866F6] hover:bg-[#3855E0] active:scale-95 text-white font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-center"
+            className="h-[40px] px-6 rounded-full bg-[#4866F6] hover:bg-[#3855E0] active:scale-95 text-white font-medium text-sm shadow-sm transition-all duration-200 cursor-pointer flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
           >
             View Audit Log
           </button>
@@ -318,8 +318,10 @@ export default function DataProtectionEncryption({ onNavigateAudit }) {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-xs z-[99999] flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-[24px] max-w-md w-full p-6 sm:p-7 shadow-2xl border border-[#E9EDF5] relative">
             <button
+              type="button"
+              aria-label="Close modal"
               onClick={() => setShowValidationModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer"
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 w-8 h-8 rounded-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
             >
               <X className="w-4 h-4" />
             </button>
@@ -384,7 +386,7 @@ export default function DataProtectionEncryption({ onNavigateAudit }) {
               <button
                 type="button"
                 onClick={() => setShowValidationModal(false)}
-                className="px-6 py-2 rounded-full bg-[#4866F6] text-white font-medium text-xs hover:bg-[#3855E0] transition-colors cursor-pointer"
+                className="px-6 py-2 rounded-full bg-[#4866F6] text-white font-medium text-xs hover:bg-[#3855E0] transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
               >
                 Done
               </button>

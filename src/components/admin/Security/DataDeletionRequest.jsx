@@ -263,7 +263,7 @@ export default function DataDeletionRequest() {
                         <button
                           type="button"
                           onClick={() => setSelectedRequest(row)}
-                          className="px-4 py-1.5 bg-[#4866F6] text-white text-xs sm:text-sm font-medium rounded-full hover:bg-[#3855E5] transition-all cursor-pointer shadow-xs"
+                          className="px-4 py-1.5 bg-[#4866F6] text-white text-xs sm:text-sm font-medium rounded-full hover:bg-[#3855E5] transition-all cursor-pointer shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
                         >
                           Review
                         </button>
@@ -271,8 +271,9 @@ export default function DataDeletionRequest() {
                         <button
                           type="button"
                           onClick={() => setSelectedRequest(row)}
-                          className="inline-flex items-center justify-center p-1.5 hover:opacity-80 transition-all cursor-pointer"
+                          className="inline-flex items-center justify-center p-1.5 hover:opacity-80 transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] rounded-full"
                           title="View Details"
+                          aria-label={`View details for ${row.requestId}`}
                         >
                           <img
                             src={eyesIcon}
@@ -308,8 +309,9 @@ export default function DataDeletionRequest() {
             <button
               type="button"
               onClick={() => setSelectedRequest(null)}
-              className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#EF4444] text-white flex items-center justify-center absolute top-4 sm:top-5 right-4 sm:right-5 hover:bg-red-600 transition-all cursor-pointer shadow-sm"
+              className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#EF4444] text-white flex items-center justify-center absolute top-4 sm:top-5 right-4 sm:right-5 hover:bg-red-600 transition-all cursor-pointer shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#EF4444]"
               title="Close"
+              aria-label="Close modal"
             >
               <X className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />
             </button>
@@ -338,8 +340,15 @@ export default function DataDeletionRequest() {
               ].map((item) => (
                 <label
                   key={item.id}
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === " " || e.key === "Enter") {
+                      e.preventDefault();
+                      toggleScope(item.id);
+                    }
+                  }}
                   onClick={() => toggleScope(item.id)}
-                  className="flex items-center gap-2.5 cursor-pointer select-none group"
+                  className="flex items-center gap-2.5 cursor-pointer select-none group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] rounded p-1"
                 >
                   <div
                     className={`w-4 h-4 rounded-[4px] flex items-center justify-center transition-colors ${
@@ -370,8 +379,15 @@ export default function DataDeletionRequest() {
                 ].map((item) => (
                   <label
                     key={item.id}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === " " || e.key === "Enter") {
+                        e.preventDefault();
+                        toggleScope(item.id);
+                      }
+                    }}
                     onClick={() => toggleScope(item.id)}
-                    className="flex items-center gap-2 cursor-pointer select-none group"
+                    className="flex items-center gap-2 cursor-pointer select-none group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] rounded p-1"
                   >
                     <div
                       className={`w-4 h-4 rounded-[4px] flex items-center justify-center transition-colors ${
@@ -399,8 +415,15 @@ export default function DataDeletionRequest() {
                 ].map((item) => (
                   <label
                     key={item.id}
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === " " || e.key === "Enter") {
+                        e.preventDefault();
+                        toggleScope(item.id);
+                      }
+                    }}
                     onClick={() => toggleScope(item.id)}
-                    className="flex items-center gap-2 cursor-pointer select-none group"
+                    className="flex items-center gap-2 cursor-pointer select-none group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6] rounded p-1"
                   >
                     <div
                       className={`w-4 h-4 rounded-[4px] flex items-center justify-center transition-colors ${
@@ -434,14 +457,14 @@ export default function DataDeletionRequest() {
               <button
                 type="button"
                 onClick={() => setSelectedRequest(null)}
-                className="flex-1 max-w-[130px] sm:max-w-[150px] h-[38px] sm:h-[42px] rounded-full border border-[#4866F6] text-[#4866F6] bg-white hover:bg-blue-50/50 font-medium text-[13px] sm:text-[14px] transition-all cursor-pointer flex items-center justify-center shadow-xs"
+                className="flex-1 max-w-[130px] sm:max-w-[150px] h-[38px] sm:h-[42px] rounded-full border border-[#4866F6] text-[#4866F6] bg-white hover:bg-blue-50/50 font-medium text-[13px] sm:text-[14px] transition-all cursor-pointer flex items-center justify-center shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={() => handleApproveDeletion(selectedRequest.id)}
-                className="flex-1 max-w-[130px] sm:max-w-[150px] h-[38px] sm:h-[42px] rounded-full bg-[#4866F6] hover:bg-[#3855E0] active:scale-[0.98] text-white font-medium text-[13px] sm:text-[14px] transition-all cursor-pointer flex items-center justify-center shadow-sm"
+                className="flex-1 max-w-[130px] sm:max-w-[150px] h-[38px] sm:h-[42px] rounded-full bg-[#4866F6] hover:bg-[#3855E0] active:scale-[0.98] text-white font-medium text-[13px] sm:text-[14px] transition-all cursor-pointer flex items-center justify-center shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#4866F6]"
               >
                 Confirm
               </button>
