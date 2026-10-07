@@ -28,17 +28,23 @@ import UsageTrendAnalytics from "../components/admin/AnalyticsAndPerformance/Usa
 import OptimizationRecommendations from "../components/admin/AnalyticsAndPerformance/OptimizationRecommendations";
 import UserEngagementInsights from "../components/admin/AnalyticsAndPerformance/UserEngagementInsights";
 
+import SecurityDashboard from "../components/admin/Security/SecurityDashboard";
+import SessionAuthentication from "../components/admin/Security/SessionAuthentication/SessionAuthentication";
+import SecurityTestingVulnerabilities from "../components/admin/Security/SecurityTestingVulnerabilities/SecurityTestingVulnerabilities";
 import DataProtectionEncryption from "../components/admin/Security/DataProtectionEncryption";
 import PrivacyConsent from "../components/admin/Security/PrivacyConsent";
 import DataDeletionRequest from "../components/admin/Security/DataDeletionRequest";
-
 
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
 
 export default function Dashboard({ defaultItem }) {
   const [activeItem, setActiveItem] = useState(() => {
-    return defaultItem || sessionStorage.getItem("adminActiveItem") || "privacy_consent";
+    return (
+      defaultItem ||
+      sessionStorage.getItem("adminActiveItem") ||
+      "privacy_consent"
+    );
   });
 
   useEffect(() => {
@@ -85,25 +91,25 @@ export default function Dashboard({ defaultItem }) {
   };
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openMenus, setOpenMenus] = useState({ security_compliance: true });
-  
-// color toast
+
+  // color toast
   const handleSuccessMessage = (message, type = "success") => {
-  setSuccessMessage(message);
-  setSuccessType(type);
-  setShowSuccess(false);
-
-  setTimeout(() => {
-    setShowSuccess(true);
-  }, 10);
-
-  setTimeout(() => {
+    setSuccessMessage(message);
+    setSuccessType(type);
     setShowSuccess(false);
 
     setTimeout(() => {
-      setSuccessMessage("");
-    }, 200);
-  }, 2000);
-};
+      setShowSuccess(true);
+    }, 10);
+
+    setTimeout(() => {
+      setShowSuccess(false);
+
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 200);
+    }, 2000);
+  };
 
   return (
     <div className="h-screen flex  flex-col">
@@ -195,32 +201,32 @@ export default function Dashboard({ defaultItem }) {
             />
           )}
 
-         {activeItem === "subscriptionplan" && (
-  <SubscriptionPlan
-    setActiveItem={setActiveItem}
-    onPlanDeleted={() =>
-      handleSuccessMessage("Plan deleted successfully")
-    }
-  />
-)}
+          {activeItem === "subscriptionplan" && (
+            <SubscriptionPlan
+              setActiveItem={setActiveItem}
+              onPlanDeleted={() =>
+                handleSuccessMessage("Plan deleted successfully")
+              }
+            />
+          )}
 
-{activeItem === "addSubscription" && (
-  <AddSubscription
-    setActiveItem={setActiveItem}
-    onPlanAdded={() =>
-      handleSuccessMessage("New plan added successfully")
-    }
-  />
-)}
+          {activeItem === "addSubscription" && (
+            <AddSubscription
+              setActiveItem={setActiveItem}
+              onPlanAdded={() =>
+                handleSuccessMessage("New plan added successfully")
+              }
+            />
+          )}
 
-{activeItem === "editSubscription" && (
-  <EditSubscription
-    setActiveItem={setActiveItem}
-    onPlanUpdated={() =>
-      handleSuccessMessage("Plan updated successfully")
-    }
-  />
-)}
+          {activeItem === "editSubscription" && (
+            <EditSubscription
+              setActiveItem={setActiveItem}
+              onPlanUpdated={() =>
+                handleSuccessMessage("Plan updated successfully")
+              }
+            />
+          )}
           {activeItem === "profile" && <AdminProfile />}
 
           {/* Analytics & Performance */}
@@ -239,6 +245,13 @@ export default function Dashboard({ defaultItem }) {
           {/* Audit Logs */}
           {activeItem === "audit_logs" && <AuditLogs />}
 
+          {/* Security & Compliance */}
+          {activeItem === "security_dashboard" && <SecurityDashboard />}
+          {activeItem === "security_testing_vulnerabilities" && (
+            <SecurityTestingVulnerabilities />
+          )}
+          {activeItem === "session_authentication" && <SessionAuthentication />}
+
           {/* Security & Compliance - Data Protection & Encryption */}
           {activeItem === "data_protection_encryption" && (
             <DataProtectionEncryption
@@ -247,28 +260,22 @@ export default function Dashboard({ defaultItem }) {
           )}
 
           {/* Security & Compliance - Privacy & Consent */}
-          {activeItem === "privacy_consent" && (
-            <PrivacyConsent />
-          )}
+          {activeItem === "privacy_consent" && <PrivacyConsent />}
 
           {/* Security & Compliance - Data Deletion Request */}
-          {activeItem === "data_deletion_request" && (
-            <DataDeletionRequest />
-          )}
+          {activeItem === "data_deletion_request" && <DataDeletionRequest />}
         </div>
       </div>
 
       {showSuccess && (
-  <div
-    className={`fixed top-5 right-5 z-[9999] text-white px-5 py-3 rounded-lg shadow-lg ${
-      successType === "delete"
-        ? "bg-red-500"
-        : "bg-green-500"
-    }`}
-  >
-    {successMessage}
-  </div>
-)}
+        <div
+          className={`fixed top-5 right-5 z-[9999] text-white px-5 py-3 rounded-lg shadow-lg ${
+            successType === "delete" ? "bg-red-500" : "bg-green-500"
+          }`}
+        >
+          {successMessage}
+        </div>
+      )}
       <SessionTimeout
         open={showSessionTimeout}
         onClose={handleLogout}
