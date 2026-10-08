@@ -1,3 +1,134 @@
+// import React from "react";
+// import {
+//   ResponsiveContainer,
+//   LineChart,
+//   Line,
+//   XAxis,
+//   YAxis,
+//   CartesianGrid,
+// } from "recharts";
+
+// export default function TransactionRevenueChart({
+//   revenueData,
+//   isMinimized,
+//   setIsMinimized,
+// }) {
+//   return (
+//     <div className="border border-[#D9D9D9] rounded-[28px] bg-white p-6">
+//       <div className="flex items-center justify-between">
+//         <h3 className="text-[24px] font-medium text-[#4866F6]">
+//           Revenue Chart
+//         </h3>
+
+//         <button
+//           onClick={() => setIsMinimized(!isMinimized)}
+//           className="w-[28px] h-[28px] rounded-full bg-[#4866F6] text-white flex items-center justify-center text-[18px] cursor-pointer"
+//         >
+//           {isMinimized ? "+" : "−"}
+//         </button>
+//       </div>
+
+//       <div
+//         className={`overflow-hidden transition-all duration-500 ease-in-out ${
+//           isMinimized ? "max-h-0 opacity-0" : "max-h-[500px] opacity-100"
+//         }`}
+//       >
+//         <div className="h-[1px] bg-[#D9D9D9] mt-6 mb-4" />
+
+//         <div className="w-full h-[260px]">
+//           <ResponsiveContainer width="100%" height="100%">
+//             <LineChart
+//               data={revenueData}
+//               margin={{ top: 10, right: 10, left: 5, bottom: 20 }}
+//             >
+//               <CartesianGrid stroke="#E5E5E5" vertical={false} />
+
+//               <XAxis
+//                 dataKey="month"
+//                 tick={{ fill: "#6D83AA", fontSize: 14 }}
+//                 axisLine={false}
+//                 tickLine={false}
+//               />
+
+//               <YAxis
+//                 width={55}
+//                 domain={['auto', 'auto']}
+//                 ticks={[0, 20, 40, 60, 80, 100]}
+//                 tickFormatter={(v) => `${v}%`}
+//                 tick={{ fill: "#6D83AA", fontSize: 14 }}
+//                 axisLine={{ stroke: "#D9D9D9", strokeWidth: 1 }}
+//                 tickLine={false}
+//                 label={{
+//                   value: "Percentage %",
+//                   angle: -90,
+//                   position: "insideLeft",
+//                   dy: 40,
+//                   style: { fill: "#4B5563", fontSize: 16 },
+//                 }}
+//               />
+
+//               <Line
+//                 type="monotone"
+//                 dataKey="subscription_growth"
+//                 stroke="#4D6BFA"
+//                 strokeWidth={3}
+//                 dot={false}
+//               />
+
+//               <Line
+//                 type="monotone"
+//                 dataKey="monthly_revenue"
+//                 stroke="#33B267"
+//                 strokeWidth={3}
+//                 dot={false}
+//               />
+
+//               <Line
+//                 type="monotone"
+//                 dataKey="failed_payments"
+//                 stroke="#F16464"
+//                 strokeWidth={3}
+//                 dot={false}
+//               />
+//             </LineChart>
+//           </ResponsiveContainer>
+//         </div>
+
+//         <p className="text-center text-[8px] sm:text-[14px] text-[#4B5563] mt-1">
+//           Monthly
+//         </p>
+
+//         <div className="grid grid-cols-2 sm:flex sm:flex-nowrap justify-center gap-y-3 gap-x-3 sm:gap-x-5 mt-4 px-4 sm:px-0">
+//           <div className="flex items-center gap-2">
+//             <span className="w-[12px] h-[12px] rounded-[4px] bg-[#4D6BFA]" />
+//             <span className="text-[8px] sm:text-[14px] text-[#4D6BFA] whitespace-nowrap">
+//               Subscription Growth
+//             </span>
+//           </div>
+
+//           <div className="flex items-center gap-2">
+//             <span className="w-[12px] h-[12px] rounded-[4px] bg-[#33B267]" />
+//             <span className="text-[8px] sm:text-[14px] text-[#33B267] whitespace-nowrap">
+//               Monthly Revenue
+//             </span>
+//           </div>
+
+//           <div className="flex items-center gap-2">
+//             <span className="w-[12px] h-[12px] rounded-[4px] bg-[#F16464]" />
+//             <span className="text-[8px] sm:text-[14px] text-[#F16464] whitespace-nowrap">
+//               Failed Payments
+//             </span>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
 import React from "react";
 import {
   ResponsiveContainer,
@@ -7,31 +138,33 @@ import {
   YAxis,
   CartesianGrid,
 } from "recharts";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function TransactionRevenueChart({
   revenueData,
   isMinimized,
   setIsMinimized,
 }) {
+  const { isDark } = useTheme();
   return (
-    <div className="border border-[#D9D9D9] rounded-[28px] bg-white p-6">
+    <div className={`border border-[#D9D9D9] rounded-[28px] p-6 ${isDark ? "bg-[#060D1B]" : "bg-[#FFFFFF]"}`}>
       <div className="flex items-center justify-between">
-        <h3 className="text-[24px] font-medium text-[#4866F6]">
+        <h3 className={`text-[24px] font-medium ${isDark ? "text-[#FFFFFF]" : "text-[#4866F6]"}`}>
           Revenue Chart
         </h3>
 
         <button
           onClick={() => setIsMinimized(!isMinimized)}
-          className="w-[28px] h-[28px] rounded-full bg-[#4866F6] text-white flex items-center justify-center text-[18px] cursor-pointer"
+          className={`w-[28px] h-[28px] rounded-full flex items-center justify-center text-[18px]
+            ${isDark ? "bg-[#FFFFFF] text-[#000000]" : "bg-[#4866F6] text-[#FFFFFF]"}`}
         >
           {isMinimized ? "+" : "−"}
         </button>
       </div>
 
       <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          isMinimized ? "max-h-0 opacity-0" : "max-h-[500px] opacity-100"
-        }`}
+        className={`overflow-hidden transition-all duration-500 ease-in-out ${isMinimized ? "max-h-0 opacity-0" : "max-h-[500px] opacity-100"
+          }`}
       >
         <div className="h-[1px] bg-[#D9D9D9] mt-6 mb-4" />
 
@@ -52,7 +185,7 @@ export default function TransactionRevenueChart({
 
               <YAxis
                 width={55}
-                domain={['auto', 'auto']}
+                domain={["auto", "auto"]}
                 ticks={[0, 20, 40, 60, 80, 100]}
                 tickFormatter={(v) => `${v}%`}
                 tick={{ fill: "#6D83AA", fontSize: 14 }}
@@ -63,7 +196,10 @@ export default function TransactionRevenueChart({
                   angle: -90,
                   position: "insideLeft",
                   dy: 40,
-                  style: { fill: "#4B5563", fontSize: 16 },
+                  style: {
+                    fill: isDark ? "#FFFFFF" : "#000000",
+                    fontSize: 16,
+                  },
                 }}
               />
 
@@ -94,28 +230,29 @@ export default function TransactionRevenueChart({
           </ResponsiveContainer>
         </div>
 
-        <p className="text-center text-[8px] sm:text-[14px] text-[#4B5563] mt-1">
+        <p className={`text-center text-[8px] sm:text-[14px]  mt-1 
+          ${isDark ? "text-[#FFFFFF]" : "text-[#4B5563]"}`}>
           Monthly
         </p>
 
         <div className="grid grid-cols-2 sm:flex sm:flex-nowrap justify-center gap-y-3 gap-x-3 sm:gap-x-5 mt-4 px-4 sm:px-0">
           <div className="flex items-center gap-2">
             <span className="w-[12px] h-[12px] rounded-[4px] bg-[#4D6BFA]" />
-            <span className="text-[8px] sm:text-[14px] text-[#4D6BFA] whitespace-nowrap">
+            <span className={`text-[8px] sm:text-[14px]  whitespace-nowrap ${isDark ? "text-[#FFFFFF]" : "text-[#4B5563]"}`}>
               Subscription Growth
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="w-[12px] h-[12px] rounded-[4px] bg-[#33B267]" />
-            <span className="text-[8px] sm:text-[14px] text-[#33B267] whitespace-nowrap">
+            <span className={`text-[8px] sm:text-[14px] whitespace-nowrap ${isDark ? "text-[#FFFFFF]" : "text-[#4B5563]"}`}>
               Monthly Revenue
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="w-[12px] h-[12px] rounded-[4px] bg-[#F16464]" />
-            <span className="text-[8px] sm:text-[14px] text-[#F16464] whitespace-nowrap">
+            <span className={`text-[8px] sm:text-[14px] whitespace-nowrap ${isDark ? "text-[#FFFFFF]" : "text-[#4B5563]"}`}>
               Failed Payments
             </span>
           </div>
