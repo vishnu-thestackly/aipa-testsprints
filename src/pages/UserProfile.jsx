@@ -13,7 +13,6 @@ import { getUserProfile } from "../api/authApi";
 import { Outlet, useLocation } from "react-router-dom";
 
 export default function UserProfile() {
-
   const [profile, setProfile] = useState(null);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("profileDashboard");
@@ -24,22 +23,41 @@ export default function UserProfile() {
 
   useEffect(() => {
     const path = location.pathname;
-    const menuKey =
-      path.includes("/new-chat") ? "newchat" :
-        path.includes("/ai-usage") ? "aiUsage" :
-          path.includes("/tasks") || path.includes("/reminder") ? "tasks" :
-            path.includes("/integrations") ? "integrations" :
-                    path.includes("/settings/preferences") ? "preferenceSetting" :
-                      path.includes("/settings/ai-intelligence") ? "aiIntelligence" :
-                        path.includes("/settings/security") ? "security" :
-                          path.includes("/settings/notifications") || path.includes("/settings/notification-settings") || path.includes("/notification") ? "notifications" :
-                            "profileDashboard";
+    const menuKey = path.includes("/new-chat")
+      ? "newchat"
+      : path.includes("/ai-usage")
+        ? "aiUsage"
+        : path.includes("/tasks") || path.includes("/reminder")
+          ? "tasks"
+          : path.includes("/integrations")
+            ? "integrations"
+            : path.includes("/settings/preferences")
+              ? "preferenceSetting"
+              : path.includes("/settings/ai-intelligence")
+                ? "aiIntelligence"
+                : path.includes("/settings/security")
+                  ? "security"
+                  : path.includes("/settings/ai-memory")
+                    ? "aiMemory"
+                    : path.includes("/settings/notifications") ||
+                        path.includes("/settings/notification-settings") ||
+                        path.includes("/notification")
+                      ? "notifications"
+                      : "profileDashboard";
 
     setActiveItem(menuKey);
-    if (path.includes("/settings/preferences")) setProfilePage("preferenceSetting");
-    if (path.includes("/settings/ai-intelligence")) setProfilePage("aiIntelligence");
+    if (path.includes("/settings/preferences"))
+      setProfilePage("preferenceSetting");
+    if (path.includes("/settings/ai-intelligence"))
+      setProfilePage("aiIntelligence");
     if (path.includes("/settings/security")) setProfilePage("security");
-    if (path.includes("/settings/notifications") || path.includes("/settings/notification-settings") || path.includes("/notification")) setProfilePage("notifications");
+    if (path.includes("/settings/ai-memory")) setProfilePage("aiMemory");
+    if (
+      path.includes("/settings/notifications") ||
+      path.includes("/settings/notification-settings") ||
+      path.includes("/notification")
+    )
+      setProfilePage("notifications");
     if (path.endsWith("/profile")) setProfilePage("dashboard");
   }, [location.pathname]);
 
@@ -85,7 +103,6 @@ export default function UserProfile() {
 
         {/* Content Wrapper */}
         <div className="flex-1 overflow-y-auto bg-gray-100 scrollbar-hide ">
-
           <Outlet
             context={{
               languageOpen,
@@ -100,7 +117,6 @@ export default function UserProfile() {
           />
         </div>
       </div>
-
     </div>
   );
 }
