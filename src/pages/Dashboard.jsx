@@ -21,6 +21,8 @@ import SemanticMemory from "../components/admin/ai/SemanticMemory/SemanticMemory
 import PerformanceInsights from "../components/admin/AnalyticsAndPerformance/PerformanceInsights";
 import PerformanceOverview from "../components/admin/AnalyticsAndPerformance/PerformanceOverview";
 import IntentAnalysis from "../components/admin/AnalyticsAndPerformance/IntentAnalysis";
+import TaskCompletion from "../components/admin/AnalyticsAndPerformance/TaskCompletion";
+import ErrorAnalysis from "../components/admin/AnalyticsAndPerformance/ErrorAnalysis";
 import AuditLogs from "../components/admin/AnalyticsAndPerformance/AuditLogs";
 
 import TrackApiIntegration from "../components/admin/TrackApi/TrackApiIntegration";
@@ -236,6 +238,11 @@ export default function Dashboard({ defaultItem }) {
             activeItem === "analytics_performance") && <PerformanceInsights />}
           {activeItem === "performance_overview" && <PerformanceOverview />}
           {activeItem === "intent_analysis" && <IntentAnalysis />}
+          {(activeItem === "task_completion_analytics" ||
+            activeItem === "taskCompletion") && <TaskCompletion />}
+          {(activeItem === "error_fallback_analytics" ||
+            activeItem === "taskError" ||
+            activeItem === "error_analysis") && <ErrorAnalysis />}
           {activeItem === "usage_trend_analytics" && <UsageTrendAnalytics />}
           {activeItem === "optimization_recommendations" && (
             <OptimizationRecommendations />

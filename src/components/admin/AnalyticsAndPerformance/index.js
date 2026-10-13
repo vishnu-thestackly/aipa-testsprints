@@ -1,6 +1,10 @@
 export { default as PerformanceInsights } from "./PerformanceInsights";
 export { default as PerformanceOverview } from "./PerformanceOverview";
 export { default as IntentAnalysis } from "./IntentAnalysis";
+export { default as TaskCompletion } from "./TaskCompletion";
+export { default as ErrorAnalysis } from "./ErrorAnalysis";
+export { default as TaskCompletionAnalytics } from "./TaskCompletion";
+export { default as ErrorFallbackAnalytics } from "./ErrorAnalysis";
 export { default as UsageTrendAnalytics } from "./UsageTrendAnalytics";
 export { default as OptimizationRecommendations } from "./OptimizationRecommendations";
 export { default as UserEngagementInsights } from "./UserEngagementInsights";

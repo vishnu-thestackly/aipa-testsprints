@@ -231,6 +231,23 @@ function App() {
           element={<Dashboard defaultItem="security_audit_logs" />}
         />
 
+        <Route
+          path="/task-completion-analytics"
+          element={<Dashboard defaultItem="task_completion_analytics" />}
+        />
+        <Route
+          path="/error-fallback-analytics"
+          element={<Dashboard defaultItem="error_fallback_analytics" />}
+        />
+        <Route
+          path="/task-completion"
+          element={<Dashboard defaultItem="task_completion_analytics" />}
+        />
+        <Route
+          path="/error-analysis"
+          element={<Dashboard defaultItem="error_fallback_analytics" />}
+        />
+
         <Route path="/" element={<PersonalAssistant />} />
         <Route path="/paymentmethod" element={<PaymentMethod />} />
       </Routes>
