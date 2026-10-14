@@ -3,7 +3,7 @@ import AuditAlert from "../../../assets/images/AuditAlert.svg";
 import ApplyFilter from "../../../assets/images/ApplyFilter.svg";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Completed from "../../../assets/images/Completed.svg";
+import Completed from "../../../assets/images/completed.svg";
 import TotalTaskAnalytics from "../../../assets/images/TotalTaskAnalytics.svg";
 
 const TaskCompletion = () => {
@@ -227,7 +227,11 @@ const TaskCompletion = () => {
         <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
           {/* Total Tasks */}
           <div className="flex min-h-[64px] items-center gap-3 rounded-xl border border-[#EDF0F5] p-3">
-            <img src={TotalTaskAnalytics} alt="Total Tasks" className="h-10 w-10 shrink-0" />
+            <img
+              src={TotalTaskAnalytics}
+              alt="Total Tasks"
+              className="h-10 w-10 shrink-0"
+            />
             <div>
               <div className="text-[14px] sm:text-[16px] md:text-[18px] font-semibold text-[#1E293B]">
                 18,740
@@ -240,7 +244,11 @@ const TaskCompletion = () => {
 
           {/* Completed */}
           <div className="flex min-h-[64px] items-center gap-3 rounded-xl border border-[#EDF0F5] p-3">
-            <img src={Completed} alt="Completed" className="h-10 w-10 shrink-0" />
+            <img
+              src={Completed}
+              alt="Completed"
+              className="h-10 w-10 shrink-0"
+            />
             <div>
               <div className="text-[11px] sm:text-[12px] text-[#5B5B5B]">
                 Completed
@@ -317,7 +325,10 @@ const TaskCompletion = () => {
 
               <tbody className="text-[10px] sm:text-[12px] md:text-[14px]">
                 {filteredTasks.map((task) => (
-                  <tr key={task.id} className="hover:bg-slate-50 transition-colors">
+                  <tr
+                    key={task.id}
+                    className="hover:bg-slate-50 transition-colors"
+                  >
                     <td className="h-7 border-b border-[#E9EBEF] py-3 sm:py-4 px-3 sm:px-5 md:px-6 text-[#506DA0]">
                       {task.id}
                     </td>

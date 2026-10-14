@@ -135,7 +135,7 @@ export default function SecurityDashboard() {
                   {item.label}
                 </p>
                 <span
-                  className={`inline-flex items-center justify-center px-4 py-2 rounded-full text-[12px] font-semibold min-w-[84px] ${
+                  className={`inline-flex items-center justify-center px-3 py-2 rounded-full text-[12px] font-semibold min-w-[84px] ${
                     STATUS_STYLES[item.variant]
                   }`}
                 >
