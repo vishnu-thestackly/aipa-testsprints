@@ -39,11 +39,13 @@ import PrivacyConsent from "../components/admin/Security/PrivacyConsent";
 import DataDeletionRequest from "../components/admin/Security/DataDeletionRequest";
 import ApiSecurity from "../components/admin/Security/ApiSecurity";
 import SecurityAuditLogs from "../components/admin/Security/SecurityAuditLogs";
+import { useTheme } from "../context/ThemeContext";
 
 // session timeout
 import useIdleTimeout from "../hooks/useIdleTimeout";
 
 export default function Dashboard({ defaultItem }) {
+  const { isDark } = useTheme();
   const [activeItem, setActiveItem] = useState(() => {
     return (
       defaultItem ||
@@ -117,7 +119,7 @@ export default function Dashboard({ defaultItem }) {
   };
 
   return (
-    <div className="h-screen flex  flex-col">
+    <div className={`h-screen flex flex-col ${isDark ? "bg-[#010718]" : ""}`}>
       {/* Navbar */}
       <Navbar
         activeItem={activeItem}
@@ -143,7 +145,11 @@ export default function Dashboard({ defaultItem }) {
         />
 
         {/* Content Wrapper */}
-        <div className="flex-1 overflow-hidden bg-gray-100 ">
+        <div
+          className={`flex-1 overflow-hidden transition-colors duration-300 ${
+            isDark ? "bg-[#010718]" : "bg-gray-100"
+          }`}
+        >
           {activeItem === "dashboard" && <DashboardContent />}
 
           {/* {activeItem === "manage" && (

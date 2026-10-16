@@ -247,6 +247,14 @@ function App() {
           path="/error-analysis"
           element={<Dashboard defaultItem="error_fallback_analytics" />}
         />
+        <Route
+          path="/semantic-memory"
+          element={<Dashboard defaultItem="semanticmemory" />}
+        />
+        <Route
+          path="/semanticmemory"
+          element={<Dashboard defaultItem="semanticmemory" />}
+        />
 
         <Route path="/" element={<PersonalAssistant />} />
         <Route path="/paymentmethod" element={<PaymentMethod />} />

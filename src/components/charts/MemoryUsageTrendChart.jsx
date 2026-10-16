@@ -9,11 +9,13 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { getMemoryTrend } from "../../api/authApi";
+import { useTheme } from "../../context/ThemeContext";
 
 const isMobile =
   typeof window !== "undefined" && window.innerWidth < 640;
 
 export default function MemoryUsageTrendChart() {
+  const { isDark } = useTheme();
   const [range, setRange] = useState("weekly");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -53,20 +55,32 @@ export default function MemoryUsageTrendChart() {
   }));
 
   return (
-    <div className="bg-white w-full overflow-x-hidden">
+    <div className={`w-full overflow-x-hidden ${isDark ? "bg-transparent" : "bg-white"}`}>
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-4 w-full">
-        <h4 className="text-[16px] sm:text-[18px] font-medium text-[#3D3D3D]">
+        <h4
+          className={`text-[16px] sm:text-[18px] font-medium ${
+            isDark ? "text-white" : "text-[#3D3D3D]"
+          }`}
+        >
           Memory Usage Trend
         </h4>
 
-        <div className="flex gap-2 w-full sm:w-[223px] h-[35px] rounded-[16px] border border-[#E2E2E2] items-center justify-center px-1">
+        <div
+          className={`flex gap-2 w-full sm:w-[223px] h-[35px] rounded-[16px] border items-center justify-center px-1 ${
+            isDark
+              ? "border-[#586D93] bg-[#0A1325]"
+              : "border-[#E2E2E2] bg-white"
+          }`}
+        >
           <button
             type="button"
             onClick={() => setRange("weekly")}
             className={`flex-1 h-[28px] rounded-[16px] text-[11px] sm:text-[13px] lg:text-[14px] font-normal tracking-[0.02em] cursor-pointer transition-all duration-200 ${
               range === "weekly"
                 ? "bg-[#4866F6] text-white"
+                : isDark
+                ? "text-[#8D97A9] hover:text-white"
                 : "bg-white text-[#3D3D3D] hover:bg-[#4866F6] hover:text-white"
             }`}
           >
@@ -79,6 +93,8 @@ export default function MemoryUsageTrendChart() {
             className={`flex-1 h-[28px] rounded-[16px] text-[11px] sm:text-[13px] lg:text-[14px] font-normal tracking-[0.02em] cursor-pointer transition-all duration-200 ${
               range === "monthly"
                 ? "bg-[#4866F6] text-white"
+                : isDark
+                ? "text-[#8D97A9] hover:text-white"
                 : "bg-white text-[#3D3D3D] hover:bg-[#4866F6] hover:text-white"
             }`}
           >
@@ -87,7 +103,11 @@ export default function MemoryUsageTrendChart() {
         </div>
       </div>
 
-      <div className="mb-4 border-b border-[#CFCFCF]" />
+      <div
+        className={`mb-4 border-b ${
+          isDark ? "border-[#586D93]" : "border-[#CFCFCF]"
+        }`}
+      />
 
       {/* Chart */}
       <div className="w-full h-[220px] sm:h-[260px] lg:h-[300px]">
@@ -104,23 +124,24 @@ export default function MemoryUsageTrendChart() {
             <BarChart
               data={chartData}
               barSize={isMobile ? 18 : 28}
+              margin={{ top: 10, right: 10, left: -10, bottom: 0 }}
             >
               <CartesianGrid
                 vertical={false}
-                stroke="#E5E7EB"
+                stroke={isDark ? "#586D93" : "#E5E7EB"}
               />
 
               <XAxis
                 dataKey="day"
                 tick={{
-                  fill: "#586D93",
+                  fill: isDark ? "#8D97A9" : "#586D93",
                   fontSize: 10,
                 }}
                 axisLine={{
-                  stroke: "#CFCFCF80",
+                  stroke: isDark ? "#586D93" : "#CFCFCF80",
                 }}
                 tickLine={{
-                  stroke: "#CFCFCF80",
+                  stroke: isDark ? "#586D93" : "#CFCFCF80",
                 }}
                 interval={0}
                 textAnchor={isMobile ? "end" : "middle"}
@@ -129,24 +150,17 @@ export default function MemoryUsageTrendChart() {
 
               <YAxis
                 domain={[0, 1000]}
-                ticks={[
-                  0,
-                  200,
-                  400,
-                  600,
-                  800,
-                  1000,
-                ]}
+                ticks={[0, 200, 400, 600, 800, 1000]}
                 tick={{
-                  fill: "#586D93",
+                  fill: isDark ? "#8D97A9" : "#586D93",
                   fontSize: 10,
                 }}
                 tickMargin={10}
                 axisLine={{
-                  stroke: "#CFCFCF80",
+                  stroke: isDark ? "#586D93" : "#CFCFCF80",
                 }}
                 tickLine={{
-                  stroke: "#CFCFCF80",
+                  stroke: isDark ? "#586D93" : "#CFCFCF80",
                 }}
                 label={{
                   value: "Memory",
@@ -155,22 +169,30 @@ export default function MemoryUsageTrendChart() {
                   offset: 0,
                   dy: 5,
                   style: {
-                    fill: "#3D3D3D",
+                    fill: isDark ? "#8D97A9" : "#3D3D3D",
                     fontSize: 12,
                     fontWeight: 400,
                     letterSpacing: "0.02em",
                     lineHeight: "25px",
-                    fontFamily: "SF Pro",
+                    fontFamily: "SF Pro, sans-serif",
                   },
                 }}
               />
 
               <Tooltip
+                cursor={{ fill: isDark ? "rgba(88, 109, 147, 0.12)" : "rgba(0, 0, 0, 0.05)" }}
                 contentStyle={{
+                  backgroundColor: isDark ? "#0A1325" : "#ffffff",
+                  borderColor: isDark ? "#586D93" : "#e5e7eb",
                   borderRadius: "8px",
-                  border: "none",
-                  boxShadow:
-                    "0px 2px 8px rgba(0,0,0,0.1)",
+                  color: isDark ? "#ffffff" : "#000000",
+                  boxShadow: "0px 4px 12px rgba(0,0,0,0.3)",
+                }}
+                itemStyle={{
+                  color: isDark ? "#ffffff" : "#000000",
+                }}
+                labelStyle={{
+                  color: isDark ? "#8D97A9" : "#64748b",
                 }}
               />
 
@@ -185,7 +207,11 @@ export default function MemoryUsageTrendChart() {
       </div>
 
       {/* Footer */}
-      <p className="text-center font-normal text-[9px] sm:text-[10px] leading-[25px] tracking-[0.02em] text-[#3D3D3D] md:mt-2">
+      <p
+        className={`text-center font-normal text-[9px] sm:text-[10px] leading-[25px] tracking-[0.02em] md:mt-2 ${
+          isDark ? "text-[#8D97A9]" : "text-[#3D3D3D]"
+        }`}
+      >
         {range === "weekly"
           ? "No of days (weekly)"
           : "No of weeks (monthly)"}

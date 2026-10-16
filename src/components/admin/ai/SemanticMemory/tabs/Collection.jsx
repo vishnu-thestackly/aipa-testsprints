@@ -8,7 +8,10 @@ import { Search, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 import eyeActionIcon from "../../../../../assets/images/eye_action.svg";
 import { getQdrantDashboard } from "../../../../../api/authApi";
+import { useTheme } from "../../../../../context/ThemeContext";
 
+// -----------------------------------------------------------------------------
+// CONSTANTS
 // -----------------------------------------------------------------------------
 // CONSTANTS
 // -----------------------------------------------------------------------------
@@ -18,6 +21,7 @@ const PAGE_SIZE = 6;
 // Collection — Memory Collection list (Qdrant Collection Management)
 // -----------------------------------------------------------------------------
 export default function Collection({ onViewCollection }) {
+  const { isDark } = useTheme();
   const [collections, setCollections] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -98,10 +102,20 @@ export default function Collection({ onViewCollection }) {
   };
 
   return (
-    <div className="mx-4 mb-6 rounded-[20px] p-1 md:mx-5 md:border md:border-[#E2E2E2] md:p-5 md:shadow-sm lg:mx-7">
+    <div
+      className={`mx-4 mb-6 rounded-[20px] p-4 sm:p-5 md:p-6 pb-40 sm:pb-48 md:pb-52 lg:pb-[210px] md:mx-5 md:border md:shadow-sm lg:mx-7 ${
+        isDark
+          ? "md:border-[#586D93] bg-[#070E1E]"
+          : "md:border-[#E2E2E2] bg-white"
+      }`}
+    >
       {/* Header: title + search */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h3 className="text-[18px] font-medium text-[#3D3D3D]">
+        <h3
+          className={`text-[18px] font-medium ${
+            isDark ? "text-white" : "text-[#3D3D3D]"
+          }`}
+        >
           Memory Collection
         </h3>
 
@@ -111,27 +125,45 @@ export default function Collection({ onViewCollection }) {
             value={searchQuery}
             onChange={handleSearchChange}
             placeholder="Search by Collection Name"
-            className="w-full rounded-lg border border-[#CFCFCF] bg-white py-2.5 pl-3 pr-10 text-[14px] text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-0"
+            className={`w-full rounded-lg border py-2.5 pl-3 pr-10 text-[14px] focus:outline-none focus:ring-0 ${
+              isDark
+                ? "border-[#586D93] bg-[#0A1325] text-white placeholder:text-[#586D93] focus:border-[#4866F6]"
+                : "border-[#CFCFCF] bg-white text-slate-700 placeholder:text-slate-400 focus:border-[#4866F6]"
+            }`}
           />
 
           <Search
-            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#586D93]"
             aria-hidden="true"
           />
         </div>
       </div>
 
-      <div className="mt-4 border-b border-[#CFCFCF]" />
+      <div
+        className={`mt-4 border-b ${
+          isDark ? "border-[#586D93]" : "border-[#CFCFCF]"
+        }`}
+      />
 
       {/* Collection table */}
-      <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
+      <div
+        className={`mt-4 overflow-hidden rounded-xl ${
+          isDark ? "border border-[#586D93]" : "border border-slate-200"
+        }`}
+      >
         <div
           ref={tableScrollRef}
           className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           <table className="w-full min-w-[700px] table-fixed text-sm">
             <thead>
-              <tr className="bg-[#edf0fe] text-left text-[#3D3D3D]">
+              <tr
+                className={`text-left ${
+                  isDark
+                    ? "text-[#8D97A9] border-b-0"
+                    : "bg-[#edf0fe] text-[#3D3D3D] border-b border-slate-200"
+                }`}
+              >
                 <th className="w-[10%] whitespace-nowrap px-4 py-4 font-medium">
                   SL No
                 </th>
@@ -154,7 +186,13 @@ export default function Collection({ onViewCollection }) {
               </tr>
             </thead>
 
-            <tbody className="divide-y divide-slate-200 bg-white">
+            <tbody
+              className={`divide-y ${
+                isDark
+                  ? "divide-[#586D93] bg-[#070E1E]"
+                  : "divide-slate-200 bg-white"
+              }`}
+            >
               {/* Loading */}
               {loading ? (
                 <tr>
@@ -179,8 +217,12 @@ export default function Collection({ onViewCollection }) {
                 /* Collection rows */
                 pageRows.map((row, index) => (
                   <tr
-                    key={row.id}
-                    className="h-12 text-[#586D93]"
+                    key={row.id || index}
+                    className={`h-12 transition-colors ${
+                      isDark
+                        ? "text-[#8D97A9] hover:bg-[#0C162B]/50"
+                        : "text-[#586D93] hover:bg-slate-50"
+                    }`}
                   >
                     <td className="whitespace-nowrap px-4 py-3">
                       {start + index + 1}
@@ -195,7 +237,13 @@ export default function Collection({ onViewCollection }) {
                     </td>
 
                     <td className="px-4 py-3">
-                      <span className="inline-flex w-[95px] items-center justify-start gap-2 rounded-full bg-[#33B46926] py-1.5 pl-4 pr-3 text-sm font-normal text-[#33B469]">
+                      <span
+                        className={`inline-flex w-[95px] items-center justify-start gap-2 rounded-full py-1.5 pl-4 pr-3 text-sm font-normal ${
+                          isDark
+                            ? "bg-[#0B3824] text-[#33B469]"
+                            : "bg-[#33B46926] text-[#33B469]"
+                        }`}
+                      >
                         <span
                           className="h-2 w-2 shrink-0 rounded-full bg-[#33B469]"
                           aria-hidden="true"
@@ -211,13 +259,17 @@ export default function Collection({ onViewCollection }) {
                       <button
                         type="button"
                         onClick={() => onViewCollection?.(row)}
-                        className="inline-flex cursor-pointer items-center justify-center"
+                        className={`inline-flex cursor-pointer items-center justify-center w-7 h-7 rounded-full transition-colors ${
+                          isDark
+                            ? "bg-[#101F3D] text-[#4866F6] hover:bg-[#4866F6] hover:text-white"
+                            : "hover:opacity-80"
+                        }`}
                         title="View Details"
                       >
                         <img
                           src={eyeActionIcon}
                           alt="View"
-                          className="h-6 w-6"
+                          className="h-5 w-5"
                         />
                       </button>
                     </td>
@@ -239,13 +291,18 @@ export default function Collection({ onViewCollection }) {
         </div>
 
         {/* Pagination footer + horizontal scrollbar */}
-        <div className="border-t border-slate-200 px-4 py-3">
+        <div
+          className={`border-t px-4 sm:px-6 py-4 sm:py-5 min-h-[64px] sm:min-h-[72px] flex flex-col justify-center ${
+            isDark ? "border-[#586D93]" : "border-slate-200"
+          }`}
+        >
           <div className="flex min-h-9 items-center justify-center sm:justify-end">
             {totalPages > 1 ? (
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
+                isDark={isDark}
               />
             ) : (
               <nav
@@ -264,6 +321,7 @@ export default function Collection({ onViewCollection }) {
           <div className="mt-3 min-h-1 lg:hidden">
             <HorizontalScrollIndicator
               scrollRef={tableScrollRef}
+              isDark={isDark}
             />
           </div>
         </div>
@@ -326,6 +384,7 @@ function Pagination({
   currentPage,
   totalPages,
   onPageChange,
+  isDark = false,
 }) {
   const items = getPaginationItems(
     currentPage,
@@ -338,15 +397,19 @@ function Pagination({
   const navButtonClass =
     "inline-flex items-center gap-1 rounded px-2 py-1 transition-colors";
 
-  const navButtonEnabled =
-    "text-[#4866F6] hover:text-blue-800";
+  const navButtonEnabled = isDark
+    ? "text-[#4866F6] hover:text-blue-400"
+    : "text-[#4866F6] hover:text-blue-800";
 
-  const navButtonDisabled =
-    "cursor-not-allowed text-slate-300";
+  const navButtonDisabled = isDark
+    ? "cursor-not-allowed text-[#3A4A6B]"
+    : "cursor-not-allowed text-slate-300";
 
   return (
     <nav
-      className="flex shrink-0 items-center justify-end gap-1 text-[15px] text-slate-600"
+      className={`flex shrink-0 items-center justify-end gap-1 text-[15px] ${
+        isDark ? "text-[#8D97A9]" : "text-slate-600"
+      }`}
       aria-label="Pagination"
     >
       <button
@@ -372,7 +435,9 @@ function Pagination({
         item === "ellipsis" ? (
           <span
             key={`ellipsis-${index}`}
-            className="select-none px-1 text-slate-600"
+            className={`select-none px-1 ${
+              isDark ? "text-[#586D93]" : "text-slate-600"
+            }`}
             aria-hidden="true"
           >
             ....
@@ -390,7 +455,9 @@ function Pagination({
             className={`min-w-[2rem] rounded px-2 py-1 transition-colors focus:outline-none ${
               item === currentPage
                 ? "bg-[#4866F6] font-medium text-white"
-                : "hover:text-[#4866F6]"
+                : isDark
+                ? "text-[#8D97A9] hover:text-[#4866F6]"
+                : "text-slate-600 hover:text-[#4866F6]"
             }`}
           >
             {item}
@@ -426,6 +493,7 @@ function Pagination({
 function HorizontalScrollIndicator({
   scrollRef,
   className = "",
+  isDark = false,
 }) {
   const [thumb, setThumb] = useState({
     width: 75,
@@ -503,7 +571,9 @@ function HorizontalScrollIndicator({
 
   return (
     <div
-      className={`relative h-1 w-full rounded-full bg-[#E0E0E0] ${className}`.trim()}
+      className={`relative h-1 w-full rounded-full ${
+        isDark ? "bg-[#586D93]/40" : "bg-[#E0E0E0]"
+      } ${className}`.trim()}
       aria-hidden="true"
     >
       <div

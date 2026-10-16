@@ -2,56 +2,55 @@
 // Semantic Memory — parent shell
 // Header + compact right-aligned pill tabs:
 //   1) Qdrant Collection Management
-//   2) Semantic Memory Dashboard
+//   2) Sematic Memory Dashboard
 // Collection Details is a drill-down from the Qdrant tab (Eye action).
 // =============================================================================
 
 import { useState } from "react";
-
 import SemanticMemoryContent from "./tabs/Semantic";
 import CollectionDetails from "./tabs/CollectionDetails";
-import {
-  getSemanticMemoryCollectionDetails,
-} from "../../../../api/authApi";
+import { getSemanticMemoryCollectionDetails } from "../../../../api/authApi";
+import { useTheme } from "../../../../context/ThemeContext";
 
 export default function SemanticMemory() {
+  const { isDark } = useTheme();
+
   // Active tab: "qdrant" | "dashboard"
   const [activeTab, setActiveTab] = useState("qdrant");
   // Selected collection for details drill-down (null = list / dashboard view)
   const [selectedCollection, setSelectedCollection] = useState(null);
- 
+
   const [collectionLoading, setCollectionLoading] = useState(false);
   const [collectionError, setCollectionError] = useState("");
 
   const tabs = [
     { id: "qdrant", label: "Qdrant Collection Management" },
-    { id: "dashboard", label: "Semantic Memory Dashboard" },
+    { id: "dashboard", label: "Sematic Memory dashboard" },
   ];
 
   const handleViewCollection = async (collection) => {
-  try {
-    setCollectionLoading(true);
-    setCollectionError("");
+    try {
+      setCollectionLoading(true);
+      setCollectionError("");
 
-    const response = await getSemanticMemoryCollectionDetails(
-      collection.id
-    );
+      const response = await getSemanticMemoryCollectionDetails(
+        collection.id
+      );
 
-    console.log("Collection Details Response:", response);
+      console.log("Collection Details Response:", response);
 
-    if (response?.success) {
-      setSelectedCollection(response.data);
-    } else {
+      if (response?.success) {
+        setSelectedCollection(response.data);
+      } else {
+        setCollectionError("Failed to load collection details.");
+      }
+    } catch (error) {
+      console.error("Collection Details API Error:", error);
       setCollectionError("Failed to load collection details.");
+    } finally {
+      setCollectionLoading(false);
     }
-  } catch (error) {
-    console.error("Collection Details API Error:", error);
-    setCollectionError("Failed to load collection details.");
-  } finally {
-    setCollectionLoading(false);
-  }
-};
-
+  };
 
   const handleBackFromDetails = () => {
     setSelectedCollection(null);
@@ -65,8 +64,18 @@ export default function SemanticMemory() {
   // Collection details takes over the content area
   if (selectedCollection) {
     return (
-      <div className="h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide">
-        <div className="w-full flex flex-col gap-4 md:gap-5 bg-white rounded-[20px] md:rounded-[25px] border-b border-gray-200 shadow-[0px_1px_4px_0px_#00000040]">
+      <div
+        className={`h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide ${
+          isDark ? "bg-[#010718]" : ""
+        }`}
+      >
+        <div
+          className={`w-full flex flex-col gap-4 md:gap-5 rounded-[20px] md:rounded-[25px] ${
+            isDark
+              ? "bg-[#060D1B] border-0"
+              : "bg-white border border-gray-200 shadow-[0px_1px_4px_0px_#00000040]"
+          }`}
+        >
           <CollectionDetails
             collection={selectedCollection}
             onBack={handleBackFromDetails}
@@ -77,20 +86,44 @@ export default function SemanticMemory() {
   }
 
   return (
-    <div className="h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide">
-      <div className="w-full flex flex-col gap-4 md:gap-5 bg-white rounded-[20px] md:rounded-[25px] border-b border-gray-200 shadow-[0px_1px_4px_0px_#00000040]">
+    <div
+      className={`h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide ${
+        isDark ? "bg-[#010718]" : ""
+      }`}
+    >
+      <div
+        className={`w-full flex flex-col gap-4 md:gap-5 rounded-[20px] md:rounded-[25px] ${
+          isDark
+            ? "bg-[#060D1B] border-0"
+            : "bg-white border border-gray-200 shadow-[0px_1px_4px_0px_#00000040]"
+        }`}
+      >
         {/* Header */}
-        <div className="mx-4 md:mx-5 lg:mx-7 py-4 md:py-5 border-b border-[#CFCFCF]">
-          <h2 className="text-[18px] font-medium text-[#3D3D3D]">
+        <div
+          className={`mx-4 md:mx-5 lg:mx-7 py-4 md:py-5 border-b ${
+            isDark ? "border-[#586D93]" : "border-[#CFCFCF]"
+          }`}
+        >
+          <h2
+            className={`text-[18px] font-medium ${
+              isDark ? "text-white" : "text-[#3D3D3D]"
+            }`}
+          >
             Semantic memory
           </h2>
         </div>
 
         {/* Pill tab switcher — mobile: BehaviorLearning scroll; desktop: compact right-aligned */}
-        <div className="px-4 md:px-5 lg:px-7 ">
+        <div className="px-4 md:px-5 lg:px-7">
           {/* Mobile / tablet */}
-          <div className="w-full border border-[#D9D9D9] rounded-full bg-white  p-1 overflow-hidden lg:hidden">
-            <div className="overflow-x-auto scrollbar-hide ">
+          <div
+            className={`w-full rounded-full p-1 overflow-hidden lg:hidden ${
+              isDark
+                ? "border-0 bg-[#0A1325]"
+                : "border border-[#D9D9D9] bg-white"
+            }`}
+          >
+            <div className="overflow-x-auto scrollbar-hide">
               <div className="flex min-w-max gap-2">
                 {tabs.map((tab) => (
                   <button
@@ -101,7 +134,9 @@ export default function SemanticMemory() {
                       ${
                         activeTab === tab.id
                           ? "bg-[#4866F6] text-white"
-                          : "text-[#586D93]"
+                          : isDark
+                          ? "text-[#8D97A9] hover:text-white"
+                          : "text-[#586D93] hover:text-[#3D3D3D]"
                       }`}
                   >
                     {tab.label}
@@ -113,7 +148,13 @@ export default function SemanticMemory() {
 
           {/* Desktop */}
           <div className="hidden lg:flex justify-end">
-            <div className="w-[680px] h-[48px] flex items-center rounded-full border border-[#D9D9D9] bg-white p-1 gap-[5px]">
+            <div
+              className={`w-[680px] h-[48px] flex items-center rounded-full p-1 gap-[5px] ${
+                isDark
+                  ? "border-0 bg-[#0A1325]"
+                  : "border border-[#D9D9D9] bg-white"
+              }`}
+            >
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -123,6 +164,8 @@ export default function SemanticMemory() {
                     ${
                       activeTab === tab.id
                         ? "bg-[#4866F6] text-white shadow-md"
+                        : isDark
+                        ? "text-[#8D97A9] hover:text-white"
                         : "text-[#586D93] hover:text-[#3D3D3D]"
                     }`}
                 >
