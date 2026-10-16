@@ -24,6 +24,7 @@ import IntentAnalysis from "../components/admin/AnalyticsAndPerformance/IntentAn
 import TaskCompletion from "../components/admin/AnalyticsAndPerformance/TaskCompletion";
 import ErrorAnalysis from "../components/admin/AnalyticsAndPerformance/ErrorAnalysis";
 import AuditLogs from "../components/admin/AnalyticsAndPerformance/AuditLogs";
+import AiPerformanceMetrics from "../components/admin/AnalyticsAndPerformance/AiPerformanceMetrics";
 
 import TrackApiIntegration from "../components/admin/TrackApi/TrackApiIntegration";
 import UsageTrendAnalytics from "../components/admin/AnalyticsAndPerformance/UsageTrendAnalytics";
@@ -243,6 +244,7 @@ export default function Dashboard({ defaultItem }) {
           {(activeItem === "error_fallback_analytics" ||
             activeItem === "taskError" ||
             activeItem === "error_analysis") && <ErrorAnalysis />}
+          {activeItem === "ai_performance_metrics" && <AiPerformanceMetrics />}
           {activeItem === "usage_trend_analytics" && <UsageTrendAnalytics />}
           {activeItem === "optimization_recommendations" && (
             <OptimizationRecommendations />
@@ -275,27 +277,21 @@ export default function Dashboard({ defaultItem }) {
 
           {activeItem === "data_deletion_request" && <DataDeletionRequest />}
 
-          {activeItem === "data_deletion_request" && (
-            <DataDeletionRequest />
-          )}
+          {activeItem === "data_deletion_request" && <DataDeletionRequest />}
 
           {/* Security & Compliance - API Security */}
-          {activeItem === "api_security" && (
-            <ApiSecurity />
-          )}
+          {activeItem === "api_security" && <ApiSecurity />}
 
           {/* Security & Compliance - Security Audit Logs */}
-          {activeItem === "security_audit_logs" && (
-            <SecurityAuditLogs />
-          )}
-
+          {activeItem === "security_audit_logs" && <SecurityAuditLogs />}
         </div>
       </div>
 
       {showSuccess && (
         <div
-          className={`fixed top-5 right-5 z-[9999] text-white px-5 py-3 rounded-lg shadow-lg ${successType === "delete" ? "bg-red-500" : "bg-green-500"
-            }`}
+          className={`fixed top-5 right-5 z-[9999] text-white px-5 py-3 rounded-lg shadow-lg ${
+            successType === "delete" ? "bg-red-500" : "bg-green-500"
+          }`}
         >
           {successMessage}
         </div>

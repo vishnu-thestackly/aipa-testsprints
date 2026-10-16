@@ -5,6 +5,7 @@ export { default as TaskCompletion } from "./TaskCompletion";
 export { default as ErrorAnalysis } from "./ErrorAnalysis";
 export { default as TaskCompletionAnalytics } from "./TaskCompletion";
 export { default as ErrorFallbackAnalytics } from "./ErrorAnalysis";
+export { default as AiPerformanceMetrics } from "./AiPerformanceMetrics";
 export { default as UsageTrendAnalytics } from "./UsageTrendAnalytics";
 export { default as OptimizationRecommendations } from "./OptimizationRecommendations";
 export { default as UserEngagementInsights } from "./UserEngagementInsights";
