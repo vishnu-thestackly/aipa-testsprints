@@ -7,6 +7,7 @@
 // -----------------------------------------------------------------------------
 import { Children, useEffect, useRef, useState } from "react";
 
+
 import dayjs from "dayjs";
 import {
   Check,
@@ -36,6 +37,7 @@ import exportIcon from "../../../assets/images/export_icon.svg";
 import calendarIcon from "../../../assets/images/calender.svg";
 import refundIcon from "../../../assets/images/Refund_icon.svg";
 import userStatusIcon from "../../../assets/images/user_status.svg";
+import { useTheme } from "../../../context/ThemeContext";
 
 import {
   getPaymentReportKPIs,
@@ -47,19 +49,24 @@ import {
 // CONSTANTS
 // -----------------------------------------------------------------------------
 const PAGE_SIZE = 6;
-
 const COMPACT_SELECT_PADDING = "pr-8 md:pr-7 xl:pr-30";
-const COMPACT_SELECT_TRIGGER_CLASS = `w-full md:w-auto cursor-pointer appearance-none rounded-lg border border-[#CFCFCF] bg-white py-1.5 pl-3 md:py-2.5 md:text-sm lg:text-base text-left text-[#8D97A9] focus:outline-none focus:ring-0 ${COMPACT_SELECT_PADDING}`;
+
+const COMPACT_SELECT_TRIGGER_CLASS =
+  `w-full md:w-auto cursor-pointer appearance-none rounded-lg border py-1.5 pl-3 md:py-2.5 md:text-sm lg:text-base text-left focus:outline-none focus:ring-0 ${COMPACT_SELECT_PADDING}`;
+
 const COMPACT_SELECT_CHEVRON_CLASS =
   "pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2 text-slate-400";
 
 // KPI filter row — shared field height, border, and placeholder styling (matches design)
 const KPI_FILTER_INPUT_CLASS =
-  "w-full rounded-lg border border-[#CFCFCF] bg-white py-2.5 pl-3 pr-10 text-sm text-[#8D97A9] focus:outline-none focus:ring-0 lg:text-base";
+  "w-full rounded-lg border py-2.5 pl-3 pr-10 text-sm focus:outline-none focus:ring-0 lg:text-base";
+
 const DATE_FILTER_TRIGGER_CLASS =
-  "w-full rounded-lg border border-[#CFCFCF] bg-white py-2.5 pl-3 pr-3 text-sm focus:outline-none focus:ring-0 lg:text-base";
+  "w-full rounded-lg border py-2.5 pl-3 pr-3 text-sm focus:outline-none focus:ring-0 lg:text-base";
+
 const KPI_FILTER_ICON_CLASS =
   "pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400";
+
 
 const PLAN_FILTER_OPTIONS = [
   { value: "premium", label: "Premium" },
@@ -192,12 +199,14 @@ const PAYMENT_METHOD_TOTAL = 12405.0;
 // PaymentReport — payment reports home (KPIs + transactions + charts)
 // -----------------------------------------------------------------------------
 export default function PaymentReport({ currentPage, onPageChange }) {
+
   console.log("Payment Report Component Rendered");
+
   const [stats, setStats] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [revenueData, setRevenueData] = useState([]);
   const [paymentMethodData, setPaymentMethodData] = useState([]);
-  
+   const { isDark } = useTheme();
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -216,7 +225,7 @@ export default function PaymentReport({ currentPage, onPageChange }) {
     }
   };
 
-  
+
 
   const fetchTransactions = async (filters = {}) => {
     try {
@@ -267,8 +276,8 @@ useEffect(() => {
 
 console.log("paymentMethodData State:", paymentMethodData);
   return (
-    <div className="h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide">
-      <div className="w-full min-h-full flex flex-col gap-4 rounded-[20px] md:rounded-[25px] border-b border-gray-200 bg-white p-4 shadow-[0px_1px_4px_0px_#00000040] md:gap-5 md:p-5 lg:gap-6 lg:p-6">
+    <div className={`h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide ${isDark ? "bg-[#010718]" : "bg-[#f5f6f8]"}`}>
+     <div className={`w-full min-h-full flex flex-col gap-4 rounded-[20px] md:rounded-[25px] border-b p-4 shadow-[0px_1px_4px_0px_#00000040] md:gap-5 md:p-5 lg:gap-6 lg:p-6 ${ isDark ? "border-[#586D93]  bg-[#060D1B]" : "border-gray-200 bg-white"  }`}>
         <PaymentKpiSection
           stats={stats}
           fromDate={fromDate}
@@ -308,6 +317,7 @@ function PaymentKpiSection({
   selectedStatuses,
   setSelectedStatuses,
 }) {
+  const { isDark } = useTheme();
   const togglePlan = (value) => {
     setSelectedPlans((prev) =>
       prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value],
@@ -329,9 +339,9 @@ function PaymentKpiSection({
   )}`;
 
   return (
-    <section className="shrink-0 rounded-2xl border border-slate-100 p-4 pt-2 shadow-[0_0_2px_0px_rgba(61,61,61,0.15)] md:p-5 lg:p-5">
+    <section className={`shrink-0 rounded-2xl border p-4 pt-2 shadow-[0_0_2px_0px_rgba(61,61,61,0.15)] md:p-5 lg:p-5 ${ isDark ? "border-[#586D93] bg-[#060D1B]" : "border-slate-100 bg-white" }`}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-lg font-medium text-slate-800">
+        <h2 className={`text-lg font-medium ${isDark ? "text-[#F5F7FA]" : "text-slate-800"}`}>
           Payment Reports KPI&apos;s
         </h2>
         <ExportButton className="w-full sm:w-auto shrink-0 justify-center sm:inline-flex" />
@@ -419,6 +429,7 @@ function KpiFilterBar({ children }) {
 // DateFilterField — full-width clickable trigger with full-width calendar panel
 // -----------------------------------------------------------------------------
 function DateFilterField({ label, value, onChange }) {
+  const { isDark } = useTheme();
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
 
@@ -458,10 +469,11 @@ function DateFilterField({ label, value, onChange }) {
         aria-label={`${label} date filter`}
         aria-expanded={open}
         aria-haspopup="dialog"
-        className={`${DATE_FILTER_TRIGGER_CLASS} flex cursor-pointer items-center justify-between gap-2 text-left`}
+        className={`${DATE_FILTER_TRIGGER_CLASS} ${ isDark ? "border-[#586D93] bg-[#181F2D]" : "border-[#CFCFCF] bg-white"} flex cursor-pointer items-center justify-between gap-2 text-left`}
+
       >
         <span
-          className={`min-w-0 flex-1 truncate ${value ? "text-slate-700" : "text-[#8D97A9]"}`}
+         className={`min-w-0 flex-1 truncate ${ isDark ? value   ? "text-[#586D93]" : "text-[#586D93]" : value ? "text-slate-700" : "text-[#8D97A9]"}`}
         >
           {displayText}
         </span>
@@ -471,6 +483,7 @@ function DateFilterField({ label, value, onChange }) {
           className="h-5 w-5 shrink-0"
           aria-hidden="true"
         />
+
       </button>
 
       {open && (
@@ -489,6 +502,7 @@ function DateFilterField({ label, value, onChange }) {
 // DatePickerPanel — month grid calendar dropdown (matches input width)
 // -----------------------------------------------------------------------------
 function DatePickerPanel({ label, value, onSelect, onClear }) {
+  const { isDark } = useTheme();
   const [viewDate, setViewDate] = useState(() =>
     dayjs(value || undefined).startOf("month"),
   );
@@ -516,23 +530,22 @@ function DatePickerPanel({ label, value, onSelect, onClear }) {
     const nextValue = viewDate.date(day).format("YYYY-MM-DD");
     onSelect(nextValue);
   };
-
-  return (
+ return (
     <div
       role="dialog"
       aria-label={`${label} calendar`}
-      className="absolute left-0 top-full z-50 mt-2 w-full rounded-xl border border-[#CFCFCF] bg-white p-4 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+      className={`absolute left-0 top-full z-50 mt-2 w-full rounded-xl border p-4 shadow-[0_4px_16px_rgba(0,0,0,0.08)] ${ isDark ? "border-[#586D93] bg-[#060D1B]" : "border-[#CFCFCF] bg-white"}`}
     >
       <div className="mb-3 flex items-center justify-between">
         <button
           type="button"
           onClick={goToPreviousMonth}
           aria-label="Previous month"
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-[#586D93] transition-colors hover:bg-slate-50"
+          className={`flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg transition-colors ${ isDark ? "text-[#D9E1F2] hover:bg-[#151922]" : "text-[#586D93] hover:bg-slate-50"}`}
         >
           <ChevronLeft className="h-4 w-4" aria-hidden="true" />
         </button>
-        <p className="text-sm font-medium text-[#3D3D3D]">
+        <p className={`text-sm font-medium ${ isDark ? "text-[#F5F7FA]" : "text-[#3D3D3D]"}`}>
           {viewDate.format("MMMM YYYY")}
         </p>
         <button
@@ -568,13 +581,14 @@ function DatePickerPanel({ label, value, onSelect, onClear }) {
               key={`day-${day}`}
               type="button"
               onClick={() => handleDaySelect(day)}
-              className={`flex h-7 w-full cursor-pointer items-center justify-center rounded-lg text-sm transition-colors ${
-                isSelected
-                  ? "bg-[#4866F6] font-medium text-white"
-                  : isToday
-                    ? "bg-[#E4E8FE] text-[#4866F6] hover:bg-[#d8ddfd]"
-                    : "text-[#586D93] hover:bg-slate-50"
-              }`}
+              className={`flex h-7 w-full cursor-pointer items-center justify-center rounded-lg text-sm transition-colors ${ isSelected ? "bg-[#4866F6] font-medium text-white" : isToday
+              ? isDark
+              ? "bg-[#34445E] text-[#F5F7FA] hover:bg-[#586D93]"
+              : "bg-[#E4E8FE] text-[#4866F6] hover:bg-[#d8ddfd]"
+              : isDark
+              ? "text-[#D9E1F2] hover:bg-[#151922]"
+              : "text-[#586D93] hover:bg-slate-50"
+             }`}
             >
               {day}
             </button>
@@ -587,7 +601,7 @@ function DatePickerPanel({ label, value, onSelect, onClear }) {
           <button
             type="button"
             onClick={onClear}
-            className="cursor-pointer rounded-md px-2 py-0.5 text-xs text-[#8D97A9] transition-colors hover:text-[#586D93]"
+             className={`cursor-pointer rounded-md px-2 py-0.5 text-xs transition-colors ${ isDark ? "text-[#8D97A9] hover:text-[#D9E1F2]" : "text-[#8D97A9] hover:text-[#586D93]"}`}
           >
             Clear date
           </button>
@@ -619,11 +633,12 @@ function KpiGrid({ items }) {
 // KpiCard — single KPI value, label, and icon
 // -----------------------------------------------------------------------------
 function KpiCard({ value, label, icon }) {
+  const { isDark } = useTheme();
   return (
-    <div className="flex w-full min-w-0 items-center gap-4 rounded-3xl border border-slate-100 bg-white p-4 shadow-[0_0_2px_0px_rgba(61,61,61,0.15)]">
+    <div className={`flex w-full min-w-0 items-center gap-4 rounded-3xl border p-4 shadow-[0_0_2px_0px_rgba(61,61,61,0.15)] ${ isDark ? "border-[#586D93] bg-[#060D1B]" : "border-slate-100 bg-white"}`}>
       <KpiIcon type={icon} />
       <div className="min-w-0">
-        <p className="truncate text-xl font-bold text-[#3D3D3D]">{value}</p>
+        <p className={`truncate text-xl font-bold ${ isDark ? "text-[#F5F7FA]" : "text-[#3D3D3D]" }`} >{value}</p>
         <p className="text-sm text-[#586D93] md:text-base">{label}</p>
       </div>
     </div>
@@ -634,6 +649,7 @@ function KpiCard({ value, label, icon }) {
 // KpiIcon — inner-circle badges (revenue/success/failed) or image badges (refund/subscribers)
 // -----------------------------------------------------------------------------
 function KpiIcon({ type }) {
+  const { isDark } = useTheme();
   const innerCircleIconClass = "h-5 w-5 text-[#E4E8FE]";
 
   const imageIconMap = {
@@ -643,8 +659,7 @@ function KpiIcon({ type }) {
 
   if (imageIconMap[type]) {
     return (
-      <div
-        className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#E4E8FE]"
+      <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-full  ${ isDark ? "bg-[#181F2D]" :"bg-[#E4E8FE]"} `}
         aria-hidden="true"
       >
         <img src={imageIconMap[type]} alt="" className="h-9 w-9" />
@@ -671,7 +686,7 @@ function KpiIcon({ type }) {
 
   return (
     <div
-      className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#E4E8FE]"
+      className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-full  ${ isDark ? "bg-[#181F2D]" :"bg-[#E4E8FE]"} `}
       aria-hidden="true"
     >
       <div className="flex h-6.5 w-6.5 items-center justify-center rounded-full bg-[#4866F6]">
@@ -689,6 +704,7 @@ function RecentTransactionsSection({
   currentPage,
   onPageChange,
 }) {
+   const { isDark } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatuses, setSelectedStatuses] = useState([]);
 
@@ -721,7 +737,7 @@ function RecentTransactionsSection({
 
   return (
     <section className="flex min-h-0 min-w-0 flex-col max-md:flex-none max-md:shrink-0 md:min-h-0 md:flex-1 md:overflow-visible">
-      <h2 className="mb-3 shrink-0 text-lg font-medium text-slate-800">
+      <h2 className={`mb-3 shrink-0 text-lg font-medium ${ isDark ? "text-[#FFFFFF]" : "text-slate-800"}`}>
         Recent Transactions
       </h2>
       <TransactionsToolbar
@@ -749,13 +765,15 @@ function TransactionsToolbar({
   selectedStatuses,
   onToggleStatus,
 }) {
+
+
   return (
-    <div className="mb-0 flex w-full shrink-0 flex-col gap-3 md:flex-row md:items-center md:justify-between">
+     <div className="mb-0 flex w-full shrink-0 flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <SearchInput
         value={searchQuery}
         onChange={onSearchChange}
         placeholder="Search by Name"
-        className="w-full md:w-[250px] xl:w-[400px] md:shrink-0"
+        className="w-full md:w-[250px] xl:w-[400px] md:shrink-0 "
       />
       <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
         <CheckboxFilterField
@@ -781,6 +799,7 @@ function SearchInput({
   placeholder = "Search by Name",
   className = "",
 }) {
+  const { isDark } = useTheme();
   return (
     <div className={`relative w-full ${className}`.trim()}>
       <input
@@ -788,7 +807,7 @@ function SearchInput({
         value={value ?? ""}
         onChange={onChange}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-[#CFCFCF] bg-white py-1.5 lg:py-2.5 pl-3 pr-10 lg:text-base md:text-sm md:py-2.5 text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-0 "
+        className={`w-full rounded-lg border py-1.5 pl-3 pr-10 lg:py-2.5 lg:text-base md:text-sm md:py-2.5 focus:outline-none focus:ring-0 ${ isDark ? "border-[#586D93] bg-[#181F2D] text-[#586D93] placeholder:text-[#586D93]" : "border-[#CFCFCF] bg-white text-slate-700 placeholder:text-slate-400"}`}
       />
       <Search
         className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
@@ -803,6 +822,7 @@ function SearchInput({
 // -----------------------------------------------------------------------------
 function TransactionTableBlock({ transactions, currentPage, onPageChange }) {
   const tableScrollRef = useRef(null);
+  const { isDark } = useTheme();
 
   const totalPages = Math.ceil(transactions.length / PAGE_SIZE) || 1;
   const start = (currentPage - 1) * PAGE_SIZE;
@@ -819,14 +839,14 @@ function TransactionTableBlock({ transactions, currentPage, onPageChange }) {
   }, [currentPage, totalPages, onPageChange]);
 
   return (
-    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-xl border border-slate-200 max-md:flex-none max-md:h-auto max-md:overflow-visible md:min-h-0 md:flex-1">
+    <div className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-xl border  max-md:flex-none max-md:h-auto max-md:overflow-visible md:min-h-0 md:flex-1 ${isDark ? "border-[#586D93]" : "border-slate-200"}`}>
       <div
         ref={tableScrollRef}
         className="min-h-0 min-w-0 flex-1 overflow-x-auto overscroll-x-contain [scrollbar-gutter:stable] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden max-md:flex-none max-md:overflow-y-visible md:h-[220px] md:overflow-y-scroll max-lg:touch-auto min-[1441px]:overflow-x-visible min-[1441px]:overflow-y-scroll"
       >
         <table className="w-full table-fixed text-sm max-[1440px]:min-w-[1000px] min-[1441px]:min-w-0">
           <thead className="sticky top-0 z-10">
-            <tr className="bg-[#edf0fe] text-left text-slate-700">
+            <tr  className={`text-left ${ isDark ? "bg-[#181F2D] text-[#D9E1F2]" : "bg-[#edf0fe] text-slate-700" }`}>
               <th className="w-[7%] whitespace-nowrap px-3 py-4 font-medium md:px-3 lg:px-4">
                 SL No
               </th>
@@ -848,13 +868,12 @@ function TransactionTableBlock({ transactions, currentPage, onPageChange }) {
               <th className="w-[14%] px-4 py-4 font-medium">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-200 bg-white">
+          <tbody  className={`divide-y ${ isDark ? "divide-[#586D93] bg-[#060D1B]"  : "divide-slate-200 bg-white" }`}>
             {tableSlots.map(({ transaction, rowNumber }, index) =>
               transaction ? (
                 <tr
                   key={transaction.payment_id}
-                  className="h-11 text-slate-800"
-                >
+                  className={`h-11 ${ isDark ? "text-[#586D93]" : "text-slate-800" }`} >
                   <td className="whitespace-nowrap px-3 py-2.5 text-[#586D93] md:px-3 lg:px-4">
                     {rowNumber}
                   </td>
@@ -900,7 +919,10 @@ function TransactionTableBlock({ transactions, currentPage, onPageChange }) {
           </tbody>
         </table>
       </div>
-      <div className="shrink-0 border-t border-slate-200 px-4 py-3">
+      <div className={`shrink-0 px-4 py-3 ${ isDark
+            ? "border-t border-[#586D93] bg-[#060D1B]"
+            : "border-t border-slate-200 bg-white"
+        }`}>
         <div className="flex min-h-9 items-center justify-center sm:justify-end">
           {totalPages > 1 ? (
             <Pagination
@@ -975,14 +997,16 @@ function AnalyticsChartsSection({ revenueData, paymentMethodData }) {
 // RevenueChartCard — collapsible monthly revenue bar chart
 // -----------------------------------------------------------------------------
 function RevenueChartCard({ data }) {
+  const { isDark } = useTheme();
   const [expanded, setExpanded] = useState(true);
-
   return (
     <div
-      className={`w-full rounded-2xl border border-slate-100 py-4 shadow-[0_0_2px_0px_rgba(61,61,61,0.15)] md:p-5 flex flex-col ${expanded ? "lg:h-full" : "self-start"}`}
+       className={`w-full rounded-2xl border py-4 shadow-[0_0_2px_0px_rgba(61,61,61,0.15)] md:p-5 flex flex-col ${
+        isDark ? "border-[#586D93] bg-[#060D1B]" : "border-slate-100 bg-white"
+      } ${expanded ? "lg:h-full" : "self-start"}`}
     >
       <div className="flex shrink-0 items-center justify-between px-4 md:px-0">
-        <h2 className="text-lg font-medium text-[#4866F6]">Revenue Chart</h2>
+        <h2 className={`text-lg font-medium ${isDark ? "text-[#FFFFFF]":"text-[#4866F6]"}`}>Revenue Chart</h2>
         <CollapseToggle
           expanded={expanded}
           onToggle={() => setExpanded((prev) => !prev)}
@@ -990,7 +1014,7 @@ function RevenueChartCard({ data }) {
         />
       </div>
       <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
+         className={`overflow-hidden transition-all duration-500 ease-in-out ${
           expanded ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
@@ -1004,6 +1028,7 @@ function RevenueChartCard({ data }) {
 // RevenueChart — recharts bar chart of revenue per month
 // -----------------------------------------------------------------------------
 function RevenueChart({ data }) {
+  const { isDark } = useTheme();
   const chartData = data.map((entry) => ({
     month: entry.month,
     slot: toRevenueSlot(entry.amount),
@@ -1012,7 +1037,9 @@ function RevenueChart({ data }) {
   const formatSlot = (slot) => REVENUE_Y_LABELS[slot] ?? "";
 
   return (
-    <div className="mt-4 flex min-h-0 flex-1 flex-col border-t border-[#CFCFCF] pt-10">
+    <div  className={`mt-4 flex min-h-0 flex-1 flex-col border-t pt-10 ${
+        isDark ? "border-[#586D93]" : "border-[#CFCFCF]"
+      }`}>
       <div className="h-[260px] w-full shrink-0 sm:h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
@@ -1020,11 +1047,11 @@ function RevenueChart({ data }) {
             barSize={10}
             margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
           >
-            <CartesianGrid vertical={false} stroke="#E5E7EB" />
+            <CartesianGrid vertical={false}  stroke={isDark ? "#586D93" : "#E5E7EB"} />
             <XAxis
               dataKey="month"
-              tick={{ fill: "#586D93", fontSize: 10 }}
-              axisLine={{ stroke: "#CFCFCF80" }}
+              tick={{ fill: isDark ? "#D9E1F2" : "#586D93", fontSize: 10 }}
+              axisLine={{ stroke: isDark ? "#586D93" : "#CFCFCF80", }}
               tickLine={false}
               interval={0}
             />
@@ -1032,9 +1059,9 @@ function RevenueChart({ data }) {
               ticks={REVENUE_Y_SLOTS}
               domain={[0, REVENUE_Y_SLOTS.length - 1]}
               tickFormatter={formatSlot}
-              tick={{ fill: "#586D93", fontSize: 10 }}
+              tick={{ fill: isDark ? "#D9E1F2" : "#586D93", fontSize: 10 }}
               tickMargin={8}
-              axisLine={{ stroke: "#CFCFCF80" }}
+              axisLine={{ stroke: isDark ? "#586D93" : "#CFCFCF80", }}
               tickLine={false}
               label={{
                 value: "Amount (₹)",
@@ -1042,7 +1069,7 @@ function RevenueChart({ data }) {
                 position: "insideLeft",
                 dy: 30,
                 style: {
-                  fill: "#3D3D3D",
+                  fill: isDark ? "#F5F7FA" : "#3D3D3D",
                   fontSize: 10,
                   fontWeight: 400,
                   letterSpacing: "0.02em",
@@ -1054,7 +1081,9 @@ function RevenueChart({ data }) {
         </ResponsiveContainer>
       </div>
       <div className="-mt-3 flex min-h-[52px] shrink-0 items-center justify-center">
-        <p className="text-center text-[10px] font-normal tracking-[0.02em] text-[#3D3D3D]">
+        <p className={`text-center text-[10px] font-normal tracking-[0.02em] ${
+            isDark ? "text-[#F5F7FA]" : "text-[#3D3D3D]"
+          }`}>
           Monthly
         </p>
       </div>
@@ -1066,14 +1095,18 @@ function RevenueChart({ data }) {
 // PaymentMethodUsageCard — collapsible donut chart of payment method share
 // -----------------------------------------------------------------------------
 function PaymentMethodUsageCard({ data }) {
+  const { isDark } = useTheme();
   const [expanded, setExpanded] = useState(true);
 
   return (
-    <div
-      className={`w-full rounded-2xl border border-slate-100 py-4 shadow-[0_0_2px_0px_rgba(61,61,61,0.15)] md:p-5 flex flex-col ${expanded ? "lg:h-full" : "self-start"}`}
+    <div  className={`w-full rounded-2xl border py-4 shadow-[0_0_2px_0px_rgba(61,61,61,0.15)] md:p-5 flex flex-col ${
+        isDark
+          ? "border-[#586D93] bg-[#060D1B]"
+          : "border-slate-100 bg-white"
+      } ${expanded ? "lg:h-full" : "self-start"}`}
     >
       <div className="flex shrink-0 items-center justify-between px-4 md:px-0">
-        <h2 className="text-lg font-medium text-[#4866F6]">
+        <h2 className={`text-lg font-medium ${isDark ? "text-[#FFFFFF]":"text-[#4866F6]"}`}>
           Payment Method Usage
         </h2>
         <CollapseToggle
@@ -1097,12 +1130,14 @@ function PaymentMethodUsageCard({ data }) {
 // PaymentMethodDonut — recharts pie/donut with center total, callouts, and legend
 // -----------------------------------------------------------------------------
 function PaymentMethodDonut({ data }) {
-
+  const { isDark } = useTheme();
   console.log("Donut received:", data);
 
 
   return (
-    <div className="mt-4 flex min-h-0 flex-1 flex-col border-t border-[#CFCFCF] pt-4">
+    <div  className={`mt-4 flex min-h-0 flex-1 flex-col border-t pt-4 ${
+        isDark ? "border-[#586D93]" : "border-[#CFCFCF]"
+      }`}>
       <div className="relative h-[260px] w-full shrink-0 sm:h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
@@ -1138,8 +1173,8 @@ function PaymentMethodDonut({ data }) {
         </ResponsiveContainer>
 
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-sm">Total</span>
-          <span className="text-sm font-bold text-[#3D3D3D]">
+          <span className={isDark ? "text-[#586D93]" : "text-[#3D3D3D]"}>Total</span>
+          <span className={`text-sm font-bold ${ isDark ? "text-[#586D93]" : "text-[#3D3D3D]" }`}>
             ₹{PAYMENT_METHOD_TOTAL.toFixed(2)}
           </span>
         </div>
@@ -1168,7 +1203,7 @@ function PaymentMethodDonut({ data }) {
               }}
               aria-hidden="true"
             />
-            <span className="text-xs text-[#586D93] md:text-sm">{name}</span>
+            <span className={`text-xs md:text-sm ${isDark ? "text-[#FFFFFF]" : " text-[#586D93]"}`}>{name}</span>
           </div>
         ))}
       </div>
@@ -1180,10 +1215,14 @@ function PaymentMethodDonut({ data }) {
 // PaymentMethodCallout — white percentage badge with pointer toward donut segment
 // -----------------------------------------------------------------------------
 function PaymentMethodCallout({ value, className = "", pointer = "right" }) {
+  const { isDark } = useTheme();
   const pointerClasses = {
-    right:
-      "absolute right-2 top-7.5 h-2.5 w-2.5 -translate-y-1/2 rotate-45 bg-white",
-    left: "absolute left-2 top-7.5 h-2.5 w-2.5 -translate-y-1/2 rotate-45 bg-white",
+      right: `absolute right-2 top-7.5 h-2.5 w-2.5 -translate-y-1/2 rotate-45 ${
+      isDark ? "bg-[#181F2D]" : "bg-white"
+    }`,
+    left: `absolute left-2 top-7.5 h-2.5 w-2.5 -translate-y-1/2 rotate-45 ${
+      isDark ? "bg-[#181F2D]" : "bg-white"
+    }`,
   };
 
   return (
@@ -1191,8 +1230,12 @@ function PaymentMethodCallout({ value, className = "", pointer = "right" }) {
       className={`pointer-events-none absolute z-10 ${className}`.trim()}
       aria-hidden="true"
     >
-      <div className="relative rounded-md bg-white px-2.5 py-1 shadow-[0_2px_10px_rgba(0,0,0,0.12)]">
-        <span className="text-xs font-medium text-[#3D3D3D]">{value}</span>
+      <div  className={`relative rounded-md px-2.5 py-1 shadow-[0_2px_10px_rgba(0,0,0,0.12)] ${
+          isDark
+            ? " bg-[#181F2D]"
+            : "bg-white"
+        }`}>
+        <span  className={`text-xs font-medium ${ isDark ? "text-white" : "text-[#3D3D3D]" }`}>{value}</span>
         <span className={pointerClasses[pointer] ?? pointerClasses.right} />
       </div>
     </div>
@@ -1203,22 +1246,28 @@ function PaymentMethodCallout({ value, className = "", pointer = "right" }) {
 // CollapseToggle — expand/collapse button for chart cards
 // -----------------------------------------------------------------------------
 function CollapseToggle({ expanded, onToggle, label }) {
+  const { isDark } = useTheme();
   return (
     <button
       type="button"
       onClick={onToggle}
       aria-expanded={expanded}
       aria-label={expanded ? `Collapse ${label}` : `Expand ${label}`}
-      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#4866F6] bg-[#4866f6] text-[#ffffff] transition-colors hover:opacity-90 cursor-pointer"
+      className={`flex h-6 w-6 items-center justify-center rounded-full border cursor-pointer ${
+        isDark
+          ? "border-[#586D93] bg-[#FFFFFF]"
+          : "border-slate-200 bg-[#4866F6]"
+      }`}
     >
       {expanded ? (
-        <Minus className="h-4 w-4" strokeWidth={2.5} />
+        <Minus  className={`h-4 w-4 ${ isDark ? "text-[#060D1B]" : "text-[#FFFFFF]" }`} strokeWidth={2.5} />
       ) : (
-        <Plus className="h-4 w-4" strokeWidth={2.5} />
+        <Plus  className={`h-4 w-4 ${  isDark ? "text-[#060D1B]" : "text-[#FFFFFF]"}`} strokeWidth={2.5} />
       )}
     </button>
   );
 }
+
 
 // -----------------------------------------------------------------------------
 // getPaginationItems — page numbers with ellipsis for long page ranges
@@ -1264,6 +1313,7 @@ function getPaginationItems(currentPage, totalPages) {
 // Pagination — page numbers and previous/next controls
 // -----------------------------------------------------------------------------
 function Pagination({ currentPage, totalPages, onPageChange }) {
+  const { isDark } = useTheme();
   const items = getPaginationItems(currentPage, totalPages);
   const isFirstPage = currentPage <= 1;
   const isLastPage = currentPage >= totalPages;
@@ -1271,11 +1321,15 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
   const navButtonClass =
     "inline-flex items-center gap-1 rounded px-2 py-1 transition-colors max-[424px]:gap-0.5 max-[424px]:px-1.5 max-[424px]:py-0.5";
   const navButtonEnabled = "text-[#4866F6] hover:text-blue-800";
-  const navButtonDisabled = "cursor-not-allowed text-slate-300";
+  const navButtonDisabled = isDark
+    ? "cursor-not-allowed text-[#586D93]"
+    : "cursor-not-allowed text-slate-300";
 
   return (
     <nav
-      className="flex shrink-0 items-center justify-center sm:flex sm:items-center sm:justify-end gap-1 text-[15px] text-slate-600 max-[424px]:gap-0.5 max-[424px]:text-sm"
+       className={`flex shrink-0 items-center justify-center sm:flex sm:items-center sm:justify-end gap-1 text-[15px] max-[424px]:gap-0.5 max-[424px]:text-sm ${
+        isDark ? "text-[#D9E1F2]" : "text-slate-600"
+      }`}
       aria-label="Pagination"
     >
       <button
@@ -1294,7 +1348,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
         item === "ellipsis" ? (
           <span
             key={`ellipsis-${index}`}
-            className="select-none px-1 text-slate-600"
+             className={`select-none px-1 ${ isDark ? "text-[#D9E1F2]" : "text-slate-600" }`}
             aria-hidden="true"
           >
             ...
@@ -1307,7 +1361,9 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
             aria-current={item === currentPage ? "page" : undefined}
             className={`min-w-[2rem] rounded px-2 py-1 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 max-[424px]:min-w-[1.5rem] max-[424px]:px-1.5 max-[424px]:py-0.5 ${
               item === currentPage
-                ? "bg-blue-600 font-medium text-white"
+                ? "bg-[#4866F6] font-medium text-white"
+                : isDark
+                ? "text-[#D9E1F2] hover:text-[#4866F6]"
                 : "hover:text-blue-600"
             }`}
           >
@@ -1335,6 +1391,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
 // HorizontalScrollIndicator — custom scrollbar for wide table on mobile
 // -----------------------------------------------------------------------------
 function HorizontalScrollIndicator({ scrollRef, className = "" }) {
+  const { isDark } = useTheme();
   const [thumb, setThumb] = useState({ width: 75, left: 0 });
   const [hasOverflow, setHasOverflow] = useState(false);
 
@@ -1375,7 +1432,9 @@ function HorizontalScrollIndicator({ scrollRef, className = "" }) {
 
   return (
     <div
-      className={`relative h-1 w-full rounded-full bg-[#E0E0E0] ${className}`.trim()}
+       className={`relative h-1 w-full rounded-full ${
+        isDark ? "bg-[#586D93]" : "bg-[#E0E0E0]"
+      } ${className}`.trim()}
       aria-hidden="true"
     >
       <div
@@ -1392,6 +1451,7 @@ function HorizontalScrollIndicator({ scrollRef, className = "" }) {
 // -----------------------------------------------------------------------------
 // CheckboxFilterField — multi-select status/plan filter dropdown
 // -----------------------------------------------------------------------------
+
 function CheckboxFilterField({
   placeholder,
   options = [],
@@ -1401,16 +1461,32 @@ function CheckboxFilterField({
   className = "",
   variant = "default",
 }) {
+  const { isDark } = useTheme();
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
 
   const isKpiVariant = variant === "kpi";
+
   const triggerClass = isKpiVariant
-    ? `${KPI_FILTER_INPUT_CLASS} cursor-pointer appearance-none text-left`
-    : COMPACT_SELECT_TRIGGER_CLASS;
+    ? `${KPI_FILTER_INPUT_CLASS} cursor-pointer appearance-none text-left ${
+        isDark
+        ? "border-[#586D93] bg-[#181F2D]"
+        : "border-[#CFCFCF] bg-white"
+      }`
+    : `${COMPACT_SELECT_TRIGGER_CLASS} ${
+        isDark
+        ? "border-[#586D93] bg-[#181F2D]"
+        : "border-[#CFCFCF] bg-white"
+      }`;
+
   const chevronClass = isKpiVariant
-    ? `${KPI_FILTER_ICON_CLASS} transition-transform ${open ? "rotate-180" : ""}`
-    : `${COMPACT_SELECT_CHEVRON_CLASS} transition-transform ${open ? "rotate-180" : ""}`;
+    ? `${KPI_FILTER_ICON_CLASS} transition-transform ${
+
+        open ? "rotate-180" : ""
+      }`
+    : `${COMPACT_SELECT_CHEVRON_CLASS} transition-transform ${
+        open ? "rotate-180" : ""
+      }`;
 
   useEffect(() => {
     if (!open) return;
@@ -1426,6 +1502,7 @@ function CheckboxFilterField({
 
     document.addEventListener("mousedown", handlePointerDown);
     document.addEventListener("keydown", handleKeyDown);
+
     return () => {
       document.removeEventListener("mousedown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
@@ -1433,7 +1510,10 @@ function CheckboxFilterField({
   }, [open]);
 
   return (
-    <div ref={containerRef} className={`relative w-full ${className}`.trim()}>
+    <div
+      ref={containerRef}
+      className={`relative w-full ${className}`.trim()}
+    >
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
@@ -1449,17 +1529,27 @@ function CheckboxFilterField({
           >
             {placeholder}
           </span>
-          <span className="col-start-1 row-start-1 truncate whitespace-nowrap">
+
+          <span className="col-start-1 row-start-1 truncate whitespace-nowrap text-[#586D93]">
             {placeholder}
           </span>
         </span>
       </button>
-      <ChevronDown className={chevronClass} aria-hidden="true" />
+
+      <ChevronDown
+        className={chevronClass}
+        aria-hidden="true"
+      />
+
       {open && (
         <div
           role="group"
           aria-label={ariaLabel}
-          className="absolute left-0 top-full z-50 mt-2 w-full min-w-full rounded-xl bg-white py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+          className={`absolute left-0 top-full z-50 mt-2 w-full min-w-full rounded-xl py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] ${
+            isDark
+              ? "border border-[#586D93] bg-[#060D1B]"
+              : "border border-[#CFCFCF] bg-white"
+          }`}
         >
           {options.map((option) => {
             const checked = selected.includes(option.value);
@@ -1471,21 +1561,31 @@ function CheckboxFilterField({
                 role="checkbox"
                 aria-checked={checked}
                 onClick={() => onToggle(option.value)}
-                className="flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-left hover:bg-slate-50"
+                className={`flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 text-left ${
+                  isDark
+                    ? "hover:bg-[#171F31]"
+                    : "hover:bg-slate-50"
+                }`}
               >
                 <span
                   className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-colors ${
                     checked
                       ? "border-[#4866F6] bg-[#4866F6]"
+                      : isDark
+                      ? "border-[#4866F6] bg-[#060D1B]"
                       : "border-[#4866F6] bg-white"
                   }`}
                   aria-hidden="true"
                 >
                   {checked && (
-                    <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
+                    <Check  className={`h-3.5 w-3.5 ${ isDark ? "text-black" : "text-white" }`}
+                      strokeWidth={3}
+                    />
                   )}
                 </span>
-                <span className="text-base text-[#586D93] md:text-sm lg:text-base">
+
+                <span
+                  className={`text-base md:text-sm lg:text-base ${ isDark ? "text-[#586D93]" : "text-[#586D93]" }`}>
                   {option.label}
                 </span>
               </button>
@@ -1522,10 +1622,22 @@ function ExportButton({ onClick, className = "" }) {
 // SectionDivider — horizontal rule between sections
 // -----------------------------------------------------------------------------
 function SectionDivider() {
+    const { isDark } = useTheme();
   return (
     <hr
-      className="my-4 mt-3 border-0 border-t border-[#CFCFCF]"
+       className={`my-4 mt-3 border-0 border-t ${isDark ? "border-[#586D93]" : "border-[#CFCFCF]"}`}
       aria-hidden="true"
     />
   );
 }
+
+
+
+
+
+
+
+
+
+
+ 

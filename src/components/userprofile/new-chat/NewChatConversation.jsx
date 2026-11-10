@@ -1,3 +1,6 @@
+
+
+
 // =============================================================================
 // New Chat Conversation
 // =============================================================================
@@ -11,6 +14,7 @@ import ChatInput from "./ChatInput";
 import ChatMessages from "./ChatMessages";
 import ActionCards from "./ActionCards";
 import useChat from "./hooks/useChat";
+import { useTheme } from "../../../context/ThemeContext";
 
 import { sendChatMessage, getConversationMessages,executeTask, } from "../../../api/authApi";
 // -----------------------------------------------------------------------------
@@ -26,6 +30,7 @@ const getCurrentTime = () =>
 // NewChatConversation — conversation page wrapper
 // -----------------------------------------------------------------------------
 export default function NewChatConversation({ languageOpen }) {
+  const { isDark } = useTheme();
   const location = useLocation();
   const firstMessage = location.state?.firstMessage || "";
   const aiReply = location.state?.aiReply || "";
@@ -37,7 +42,7 @@ export default function NewChatConversation({ languageOpen }) {
   Number(chatId) || 0
 );
 
-  
+
   const {
     input,
     setInput,
@@ -238,16 +243,21 @@ const handleUiAction = async (value, taskId, platform) => {
   };
 
 
-  
-
   return (
-    <div
-      className={`h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide transition-all duration-300 ${
-        languageOpen ? "mt-[60px] md:mt-[70px] lg:mt-[80px]" : "mt-0"
-      }`}
+     <div className={`h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-5 scrollbar-hide transition-all duration-300 ${
+        languageOpen
+          ? "mt-[60px] md:mt-[70px] lg:mt-[80px]"
+          : "mt-0"
+      } ${isDark ? "bg-[#010718]" : " "}`}
     >
       {/* Main card */}
-      <div className="relative flex  h-[calc(100vh-140px)] flex-col rounded-[18px] md:rounded-[25px] border border-[#DADADA] bg-white p-[12px] md:p-6 pb-6 lg:pb-8 shadow-[0px_0px_4px_0px_#00000014]">
+       <div
+        className={`relative flex h-[calc(100vh-140px)] flex-col rounded-[18px] md:rounded-[25px] border p-[12px] md:p-6 pb-6 lg:pb-8 transition-colors duration-300 ${
+          isDark
+            ? " bg-[#060D1B] shadow-none"
+            : "border-[#DADADA] bg-white shadow-[0px_0px_4px_0px_#00000014]"
+        }`}
+      >
         {/* Conversation messages */}
         <div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-2 pb-8 pt-8 md:pt-6 sm:px-4 md:px-6 lg:px-8 scrollbar-hide">
           <ChatMessages
@@ -275,3 +285,6 @@ const handleUiAction = async (value, taskId, platform) => {
   );
 }
 
+
+
+ 

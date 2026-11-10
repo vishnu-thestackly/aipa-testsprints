@@ -2,17 +2,22 @@ import React from "react";
 
 import Profile from "../../../assets/images/profile.png";
 import ChatEdit from "../../../assets/images/chat_edit.svg";
+import { useTheme } from "../../../context/ThemeContext";
 
 export default function UserMessage({ message, onEdit }) {
+  const { isDark } = useTheme();
   return (
     <div className="flex justify-end">
       <div className="flex w-full min-w-0 items-end justify-end gap-3">
         <div className="flex w-fit max-w-[70%] md:max-w-[80%] lg:max-w-[70%] min-w-0 flex-col items-end">
-          
+
           {/* User Message */}
           <div
-            className="max-h-100 max-w-full min-w-[80px] overflow-y-auto overflow-x-hidden scrollbar-hide whitespace-pre-wrap wrap-anywhere rounded-[16px] rounded-br-none rounded-tr-[30px] bg-[#4866F6] px-5 py-4 text-[14px] text-white"
-            
+            className={`max-h-100 max-w-full min-w-[80px] overflow-y-auto overflow-x-hidden scrollbar-hide whitespace-pre-wrap wrap-anywhere rounded-[16px] rounded-br-none rounded-tr-[30px] px-5 py-4 text-[14px] transition-colors duration-200 ${
+              isDark
+                ? "bg-[#4866F6] text-[#F5F7FA]"
+                : "bg-[#4866F6] text-white"
+            }`}
           >
             {message.text}
           </div>
@@ -21,13 +26,19 @@ export default function UserMessage({ message, onEdit }) {
             <button
               type="button"
               onClick={() => onEdit(message)}
-              className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[#F4F4F4] transition-all duration-200 hover:bg-[#e9ecff] hover:shadow-sm"
+             className={`flex h-7 w-7 cursor-pointer items-center justify-center rounded-full transition-all duration-200 ${
+                isDark
+                  ? "bg-[#181F2D] hover:bg-[#25314A]"
+                  : "bg-[#F4F4F4] hover:bg-[#e9ecff] hover:shadow-sm"
+              }`}
               aria-label="Edit message"
             >
               <img
                 src={ChatEdit}
                 alt=""
-                className="h-3.5 w-3.5"
+                className={`h-3.5 w-3.5 ${
+                  isDark ? "brightness-0 invert" : ""
+                }`}
               />
             </button>
 

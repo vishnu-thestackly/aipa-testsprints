@@ -23,6 +23,8 @@ import ChatSave from "../../../assets/images/chat_save.png";
 import ChatShare from "../../../assets/images/chat_share.png";
 import ChatEdit from "../../../assets/images/chat_edit.svg";
 import calendarIcon from "../../../assets/images/calender.svg";
+import DarkAiImage from "../../../assets/images/DarkAiImage.svg"
+import { useTheme } from "../../../context/ThemeContext";
 
 // -----------------------------------------------------------------------------
 // CONSTANTS
@@ -441,6 +443,7 @@ function getNextResponse(userInput, workflow) {
 // NewChatConversation — conversation page wrapper
 // -----------------------------------------------------------------------------
 export default function NewChatConversation({ languageOpen }) {
+  const { isDark } = useTheme();
   const location = useLocation();
   // Message the user typed on the previous screen (NewChat) and navigated with.
   const firstMessage = location.state?.firstMessage || "";
@@ -843,13 +846,14 @@ export default function NewChatConversation({ languageOpen }) {
   };
 
   return (
-    <div
-      className={`h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-4 scrollbar-hide transition-all duration-300 ${
-        languageOpen ? "mt-[60px] md:mt-[70px] lg:mt-[80px]" : "mt-0"
-      }`}
-    >
+    <div className={`h-full overflow-y-auto px-3 sm:px-5 lg:px-7 pt-4 lg:pt-7 pb-4 scrollbar-hide transition-all duration-300 ${ languageOpen ? "mt-[60px] md:mt-[70px] lg:mt-[80px]" : "mt-0" } ${isDark ? "bg-[#010718]" : " "}`}>
       {/* Main card */}
-      <div className="relative flex min-h-[calc(100vh-150px)] flex-1 flex-col rounded-[18px] md:rounded-[25px] border border-[#DADADA] bg-white p-[12px] md:p-6 pb-6 lg:pb-8 shadow-[0px_0px_4px_0px_#00000014]">
+      <div className={`relative flex min-h-[calc(100vh-150px)] flex-1 flex-col rounded-[18px] md:rounded-[25px] border p-[12px] md:p-6 pb-6 lg:pb-8 transition-colors duration-200 ${
+        isDark
+        ? "border-[#586D93] bg-[#060D1B] shadow-none"
+        : "border-[#DADADA] bg-white shadow-[0px_0px_4px_0px_#00000014]"
+       }`}
+       >
         {/* Conversation messages */}
         <div
           ref={messagesContainerRef}
@@ -863,6 +867,7 @@ export default function NewChatConversation({ languageOpen }) {
                 <BotMessage
                   key={message.id}
                   message={message}
+                  isDark={isDark}
                   isActive={isBotMessageInteractive(message)}
                   onOptionSelect={handleOptionSelect}
                   onDateSelect={handleDateSelect}
@@ -889,14 +894,14 @@ export default function NewChatConversation({ languageOpen }) {
             {/* File upload button */}
             <button
               type="button"
-              className="flex h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer"
+              className={`flex h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] cursor-pointer ${isDark ? "bg-[#4866F61A]" : "bg-[#EEF2FF]"}`}
               aria-label="Upload file"
             >
               <img src={FileUpload} alt="" className="h-6 w-6" />
             </button>
 
             {/* Input box */}
-            <div className="flex h-13 min-w-0 flex-1 items-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] px-3">
+            <div className={`flex h-13 min-w-0 flex-1 items-center rounded-lg border border-[#4866F6] px-3 ${ isDark ? "bg-[#4866F61A]" : "bg-[#EEF2FF]"}`}>
               <input
                 ref={inputRef}
                 value={input}
@@ -915,7 +920,7 @@ export default function NewChatConversation({ languageOpen }) {
                     ? "Edit your message here...."
                     : "Type your message here...."
                 }
-                className="min-w-0 flex-1 bg-transparent text-[12px] sm:text-[14px] text-[#2D2D2D] outline-none placeholder:text-[#2D2D2D]"
+               className={`min-w-0 flex-1 bg-transparent text-[12px] sm:text-[14px] outline-none ${ isDark ? "text-[#F5F7FA] placeholder:text-[#FFFFFF]" : "text-[#2D2D2D] placeholder:text-[#2D2D2D]"}`}
               />
               <button
                 type="button"
@@ -929,7 +934,7 @@ export default function NewChatConversation({ languageOpen }) {
             {/* Audio button — tablet & desktop only */}
             <button
               type="button"
-              className="hidden md:flex h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] bg-[#EEF2FF] cursor-pointer"
+              className={`hidden md:flex h-13 w-13 shrink-0 items-center justify-center rounded-lg border border-[#4866F6] cursor-pointer ${isDark ? "bg-[#4866F61A]" : "bg-[#EEF2FF]"}`}
               aria-label="Record audio"
             >
               <img src={Audio} alt="" className="h-6.5 w-6.5" />
@@ -957,6 +962,7 @@ export default function NewChatConversation({ languageOpen }) {
 function BotMessage({
   message,
   isActive,
+  isDark,
   onOptionSelect,
   onDateSelect,
   onTimeSelect,
@@ -971,17 +977,25 @@ function BotMessage({
 
   return (
     <div className="flex items-end gap-3">
-      <div className="mb-9 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E9ECFF]">
-        <img src={AiChat} alt="" className="h-6 w-6" />
+      <div className={`mb-9 flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${ isDark ? "bg-[#181F2D]" : "bg-[#E9ECFF]" }`}>
+        <img 
+
+         src={isDark ? DarkAiImage : AiChat}
+         alt="" className="h-6 w-6" />
       </div>
 
       <div className="w-fit max-w-[70%] min-w-0">
-        <div className="max-w-full whitespace-pre-wrap wrap-anywhere rounded-[16px] rounded-bl-none rounded-tl-[30px] bg-[#F3F3F3] px-5 py-4 text-[14px] text-[#111111]">
+       <div className={`max-w-full whitespace-pre-wrap wrap-anywhere rounded-[16px] rounded-bl-none rounded-tl-[30px] px-5 py-4 text-[14px] transition-colors duration-200 ${
+         isDark
+         ? "bg-[#181F2D] text-[#F5F7FA]"
+         : "bg-[#F3F3F3] text-[#111111]"
+         }`} >
           {message.text && <p className="mb-0">{message.text}</p>}
 
           <BotMessageContent
             message={message}
             interactive={interactive}
+            isDark={isDark}
             onOptionSelect={onOptionSelect}
             onDateSelect={onDateSelect}
             onTimeSelect={onTimeSelect}
@@ -997,10 +1011,17 @@ function BotMessage({
               <button
                 key={index}
                 type="button"
-                className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[#F4F4F4] text-[#111111] transition-all duration-200 hover:bg-[#e9ecff] hover:shadow-sm"
+                className={`flex h-7 w-7 cursor-pointer items-center justify-center rounded-full transition-all duration-200 hover:shadow-sm ${
+                  isDark
+                    ? "bg-[#181F2D] hover:bg-[#25314A]"
+                    : "bg-[#F4F4F4] text-[#111111] hover:bg-[#e9ecff]"
+                }`}
                 aria-label="Message action"
               >
-                <img src={actionIcon} alt="" className="w-3.5" />
+                <img
+                  src={actionIcon}
+                  alt=""
+                  className={`w-3.5 ${ isDark ? "brightness-0 invert" : ""}`}/>
               </button>
             ))}
           </div>
@@ -1017,6 +1038,7 @@ function BotMessage({
 function BotMessageContent({
   message,
   interactive,
+  isDark,
   onOptionSelect,
   onDateSelect,
   onTimeSelect,
@@ -1028,6 +1050,10 @@ function BotMessageContent({
   // Plain "text" falls through to `return null` (the text is drawn by BotMessage).
   const { contentType = "text", payload = {} } = message;
 
+  const pillClass = `cursor-pointer rounded-lg border border-[#4866F6] px-4 py-1.5 text-[14px] font-medium transition-colors hover:bg-[#4866F6] hover:text-white disabled:cursor-default disabled:opacity-60 ${
+    isDark ? "bg-[#4866F61A] text-[#8DA2FF]" : "bg-[#EEF2FF] text-[#4866F6]"
+  }`;
+
   // Greeting buttons (Schedule Meeting / Draft Email / Create a Task).
   if (contentType === "quick_actions") {
     return (
@@ -1038,7 +1064,7 @@ function BotMessageContent({
             type="button"
             disabled={!interactive}
             onClick={() => onOptionSelect(option)}
-            className="cursor-pointer rounded-lg border border-[#4866F6] bg-white px-3 py-1.5 text-[14px] font-medium text-[#4866F6] transition-colors hover:bg-[#4866F6] hover:text-white disabled:cursor-default disabled:opacity-60"
+            className={pillClass}
           >
             {option}
           </button>
@@ -1079,8 +1105,8 @@ function BotMessageContent({
             type="button"
             disabled={!interactive}
             onClick={() => onOptionSelect(option)}
-            className="cursor-pointer  rounded-lg border border-[#4866F6] bg-[#EEF2FF] px-4 py-1.5 text-[14px] font-medium text-[#4866F6] transition-colors hover:bg-[#4866F6] hover:text-white disabled:cursor-default disabled:opacity-60"
-          >
+            className={pillClass}
+         >
             {option}
           </button>
         ))}
@@ -1096,7 +1122,11 @@ function BotMessageContent({
           type="button"
           disabled={!interactive}
           onClick={() => onChangeAction(payload.actionId)}
-          className="rounded-full border border-[#4866F6] bg-white px-4 py-1.5 text-[12px] font-medium text-[#4866F6] hover:bg-[#4866F6] hover:text-white disabled:cursor-default disabled:opacity-60"
+          className={`rounded-full border border-[#4866F6] px-4 py-1.5 text-[12px] font-medium transition-colors hover:bg-[#4866F6] hover:text-white disabled:cursor-default disabled:opacity-60 ${
+            isDark
+              ? "bg-[#4866F61A] text-[#586D93]"
+              : "bg-white text-[#4866F6]"
+          }`}
         >
           {payload.label}
         </button>
@@ -1108,11 +1138,11 @@ function BotMessageContent({
   if (contentType === "summary") {
     return (
       <div className={message.text ? "mt-3" : ""}>
-        <div className="rounded-lg border border-[#E0E0E0] bg-white px-4 py-3">
+        <div className={`rounded-lg border px-4 py-3 ${ isDark ? "border-[#586D93] bg-[#0D192D]" : "border-[#E0E0E0] bg-white" }`}>
           {payload.fields?.map((row) => (
             <div key={row.label} className="mb-2 last:mb-0">
-              <span className="font-medium text-[#111111]">{row.label}: </span>
-              <span className="text-[#586D93]">{row.value}</span>
+              <span  className={`font-medium ${ isDark ? "text-[#F5F7FA]" : "text-[#111111]"}`}>{row.label}: </span>
+              <span className={isDark ? "text-[#586D93]" : "text-[#586D93]"}>{row.value}</span>
             </div>
           ))}
         </div>
@@ -1121,15 +1151,14 @@ function BotMessageContent({
             <button
               type="button"
               onClick={() => onSummaryAction("edit")}
-              className="rounded-full border border-[#4866F6] bg-[#EEF2FF] px-10 py-2 text-[14px] font-medium text-[#4866F6] hover:bg-[#4866F6] hover:text-white cursor-pointer"
+              className={pillClass + " rounded-full px-10 py-2"}            
             >
               Edit
             </button>
             <button
               type="button"
               onClick={() => onSummaryAction("confirm")}
-              className="rounded-full border border-[#4866F6] bg-[#EEF2FF] px-6.5 py-2 text-[14px] font-medium text-[#4866F6] hover:bg-[#4866F6] hover:text-white cursor-pointer"
-            >
+              className={pillClass + " rounded-full px-6 py-2"}>
               Confirm
             </button>
           </div>
@@ -1142,11 +1171,15 @@ function BotMessageContent({
   if (contentType === "processing") {
     return (
       <div className={message.text ? "mt-3" : ""}>
-        <div className="rounded-lg border border-[#B8C9FF] bg-[#F5F7FF] px-4 py-3">
+        <div   className={`rounded-lg border px-4 py-3 ${
+            isDark
+              ? "border-[#586D93] bg-[#0D192D]"
+              : "border-[#B8C9FF] bg-[#F5F7FF]"
+          }`}>
           <p className="mb-2 text-[14px] font-medium text-[#4866F6]">
             Executing...
           </p>
-          <ul className="space-y-1 text-[14px] text-[#586D93]">
+          <ul  className={`space-y-1 text-[14px] ${  isDark ? "text-[#D9E1F2]" : "text-[#586D93]"}`}>
             {payload.steps?.map((step) => (
               <li key={step}>{step}</li>
             ))}
@@ -1160,7 +1193,13 @@ function BotMessageContent({
   if (contentType === "success") {
     return (
       <div className={message.text ? "mt-3" : ""}>
-        <div className="rounded-lg border border-[#33B469] bg-[#F0FDF4] px-4 py-3">
+        <div
+  className={`rounded-lg border px-4 py-3 ${
+    isDark
+      ? "border-[#586D93] bg-[#33B4691A]"
+      : "border-[#E0E0E0] bg-white"
+  }`}
+>
           <p className="mb-2 text-[14px] font-medium text-[#33B469]">
             {payload.title}
           </p>
@@ -1168,10 +1207,10 @@ function BotMessageContent({
             <p key={row.label} className="mb-1 text-[14px] text-[#586D93]">
               {row.label === "Date" || row.label === "Time" ? (
                 <>
-                  <span className="font-medium text-[#111111]">
+                    <span className={isDark ? "font-medium text-[#F5F7FA]" : "font-medium text-[#111111]"}>
                     {row.label}
                   </span>
-                  <span className="text-[#586D93]">
+                   <span className={isDark ? "text-[#586D93]" : "text-[#586D93]"}>
                     {row.value ? `: ${row.value}` : ""}
                   </span>
                 </>
@@ -1191,8 +1230,8 @@ function BotMessageContent({
                 key={action.id}
                 type="button"
                 onClick={() => onStatusAction(action.id)}
-                className="cursor-pointer rounded-full border border-[#4866F6] bg-[#EEF2FF] hover:bg-[#4866F6] hover:text-white px-4 py-2 text-[14px] font-medium text-[#4866F6]"
-              >
+                 className={pillClass + " rounded-full px-4 py-2"}
+             >
                 {action.label}
               </button>
             ))}
@@ -1206,11 +1245,17 @@ function BotMessageContent({
   if (contentType === "error") {
     return (
       <div className={message.text ? "mt-3" : ""}>
-        <div className="rounded-lg border border-[#FCA5A5] bg-[#FEF2F2] px-4 py-3">
+         <div
+          className={`rounded-lg border px-4 py-3 ${
+            isDark
+              ? "border-[#7F3D49] bg-[#27151D]"
+              : "border-[#FCA5A5] bg-[#FEF2F2]"
+          }`}
+        >
           <p className="mb-1 text-[13px] font-semibold text-[#B91C1C]">
             {payload.title}
           </p>
-          <p className="text-[12px] text-[#586D93]">{payload.description}</p>
+         <p className={`text-[12px] ${ isDark ? "text-[#D9E1F2]" : "text-[#586D93]"}`}> {payload.description}</p>
         </div>
         {interactive && payload.actions?.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
@@ -1219,7 +1264,7 @@ function BotMessageContent({
                 key={action.id}
                 type="button"
                 onClick={() => onStatusAction(action.id)}
-                className="rounded-full border border-[#4866F6] bg-white px-4 py-2 text-[12px] font-medium text-[#4866F6]"
+                className={pillClass + " rounded-full px-4 py-2 text-[12px]"}
               >
                 {action.label}
               </button>
@@ -1240,6 +1285,7 @@ function BotMessageContent({
 // Trigger button + portalled calendar popup. Uses a portal so the popup can
 // escape any parent overflow/clipping and be positioned freely on screen.
 function ChatDatePickerField({ label, onChange, disabled }) {
+  const { isDark } = useTheme();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const [panelStyle, setPanelStyle] = useState({
@@ -1326,11 +1372,14 @@ function ChatDatePickerField({ label, onChange, disabled }) {
         onClick={toggleOpen}
         aria-expanded={open}
         aria-haspopup="dialog"
-        className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border border-[#CFCFCF] bg-white py-2.5 pl-3 pr-3 text-left text-sm disabled:cursor-default disabled:opacity-60"
+        className={`flex w-full cursor-pointer items-center justify-between gap-2 rounded-lg border py-2.5 pl-3 pr-3 text-left text-sm disabled:cursor-default disabled:opacity-60 ${
+          isDark
+            ? "bg-[#060D1B] border-[#586D93] text-[#F5F7FA]"
+            : "bg-white border-[#CFCFCF] text-slate-700"
+        }`}
       >
         <span
-          className={`min-w-0 flex-1 truncate ${value ? "text-slate-700" : "text-[#8D97A9]"}`}
-        >
+          className={`min-w-0 flex-1 truncate ${ value ? isDark ? "text-[#F5F7FA]" : "text-slate-700" : "text-[#8D97A9]" }`} >
           {displayText}
         </span>
         <img src={calendarIcon} alt="" className="h-5 w-5 shrink-0" />
@@ -1365,6 +1414,7 @@ function ChatDatePickerField({ label, onChange, disabled }) {
 // The month grid itself: header with prev/next arrows + a 7-column day grid.
 function ChatDatePickerPanel({ label, value, onSelect }) {
   // Which month is currently displayed (defaults to the selected/current month).
+  const { isDark } = useTheme();
   const [viewDate, setViewDate] = useState(() =>
     dayjs(value || undefined).startOf("month"),
   );
@@ -1384,27 +1434,36 @@ function ChatDatePickerPanel({ label, value, onSelect }) {
     onSelect(viewDate.date(day).format("YYYY-MM-DD"));
   };
 
+  const arrowClass = `flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg transition-colors ${
+    isDark
+      ? "text-[#D9E1F2] hover:bg-[#181F2D]"
+      : "text-[#586D93] hover:bg-slate-50"
+  }`;
+
   return (
     <div
       role="dialog"
       aria-label={`${label} calendar`}
-      className="w-full h-full rounded-xl border border-[#CFCFCF] bg-white p-4 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
-    >
+      className={`w-full rounded-xl border p-4 shadow-[0_4px_16px_rgba(0,0,0,0.08)] ${
+        isDark
+          ? "border-[#586D93] bg-[#060D1B] text-[#F5F7FA]"
+          : "border-[#CFCFCF] bg-white text-[#111111]"
+      }`}>
       <div className="mb-3 flex items-center justify-between">
         <button
           type="button"
           onClick={() => setViewDate((prev) => prev.subtract(1, "month"))}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-[#586D93] hover:bg-slate-50"
+          className={arrowClass}
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
-        <p className="text-sm font-medium text-[#3D3D3D]">
+        <p  className={`text-sm font-medium ${ isDark ? "text-[#F5F7FA]" : "text-[#3D3D3D]" }`}>
           {viewDate.format("MMMM YYYY")}
         </p>
         <button
           type="button"
           onClick={() => setViewDate((prev) => prev.add(1, "month"))}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-[#586D93] hover:bg-slate-50"
+          className={arrowClass}
         >
           <ChevronRight className="h-4 w-4" />
         </button>
@@ -1439,8 +1498,12 @@ function ChatDatePickerPanel({ label, value, onSelect }) {
                 isSelected
                   ? "bg-[#4866F6] font-medium text-white"
                   : isToday
-                    ? "bg-[#E4E8FE] text-[#4866F6] hover:bg-[#d8ddfd]"
-                    : "text-[#586D93] hover:bg-slate-50"
+                    ? isDark
+                      ? "bg-[#181F2D] text-[#8DA2FF] hover:bg-[#25314A]"
+                      : "bg-[#E4E8FE] text-[#4866F6] hover:bg-[#d8ddfd]"
+                    : isDark
+                      ? "text-[#D9E1F2] hover:bg-[#181F2D]"
+                      : "text-[#586D93] hover:bg-slate-50"
               }`}
             >
               {day}
@@ -1457,6 +1520,7 @@ function ChatDatePickerPanel({ label, value, onSelect }) {
 // -----------------------------------------------------------------------------
 // Three dropdowns (hour / minute / AM-PM) plus a "Set Time" button.
 function ChatTimePickerRow({ onSubmit, disabled }) {
+  const { isDark } = useTheme();
   const [hour, setHour] = useState("12");
   const [minute, setMinute] = useState("00");
   const [meridiem, setMeridiem] = useState("PM");
@@ -1466,9 +1530,14 @@ function ChatTimePickerRow({ onSubmit, disabled }) {
     onSubmit(`${hour}:${minute} ${meridiem}`);
   };
 
-  const selectClass =
-    "rounded-lg border border-[#CFCFCF] bg-white px-2 py-2 text-[14px] text-[#586D93] outline-none disabled:opacity-60";
-
+  const selectClass = `rounded-lg border px-2 py-2 text-[14px] outline-none disabled:opacity-60 ${
+  isDark
+    ? "border-[#586D93] bg-[#060D1B] text-[#F5F7FA]"
+    : "border-[#CFCFCF] bg-white text-[#586D93]"
+}`;
+    const optionClass = isDark
+    ? "bg-[#060D1B] text-[#F5F7FA]"
+    : "bg-white text-[#586D93]";
   return (
     <div className="flex flex-wrap items-center gap-2">
       <select
@@ -1479,8 +1548,8 @@ function ChatTimePickerRow({ onSubmit, disabled }) {
         aria-label="Hour"
       >
         {HOUR_OPTIONS.map((h) => (
-          <option key={h} value={h}>
-            {h}
+          <option key={h} value={h} className={optionClass}>
+            {h} 
           </option>
         ))}
       </select>
@@ -1492,7 +1561,7 @@ function ChatTimePickerRow({ onSubmit, disabled }) {
         aria-label="Minute"
       >
         {MINUTE_OPTIONS.map((m) => (
-          <option key={m} value={m}>
+          <option key={m} value={m} className={optionClass}>
             {m}
           </option>
         ))}
@@ -1505,7 +1574,7 @@ function ChatTimePickerRow({ onSubmit, disabled }) {
         aria-label="AM or PM"
       >
         {MERIDIEM_OPTIONS.map((m) => (
-          <option key={m} value={m}>
+          <option key={m} value={m} className={optionClass}>
             {m}
           </option>
         ))}
@@ -1527,11 +1596,13 @@ function ChatTimePickerRow({ onSubmit, disabled }) {
 // -----------------------------------------------------------------------------
 // Right-aligned user bubble with an edit button and timestamp.
 function UserMessage({ message, onEdit }) {
+   const { isDark } = useTheme();
   return (
     <div className="flex justify-end">
       <div className="flex w-full min-w-0 items-end justify-end gap-3">
         <div className="flex w-fit max-w-[70%] md:max-w-[80%] lg:max-w-[70%] min-w-0 flex-col items-end">
-          <div className="max-w-full min-w-[80px] whitespace-pre-wrap wrap-anywhere rounded-[16px] rounded-br-none rounded-tr-[30px] bg-[#4866F6] px-5 py-4 text-[14px] text-white">
+           <div
+            className={`max-w-full min-w-[80px] whitespace-pre-wrap wrap-anywhere bg-[#4866F6] text-white rounded-[16px] rounded-br-none rounded-tr-[30px] px-5 py-4 text-[14px] `}>
             {message.text}
           </div>
 
@@ -1539,10 +1610,14 @@ function UserMessage({ message, onEdit }) {
             <button
               type="button"
               onClick={() => onEdit(message)}
-              className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-[#F4F4F4] text-[#111111] transition-all duration-200 hover:bg-[#e9ecff] hover:shadow-sm"
+              className={`flex h-7 w-7 cursor-pointer items-center justify-center rounded-full transition-all duration-200 hover:shadow-sm ${
+                isDark
+                  ? "bg-[#181F2D] hover:bg-[#25314A]"
+                  : "bg-[#F4F4F4] text-[#111111] hover:bg-[#e9ecff]"
+              }`}
               aria-label="Edit message"
             >
-              <img src={ChatEdit} alt="" className="h-3.5 w-3.5" />
+              <img src={ChatEdit}  alt="" className={`h-3.5 w-3.5 ${isDark ? "brightness-0 invert" : ""}`}/>
             </button>
             <p className="text-[11px] text-[#8D97A9]">{message.time}</p>
           </div>
@@ -1557,3 +1632,4 @@ function UserMessage({ message, onEdit }) {
     </div>
   );
 }
+ 
