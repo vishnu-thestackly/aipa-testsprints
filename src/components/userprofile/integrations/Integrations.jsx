@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
+import { useTheme } from "../../../context/ThemeContext";
 
 import GmailIcon from "../../../assets/images/Gmail.png";
 import ExchangeIcon from "../../../assets/images/Exchange.png";
@@ -17,6 +18,7 @@ import {
 
 const Integrations = ({ onBack }) => {
   const { languageOpen } = useOutletContext();
+  const { isDark } = useTheme();
   const navigate = useNavigate();
 
   const [connectedApps, setConnectedApps] = useState([]);
@@ -182,8 +184,16 @@ const Integrations = ({ onBack }) => {
       }`}
     >
       <div className="w-full flex flex-col min-h-[calc(100vh-90px)]">
-        <div className="w-full flex-1 min-h-[650px] bg-white border border-[#DADADA] rounded-[25px] shadow-[0px_0px_4px_0px_#00000014] px-4 sm:px-6 py-5 sm:py-6 flex flex-col">
-          <div className="border-b border-[#DCDCDC] pb-3 flex items-center gap-2">
+        <div
+          className={`w-full flex-1 min-h-[650px] ${
+            isDark ? "bg-[#060D1B] border-[#152342]" : "bg-white border-[#DADADA]"
+          } border rounded-[25px] shadow-[0px_0px_4px_0px_#00000014] px-4 sm:px-6 py-5 sm:py-6 flex flex-col transition-colors duration-300`}
+        >
+          <div
+            className={`border-b ${
+              isDark ? "border-[#152342]" : "border-[#DCDCDC]"
+            } pb-3 flex items-center gap-2`}
+          >
             {onBack && (
               <button
                 onClick={onBack}
@@ -193,7 +203,11 @@ const Integrations = ({ onBack }) => {
               </button>
             )}
 
-            <h1 className="text-[#303030] text-[18px] font-[510] leading-[21px]">
+            <h1
+              className={`${
+                isDark ? "text-white" : "text-[#303030]"
+              } text-[18px] font-[510] leading-[21px]`}
+            >
               Connected Apps
             </h1>
           </div>
@@ -207,7 +221,11 @@ const Integrations = ({ onBack }) => {
               return (
                 <div
                   key={index}
-                  className="w-full min-h-[77px] border border-[#E7E7E7] rounded-[20px] bg-white shadow-[0px_1px_4px_rgba(0,0,0,0.04)] px-3 py-3 flex items-center"
+                  className={`w-full min-h-[77px] border ${
+                    isDark
+                      ? "border-[#152342] bg-[#081026]"
+                      : "border-[#E7E7E7] bg-white"
+                  } rounded-[20px] shadow-[0px_1px_4px_rgba(0,0,0,0.04)] px-3 py-3 flex items-center transition-colors`}
                 >
                   <div className="w-full flex flex-col sm:flex-row sm:items-center gap-3">
                     <div className="flex items-center min-w-0 flex-1">
@@ -222,7 +240,11 @@ const Integrations = ({ onBack }) => {
                           {app.name}
                         </h2>
 
-                        <p className="text-[#91A0B8] text-[12px]">
+                        <p
+                          className={`${
+                            isDark ? "text-[#7E8B9F]" : "text-[#91A0B8]"
+                          } text-[12px]`}
+                        >
                           {app.description}
                         </p>
                       </div>
@@ -240,8 +262,11 @@ const Integrations = ({ onBack }) => {
                         className={`h-[32px] w-[73px] rounded-[18px] border-none ${
                           isConnected
                             ? "bg-[#4866F6] text-white cursor-pointer"
+                            : isDark
+                            ? "bg-[#1E283D] text-[#7E8B9F] cursor-not-allowed"
                             : "bg-[#CFCFCF] text-[#3D3D3D] cursor-not-allowed"
-                        }`}>
+                        }`}
+                      >
                         View
                       </button>
                       

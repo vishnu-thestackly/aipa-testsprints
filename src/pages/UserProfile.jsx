@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../components/userprofile/Navbar";
 import Sidebar from "../components/userprofile/sidebar/Sidebar";
 import { getUserProfile } from "../api/authApi";
+import { useTheme } from "../context/ThemeContext";
 
 // import ProfileDashboard from "../components/userprofile/ProfileDashboard";
 // import EditProfile from "../components/userprofile/EditProfile";
@@ -13,6 +14,7 @@ import { getUserProfile } from "../api/authApi";
 import { Outlet, useLocation } from "react-router-dom";
 
 export default function UserProfile() {
+  const { isDark } = useTheme();
   const [profile, setProfile] = useState(null);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("profileDashboard");
@@ -76,7 +78,7 @@ export default function UserProfile() {
   }, []);
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className={`h-screen flex flex-col transition-colors duration-300 ${isDark ? "bg-[#010718]" : ""}`}>
       {/* Navbar */}
       <Navbar
         languageOpen={languageOpen}
@@ -102,7 +104,7 @@ export default function UserProfile() {
         />
 
         {/* Content Wrapper */}
-        <div className="flex-1 overflow-y-auto bg-gray-100 scrollbar-hide ">
+        <div className={`flex-1 overflow-y-auto scrollbar-hide transition-colors duration-300 ${isDark ? "bg-[#010718]" : "bg-gray-100"}`}>
           <Outlet
             context={{
               languageOpen,

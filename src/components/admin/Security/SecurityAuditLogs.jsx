@@ -127,7 +127,7 @@ export default function SecurityAuditLogs() {
 
       {/* Main Card Container */}
       <div className="w-full min-h-full bg-white rounded-[20px] md:rounded-[25px] border border-[#E2E8F0] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.12)] p-4 sm:p-6 lg:p-8 flex flex-col">
-        
+
         {/* Main Title Header */}
         <div className="pb-3 lg:pb-3.5">
           <h2 className="text-lg font-medium text-slate-800 tracking-tight">
@@ -145,7 +145,7 @@ export default function SecurityAuditLogs() {
             - Mobile: 1 column stacked (Date Range, Module, Event, Status, User, Apply)
         */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 lg:gap-5 mb-6 sm:mb-7">
-          
+
           {/* 1. Date Range */}
           <div>
             <label className="block text-[13px] sm:text-[14px] font-medium text-slate-800 mb-1.5">
@@ -164,9 +164,8 @@ export default function SecurityAuditLogs() {
               className="relative h-[42px] sm:h-[44px] px-3.5 rounded-[12px] border border-[#D9DCE5] bg-white flex items-center justify-between cursor-pointer hover:border-[#4866F6] transition-colors w-full"
             >
               <span
-                className={`text-[13px] sm:text-[14px] ${
-                  dateRange ? "text-slate-800 font-medium" : "text-[#586D93]"
-                }`}
+                className={`text-[13px] sm:text-[14px] ${dateRange ? "text-slate-800 font-medium" : "text-[#586D93]"
+                  }`}
               >
                 {dateRange ? dateRange : "Select Date"}
               </span>

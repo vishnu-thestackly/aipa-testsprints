@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
 import { ArrowLeft, CalendarDays, Search, ChevronDown } from "lucide-react";
 import { createTask, updateTask } from "../../../api/authApi";
+import { useTheme } from "../../../context/ThemeContext";
 
 const CreateNewTask = ({ onCancel, onSave, taskData = null, isEditing = false }) => {
+  const { isDark } = useTheme();
   // Helper to parse existing time string (e.g. "10:30 AM", "14:30")
   const parseTime = (timeStr) => {
     if (!timeStr) return { hh: "10", mm: "30", ampm: "AM" };
@@ -285,9 +287,11 @@ if (selectedDateTime <= now) {
 };
 
   return (
-    <div className="w-full flex-1 rounded-[24px] border border-[#E5E7EB] bg-white p-5 sm:p-8 shadow-[0px_1px_4px_rgba(0,0,0,0.05)] flex flex-col">
+    <div className={`w-full flex-1 rounded-[24px] border ${
+      isDark ? "border-[#1E283D] bg-[#060D1B]" : "border-[#E5E7EB] bg-white"
+    } p-5 sm:p-8 shadow-[0px_1px_4px_rgba(0,0,0,0.05)] flex flex-col`}>
       {/* Header */}
-      <div className="flex items-center gap-3 pb-3.5 border-b border-[#E5E7EB]">
+      <div className={`flex items-center gap-3 pb-3.5 border-b ${isDark ? "border-[#586D93]" : "border-[#E5E7EB]"}`}>
         {/* Back Button */}
         <button
           type="button"
@@ -299,7 +303,7 @@ if (selectedDateTime <= now) {
         </button>
 
         {/* Page Title */}
-        <h1 className="text-[#303030] text-[18px] sm:text-[19px] font-medium tracking-tight">
+        <h1 className={`${isDark ? "text-white" : "text-[#303030]"} text-[18px] sm:text-[19px] font-medium tracking-tight`}>
           {isEditing ? "Edit Task" : "Create New Task"}
         </h1>
       </div>
@@ -307,13 +311,13 @@ if (selectedDateTime <= now) {
       {/* Task Information Section */}
       <div className="mt-5 flex-1 flex flex-col justify-between">
         <div>
-          <h2 className="text-[#303030] text-[15px] font-semibold mb-5">
+          <h2 className={`${isDark ? "text-white" : "text-[#303030]"} text-[15px] font-semibold mb-5`}>
             Task Information
           </h2>
 
           {/* Error Alert */}
           {error && (
-            <div className="mb-5 p-3.5 bg-red-50 border border-red-200 text-red-600 rounded-xl text-xs sm:text-sm flex items-center justify-between animate-in fade-in">
+            <div className="mb-5 p-3.5 bg-red-500/10 border border-red-500/30 text-red-500 rounded-xl text-xs sm:text-sm flex items-center justify-between animate-in fade-in">
               <span>{error}</span>
               <button
                 type="button"
@@ -334,12 +338,12 @@ if (selectedDateTime <= now) {
                 {/* Task Title */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-[#3D3D3D] text-[14px] font-medium">
+                    <label className={`block ${isDark ? "text-white" : "text-[#3D3D3D]"} text-[14px] font-medium`}>
                       Task Title
                     </label>
                     <span
                       className={`text-[11px] ${
-                        title.length > 100 ? "text-red-500 font-semibold" : "text-[#9AA6BA]"
+                        title.length > 100 ? "text-red-500 font-semibold" : isDark ? "text-[#7E8B9F]" : "text-[#9AA6BA]"
                       }`}
                     >
                       {title.length}/100
@@ -354,8 +358,10 @@ if (selectedDateTime <= now) {
                     className={`w-full h-[42px] px-3.5 rounded-lg border ${
                       titleError
                         ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500"
-                        : "border-[#D9DDE5] focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6]"
-                    } bg-white text-[13px] sm:text-[14px] text-[#3D3D3D] placeholder:text-[#9AA6BA] outline-none transition-all`}
+                        : isDark
+                        ? "border-[#586D93] bg-[#0B1426] text-[#586D93] placeholder:text-[#7E8B9F] focus:border-[#4866F6]"
+                        : "border-[#D9DDE5] bg-white text-[#3D3D3D] placeholder:text-[#9AA6BA] focus:border-[#4866F6]"
+                    } outline-none transition-all text-[13px] sm:text-[14px]`}
                   />
                   {titleError && (
                     <p className="text-red-500 text-xs mt-1 animate-in fade-in">
@@ -367,14 +373,14 @@ if (selectedDateTime <= now) {
                 {/* Description */}
                 <div className="flex flex-col">
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-[#3D3D3D] text-[14px] font-medium">
+                    <label className={`block ${isDark ? "text-white" : "text-[#3D3D3D]"} text-[14px] font-medium`}>
                       Description
                     </label>
                     <span
                       className={`text-[11px] ${
                         description.length > 200
                           ? "text-red-500 font-semibold"
-                          : "text-[#9AA6BA]"
+                          : isDark ? "text-[#7E8B9F]" : "text-[#9AA6BA]"
                       }`}
                     >
                       {description.length}/200
@@ -387,8 +393,10 @@ if (selectedDateTime <= now) {
                     className={`w-full h-[120px] sm:h-[125px] p-3.5 rounded-lg border ${
                       descriptionError
                         ? "border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500"
-                        : "border-[#D9DDE5] focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6]"
-                    } bg-white text-[13px] sm:text-[14px] text-[#3D3D3D] placeholder:text-[#9AA6BA] outline-none transition-all resize-none overflow-y-auto scrollbar-hide no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden`}
+                        : isDark
+                        ? "border-[#586D93] bg-[#0B1426] text-[#586D93] placeholder:text-[#7E8B9F] focus:border-[#4866F6]"
+                        : "border-[#D9DDE5] bg-white text-[#3D3D3D] placeholder:text-[#9AA6BA] focus:border-[#4866F6]"
+                    } text-[13px] sm:text-[14px] outline-none transition-all resize-none overflow-y-auto scrollbar-hide no-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden`}
                   />
                   {descriptionError && (
                     <p className="text-red-500 text-xs mt-1 animate-in fade-in">
@@ -399,24 +407,26 @@ if (selectedDateTime <= now) {
 
                 {/* Platform */}
                 <div>
-                  <label className="block text-[#3D3D3D] text-[14px] font-medium mb-1.5">
+                  <label className={`block ${isDark ? "text-white" : "text-[#3D3D3D]"} text-[14px] font-medium mb-1.5`}>
                     Platform
                   </label>
                   <div className="relative">
                     <select
                       value={platform}
                       onChange={(e) => setPlatform(e.target.value)}
-                      className="w-full h-[42px] px-3.5 pr-10 rounded-lg border border-[#D9DDE5] bg-white text-[13px] sm:text-[14px] text-[#3D3D3D] outline-none focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6] appearance-none cursor-pointer"
+                      className={`w-full h-[42px] px-3.5 pr-10 rounded-lg border ${
+                        isDark ? "border-[#586D93] bg-[#0B1426] text-[#586D93]" : "border-[#D9DDE5] bg-white text-[#3D3D3D]"
+                      } text-[13px] sm:text-[14px] outline-none focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6] appearance-none cursor-pointer`}
                     >
-                      <option value="" disabled className="text-[#9AA6BA]">
+                      <option value="" disabled className={isDark ? "text-[#7E8B9F] bg-[#0B1426]" : "text-[#9AA6BA]"}>
                         Select Platform
                       </option>
-                      <option value="Jira">Jira</option>
-                      <option value="Trello">Trello</option>
-                      <option value="Outlook">Outlook</option>
-                      <option value="Google Calendar">Google Calendar</option>
-                      <option value="Slack">Slack</option>
-                      <option value="Teams">Teams</option>
+                      <option value="Jira" className={isDark ? "bg-[#0B1426] text-[#586D93]" : ""}>Jira</option>
+                      <option value="Trello" className={isDark ? "bg-[#0B1426] text-[#586D93]" : ""}>Trello</option>
+                      <option value="Outlook" className={isDark ? "bg-[#0B1426] text-[#586D93]" : ""}>Outlook</option>
+                      <option value="Google Calendar" className={isDark ? "bg-[#0B1426] text-[#586D93]" : ""}>Google Calendar</option>
+                      <option value="Slack" className={isDark ? "bg-[#0B1426] text-[#586D93]" : ""}>Slack</option>
+                      <option value="Teams" className={isDark ? "bg-[#0B1426] text-[#586D93]" : ""}>Teams</option>
                     </select>
                     <ChevronDown
                       size={16}
@@ -430,7 +440,7 @@ if (selectedDateTime <= now) {
               <div className="flex flex-col gap-5">
                 {/* Due Date */}
                 <div>
-                  <label className="block text-[#3D3D3D] text-[14px] font-medium mb-1.5">
+                  <label className={`block ${isDark ? "text-white" : "text-[#3D3D3D]"} text-[14px] font-medium mb-1.5`}>
                     Due Date
                   </label>
                   <div className="relative">
@@ -455,7 +465,11 @@ if (selectedDateTime <= now) {
                       
                         setDueDate(value);
                       }}
-                      className="w-full h-[42px] px-3.5 pr-10 rounded-lg border border-[#D9DDE5] bg-white text-[13px] sm:text-[14px] text-[#3D3D3D] placeholder:text-[#9AA6BA] outline-none focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6] transition-all"
+                      className={`w-full h-[42px] px-3.5 pr-10 rounded-lg border ${
+                        isDark
+                          ? "border-[#586D93] bg-[#0B1426] text-[#586D93] placeholder:text-[#7E8B9F]"
+                          : "border-[#D9DDE5] bg-white text-[#3D3D3D] placeholder:text-[#9AA6BA]"
+                      } text-[13px] sm:text-[14px] outline-none focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6] transition-all`}
                     />
                     <button
                       type="button"
@@ -478,7 +492,7 @@ if (selectedDateTime <= now) {
 
                 {/* Due Time */}
                 <div>
-                  <label className="block text-[#3D3D3D] text-[14px] font-medium mb-1.5">
+                  <label className={`block ${isDark ? "text-white" : "text-[#3D3D3D]"} text-[14px] font-medium mb-1.5`}>
                     Due Time
                   </label>
                   <div className="flex items-center gap-2">
@@ -487,11 +501,13 @@ if (selectedDateTime <= now) {
                       <select
                         value={dueTimeHH}
                         onChange={(e) => setDueTimeHH(e.target.value)}
-                        className="w-full h-[42px] px-3 pr-7 rounded-lg border border-[#D9DDE5] bg-white text-[13px] sm:text-[14px] text-[#3D3D3D] outline-none focus:border-[#4866F6] appearance-none cursor-pointer"
+                        className={`w-full h-[42px] px-3 pr-7 rounded-lg border ${
+                          isDark ? "border-[#586D93] bg-[#0B1426] text-[#586D93]" : "border-[#D9DDE5] bg-white text-[#3D3D3D]"
+                        } text-[13px] sm:text-[14px] outline-none focus:border-[#4866F6] appearance-none cursor-pointer`}
                       >
                         <option value="HH">HH</option>
                         {Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, "0")).map((hr) => (
-                          <option key={hr} value={hr}>
+                          <option key={hr} value={hr} className={isDark ? "bg-[#0B1426] text-[#586D93]" : ""}>
                             {hr}
                           </option>
                         ))}
@@ -509,11 +525,13 @@ if (selectedDateTime <= now) {
                       <select
                         value={dueTimeMM}
                         onChange={(e) => setDueTimeMM(e.target.value)}
-                        className="w-full h-[42px] px-3 pr-7 rounded-lg border border-[#D9DDE5] bg-white text-[13px] sm:text-[14px] text-[#3D3D3D] outline-none focus:border-[#4866F6] appearance-none cursor-pointer"
+                        className={`w-full h-[42px] px-3 pr-7 rounded-lg border ${
+                          isDark ? "border-[#586D93] bg-[#0B1426] text-[#586D93]" : "border-[#D9DDE5] bg-white text-[#3D3D3D]"
+                        } text-[13px] sm:text-[14px] outline-none focus:border-[#4866F6] appearance-none cursor-pointer`}
                       >
                         <option value="MM">MM</option>
                         {["00", "15", "30", "45"].map((min) => (
-                          <option key={min} value={min}>
+                          <option key={min} value={min} className={isDark ? "bg-[#0B1426] text-[#586D93]" : ""}>
                             {min}
                           </option>
                         ))}
@@ -529,10 +547,12 @@ if (selectedDateTime <= now) {
                       <select
                         value={dueTimeAmpm}
                         onChange={(e) => setDueTimeAmpm(e.target.value)}
-                        className="w-full h-[42px] px-3 pr-7 rounded-lg border border-[#D9DDE5] bg-white text-[13px] sm:text-[14px] text-[#3D3D3D] outline-none focus:border-[#4866F6] appearance-none cursor-pointer"
+                        className={`w-full h-[42px] px-3 pr-7 rounded-lg border ${
+                          isDark ? "border-[#586D93] bg-[#0B1426] text-[#586D93]" : "border-[#D9DDE5] bg-white text-[#3D3D3D]"
+                        } text-[13px] sm:text-[14px] outline-none focus:border-[#4866F6] appearance-none cursor-pointer`}
                       >
-                        <option value="AM">AM</option>
-                        <option value="PM">PM</option>
+                        <option value="AM" className={isDark ? "bg-[#0B1426] text-[#586D93]" : ""}>AM</option>
+                        <option value="PM" className={isDark ? "bg-[#0B1426] text-[#586D93]" : ""}>PM</option>
                       </select>
                       <ChevronDown
                         size={14}
@@ -544,7 +564,7 @@ if (selectedDateTime <= now) {
 
                 {/* Assign To */}
                 <div>
-                  <label className="block text-[#3D3D3D] text-[14px] font-medium mb-1.5">
+                  <label className={`block ${isDark ? "text-white" : "text-[#3D3D3D]"} text-[14px] font-medium mb-1.5`}>
                     Assign To
                   </label>
                   <div className="relative">
@@ -553,7 +573,9 @@ if (selectedDateTime <= now) {
                       placeholder="Assign to"
                       value={assignedTo}
                       onChange={(e) => setAssignedTo(e.target.value)}
-                      className="w-full h-[42px] px-3.5 pr-10 rounded-lg border border-[#D9DDE5] bg-white text-[13px] sm:text-[14px] text-[#3D3D3D] placeholder:text-[#9AA6BA] outline-none focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6] transition-all"
+                      className={`w-full h-[42px] px-3.5 pr-10 rounded-lg border ${
+                        isDark ? "border-[#586D93] bg-[#0B1426] text-[#586D93] placeholder:text-[#7E8B9F]" : "border-[#D9DDE5] bg-white text-[#3D3D3D] placeholder:text-[#9AA6BA]"
+                      } text-[13px] sm:text-[14px] outline-none focus:border-[#4866F6] focus:ring-1 focus:ring-[#4866F6] transition-all`}
                     />
                     <Search
                       size={16}
@@ -566,7 +588,7 @@ if (selectedDateTime <= now) {
 
             {/* Priority Section */}
             <div className="mt-5">
-              <label className="block text-[#3D3D3D] text-[14px] font-medium mb-2.5">
+              <label className={`block ${isDark ? "text-white" : "text-[#3D3D3D]"} text-[14px] font-medium mb-2.5`}>
                 Priority
               </label>
               <div className="flex items-center gap-8">
@@ -587,14 +609,14 @@ if (selectedDateTime <= now) {
                       className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${
                         priority.toLowerCase() === item.toLowerCase()
                           ? "border-[#4866F6]"
-                          : "border-[#4866F6] opacity-80 group-hover:opacity-100"
+                          : isDark ? "border-[#586D93]" : "border-[#4866F6] opacity-80 group-hover:opacity-100"
                       }`}
                     >
                       {priority.toLowerCase() === item.toLowerCase() && (
                         <span className="w-2 h-2 rounded-full bg-[#4866F6]" />
                       )}
                     </span>
-                    <span className="text-[13px] sm:text-[14px] text-[#53647E]">
+                    <span className={`text-[13px] sm:text-[14px] ${isDark ? "text-[#7E8B9F]" : "text-[#53647E]"}`}>
                       {item}
                     </span>
                   </label>
@@ -604,7 +626,7 @@ if (selectedDateTime <= now) {
 
             {/* Reminder Section */}
             <div className="mt-5">
-              <label className="block text-[#3D3D3D] text-[14px] font-medium mb-2.5">
+              <label className={`block ${isDark ? "text-white" : "text-[#3D3D3D]"} text-[14px] font-medium mb-2.5`}>
                 Reminder
               </label>
               <label className="flex items-center gap-2.5 cursor-pointer select-none group">
@@ -618,16 +640,18 @@ if (selectedDateTime <= now) {
                   className={`w-4 h-4 rounded-[4px] flex items-center justify-center border transition-colors ${
                     reminder
                       ? "bg-[#4866F6] border-[#4866F6]"
+                      : isDark
+                      ? "bg-[#0B1426] border-[#586D93]"
                       : "bg-white border-[#C8D0DD] group-hover:border-[#4866F6]"
                   }`}
                 >
                   {reminder && (
-                    <svg className="w-2.5 h-2.5 text-white fill-current" viewBox="0 0 12 10">
+                    <svg className={`w-2.5 h-2.5 ${isDark ? "text-black" : "text-white"} fill-current`} viewBox="0 0 12 10">
                       <path d="M4.2 9.5L0.5 5.8l1.4-1.4 2.3 2.3L10.1 0.8l1.4 1.4z" />
                     </svg>
                   )}
                 </span>
-                <span className="text-[13px] sm:text-[14px] text-[#53647E]">
+                <span className={`text-[13px] sm:text-[14px] ${isDark ? "text-[#7E8B9F]" : "text-[#53647E]"}`}>
                   Notify 30 mins before due time
                 </span>
               </label>
@@ -641,7 +665,9 @@ if (selectedDateTime <= now) {
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="w-[110px] h-[38px] rounded-full border border-[#4866F6] bg-white text-[#4866F6] font-medium text-[13px] sm:text-[14px] cursor-pointer hover:bg-[#F5F7FF] transition-all disabled:opacity-50"
+            className={`w-[110px] h-[38px] rounded-full border border-[#4866F6] ${
+              isDark ? "bg-[#060D1B] text-[#4866F6] hover:bg-[#4866F61A]" : "bg-white text-[#4866F6] hover:bg-[#F5F7FF]"
+            } font-medium text-[13px] sm:text-[14px] cursor-pointer transition-all disabled:opacity-50`}
           >
             Cancel
           </button>
